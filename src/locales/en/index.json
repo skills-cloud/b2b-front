@@ -1,0 +1,13 @@
+{
+    "components": {},
+    "routes": {
+        "main": {
+            "hello": "Hello! I'm main page."
+        }
+    },
+    "helmet": {
+        "title": "SkillsCloud",
+        "description": "SkillsCloud description",
+        "keywords": "skills, cloud"
+    }
+}

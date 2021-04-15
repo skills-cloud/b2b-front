@@ -1,0 +1,22 @@
+name: CI
+on: push
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Install dependencies
+              run: yarn
+
+            - name: Lint style
+              run: yarn lint:style
+
+            - name: Lint code
+              run: yarn lint:es
+
+            - name: Check build (develop)
+              run: yarn build:dev
+
+            - name: Check build (production)
+              run: yarn build:prod
