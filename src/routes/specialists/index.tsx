@@ -31,7 +31,7 @@ const DATA = [{
     name    : 'Солодов Олег Вячеславович',
     position: 'Senior Front-end Developer',
     photo   : 'https://avataaars.io/?avatarStyle=Transparent&topType=Turban&accessoriesType=Kurt&hatColor=Blue03&hairColor=Brown&facialHairType=Blank&facialHairColor=Brown&clotheType=CollarSweater&clotheColor=Blue02&eyeType=Dizzy&eyebrowType=UpDown&mouthType=Default&skinColor=Light'
-}]
+}];
 
 export const Specialists = () => {
     const cn = useClassnames(style);
@@ -43,7 +43,7 @@ export const Specialists = () => {
                 <div className={cn('specialists__users')}>
                     {DATA.map((user, index) => (
                         <div key={index} className={cn('specialists__user')}>
-                            <Avatar  src={user.photo} />
+                            <Avatar src={user.photo} />
                             <Link to={`/user/${index}`}>{user.name}</Link>
                             <span>{user.position}</span>
                         </div>

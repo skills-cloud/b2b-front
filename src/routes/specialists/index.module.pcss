@@ -8,8 +8,8 @@
 
     &__sidebar,
     &__main {
-        background-color: #fff;
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+        background-color: var(--color-white);
+        box-shadow: 0 1px 1px var(--color-shadow);
         border-radius: 4px;
         padding: 32px;
         box-sizing: border-box;
@@ -23,11 +23,11 @@
     }
 
     &__main-header {
-        font-family: 'Montserrat', sans-serif;
+        font-family: Montserrat, sans-serif;
         font-weight: 700;
         font-size: 24px;
         line-height: 30px;
-        color: #000;
+        color: var(--color-black);
     }
 
     &__main-button {
@@ -37,7 +37,7 @@
         height: 40px;
         padding: 8px;
         box-sizing: border-box;
-        background-color: #f2f2f2;
+        background-color: var(--color-bg-button);
         border-radius: 50%;
         top: 27px;
         right: 32px;
@@ -51,10 +51,10 @@
         grid-column-gap: 16px;
         padding: 16px 0;
         position: relative;
-        font-family: 'Roboto', sans-serif;
+        font-family: Roboto, sans-serif;
         font-size: 14px;
         line-height: 16px;
-        color: #000;
+        color: var(--color-black);
 
         &::after {
             content: "";
@@ -64,7 +64,7 @@
             left: 64px;
             right: 0;
             height: 1px;
-            background-color: #dfdfdf;
+            background-color: var(--color-border);
         }
 
         &:first-child {
