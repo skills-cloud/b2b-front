@@ -16,11 +16,13 @@
     "devDependencies": {
         "@types/node": "14.x.x",
         "@types/react": "17.x.x",
+        "@types/react-datepicker": "3.x.x",
         "@types/react-dom": "17.x.x",
         "@types/react-helmet": "6.x.x",
         "@types/react-router": "5.x.x",
         "@types/react-router-dom": "5.x.x",
         "@types/redux-logger": "3.x.x",
+        "@types/uuid": "8.x.x",
         "@types/webpack": "5.x.x",
         "@types/webpack-env": "1.x.x",
         "@typescript-eslint/eslint-plugin": "4.x.x",
@@ -46,21 +48,26 @@
         "webpack-dev-server": "3.x.x"
     },
     "dependencies": {
+        "@hookform/error-message": "2.x.x",
         "@reduxjs/toolkit": "1.x.x",
         "axios": "0.x.x",
         "classnames": "2.x.x",
         "history": "4.x.x",
         "i18next": "20.x.x",
         "i18next-xhr-backend": "3.x.x",
+        "moment": "2.x.x",
         "query-string": "7.x.x",
         "react": "17.x.x",
+        "react-datepicker": "3.x.x",
         "react-dom": "17.x.x",
         "react-helmet": "6.x.x",
+        "react-hook-form": "7.x.x",
         "react-i18next": "11.x.x",
         "react-redux": "7.x.x",
         "react-router": "5.x.x",
         "react-router-dom": "5.x.x",
         "redux": "4.x.x",
-        "redux-logger": "3.x.x"
+        "redux-logger": "3.x.x",
+        "uuid": "8.x.x"
     }
 }

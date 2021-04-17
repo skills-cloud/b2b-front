@@ -1,0 +1,29 @@
+.input {
+    display: block;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border-input);
+    box-sizing: border-box;
+    border-radius: 4px;
+    height: 40px;
+    line-height: 38px;
+    width: 100%;
+    font-family: Roboto, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    padding: 0 12px;
+    color: var(--color-sidebar-header);
+
+    &::placeholder {
+        opacity: 0.4;
+    }
+
+    &__label {
+        display: grid;
+        grid-auto-flow: row;
+        grid-row-gap: 4px;
+        font-family: Roboto, sans-serif;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 18px;
+    }
+}
