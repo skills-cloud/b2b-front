@@ -56,7 +56,7 @@ module.exports = (env = {}) => {
                     }
                 }]
             }, {
-                test   : /\.pcss$/,
+                test   : /\.p?css$/,
                 include: DIR_SRC,
                 use    : [{
                     loader: MiniCssExtractPlugin.loader

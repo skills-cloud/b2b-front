@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useFormContext, Message } from 'react-hook-form';
 import { ValidationRule } from 'react-hook-form/dist/types/validator';
+import { ErrorMessage } from '@hookform/error-message';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
+
+import Error from 'component/error';
 
 import style from './index.module.pcss';
 
@@ -20,13 +23,21 @@ export interface IProps {
 
 export const Input = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const context = useFormContext();
+    const { register, formState } = useFormContext();
+
+    const [isWatch, setIsWatch] = useState<boolean>(formState.touchedFields[props.name]);
+
+    useEffect(() => {
+        setIsWatch(formState.touchedFields[props.name] || formState.isSubmitted);
+    }, [formState.touchedFields[props.name], formState.isSubmitted]);
 
     const attrs = {
-        className  : cn('input'),
+        className: cn('input', {
+            'input_invalid': formState?.errors?.[props.name]?.message && isWatch
+        }),
         type       : props.type,
         placeholder: props.placeholder,
-        ...context.register(props.name, {
+        ...register(props.name, {
             required : props.required,
             maxLength: props.maxLength,
             minLength: props.minLength,
@@ -34,11 +45,32 @@ export const Input = (props: IProps) => {
         })
     };
 
+    const elError = useMemo(() => {
+        if(formState?.errors?.[props.name]?.message && isWatch) {
+            return (
+                <ErrorMessage
+                    as={Error}
+                    name={props.name}
+                    elIcon={true}
+                    errors={formState?.errors}
+                    className={cn('field__error')}
+                />
+            );
+        }
+    }, [props.name, formState?.errors?.[props.name], isWatch]);
+
+    const elLabel = useMemo(() => {
+        if(props.label) {
+            return <strong className={cn('input__label-text')}>{props.label}</strong>;
+        }
+    }, [props.label]);
+
     if(props.label) {
         return (
             <label className={cn('input__label')}>
-                {props.label}
+                {elLabel}
                 <input {...attrs} />
+                {elError}
             </label>
         );
     }

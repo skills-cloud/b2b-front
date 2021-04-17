@@ -1,5 +1,9 @@
 {
-    "components": {},
+    "components": {
+        "form": {
+            "submit": "Submit"
+        }
+    },
     "routes": {
         "main": {
             "hello": "Привет, дно! Я Main страница."
