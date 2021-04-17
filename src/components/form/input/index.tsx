@@ -23,17 +23,17 @@ export interface IProps {
 
 export const Input = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const { register, formState } = useFormContext();
+    const { formState: { errors, touchedFields, isSubmitted }, register } = useFormContext();
 
-    const [isWatch, setIsWatch] = useState<boolean>(formState.touchedFields[props.name]);
+    const [isWatch, setIsWatch] = useState<boolean>(touchedFields[props.name]);
 
     useEffect(() => {
-        setIsWatch(formState.touchedFields[props.name] || formState.isSubmitted);
-    }, [formState.touchedFields[props.name], formState.isSubmitted]);
+        setIsWatch(touchedFields[props.name] || isSubmitted);
+    }, [touchedFields[props.name], isSubmitted]);
 
     const attrs = {
         className: cn('input', {
-            'input_invalid': formState?.errors?.[props.name]?.message && isWatch
+            'input_invalid': errors?.[props.name]?.message && isWatch
         }),
         type       : props.type,
         placeholder: props.placeholder,
@@ -46,18 +46,18 @@ export const Input = (props: IProps) => {
     };
 
     const elError = useMemo(() => {
-        if(formState?.errors?.[props.name]?.message && isWatch) {
+        if(errors?.[props.name]?.message && isWatch) {
             return (
                 <ErrorMessage
                     as={Error}
                     name={props.name}
                     elIcon={true}
-                    errors={formState?.errors}
+                    errors={errors}
                     className={cn('field__error')}
                 />
             );
         }
-    }, [props.name, formState?.errors?.[props.name], isWatch]);
+    }, [props.name, errors?.[props.name], isWatch]);
 
     const elLabel = useMemo(() => {
         if(props.label) {
