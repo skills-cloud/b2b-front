@@ -39,6 +39,8 @@ export const Form = (props: IProps) => {
     };
 
     const onInvalid = (value: UnpackNestedValue<IFormData>) => {
+        console.info(value);
+
         if(props.onInvalid) {
             props.onInvalid(value);
         }

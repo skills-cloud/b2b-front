@@ -9,6 +9,7 @@ import Form from 'component/form';
 import Input from 'component/form/input';
 
 import style from './index.module.pcss';
+import InputRadio from 'component/form/radio';
 
 export const Main = () => {
     const cn = useClassnames(style);
@@ -20,6 +21,7 @@ export const Main = () => {
 
             <Form legend="Legend">
                 <Input name="test" type="text" label="test" required="error" />
+                <InputRadio label="radio" direction="column" required="text" name="radio" options={[{ value: 'test', label: 'test' }, { value: 'test2', label: 'test2' }]} />
                 <DateInput label="label" direction="column" name="date" required="error" />
             </Form>
 
