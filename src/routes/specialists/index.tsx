@@ -1,47 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useForm, FormProvider } from 'react-hook-form';
 
 import useClassnames from 'hook/use-classnames';
+
 import Avatar from 'component/avatar';
 import IconPlus from 'component/icons/plus';
+import FormInput from 'component/form/input';
 
 import style from './index.module.pcss';
 
-const DATA = [{
-    name    : 'Федоров Алексей Иванович',
-    position: 'Senior Front-end Developer',
-    photo   : 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairTheCaesarSidePart&accessoriesType=Wayfarers&hairColor=Blonde&facialHairType=MoustacheFancy&facialHairColor=Blonde&clotheType=CollarSweater&clotheColor=Heather&eyeType=Default&eyebrowType=UpDown&mouthType=Smile&skinColor=Pale'
-}, {
-    name    : 'Алексеев Антон Вячеславович',
-    position: 'Senior Front-end Developer',
-    photo   : 'https://avataaars.io/?avatarStyle=Transparent&topType=Hat&accessoriesType=Prescription02&hairColor=BlondeGolden&facialHairType=BeardLight&facialHairColor=BlondeGolden&clotheType=Overall&clotheColor=PastelRed&eyeType=Surprised&eyebrowType=UpDown&mouthType=ScreamOpen&skinColor=Yellow'
-}, {
-    name    : 'Иванов Алексей Федорович',
-    position: 'Senior Front-end Developer',
-    photo   : 'https://avataaars.io/?avatarStyle=Transparent&topType=LongHairFrida&accessoriesType=Blank&facialHairType=BeardMedium&facialHairColor=Platinum&clotheType=BlazerSweater&clotheColor=Blue02&eyeType=Cry&eyebrowType=SadConcerned&mouthType=Grimace&skinColor=Pale'
-}, {
-    name    : 'Сервеев Антон Иванович',
-    position: 'Senior Front-end Developer',
-    photo   : 'https://avataaars.io/?avatarStyle=Transparent&topType=LongHairFrida&accessoriesType=Prescription01&facialHairType=Blank&facialHairColor=Blonde&clotheType=BlazerShirt&eyeType=Hearts&eyebrowType=SadConcerned&mouthType=Smile&skinColor=DarkBrown'
-}, {
-    name    : 'Макаров Алексей Владимирович',
-    position: 'Senior Front-end Developer',
-    photo   : 'https://avataaars.io/?avatarStyle=Transparent&topType=LongHairBigHair&accessoriesType=Prescription01&hairColor=BrownDark&facialHairType=BeardLight&facialHairColor=Blonde&clotheType=BlazerShirt&eyeType=Cry&eyebrowType=RaisedExcitedNatural&mouthType=Tongue&skinColor=Tanned'
-}, {
-    name    : 'Солодов Олег Вячеславович',
-    position: 'Senior Front-end Developer',
-    photo   : 'https://avataaars.io/?avatarStyle=Transparent&topType=Turban&accessoriesType=Kurt&hatColor=Blue03&hairColor=Brown&facialHairType=Blank&facialHairColor=Brown&clotheType=CollarSweater&clotheColor=Blue02&eyeType=Dizzy&eyebrowType=UpDown&mouthType=Default&skinColor=Light'
-}];
+export interface IUser {
+    name: string,
+    position: string,
+    photo: string
+}
 
 export const Specialists = () => {
     const cn = useClassnames(style);
+    const { t, i18n } = useTranslation();
+    const [users, setUsers] = useState<Array<IUser>>([]);
+    const context = useForm({
+        mode         : 'onChange',
+        defaultValues: {
+            search: ''
+        }
+    });
+    const search = context.watch('search');
 
-    return (
-        <div className={cn('specialists')}>
-            <main className={cn('specialists__main')}>
-                <h1 className={cn('specialists__main-header')}>Специалисты</h1>
+
+    const elUsers = useMemo(() => {
+        if(users.length) {
+            return (
                 <div className={cn('specialists__users')}>
-                    {DATA.map((user, index) => (
+                    {users.map((user, index) => (
                         <div key={index} className={cn('specialists__user')}>
                             <Avatar src={user.photo} />
                             <Link to={`/user/${index}`}>{user.name}</Link>
@@ -49,6 +42,25 @@ export const Specialists = () => {
                         </div>
                     ))}
                 </div>
+            );
+        }
+
+        return <span className={cn('specialists__users-empty')}>{t('routes.specialists.main.users.empty')}</span>;
+    }, [users, i18n.language]);
+
+    useEffect(() => {
+        import('./mock.json')
+            .then((payload) => {
+                setUsers(payload.default.filter(({ name }) => name.includes(search)));
+            })
+            .catch(console.error);
+    }, [search]);
+
+    return (
+        <div className={cn('specialists')}>
+            <main className={cn('specialists__main')}>
+                <h1 className={cn('specialists__main-header')}>{t('routes.specialists.main.title')}</h1>
+                {elUsers}
                 <Link
                     to="/specialists/create"
                     className={cn('specialists__main-button')}
@@ -56,8 +68,23 @@ export const Specialists = () => {
                     <IconPlus />
                 </Link>
             </main>
-            <aside className={cn('specialists__sidebar')}>
-
+            <aside>
+                <div className={cn('specialists__search')}>
+                    <h3 className={cn('specialists__search-header')}>{t('routes.specialists.sidebar.search.title')}</h3>
+                    <FormProvider {...context}>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                            }}
+                        >
+                            <FormInput
+                                name="search"
+                                type="search"
+                                placeholder={t('routes.specialists.sidebar.search.form.input.placeholder')}
+                            />
+                        </form>
+                    </FormProvider>
+                </div>
             </aside>
         </div>
     );
