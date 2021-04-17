@@ -1,0 +1,25 @@
+[{
+    "name"    : "Федоров Алексей Иванович",
+    "position": "Senior Front-end Developer",
+    "photo"   : "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairTheCaesarSidePart&accessoriesType=Wayfarers&hairColor=Blonde&facialHairType=MoustacheFancy&facialHairColor=Blonde&clotheType=CollarSweater&clotheColor=Heather&eyeType=Default&eyebrowType=UpDown&mouthType=Smile&skinColor=Pale"
+}, {
+    "name"    : "Алексеев Антон Вячеславович",
+    "position": "Senior Front-end Developer",
+    "photo"   : "https://avataaars.io/?avatarStyle=Transparent&topType=Hat&accessoriesType=Prescription02&hairColor=BlondeGolden&facialHairType=BeardLight&facialHairColor=BlondeGolden&clotheType=Overall&clotheColor=PastelRed&eyeType=Surprised&eyebrowType=UpDown&mouthType=ScreamOpen&skinColor=Yellow"
+}, {
+    "name"    : "Иванов Алексей Федорович",
+    "position": "Senior Front-end Developer",
+    "photo"   : "https://avataaars.io/?avatarStyle=Transparent&topType=LongHairFrida&accessoriesType=Blank&facialHairType=BeardMedium&facialHairColor=Platinum&clotheType=BlazerSweater&clotheColor=Blue02&eyeType=Cry&eyebrowType=SadConcerned&mouthType=Grimace&skinColor=Pale"
+}, {
+    "name"    : "Сервеев Антон Иванович",
+    "position": "Senior Front-end Developer",
+    "photo"   : "https://avataaars.io/?avatarStyle=Transparent&topType=LongHairFrida&accessoriesType=Prescription01&facialHairType=Blank&facialHairColor=Blonde&clotheType=BlazerShirt&eyeType=Hearts&eyebrowType=SadConcerned&mouthType=Smile&skinColor=DarkBrown"
+}, {
+    "name"    : "Макаров Алексей Владимирович",
+    "position": "Senior Front-end Developer",
+    "photo"   : "https://avataaars.io/?avatarStyle=Transparent&topType=LongHairBigHair&accessoriesType=Prescription01&hairColor=BrownDark&facialHairType=BeardLight&facialHairColor=Blonde&clotheType=BlazerShirt&eyeType=Cry&eyebrowType=RaisedExcitedNatural&mouthType=Tongue&skinColor=Tanned"
+}, {
+    "name"    : "Солодов Олег Вячеславович",
+    "position": "Senior Front-end Developer",
+    "photo"   : "https://avataaars.io/?avatarStyle=Transparent&topType=Turban&accessoriesType=Kurt&hatColor=Blue03&hairColor=Brown&facialHairType=Blank&facialHairColor=Brown&clotheType=CollarSweater&clotheColor=Blue02&eyeType=Dizzy&eyebrowType=UpDown&mouthType=Default&skinColor=Light"
+}]

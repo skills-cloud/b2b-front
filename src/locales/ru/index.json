@@ -3,6 +3,24 @@
     "routes": {
         "main": {
             "hello": "Привет, дно! Я Main страница."
+        },
+        "specialists": {
+            "main": {
+                "title": "Специалисты",
+                "users": {
+                    "empty": "Поиск не дал результатов."
+                }
+            },
+            "sidebar": {
+                "search": {
+                    "title": "Поиск",
+                    "form": {
+                        "input": {
+                            "placeholder": "Введите имя..."
+                        }
+                    }
+                }
+            }
         }
     },
     "helmet": {

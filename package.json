@@ -14,6 +14,7 @@
         "eslint": "eslint"
     },
     "devDependencies": {
+        "@hookform/devtools": "3.x.x",
         "@types/node": "14.x.x",
         "@types/react": "17.x.x",
         "@types/react-dom": "17.x.x",
@@ -46,6 +47,7 @@
         "webpack-dev-server": "3.x.x"
     },
     "dependencies": {
+        "@hookform/error-message": "2.x.x",
         "@reduxjs/toolkit": "1.x.x",
         "axios": "0.x.x",
         "classnames": "2.x.x",
@@ -56,6 +58,7 @@
         "react": "17.x.x",
         "react-dom": "17.x.x",
         "react-helmet": "6.x.x",
+        "react-hook-form": "7.x.x",
         "react-i18next": "11.x.x",
         "react-redux": "7.x.x",
         "react-router": "5.x.x",
