@@ -5,6 +5,8 @@ import { ErrorMessage } from '@hookform/error-message';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 
+import Error from 'component/error';
+
 import style from './index.module.pcss';
 
 export interface IProps {
@@ -16,8 +18,7 @@ export interface IProps {
     required?: Message | ValidationRule<boolean>,
     maxLength?: ValidationRule<number | string>,
     minLength?: ValidationRule<number | string>,
-    pattern?: ValidationRule<RegExp>,
-    elError?: ReactNode
+    pattern?: ValidationRule<RegExp>
 }
 
 export const Input = (props: IProps) => {
@@ -31,7 +32,9 @@ export const Input = (props: IProps) => {
     }, [formState.touchedFields[props.name], formState.isSubmitted]);
 
     const attrs = {
-        className  : cn('input'),
+        className: cn('input', {
+            'input_invalid': formState?.errors?.[props.name]?.message && isWatch
+        }),
         type       : props.type,
         placeholder: props.placeholder,
         ...register(props.name, {
@@ -44,14 +47,28 @@ export const Input = (props: IProps) => {
 
     const elError = useMemo(() => {
         if(formState?.errors?.[props.name]?.message && isWatch) {
-            return <ErrorMessage as="span" name={props.name} errors={formState?.errors} className={cn('field__error')} />;
+            return (
+                <ErrorMessage
+                    as={Error}
+                    name={props.name}
+                    elIcon={true}
+                    errors={formState?.errors}
+                    className={cn('field__error')}
+                />
+            );
         }
-    }, [props.elError, props.name, formState?.errors?.[props.name], isWatch]);
+    }, [props.name, formState?.errors?.[props.name], isWatch]);
+
+    const elLabel = useMemo(() => {
+        if(props.label) {
+            return <strong className={cn('input__label-text')}>{props.label}</strong>;
+        }
+    }, [props.label]);
 
     if(props.label) {
         return (
             <label className={cn('input__label')}>
-                {props.label}
+                {elLabel}
                 <input {...attrs} />
                 {elError}
             </label>

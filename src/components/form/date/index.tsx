@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, ReactNode, Fragment } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
+import { useFormContext, Controller, Message } from 'react-hook-form';
 import { ValidationRule } from 'react-hook-form/dist/types/validator';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
@@ -20,7 +20,7 @@ export interface IProps {
     maxDate?: number | string,
     placeholder?: string,
     label?: ReactNode,
-    required?: ValidationRule<boolean>,
+    required?: Message | ValidationRule<boolean>,
     tabIndex?: number,
     disabled?: boolean,
     isErrorTootip?: boolean,
@@ -58,7 +58,7 @@ const DateInput = (props: IProps) => {
 
     const elError = useMemo(() => {
         if(props.elError !== false && !props.isErrorTootip) {
-            return <ErrorMessage as={Error} name={props.name} errors={errors} className={cn('date__error')} />;
+            return <ErrorMessage as={Error} elIcon={true} name={props.name} errors={errors} className={cn('date__error')} />;
         }
     }, [props.elError, props.name, errors[props.name], props.isErrorTootip]);
 

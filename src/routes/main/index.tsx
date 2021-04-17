@@ -20,7 +20,7 @@ export const Main = () => {
 
             <Form legend="Legend">
                 <Input name="test" type="text" label="test" required="error" />
-                <DateInput label="label" direction="column" name="date" />
+                <DateInput label="label" direction="column" name="date" required="error" />
             </Form>
 
             <div className={cn('main__buttons')}>
