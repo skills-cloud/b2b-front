@@ -1,5 +1,9 @@
 {
-    "components": {},
+    "components": {
+        "form": {
+            "submit": "Submit"
+        }
+    },
     "routes": {
         "main": {
             "hello": "Привет, дно! Я Main страница."
@@ -54,6 +58,24 @@
                         "role": "Роль",
                         "skills": "Навыки",
                         "comment": "Комментарий"
+                    }
+                }
+            }
+        },
+        "specialists": {
+            "main": {
+                "title": "Специалисты",
+                "users": {
+                    "empty": "Поиск не дал результатов."
+                }
+            },
+            "sidebar": {
+                "search": {
+                    "title": "Поиск",
+                    "form": {
+                        "input": {
+                            "placeholder": "Введите имя..."
+                        }
                     }
                 }
             }
