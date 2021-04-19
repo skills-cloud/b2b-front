@@ -3,6 +3,60 @@
     "routes": {
         "main": {
             "hello": "Привет, дно! Я Main страница."
+        },
+        "person": {
+            "links": {
+                "base-info": {
+                    "title": "Основная информация",
+                    "tooltip": "Текст текст текст"
+                },
+                "competencies": {
+                    "title": "Компетенции"
+                },
+                "contacts": {
+                    "title": "Контакты"
+                },
+                "career": {
+                    "title": "Карьеры",
+                    "tooltip": "Текст текст текст"
+                },
+                "projects": {
+                    "title": "Проекты",
+                    "tooltip": "Текст текст текст"
+                },
+                "education": {
+                    "title": "Образование"
+                },
+                "certificates": {
+                    "title": "Сертификаты"
+                },
+                "files": {
+                    "title": "Файлы"
+                }
+            },
+            "blocks": {
+                "common": {
+                    "base": {
+                        "title": "Основная информация",
+                        "age": "Возраст",
+                        "location": "Локация",
+                        "resource-owner": "Владелец ресурса",
+                        "show-more": "Посказать больше информации"
+                    },
+                    "contacts": {
+                        "title": "Контакты",
+                        "email": "Email (основное)",
+                        "telephone": "Моб. телефон",
+                        "skype": "Skype"
+                    },
+                    "competencies": {
+                        "title": "Компетенции",
+                        "role": "Роль",
+                        "skills": "Навыки",
+                        "comment": "Комментарий"
+                    }
+                }
+            }
         }
     },
     "helmet": {
