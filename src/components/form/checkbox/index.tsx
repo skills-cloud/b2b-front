@@ -17,7 +17,6 @@ export interface IProps {
     tabIndex?: number,
     disabled?: boolean,
     elError?: boolean,
-    dataQA?: string,
     defaultChecked?: boolean
 }
 
