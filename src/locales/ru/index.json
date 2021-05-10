@@ -74,6 +74,17 @@
                     "competencies": "Компетенции",
                     "description": "Описание"
                 }
+            },
+            "education": {
+                "header": "Образование",
+                "label": {
+                    "period": "Период",
+                    "specialty": "Специальность",
+                    "power": "Степень",
+                    "diploma": "Диплом",
+                    "competencies": "Компетенции",
+                    "description": "Описание"
+                }
             }
         },
         "specialists": {

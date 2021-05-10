@@ -57,7 +57,9 @@ export const Certificates = (props: IProps) => {
                         </li>
                         <li className={cn('certificates__list-item')}>
                             <strong>{t('routes.person.certificates.label.competencies')}</strong>
-                            <span>Подбор персонала</span>
+                            <div className={cn('certificates__tags')}>
+                                <span className={cn('certificates__tag')}>Подбор персонала</span>
+                            </div>
                         </li>
                         <li className={cn('certificates__list-item')}>
                             <strong>{t('routes.person.certificates.label.description')}</strong>
@@ -93,7 +95,9 @@ export const Certificates = (props: IProps) => {
                         </li>
                         <li className={cn('certificates__list-item')}>
                             <strong>{t('routes.person.certificates.label.competencies')}</strong>
-                            <span>Подбор персонала</span>
+                            <div className={cn('certificates__tags')}>
+                                <span className={cn('certificates__tag')}>Подбор персонала</span>
+                            </div>
                         </li>
                         <li className={cn('certificates__list-item')}>
                             <strong>{t('routes.person.certificates.label.description')}</strong>
