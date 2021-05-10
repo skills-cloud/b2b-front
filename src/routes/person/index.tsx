@@ -8,6 +8,7 @@ import useClassnames from 'hook/use-classnames';
 import Common from './common';
 import Photo from './photo';
 import Files from './files';
+import Certificates from './certificates';
 import style from './index.module.pcss';
 
 export const Person = () => {
@@ -50,7 +51,7 @@ export const Person = () => {
                         <strong className={cn('person__link')} data-count="1">{t('routes.person.links.education.title')}</strong>
                     </div>
                     <div className={cn('person__link-wrapper')}>
-                        <strong className={cn('person__link')} data-count="1">{t('routes.person.links.certificates.title')}</strong>
+                        <a href="#person-block-certificates" className={cn('person__link')} data-count="1">{t('routes.person.links.certificates.title')}</a>
                     </div>
                     <div className={cn('person__link-wrapper')}>
                         <a href="#person-block-files" className={cn('person__link')} data-count="4">{t('routes.person.links.files.title')}</a>
@@ -59,6 +60,7 @@ export const Person = () => {
             </div>
             <div className={cn('person__content')}>
                 <Common />
+                <Certificates id="person-block-certificates" />
                 <Files id="person-block-files" />
             </div>
         </div>

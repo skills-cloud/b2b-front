@@ -63,6 +63,17 @@
             },
             "files": {
                 "header": "Файлы"
+            },
+            "certificates": {
+                "header": "Сертификаты",
+                "label": {
+                    "issued": "Выдан",
+                    "specialty": "Специальность",
+                    "power": "Степень",
+                    "number": "Номер",
+                    "competencies": "Компетенции",
+                    "description": "Описание"
+                }
             }
         },
         "specialists": {
