@@ -7,7 +7,11 @@ import IconApply from 'component/icons/apply';
 
 import style from './index.module.pcss';
 
-export const Person = () => {
+export interface IProps {
+    id?: string
+}
+
+export const Common = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
 
@@ -35,7 +39,7 @@ export const Person = () => {
     }, [more]);
 
     return (
-        <div className={cn('person__block', 'person__info')}>
+        <div id={props.id} className={cn('person__block', 'person__info')}>
             <div className={cn('person__info-header')}>
                 <h2>Сергей Андреевич Иванов</h2>
                 <IconEdit
@@ -136,4 +140,4 @@ export const Person = () => {
     );
 };
 
-export default Person;
+export default Common;
