@@ -1,0 +1,113 @@
+.certificates {
+    background-color: var(--color-white);
+    box-shadow: 0 1px 1px var(--color-shadow);
+    border-radius: 4px;
+    padding: 32px;
+    position: relative;
+    display: grid;
+    grid-row-gap: 24px;
+
+    &__header {
+        font-family: Montserrat, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 29px;
+        color: var(--color-sidebar-header);
+    }
+
+    &__controls {
+        position: absolute;
+        top: 28px;
+        right: 32px;
+        display: grid;
+        grid-auto-flow: column;
+        grid-column-gap: 12px;
+    }
+
+    &__control {
+        fill: var(--color-gray-3);
+        display: grid;
+        justify-content: center;
+        justify-items: center;
+        align-items: center;
+        align-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--color-bg-button);
+
+        @media (hover: hover) and (pointer: fine) {
+            cursor: pointer;
+        }
+
+        &_disable {
+            opacity: 0.3;
+            cursor: default;
+        }
+    }
+
+    &__list {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        display: grid;
+        grid-row-gap: 16px;
+    }
+
+    &__list-item {
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-columns: 150px 1fr;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-black);
+
+        strong {
+            font-weight: normal;
+        }
+    }
+
+    &__certificate {
+        display: grid;
+        grid-row-gap: 16px;
+        padding: 32px 0;
+    }
+
+    &__certificate-title {
+        font-family: Montserrat, sans-serif;
+        display: block;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
+        color: var(--color-black);
+        position: relative;
+    }
+
+    &__icon {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -12px;
+    }
+
+    &__collection {
+
+        & > * {
+            border-bottom: solid 1px var(--color-gray-2);
+
+            &:first-child {
+                padding-top: 0;
+            }
+
+            &:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+        }
+    }
+}
