@@ -27,7 +27,7 @@ export const Form = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
     const methods = useForm({
-        mode: 'onChange'
+        mode: 'all'
     });
 
     const onValid = (value: UnpackNestedValue<IFormData>) => {

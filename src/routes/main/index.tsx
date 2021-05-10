@@ -5,24 +5,33 @@ import useClassnames from 'hook/use-classnames';
 
 import Button from 'component/button';
 import DateInput from 'component/form/date';
-import Form from 'component/form';
+import Form, { IFormData } from 'component/form';
 import Input from 'component/form/input';
+import InputRadio from 'component/form/radio';
+import Checkbox from 'component/form/checkbox';
 
 import style from './index.module.pcss';
-import InputRadio from 'component/form/radio';
 
 export const Main = () => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
 
+    const onSubmit = (formData: IFormData) => {
+        console.info('DATA', formData);
+    };
+
     return (
         <div className={cn('main')}>
             {t('routes.main.hello')}
 
-            <Form legend="Legend">
+            <Form legend="Legend" onSubmit={onSubmit}>
                 <Input name="test" type="text" label="test" required="error" />
                 <InputRadio label="radio" direction="column" required="text" name="radio" options={[{ value: 'test', label: 'test' }, { value: 'test2', label: 'test2' }]} />
                 <DateInput label="label" direction="column" name="date" required="error" />
+                <Checkbox name="checkbox1" label="Checkbox" direction="column" />
+                <Checkbox name="checkbox2" label="Checkbox row" direction="row" />
+                <Checkbox name="checkbox5" disabled={true} label="Disabled" defaultChecked={true} />
+                <Button type="submit">Button 2</Button>
             </Form>
 
             <div className={cn('main__buttons')}>
