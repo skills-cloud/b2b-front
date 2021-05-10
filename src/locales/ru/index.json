@@ -60,6 +60,9 @@
                         "comment": "Комментарий"
                     }
                 }
+            },
+            "files": {
+                "header": "Файлы"
             }
         },
         "specialists": {
