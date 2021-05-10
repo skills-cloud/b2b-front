@@ -6,6 +6,7 @@ import Tooltip from 'component/tooltip';
 import useClassnames from 'hook/use-classnames';
 
 import Common from './common';
+import Photo from './photo';
 import Files from './files';
 import style from './index.module.pcss';
 
@@ -21,9 +22,11 @@ export const Person = () => {
     return (
         <div className={cn('person')}>
             <div className={cn('person__sidebar')}>
-                <div className={cn('person__block', 'person__photo')}>
-                    <img className={cn('person__photo-image')} src="https://avatars.githubusercontent.com/u/8215396?v=4" alt="photo" />
-                </div>
+                <Photo
+                    src="https://avatars.githubusercontent.com/u/8215396?v=4"
+                    alt="User photo"
+                    isEdit={true}
+                />
                 <div className={cn('person__block', 'person__links')}>
                     <div className={cn('person__link-wrapper')}>
                         <strong className={cn('person__link')}>{t('routes.person.links.base-info.title')}</strong>
