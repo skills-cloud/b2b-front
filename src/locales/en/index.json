@@ -3,6 +3,11 @@
     "routes": {
         "main": {
             "hello": "Hello! I'm main page."
+        },
+        "person": {
+            "files": {
+                "header": "Files"
+            }
         }
     },
     "helmet": {

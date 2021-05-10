@@ -6,6 +6,7 @@ import Tooltip from 'component/tooltip';
 import useClassnames from 'hook/use-classnames';
 
 import Common from './common';
+import Files from './files';
 import style from './index.module.pcss';
 
 export const Person = () => {
@@ -49,12 +50,13 @@ export const Person = () => {
                         <strong className={cn('person__link')} data-count="1">{t('routes.person.links.certificates.title')}</strong>
                     </div>
                     <div className={cn('person__link-wrapper')}>
-                        <strong className={cn('person__link')} data-count="4">{t('routes.person.links.files.title')}</strong>
+                        <a href="#person-block-files" className={cn('person__link')} data-count="4">{t('routes.person.links.files.title')}</a>
                     </div>
                 </div>
             </div>
             <div className={cn('person__content')}>
                 <Common />
+                <Files id="person-block-files" />
             </div>
         </div>
     );
