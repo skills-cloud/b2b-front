@@ -9,6 +9,7 @@ import Common from './common';
 import Photo from './photo';
 import Files from './files';
 import Certificates from './certificates';
+import Education from './education';
 import style from './index.module.pcss';
 
 export const Person = () => {
@@ -48,7 +49,7 @@ export const Person = () => {
                         <Tooltip content={t('routes.person.links.projects.tooltip')}><span className={cn('person__link-info')}>!</span></Tooltip>
                     </div>
                     <div className={cn('person__link-wrapper')}>
-                        <strong className={cn('person__link')} data-count="1">{t('routes.person.links.education.title')}</strong>
+                        <a href="#person-block-education" className={cn('person__link')} data-count="1">{t('routes.person.links.education.title')}</a>
                     </div>
                     <div className={cn('person__link-wrapper')}>
                         <a href="#person-block-certificates" className={cn('person__link')} data-count="1">{t('routes.person.links.certificates.title')}</a>
@@ -60,6 +61,7 @@ export const Person = () => {
             </div>
             <div className={cn('person__content')}>
                 <Common />
+                <Education id="person-block-education" />
                 <Certificates id="person-block-certificates" />
                 <Files id="person-block-files" />
             </div>
