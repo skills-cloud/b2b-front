@@ -31,22 +31,28 @@ export const Person = () => {
                 />
                 <div className={cn('person__block', 'person__links')}>
                     <div className={cn('person__link-wrapper')}>
-                        <strong className={cn('person__link')}>{t('routes.person.links.base-info.title')}</strong>
-                        <Tooltip content={t('routes.person.links.base-info.tooltip')}><span className={cn('person__link-info')}>!</span></Tooltip>
+                        <a href="#person-block-common" className={cn('person__link')}>{t('routes.person.links.base-info.title')}</a>
+                        <Tooltip content={t('routes.person.links.base-info.tooltip')}>
+                            <span className={cn('person__link-info')}>!</span>
+                        </Tooltip>
                     </div>
                     <div className={cn('person__link-wrapper')}>
-                        <strong className={cn('person__link')}>{t('routes.person.links.competencies.title')}</strong>
+                        <a href="#person-block-competencies" className={cn('person__link')}>{t('routes.person.links.competencies.title')}</a>
                     </div>
                     <div className={cn('person__link-wrapper')}>
-                        <strong className={cn('person__link')}>{t('routes.person.links.contacts.title')}</strong>
+                        <a href="#person-block-contacts" className={cn('person__link')}>{t('routes.person.links.contacts.title')}</a>
                     </div>
                     <div className={cn('person__link-wrapper')}>
-                        <strong className={cn('person__link')} data-count="1">{t('routes.person.links.career.title')}</strong>
-                        <Tooltip content={t('routes.person.links.career.tooltip')}><span className={cn('person__link-info')}>!</span></Tooltip>
+                        <a href="#person-block-career" className={cn('person__link')} data-count="1">{t('routes.person.links.career.title')}</a>
+                        <Tooltip content={t('routes.person.links.career.tooltip')}>
+                            <span className={cn('person__link-info')}>!</span>
+                        </Tooltip>
                     </div>
                     <div className={cn('person__link-wrapper')}>
-                        <strong className={cn('person__link')}>{t('routes.person.links.projects.title')}</strong>
-                        <Tooltip content={t('routes.person.links.projects.tooltip')}><span className={cn('person__link-info')}>!</span></Tooltip>
+                        <a href="#projects" className={cn('person__link')}>{t('routes.person.links.projects.title')}</a>
+                        <Tooltip content={t('routes.person.links.projects.tooltip')}>
+                            <span className={cn('person__link-info')}>!</span>
+                        </Tooltip>
                     </div>
                     <div className={cn('person__link-wrapper')}>
                         <a href="#person-block-education" className={cn('person__link')} data-count="1">{t('routes.person.links.education.title')}</a>
@@ -60,7 +66,7 @@ export const Person = () => {
                 </div>
             </div>
             <div className={cn('person__content')}>
-                <Common />
+                <Common id="person-block-common" />
                 <Education id="person-block-education" />
                 <Certificates id="person-block-certificates" />
                 <Files id="person-block-files" />
