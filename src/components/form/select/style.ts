@@ -24,8 +24,8 @@ export default (props: TProps, isFocus: boolean): Partial<Styles<any, false>> =>
             minHeight   : '40px',
             boxSizing   : '-moz-initial',
             position    : 'relative',
-            borderColor : isFocus ? '#f7b322' : '#d9d9d9',
-            boxShadow   : isFocus ? '0 0 0 1px #f7b322' : 'none',
+            borderColor : isFocus ? '#999' : '#d9d9d9',
+            boxShadow   : isFocus ? '0 0 0 1px #999' : 'none',
             display     : 'flex'
         }),
         control: () => ({

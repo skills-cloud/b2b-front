@@ -179,8 +179,8 @@ const InputSkills = (props: IProps) => {
                     minHeight   : '40px',
                     boxSizing   : 'border-box',
                     position    : 'relative',
-                    borderColor : isFocus ? '#f7b322' : '#d9d9d9',
-                    boxShadow   : isFocus ? '0 0 0 1px #f7b322' : 'none'
+                    borderColor : isFocus ? '#999' : '#d9d9d9',
+                    boxShadow   : isFocus ? '0 0 0 1px #999' : 'none'
                 }),
                 control: () => ({
                     alignItems     : 'center',
@@ -198,10 +198,10 @@ const InputSkills = (props: IProps) => {
                     display        : 'block',
                     height         : '24px',
                     lineHeight     : '24px',
-                    backgroundColor: 'rgba(0, 112, 233, 0.15)',
+                    backgroundColor: 'rgba(170, 170, 170, 0.15)',
                     fontSize       : '12px',
                     padding        : '0 24px 0 10px',
-                    color          : '#0070e9',
+                    color          : '#121212',
                     whiteSpace     : 'nowrap',
                     overflow       : 'hidden',
                     textOverflow   : 'ellipsis',
@@ -215,14 +215,14 @@ const InputSkills = (props: IProps) => {
                 multiValueRemove: () => ({
                     borderRadius   : '50%',
                     backgroundColor: '#fff',
-                    fill           : '#0070e9',
+                    fill           : '#333',
                     boxSizing      : 'border-box',
                     position       : 'absolute',
                     right          : '4px',
                     top            : '4px',
                     bottom         : '4px',
                     cursor         : 'pointer',
-                    padding        : '4px'
+                    padding        : '3px'
                 })
             }
         };
