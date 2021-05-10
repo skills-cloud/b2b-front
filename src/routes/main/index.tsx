@@ -11,6 +11,8 @@ import InputRadio from 'component/form/radio';
 import Checkbox from 'component/form/checkbox';
 
 import style from './index.module.pcss';
+import InputSelect from 'component/form/select';
+import InputSkills from 'component/form/input-skills';
 
 export const Main = () => {
     const cn = useClassnames(style);
@@ -31,6 +33,10 @@ export const Main = () => {
                 <Checkbox name="checkbox1" label="Checkbox" direction="column" />
                 <Checkbox name="checkbox2" label="Checkbox row" direction="row" />
                 <Checkbox name="checkbox5" disabled={true} label="Disabled" defaultChecked={true} />
+                <InputSelect label="Select" direction="row" name="select" options={[{ value: 'test', label: 'test' }, { value: 'test1', label: 'test1' }]} />
+                <InputSelect label="Select column" direction="column" name="select 2" options={[{ value: 'test', label: 'test' }, { value: 'test1', label: 'test1' }]} />
+                <InputSkills name="skills">Skills</InputSkills>
+                <InputSkills name="skills" direction="column">Skills</InputSkills>
                 <Button type="submit">Button 2</Button>
             </Form>
 

@@ -15,6 +15,7 @@
     },
     "devDependencies": {
         "@hookform/devtools": "3.x.x",
+        "@types/lodash.debounce": "^4.0.6",
         "@types/node": "14.x.x",
         "@types/react": "17.x.x",
         "@types/react-datepicker": "3.x.x",
@@ -22,6 +23,7 @@
         "@types/react-helmet": "6.x.x",
         "@types/react-router": "5.x.x",
         "@types/react-router-dom": "5.x.x",
+        "@types/react-select": "3.x.x",
         "@types/redux-logger": "3.x.x",
         "@types/uuid": "8.x.x",
         "@types/webpack": "5.x.x",
@@ -56,6 +58,7 @@
         "history": "4.x.x",
         "i18next": "20.x.x",
         "i18next-xhr-backend": "3.x.x",
+        "lodash.debounce": "^4.0.8",
         "moment": "2.x.x",
         "query-string": "7.x.x",
         "react": "17.x.x",
@@ -68,6 +71,7 @@
         "react-redux": "7.x.x",
         "react-router": "5.x.x",
         "react-router-dom": "5.x.x",
+        "react-select": "3.x.x",
         "redux": "4.x.x",
         "redux-logger": "3.x.x",
         "uuid": "8.x.x"

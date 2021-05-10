@@ -1,0 +1,139 @@
+import React, { useState, useMemo, FC, useEffect, useCallback } from 'react';
+import ReactSelect, { components } from 'react-select';
+import ReactSelectAsync from 'react-select/async';
+import { useFormContext, Controller } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
+
+import { useClassnames } from 'hook/use-classnames';
+import Error from 'component/error';
+
+import getStyles from './style';
+import { TProps, IValue } from './types';
+import style from './index.module.pcss';
+
+const InputSelect = (props: TProps) => {
+    const cn = useClassnames(style, props.className, true);
+
+    const { formState: { errors }, watch, trigger, control } = useFormContext();
+    const value = watch(props.name);
+
+    const [isFocus, setIsFocus] = useState(false);
+    const [suggests, setSuggests] = useState<Array<IValue>>(props.options || []);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SelectInput: FC<any> = useMemo(() => ({ children, ...args }) => (
+        <components.Input {...args}>
+            {children}
+        </components.Input>
+    ), []);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const Option: FC<any> = useMemo(() => ({ children, ...args }) => (
+        <components.Option {...args}>
+            {children}
+        </components.Option>
+    ), []);
+
+    useEffect(() => {
+        if(props.options) {
+            setSuggests(props.options);
+        }
+    }, [JSON.stringify(props.options)]);
+
+    useEffect(() => {
+        if(value) {
+            void trigger(props.name);
+        }
+    }, []);
+
+    const onInputChange = useCallback((inputValue: string) => {
+        const newSuggests = props.options?.filter((suggest: IValue) => {
+            return suggest.label?.toLowerCase().includes(inputValue.toLowerCase());
+        });
+
+        if(newSuggests) {
+            setSuggests(newSuggests);
+        }
+    }, [JSON.stringify(props.options)]);
+
+    const onFocus = useCallback(() => {
+        if(!isFocus) {
+            setIsFocus(true);
+        }
+    }, [isFocus]);
+
+    const elLabel = useMemo(() => {
+        if(props.label) {
+            return (
+                <strong
+                    className={cn('input__label', {
+                        'input__label_required': props.required
+                    })}
+                >
+                    {props.label}
+                </strong>
+            );
+        }
+    }, [props.label, props.required, errors[props.name]]);
+
+    const elError = useMemo(() => {
+        if(props.elError !== false) {
+            return <ErrorMessage as={Error} name={props.name} errors={errors} className={cn('input__error')} />;
+        }
+    }, [props.elError, props.name, errors[props.name]]);
+
+    return (
+        <Controller
+            name={props.name}
+            control={control}
+            defaultValue={props.defaultValue}
+            rules={{ required: props.required }}
+            render={({ field: { onChange, onBlur, value: renderValue } }) => {
+                const selectProps = {
+                    autoFocus    : props.autoFocus,
+                    placeholder  : props.placeholder,
+                    isMulti      : false,
+                    isSearchable : props.isSearchable ? true : props.isSearchable,
+                    isClearable  : props.clearable,
+                    tabIndex     : props.tabIndex,
+                    isDisabled   : props.disabled,
+                    value        : renderValue,
+                    defaultValue : renderValue,
+                    onFocus      : onFocus,
+                    options      : suggests,
+                    onInputChange: props.loadOptions ? undefined : onInputChange,
+                    onChange     : onChange,
+                    styles       : getStyles(props, isFocus),
+                    className    : cn('input__field', {
+                        'input__field_invalid': errors[props.name]
+                    }),
+                    components: {
+                        Input : SelectInput,
+                        Option: Option,
+                        ...props.components
+                    },
+                    onBlur: () => {
+                        setIsFocus(false);
+                        onBlur();
+                    }
+                };
+
+                return (
+                    <label className={cn('input')}>
+                        <div className={cn('input__wrapper', `input__wrapper_${props.direction}`)}>
+                            {elLabel}
+                            {props.loadOptions ? <ReactSelectAsync loadOptions={props.loadOptions} {...selectProps} /> : <ReactSelect {...selectProps} />}
+                        </div>
+                        {elError}
+                    </label>
+                );
+            }}
+        />
+    );
+};
+
+InputSelect.defaultProps = {
+    direction: 'row'
+};
+
+export default InputSelect;
