@@ -1,12 +1,36 @@
 {
     "components": {
+        "header": {
+            "logo": "SKILLCLOUD",
+            "nav": {
+                "specialists": "Специалисты",
+                "teams": "Команды",
+                "help": "Помощь"
+            }
+        },
+        "user": {
+            "header-bar": {
+                "buttons": {
+                    "login": "Войти",
+                    "logout": "Выйти"
+                }
+            }
+        },
         "form": {
             "submit": "Submit"
         }
     },
     "routes": {
+        "login": {
+            "title": "Авторизация",
+            "form": {
+                "email": "Email",
+                "password": "Пароль",
+                "button": "Войти"
+            }
+        },
         "main": {
-            "hello": "Привет, дно! Я Main страница."
+            "hello": "SkillCloud"
         },
         "person": {
             "links": {
@@ -16,6 +40,9 @@
                 },
                 "competencies": {
                     "title": "Компетенции"
+                },
+                "rate": {
+                    "title": "Ставка"
                 },
                 "contacts": {
                     "title": "Контакты"
@@ -53,19 +80,62 @@
                         "telephone": "Моб. телефон",
                         "skype": "Skype"
                     },
-                    "competencies": {
-                        "title": "Компетенции",
-                        "role": "Роль",
-                        "skills": "Навыки",
-                        "comment": "Комментарий"
+                    "verify": {
+                        "title": "Верифицировал",
+                        "comment": "Комментарий",
+                        "modal": {
+                            "title": "Верифицировать данные",
+                            "placeholder": "Вы можете добавить комментарий",
+                            "buttons": {
+                                "save": "Верифицировать",
+                                "cancel": "Отмена"
+                            }
+                        }
+                    }
+                },
+                "competencies": {
+                    "title": "Компетенции",
+                    "role": "Роль",
+                    "skills": "Навыки",
+                    "files": "Файлы",
+                    "edit": {
+                        "title_competence": "Компетенции",
+                        "title_checkbox": "{{value}}",
+                        "title_role": "Новая роль",
+                        "preview": {
+                            "languages": "Языки программирования",
+                            "frameworks": "Знание фреймворков",
+                            "architecture": "Проектирование архитектуры"
+                        },
+                        "buttons": {
+                            "expand": "Развернуть все",
+                            "close": "Свернуть все",
+                            "append": "Добавить роль",
+                            "save": "Сохранить",
+                            "cancel": "Отмена"
+                        }
                     }
                 }
             },
             "files": {
-                "header": "Файлы"
+                "header": "Файлы",
+                "empty": "Нет связанных файлов"
             },
             "certificates": {
                 "header": "Сертификаты",
+                "empty": "Нет добавленных сертификатов",
+                "date": {
+                    "empty": "Даты не указаны"
+                },
+                "fields": {
+                    "grade": "Степень",
+                    "date": "Дата выдачи",
+                    "place": "Место обучения",
+                    "speciality": "Специальность",
+                    "description": "Описание",
+                    "files": "Файлы",
+                    "projects": "Проекты"
+                },
                 "label": {
                     "issued": "Выдан",
                     "specialty": "Специальность",
@@ -73,32 +143,181 @@
                     "number": "Номер",
                     "competencies": "Компетенции",
                     "description": "Описание"
+                },
+                "edit": {
+                    "buttons": {
+                        "append": "Добавить сертификат",
+                        "save": "Сохранить",
+                        "cancel": "Отмена"
+                    }
+                },
+                "confirm": {
+                    "title": "Точно удалить?",
+                    "confirm": "Удалить",
+                    "cancel": "Отмена"
                 }
             },
             "education": {
                 "header": "Образование",
                 "label": {
+                    "education-place": "ВУЗ",
                     "period": "Период",
                     "specialty": "Специальность",
                     "power": "Степень",
                     "diploma": "Диплом",
                     "competencies": "Компетенции",
                     "description": "Описание"
+                },
+                "edit": {
+                    "buttons": {
+                        "append": "Добавить образование",
+                        "cancel": "Отмена",
+                        "save": "Сохранить",
+                        "done": "Готово"
+                    }
+                },
+                "confirm": {
+                    "title": "Точно удалить?",
+                    "confirm": "Удалить",
+                    "cancel": "Отмена"
                 }
             },
             "rate": {
                 "header": "Ставка",
-                "remote": {
-                    "title": "Удалённая работа",
-                    "hour": "Часовая",
-                    "day": "День",
-                    "month": "Месяц"
+                "hour": "Часовая",
+                "remote": "Удалённая работа",
+                "office": "Офис",
+                "edit": {
+                    "buttons": {
+                        "cancel": "Отмена",
+                        "save": "Сохранить"
+                    }
+                }
+            },
+            "career": {
+                "header": "Карьера",
+                "confirm": {
+                    "title": "Точно удалить?",
+                    "confirm": "Удалить",
+                    "cancel": "Отмена"
                 },
-                "office": {
-                    "title": "Удалённая работа",
-                    "hour": "Часовая",
-                    "day": "День",
-                    "month": "Месяц"
+                "fields": {
+                    "company": "Компания",
+                    "date": "Период",
+                    "role": "Роль",
+                    "skills": "Компетенции",
+                    "description": "Описание",
+                    "files": "Файлы",
+                    "projects": "Проекты"
+                },
+                "empty": "Опыт работы не указан",
+                "edit": {
+                    "buttons": {
+                        "append": "Добавить опыт работы",
+                        "cancel": "Отмена",
+                        "save": "Сохранить"
+                    }
+                }
+            },
+            "common": {
+                "header": "Основные данные",
+                "empty-contacts": "Нет добавленных контактов",
+                "fields": {
+                    "name": "ФИО",
+                    "first_name": "Имя",
+                    "last_name": "Фамилия",
+                    "middle_name": "Отчество",
+                    "citizenship": {
+                        "title": "Гражданство",
+                        "placeholder": "Начнить вводить"
+                    },
+                    "location": {
+                        "title": "Локация",
+                        "country": "Страна",
+                        "city": "Город"
+                    },
+                    "gender": {
+                        "title": "Пол",
+                        "M": "Мужской",
+                        "М": "Мужской",
+                        "F": "Женский"
+                    },
+                    "birth_date": "Дата рождения",
+                    "contact": {
+                        "title": "Контакт {{number}}",
+                        "types": {
+                            "phone": "Телефон",
+                            "email": "Электронная почта"
+                        },
+                        "controls": {
+                            "main_default": "Основной контакт",
+                            "main_make": "Сделать основным",
+                            "remove": "Удалить"
+                        }
+                    }
+                },
+                "access": {
+                    "title": "Доступность",
+                    "form": {
+                        "start": "Начиная с",
+                        "end": "Заканчивая",
+                        "access": {
+                            "title": "Доступность",
+                            "no": "Недоступен",
+                            "partial": "Частично доступен",
+                            "full": "Доступен"
+                        },
+                        "rate": {
+                            "title": "Ставка",
+                            "hour": "В час (руб.)",
+                            "month": "В месяц (руб.)"
+                        }
+                    },
+                    "buttons": {
+                        "cancel": "Отмена",
+                        "save": "Сохранить"
+                    }
+                },
+                "tabs": {
+                    "main": "Основное",
+                    "contacts": "Контакты"
+                },
+                "edit": {
+                    "buttons": {
+                        "append": "Добавить контакт",
+                        "cancel": "Отмена",
+                        "save": "Сохранить"
+                    }
+                }
+            },
+            "projects": {
+                "header": "Проекты",
+                "fields": {
+                    "name": "Название",
+                    "customer": "Заказчик",
+                    "date": "Период",
+                    "position": "Позиция",
+                    "competencies": "Компетенции",
+                    "description": "Описание",
+                    "placeholder": {
+                        "position": "Начните вводить название позиции",
+                        "competencies": "Начните вводить название компетенции",
+                        "organization": "Выберите заказчика"
+                    }
+                },
+                "empty": "Нет ещё ни одного проекта, в котором участвовал специалист.",
+                "edit": {
+                    "buttons": {
+                        "append": "Добавить проект",
+                        "cancel": "Отмена",
+                        "save": "Сохранить",
+                        "done": "Готово"
+                    }
+                },
+                "confirm": {
+                    "title": "Точно удалить?",
+                    "confirm": "Удалить",
+                    "cancel": "Отмена"
                 }
             }
         },
@@ -107,7 +326,9 @@
                 "title": "Специалисты",
                 "users": {
                     "empty": "Поиск не дал результатов."
-                }
+                },
+                "first-name": "Имя не указано",
+                "last-name": "Фамилия не указана"
             },
             "sidebar": {
                 "search": {
@@ -117,6 +338,87 @@
                             "placeholder": "Введите имя..."
                         }
                     }
+                }
+            }
+        },
+        "specialists-create": {
+            "main": {
+                "title": "Новое резюме",
+                "form": {
+                    "empty": "Поиск не дал результатов.",
+                    "button-submit": "Создать резюме",
+                    "first_name": "Имя",
+                    "last_name": "Фамилия",
+                    "middle_name": "Отчество",
+                    "birth_date": "Дата рождения",
+                    "country": "Страна",
+                    "citizenship": "Гражданство",
+                    "city": "Город",
+                    "gender": {
+                        "title": "Пол",
+                        "M": "Мужской",
+                        "F": "Женский"
+                    }
+                }
+            },
+            "sidebar": {
+                "title": "Похожие"
+            }
+        },
+        "project-request": {
+            "create": {
+                "title": "Новый проектный запрос",
+                "industry": "Отрасль",
+                "employer": "Заказчик",
+                "project": "Проект",
+                "manager": "Ресурсный менеджер",
+                "recruiter": "Ответственный рекрутер",
+                "requestType": "Тип запроса",
+                "priority": "Приоритет",
+                "status": "Статус",
+                "description": "Описание проекта",
+                "submit": "Создать запрос",
+                "required-error": "Обязательно для заполнения"
+            },
+            "blocks": {
+                "sections": {
+                    "main-info": "Основная информация",
+                    "requirements": "Требования к сотруднику",
+                    "employer": "Заказчик",
+                    "applicant": "Кандидаты"
+                },
+                "project-term": "Сроки проекта",
+                "priority": {
+                    "top": "Высокий"
+                },
+                "status": {
+                    "in-progress" : "В работе"
+                },
+                "main-info": {
+                    "industry": "Отрасль",
+                    "project": "Проект",
+                    "manager": "Рес. менеджер",
+                    "recruiter": "Отв. рекрутер",
+                    "request-type": "Тип запроса",
+                    "count": "Общее кол-во",
+                    "description": "Описание проекта",
+                    "employer": "Заказчик"
+                },
+                "duration": "Продолжительность",
+                "rest": "Перерыв",
+                "edit-modal": {
+                    "header":"Основные данные",
+                    "cancel": "Отмена",
+                    "save": "Сохранить"
+                },
+                "tabs": {
+                    "main": "Основное",
+                    "project-timing": "Сроки проекта"
+                },
+                "perion-form": {
+                    "add": "Добавить период приостановки проекта",
+                    "date_from": "Начало проекта",
+                    "date_to": "Окончание проекта"
                 }
             }
         }
