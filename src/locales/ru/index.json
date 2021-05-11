@@ -85,6 +85,21 @@
                     "competencies": "Компетенции",
                     "description": "Описание"
                 }
+            },
+            "rate": {
+                "header": "Ставка",
+                "remote": {
+                    "title": "Удалённая работа",
+                    "hour": "Часовая",
+                    "day": "День",
+                    "month": "Месяц"
+                },
+                "office": {
+                    "title": "Удалённая работа",
+                    "hour": "Часовая",
+                    "day": "День",
+                    "month": "Месяц"
+                }
             }
         },
         "specialists": {

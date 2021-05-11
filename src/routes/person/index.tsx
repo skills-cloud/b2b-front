@@ -11,6 +11,7 @@ import Files from './files';
 import Certificates from './certificates';
 import Education from './education';
 import style from './index.module.pcss';
+import Rate from 'route/person/rate';
 
 export const Person = () => {
     const cn = useClassnames(style);
@@ -67,6 +68,7 @@ export const Person = () => {
             </div>
             <div className={cn('person__content')}>
                 <Common id="person-block-common" />
+                <Rate id="person-block-rate" />
                 <Education id="person-block-education" />
                 <Certificates id="person-block-certificates" />
                 <Files id="person-block-files" />
