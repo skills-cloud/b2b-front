@@ -1,4 +1,4 @@
-import React, { useState, useMemo, Fragment } from 'react';
+import React, { useState, useMemo, Fragment, useCallback } from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -6,6 +6,7 @@ import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconPlus from 'component/icons/plus';
 import IconPencil from 'component/icons/pencil';
 import IconApproved from 'component/icons/approved';
+import Button from 'component/button';
 
 import ProjectsEdit, { IField } from './edit';
 import style from './index.module.pcss';
@@ -43,6 +44,16 @@ export const Projects = (props: IProps) => {
     const [fields, setFields] = useState<Array<IField>>(DEFAULT_MOCK_LIST);
     const { t } = useTranslation();
 
+    const onClickAdd = useCallback(() => {
+        unstable_batchedUpdates(() => {
+            setFields((state) => [
+                ...state,
+                {}
+            ]);
+            setIsEdit(true);
+        });
+    }, []);
+
     const elEdit = useMemo(() => {
         if(isEdit) {
             return (
@@ -62,6 +73,36 @@ export const Projects = (props: IProps) => {
         }
     }, [isEdit, fields]);
 
+    const elButtonEdit = useMemo(() => {
+        if(fields.length) {
+            return (
+                <div
+                    className={cn('projects__control')}
+                    onClick={() => {
+                        setIsEdit(true);
+                    }}
+                >
+                    <IconPencil />
+                </div>
+            );
+        }
+    }, [fields.length]);
+
+    const elEmpty = useMemo(() => {
+        if(!fields.length) {
+            return (
+                <div className={cn('projects__empty')}>
+                    {t('routes.person.projects.empty')}
+                    <Button
+                        isSecondary={true}
+                        children={t('routes.person.projects.edit.buttons.append')}
+                        onClick={onClickAdd}
+                    />
+                </div>
+            );
+        }
+    }, [fields.length]);
+
     return (
         <Fragment>
             {elEdit}
@@ -70,28 +111,14 @@ export const Projects = (props: IProps) => {
                 <div className={cn('projects__controls')}>
                     <div
                         className={cn('projects__control')}
-                        onClick={() => {
-                            unstable_batchedUpdates(() => {
-                                setFields((state) => [
-                                    ...state,
-                                    {}
-                                ]);
-                                setIsEdit(true);
-                            });
-                        }}
+                        onClick={onClickAdd}
                     >
                         <IconPlus />
                     </div>
-                    <div
-                        className={cn('projects__control')}
-                        onClick={() => {
-                            setIsEdit(true);
-                        }}
-                    >
-                        <IconPencil />
-                    </div>
+                    {elButtonEdit}
                 </div>
                 <div className={cn('projects__collection')}>
+                    {elEmpty}
                     {fields.map((field, index) => (
                         <div key={index} className={cn('projects__education')}>
                             <strong className={cn('projects__education-title')}>

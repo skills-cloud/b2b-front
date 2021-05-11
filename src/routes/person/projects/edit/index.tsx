@@ -48,7 +48,7 @@ export const ProjectsEdit = (props: IProps) => {
 
     useEffect(() => {
         if(fields.length) {
-            methods.setFocus(`project.${fields.length - 1}.customer` as `project.${number}.customer`);
+            methods.setFocus(`project.${fields.length - 1}.name` as `project.${number}.name`);
         }
     }, [methods.setFocus]);
 
