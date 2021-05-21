@@ -1,16 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface IState {
-    id?: number,
+    id?: number | string,
+    email?: string,
     name?: string,
+    familyName?: string,
+    givenName?: string,
     photo?: string
 }
 
-const initialState: IState = {
-    id   : 1,
-    name : 'Марк Б.',
-    photo: ''
-};
+const initialState: IState = {};
 
 export const { actions, reducer, name } = createSlice({
     name        : 'user',
@@ -21,6 +20,9 @@ export const { actions, reducer, name } = createSlice({
                 ...state,
                 ...action.payload
             };
+        },
+        reset() {
+            return initialState;
         }
     }
 });

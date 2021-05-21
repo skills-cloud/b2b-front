@@ -1,5 +1,22 @@
 {
-    "components": {},
+    "components": {
+        "header": {
+            "logo": "SKILLCLOUD",
+            "nav": {
+                "specialists": "Specialists",
+                "teams": "Teams",
+                "help": "Help"
+            }
+        },
+        "user": {
+            "header-bar": {
+                "buttons": {
+                    "login": "Login",
+                    "logout": "Logout"
+                }
+            }
+        }
+    },
     "routes": {
         "main": {
             "hello": "Hello! I'm main page."

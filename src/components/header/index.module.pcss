@@ -1,0 +1,103 @@
+.header {
+    width: 100%;
+    display: grid;
+    background-color: #fff;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: 64px;
+    align-items: center;
+
+    &__main {
+        font-family: Montserrat, sans-serif;
+        font-style: normal;
+        text-decoration: none;
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-columns: 25% 1fr 25%;
+        max-width: 992px;
+        width: 100%;
+        margin: 0 auto;
+        color: #000;
+        align-items: center;
+    }
+
+    &__logo {
+        font-weight: 800;
+        font-size: 18px;
+        line-height: 22px;
+        text-transform: uppercase;
+        justify-self: flex-start;
+        color: inherit;
+        text-decoration: inherit;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__nav {
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 18px;
+        display: grid;
+        grid-auto-flow: column;
+        grid-column-gap: 32px;
+        justify-content: center;
+    }
+
+    &__nav-link {
+        height: 64px;
+        line-height: 64px;
+        box-sizing: border-box;
+        text-decoration: inherit;
+        color: inherit;
+
+        &_active {
+            border-top: solid 4px transparent;
+            border-bottom: solid 4px #9d9d9d;
+            line-height: 56px;
+        }
+    }
+
+    &__languages {
+        position: absolute;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        top: 4px;
+        right: 4px;
+        display: grid;
+        grid-row-gap: 4px;
+    }
+
+    &__language {
+        display: block;
+        font-size: 10px;
+        line-height: 12px;
+        height: 12px;
+        border: solid 1px #000;
+        border-radius: 6px;
+        padding: 0 4px;
+        text-align: center;
+        font-family: monospace;
+        text-transform: uppercase;
+        color: #000;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover:not(&_active) {
+                cursor: pointer;
+            }
+        }
+
+        &_active {
+            background-color: #000;
+            color: #fff;
+        }
+    }
+}

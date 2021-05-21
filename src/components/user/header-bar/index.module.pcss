@@ -1,0 +1,27 @@
+.user-header-bar {
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 12px;
+    justify-content: flex-end;
+
+    &__profile {
+        display: grid;
+        grid-auto-flow: column;
+        grid-column-gap: 12px;
+        justify-content: flex-end;
+        align-items: center;
+        font-family: Montserrat, sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+    &__profile-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: inherit;
+        text-decoration: none;
+    }
+}

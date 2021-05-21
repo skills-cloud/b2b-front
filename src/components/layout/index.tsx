@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import useClassnames from 'hook/use-classnames';
+import Header from 'component/header';
 
 import './index.pcss';
 import style from './index.module.pcss';
@@ -14,7 +15,7 @@ export const Layout = (props: IProps) => {
 
     return (
         <div className={cn('layout')}>
-            {/* Header */}
+            <Header />
             {props.children}
         </div>
     );
