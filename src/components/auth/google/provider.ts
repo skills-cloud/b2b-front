@@ -40,9 +40,6 @@ export const AuthGoogleProvider = (props: IProps) => {
                                         'Content-Type': 'application/json'
                                     }
                                 })
-                                    .then((payload) => {
-                                        console.log(123, payload);
-                                    })
                                     .catch(console.error);
 
                                 dispatch(
