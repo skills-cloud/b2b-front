@@ -44,9 +44,6 @@ export const Person = () => {
                         </TooltipError>
                     </div>
                     <div className={cn('person__link-wrapper')}>
-                        <a href="#person-block-rate" className={cn('person__link')}>{t('routes.person.links.rate.title')}</a>
-                    </div>
-                    <div className={cn('person__link-wrapper')}>
                         <a href="#person-block-competencies" className={cn('person__link')}>{t('routes.person.links.competencies.title')}</a>
                     </div>
                     <div className={cn('person__link-wrapper')}>

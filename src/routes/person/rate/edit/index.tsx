@@ -70,8 +70,8 @@ export const RateEdit = (props: IProps) => {
                     </FormProvider>
                 </div>
                 <div className={cn('rate-edit__form-footer')}>
-                    <Button isSecondary={true} onClick={props.onCancel}>{t('routes.person.projects.edit.buttons.cancel')}</Button>
-                    <Button type="submit">{t('routes.person.projects.edit.buttons.save')}</Button>
+                    <Button isSecondary={true} onClick={props.onCancel}>{t('routes.person.rate.edit.buttons.cancel')}</Button>
+                    <Button type="submit">{t('routes.person.rate.edit.buttons.save')}</Button>
                 </div>
             </form>
         </div>
