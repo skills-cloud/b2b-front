@@ -28,6 +28,23 @@ export const AuthGoogleProvider = (props: IProps) => {
                             if(authInstance.isSignedIn.get()) {
                                 const basicProfile = authInstance.currentUser.get().getBasicProfile();
 
+                                // @TODO: ----------
+                                fetch('http://dev.b2bcloud.com:19000/auth', {
+                                    method: 'POST',
+                                    mode  : 'no-cors',
+                                    cache : 'no-cache',
+                                    body  : JSON.stringify({
+                                        token: authInstance.currentUser.get().getAuthResponse().id_token
+                                    }),
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                })
+                                    .then((payload) => {
+                                        console.log(123, payload);
+                                    })
+                                    .catch(console.error);
+
                                 dispatch(
                                     actions.set({
                                         id        : basicProfile.getId(),
