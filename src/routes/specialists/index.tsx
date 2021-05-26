@@ -49,6 +49,18 @@ export const Specialists = () => {
     }, [users, i18n.language]);
 
     useEffect(() => {
+        fetch('/spec/portfolio/search', {
+            method : 'post',
+            cache  : 'no-cache',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'request': {}
+            })
+        })
+            .catch(console.error);
+
         import('./mock.json')
             .then((payload) => {
                 setUsers(payload.default.filter(({ name }) => name.includes(search)));

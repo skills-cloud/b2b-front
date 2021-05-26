@@ -21,7 +21,7 @@ export const UserHeaderBar = (props: IProps) => {
     const user = useSelector((store) => store[keyStore]);
 
     const elButtonLogin = useMemo(() => {
-        if(!user.id) {
+        if(!user.login) {
             return (
                 <Button
                     children={t('components.user.header-bar.buttons.login')}
@@ -42,52 +42,23 @@ export const UserHeaderBar = (props: IProps) => {
                 />
             );
         }
-    }, [user.id, i18n.language]);
-
-    const elButtonLogout = useMemo(() => {
-        if(user.id) {
-            return (
-                <Button
-                    isSecondary={true}
-                    children={t('components.user.header-bar.buttons.logout')}
-                    onClick={(e) => {
-                        e.preventDefault();
-
-                        const authInstance = window.gapi.auth2.getAuthInstance();
-
-                        if(authInstance.isSignedIn.get()) {
-                            authInstance.signOut();
-
-                            dispatch(actions.reset());
-                        }
-                    }}
-                />
-            );
-        }
-    }, [user.id, i18n.language]);
+    }, [user.login, i18n.language]);
 
     const elProfile = useMemo(() => {
-        if(user.id) {
-            let name = user.name;
-
-            if(user.givenName && user.familyName) {
-                name = `${user.givenName} ${user.familyName?.substring(0, 1)}.`;
-            }
-
+        if(user.login) {
             return (
                 <div className={cn('user-header-bar__profile')}>
-                    <Avatar src={user.photo} preset="small" />
-                    <Link to="/profile" className={cn('user-header-bar__profile-name')}>{name}</Link>
+                    <Avatar src={user.image} preset="small" />
+                    <Link to="/profile" className={cn('user-header-bar__profile-name')}>{user.name}</Link>
                 </div>
             );
         }
-    }, [user.id]);
+    }, [user.login, user.image, user.name]);
 
     return (
         <div className={cn('user-header-bar')}>
             {elProfile}
             {elButtonLogin}
-            {elButtonLogout}
         </div>
     );
 };

@@ -29,7 +29,13 @@ module.exports = (env = {}) => {
             compress          : false,
             historyApiFallback: true,
             clientLogLevel    : 'error',
-            index             : 'index.html'
+            index             : 'index.html',
+            proxy             : [{
+                context     : ['/spec/**', '/ui/**'],
+                target      : 'http://dev.b2bcloud.com:19000/',
+                secure      : false,
+                changeOrigin: true
+            }]
         },
         resolve: {
             symlinks  : false,

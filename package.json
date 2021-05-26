@@ -63,7 +63,6 @@
         "i18next-xhr-backend": "3.x.x",
         "lodash.debounce": "4.x.x",
         "moment": "2.x.x",
-        "query-string": "7.x.x",
         "react": "17.x.x",
         "react-datepicker": "3.x.x",
         "react-dom": "17.x.x",

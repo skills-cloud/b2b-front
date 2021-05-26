@@ -1,17 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { sync, authGoogle } from './actions';
+
 export interface IState {
-    id?: number | string,
-    email?: string,
-    name?: string,
-    familyName?: string,
-    givenName?: string,
-    photo?: string
+    image?: string,
+    login?: string,
+    name?: string
 }
 
 const initialState: IState = {};
 
-export const { actions, reducer, name } = createSlice({
+export const slice = createSlice({
     name        : 'user',
     initialState: initialState,
     reducers    : {
@@ -24,7 +23,29 @@ export const { actions, reducer, name } = createSlice({
         reset() {
             return initialState;
         }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(sync.fulfilled, (state, action) => {
+                return {
+                    ...state,
+                    ...action.payload
+                };
+            })
+            .addCase(sync.rejected, () => {
+                return initialState;
+            });
     }
 });
+
+export const name = slice.name;
+
+export const reducer = slice.reducer;
+
+export const actions = {
+    ...slice.actions,
+    sync,
+    authGoogle
+};
 
 export default reducer;
