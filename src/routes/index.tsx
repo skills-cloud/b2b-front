@@ -12,7 +12,7 @@ import { baseRoutes, IProps } from './config';
 export const Routes = () => {
     const location = useLocation();
     const { t, i18n } = useTranslation();
-    const isAuth = useSelector((store) => !!store[userReducerName].id);
+    const isAuth = useSelector((store) => !!store[userReducerName].login);
 
     const elRoutes = useCallback((routes: Array<IProps>) => {
         if(Array.isArray(routes)) {
