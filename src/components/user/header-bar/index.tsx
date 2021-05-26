@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
-import { useSelector, useDispatch } from 'component/core/store';
+import { useSelector } from 'component/core/store';
 import Button from 'component/button';
 import Avatar from 'component/avatar';
 
-import { name as keyStore, actions } from './../slice';
+import { name as keyStore } from './../slice';
 import style from './index.module.pcss';
 
 export interface IProps {
@@ -17,7 +17,6 @@ export interface IProps {
 export const UserHeaderBar = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t, i18n } = useTranslation();
-    const dispatch = useDispatch();
     const user = useSelector((store) => store[keyStore]);
 
     const elButtonLogin = useMemo(() => {
