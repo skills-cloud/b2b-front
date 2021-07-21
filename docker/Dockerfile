@@ -7,6 +7,7 @@ RUN yarn
 ADD . /app/
 RUN echo ${ENV_NAME}
 RUN yarn build:${ENV_NAME}
+RUN ls -la /app
 
 FROM nginx:1.16-alpine
 ADD ./docker/vhost.conf /etc/nginx/conf.d/default.conf
