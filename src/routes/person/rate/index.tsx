@@ -4,7 +4,7 @@ import { unstable_batchedUpdates } from 'react-dom';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconPencil from 'component/icons/pencil';
-import IconApproved from 'component/icons/approved';
+import IconApply from 'component/icons/apply';
 
 import RateEdit, { IField } from './edit';
 import style from './index.module.pcss';
@@ -96,7 +96,7 @@ export const Rate = (props: IProps) => {
             {elEdit}
             <div id={props.id} className={cn('rate')}>
                 <div className={cn('rate__header-block')}>
-                    <h1 className={cn('rate__header')}>{t('routes.person.rate.header')}</h1>
+                    <h2 className={cn('rate__header')}>{t('routes.person.rate.header')}</h2>
                     <div className={cn('rate__controls')}>
                         {elButtonEdit}
                     </div>
@@ -104,7 +104,13 @@ export const Rate = (props: IProps) => {
                 <div className={cn('rate__content')}>
                     {elRateBlock}
                     <div className={cn('rate__block', 'rate__block_control')}>
-                        <IconApproved />
+                        <IconApply
+                            svg={{
+                                width    : 24,
+                                height   : 24,
+                                className: cn('rate__icon-apply')
+                            }}
+                        />
                     </div>
                 </div>
             </div>

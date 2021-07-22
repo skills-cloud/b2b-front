@@ -1,0 +1,45 @@
+.competencies-edit {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    display: grid;
+    background-color: var(--color-shadow-2);
+    justify-items: center;
+    align-items: center;
+    overflow: auto;
+
+    &__header {
+        font-family: Montserrat, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 29px;
+        color: var(--color-black);
+    }
+
+    &__form-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__button-secondary {
+        margin-left: auto;
+        margin-right: 12px;
+    }
+
+    &__link-append {
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-blue-primary);
+        opacity: 0.5;
+        text-decoration-style: dashed;
+        text-underline-offset: 2px;
+    }
+}

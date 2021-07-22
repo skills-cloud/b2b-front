@@ -23,6 +23,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        line-height: 40px;
 
         &_required {
 
@@ -58,6 +59,11 @@
         grid-column-gap: 12px;
         align-items: center;
         cursor: pointer;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        color: var(--color-text-dark);
     }
 
     &__input {
@@ -78,15 +84,15 @@
         }
 
         &:hover {
-            border-color: var(--color-radio-checked);
+            border-color: var(--color-blue-primary);
         }
 
         &:checked {
-            border-color: var(--color-radio-checked);
+            border-color: var(--color-blue-primary);
             border-width: 7px;
 
             &:hover {
-                border-color: var(--color-radio-checked);
+                border-color: var(--color-blue-primary);
             }
         }
 

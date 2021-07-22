@@ -69,10 +69,10 @@ const DateInput = (props: IProps) => {
     }, [value, props.placeholder]);
 
     useEffect(() => {
-        if(value) {
+        if(value || props.defaultValue) {
             void trigger(props.name);
         }
-    }, []);
+    }, [value, props.defaultValue]);
 
     const elInput = () => {
         if(isSafariDesktop || isMozilla && !isChrome) {
@@ -95,6 +95,7 @@ const DateInput = (props: IProps) => {
                                 }}
                                 placeholderText={props.placeholder}
                                 className={cn('date__input')}
+                                value={props.defaultValue}
                             />
                             <IconCalendar svg={{ className: cn('date__icon') }} />
                         </Fragment>
@@ -112,6 +113,7 @@ const DateInput = (props: IProps) => {
                         'date__input_filled' : !!value,
                         'date__input_invalid': errors[props.name]
                     })}
+                    defaultValue={props.defaultValue}
                     min={props.minDate}
                     max={props.maxDate}
                     {...register(props.name, {

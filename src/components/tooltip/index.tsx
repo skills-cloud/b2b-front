@@ -1,25 +1,26 @@
-import React, { ReactNode, FC, useCallback, MouseEvent } from 'react';
-import { Arrow, useHover, useLayer } from 'react-laag';
+import React, { ReactNode, useCallback, MouseEvent } from 'react';
+import { useHover, useLayer } from 'react-laag';
 import { useClassnames, IStyle } from 'hook/use-classnames';
 
 export interface IProps {
     children?: ReactNode,
     content?: ReactNode,
-    className?: IStyle | string
+    className?: IStyle | string,
+    theme?: 'dark' | 'light'
 }
 
 import style from './index.module.pcss';
 
-const TooltipError: FC<IProps> = (props) => {
+const TooltipError = (props: IProps = { theme: 'light' }) => {
     const cn = useClassnames(style, props.className, true);
     const [isOver, hoverProps] = useHover();
     const {
         triggerProps,
         layerProps,
-        arrowProps,
         renderLayer
     } = useLayer({
-        isOpen: isOver
+        isOpen: isOver,
+        auto  : true
     });
 
     const onClick = useCallback((e: MouseEvent) => {
@@ -35,22 +36,17 @@ const TooltipError: FC<IProps> = (props) => {
             {props.children}
             {isOver && (
                 renderLayer(
-                    <div className={cn('tooltip')} {...layerProps}>
+                    <div className={cn('tooltip', `tooltip_${props.theme}`)} {...layerProps}>
                         {props.content}
-                        <Arrow
-                            {...arrowProps}
-                            size={6}
-                            angle={45}
-                            roundness={1}
-                            borderWidth={1}
-                            borderColor="rgba(0, 0, 0, 0.25)"
-                            backgroundColor="white"
-                        />
                     </div>
                 )
             )}
         </span>
     );
+};
+
+TooltipError.defaultProps = {
+    theme: 'light'
 };
 
 export default TooltipError;

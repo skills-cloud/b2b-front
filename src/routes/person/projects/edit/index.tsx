@@ -65,7 +65,7 @@ export const ProjectsEdit = (props: IProps) => {
                 })}
             >
                 <div className={cn('projects-edit__form-body')}>
-                    <h1 className={cn('projects-edit__header')}>{t('routes.person.projects.header')}</h1>
+                    <h2 className={cn('projects-edit__header')}>{t('routes.person.projects.header')}</h2>
                     <FormProvider {...methods}>
                         {fields.map((field, index) => (
                             <div

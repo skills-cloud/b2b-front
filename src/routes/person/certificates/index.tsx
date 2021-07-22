@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconPlus from 'component/icons/plus';
 import IconPencil from 'component/icons/pencil';
-import IconApproved from 'component/icons/approved';
+import IconApply from 'component/icons/apply';
 
 import style from './index.module.pcss';
 
@@ -19,7 +19,7 @@ export const Certificates = (props: IProps) => {
 
     return (
         <div id={props.id} className={cn('certificates')}>
-            <h1 className={cn('certificates__header')}>{t('routes.person.certificates.header')}</h1>
+            <h2 className={cn('certificates__header')}>{t('routes.person.certificates.header')}</h2>
             <div className={cn('certificates__controls')}>
                 <div className={cn('certificates__control', 'certificates__control_disable')}>
                     <IconPlus />
@@ -32,9 +32,11 @@ export const Certificates = (props: IProps) => {
                 <div className={cn('certificates__certificate')}>
                     <strong className={cn('certificates__certificate-title')}>
                         Повышение квалификации
-                        <IconApproved
+                        <IconApply
                             svg={{
-                                className: cn('certificates__icon')
+                                width    : 24,
+                                height   : 24,
+                                className: cn('certificates__icon-apply')
                             }}
                         />
                     </strong>
@@ -70,9 +72,11 @@ export const Certificates = (props: IProps) => {
                 <div className={cn('certificates__certificate')}>
                     <strong className={cn('certificates__certificate-title')}>
                         Повышение квалификации
-                        <IconApproved
+                        <IconApply
                             svg={{
-                                className: cn('certificates__icon')
+                                width    : 24,
+                                height   : 24,
+                                className: cn('certificates__icon-apply')
                             }}
                         />
                     </strong>

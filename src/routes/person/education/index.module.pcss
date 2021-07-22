@@ -79,7 +79,9 @@
 
     &__education-title {
         font-family: Montserrat, sans-serif;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         font-style: normal;
         font-weight: bold;
         font-size: 16px;
@@ -128,5 +130,13 @@
         font-size: 13px;
         text-align: center;
         color: var(--color-black);
+    }
+
+    &__icon-apply {
+        fill: var(--color-light-green);
+
+        & > g {
+            fill: var(--color-dark-green);
+        }
     }
 }

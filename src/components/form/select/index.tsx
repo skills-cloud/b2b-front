@@ -120,7 +120,11 @@ const InputSelect = (props: TProps) => {
 
                 return (
                     <label className={cn('input')}>
-                        <div className={cn('input__wrapper', `input__wrapper_${props.direction}`)}>
+                        <div
+                            className={cn('input__wrapper', `input__wrapper_${props.direction}`, {
+                                'input__wrapper_no-label': !props.label
+                            })}
+                        >
                             {elLabel}
                             {props.loadOptions ? <ReactSelectAsync loadOptions={props.loadOptions} {...selectProps} /> : <ReactSelect {...selectProps} />}
                         </div>

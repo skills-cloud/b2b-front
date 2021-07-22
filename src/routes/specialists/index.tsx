@@ -71,7 +71,7 @@ export const Specialists = () => {
     return (
         <div className={cn('specialists')}>
             <main className={cn('specialists__main')}>
-                <h1 className={cn('specialists__main-header')}>{t('routes.specialists.main.title')}</h1>
+                <h2 className={cn('specialists__main-header')}>{t('routes.specialists.main.title')}</h2>
                 {elUsers}
                 <Link
                     to="/specialists/create"

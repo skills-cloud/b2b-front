@@ -89,7 +89,7 @@ export const Files = (props: IProps) => {
 
     return (
         <div id={props.id} className={cn('files')}>
-            <h1 className={cn('files__header')}>{t('routes.person.files.header')}</h1>
+            <h2 className={cn('files__header')}>{t('routes.person.files.header')}</h2>
             <form className={cn('files__controls')}>
                 <label className={cn('files__control')}>
                     <IconPlus />

@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next';
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconPlus from 'component/icons/plus';
 import IconPencil from 'component/icons/pencil';
-import IconApproved from 'component/icons/approved';
 import Button from 'component/button';
-
-import CareerEdit, { IField } from './edit';
-import style from './index.module.pcss';
 import IconFileImage from 'component/icons/file-image';
 import IconFilePdf from 'component/icons/file-pdf';
 import IconFileDocument from 'component/icons/file-document';
+import IconApply from 'component/icons/apply';
+
+import CareerEdit, { IField } from './edit';
+import style from './index.module.pcss';
 
 export interface IProps {
     className?: string | IStyle,
@@ -129,7 +129,7 @@ export const Career = (props: IProps) => {
         <Fragment>
             {elEdit}
             <div id={props.id} className={cn('career')}>
-                <h1 className={cn('career__header')}>{t('routes.person.career.header')}</h1>
+                <h2 className={cn('career__header')}>{t('routes.person.career.header')}</h2>
                 <div className={cn('career__controls')}>
                     <div
                         className={cn('career__control')}
@@ -145,9 +145,11 @@ export const Career = (props: IProps) => {
                         <div key={index} className={cn('career__education')}>
                             <strong className={cn('career__education-title')}>
                                 {field.company}
-                                <IconApproved
+                                <IconApply
                                     svg={{
-                                        className: cn('career__icon')
+                                        width    : 24,
+                                        height   : 24,
+                                        className: cn('career__icon-apply')
                                     }}
                                 />
                             </strong>

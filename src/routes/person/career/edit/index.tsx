@@ -70,7 +70,7 @@ export const CareerEdit = (props: IProps) => {
                 })}
             >
                 <div className={cn('career-edit__form-body')}>
-                    <h1 className={cn('career-edit__header')}>{t('routes.person.career.header')}</h1>
+                    <h2 className={cn('career-edit__header')}>{t('routes.person.career.header')}</h2>
                     <FormProvider {...methods}>
                         {fields.map((field, index) => (
                             <div

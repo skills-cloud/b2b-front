@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconPlus from 'component/icons/plus';
 import IconPencil from 'component/icons/pencil';
-import IconApproved from 'component/icons/approved';
+import IconApply from 'component/icons/apply';
 import Button from 'component/button';
 
 import ProjectsEdit, { IField } from './edit';
@@ -107,7 +107,7 @@ export const Projects = (props: IProps) => {
         <Fragment>
             {elEdit}
             <div id={props.id} className={cn('projects')}>
-                <h1 className={cn('projects__header')}>{t('routes.person.projects.header')}</h1>
+                <h2 className={cn('projects__header')}>{t('routes.person.projects.header')}</h2>
                 <div className={cn('projects__controls')}>
                     <div
                         className={cn('projects__control')}
@@ -123,9 +123,11 @@ export const Projects = (props: IProps) => {
                         <div key={index} className={cn('projects__education')}>
                             <strong className={cn('projects__education-title')}>
                                 {field.name}
-                                <IconApproved
+                                <IconApply
                                     svg={{
-                                        className: cn('projects__icon')
+                                        width    : 24,
+                                        height   : 24,
+                                        className: cn('projects__icon-apply')
                                     }}
                                 />
                             </strong>

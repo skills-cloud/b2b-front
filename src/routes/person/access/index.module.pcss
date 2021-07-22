@@ -1,11 +1,12 @@
-.files {
+.access {
     background-color: var(--color-white);
     box-shadow: 0 1px 1px var(--color-shadow);
     border-radius: 4px;
     padding: 32px;
-    position: relative;
+    box-sizing: border-box;
+    font-family: Montserrat, sans-serif;
     display: grid;
-    grid-row-gap: 24px;
+    grid-gap: 30px;
 
     &__header {
         font-family: Montserrat, sans-serif;
@@ -14,6 +15,22 @@
         font-size: 24px;
         line-height: 29px;
         color: var(--color-sidebar-header);
+    }
+
+    &__info-content-header {
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+    }
+
+    &__modal-footer {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    &__modal-close {
+        margin-right: 12px;
     }
 
     &__controls {
@@ -47,45 +64,19 @@
         }
     }
 
-    &__input-file {
-        display: none;
-    }
-
-    &__list {
-        margin: 0;
-        padding: 0;
-        list-style: none;
+    &__field-set {
         display: grid;
-        grid-row-gap: 24px;
+        grid-gap: 32px;
+        grid-template-columns: 1fr 1fr;
     }
 
-    &__list-item {
+    &__form {
         display: grid;
-        grid-auto-flow: column;
-        grid-column-gap: 12px;
-        font-family: Roboto, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 16px;
-        color: var(--color-black);
-        justify-content: flex-start;
-        align-items: center;
-        fill: var(--color-file-icon);
-
-        a {
-            color: inherit;
-            text-decoration-line: underline;
-            text-decoration-style: dashed;
-            text-underline-offset: 3px;
-        }
+        grid-gap: 24px;
     }
 
-    &__icon-apply {
-        fill: var(--color-light-green);
-
-        & > g {
-            fill: var(--color-dark-green);
-        }
+    &__field-rate {
+        display: grid;
+        grid-gap: 16px;
     }
 }

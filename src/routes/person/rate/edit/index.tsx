@@ -48,7 +48,7 @@ export const RateEdit = (props: IProps) => {
                 })}
             >
                 <div className={cn('rate-edit__form-body')}>
-                    <h1 className={cn('rate-edit__header')}>{t('routes.person.rate.header')}</h1>
+                    <h2 className={cn('rate-edit__header')}>{t('routes.person.rate.header')}</h2>
                     <FormProvider {...methods}>
                         {fields?.map((field, index) => (
                             <div key={field.id} className={cn('rate-edit__item')}>

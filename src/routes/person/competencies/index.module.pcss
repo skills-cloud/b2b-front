@@ -1,0 +1,136 @@
+.competencies {
+    background-color: var(--color-white);
+    box-shadow: 0 1px 1px var(--color-shadow);
+    border-radius: 4px;
+    padding: 32px;
+    box-sizing: border-box;
+
+    &__info-content-header {
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+    }
+
+    &__info-list {
+        display: grid;
+        grid-auto-flow: row;
+        grid-row-gap: 16px;
+        margin-top: 16px;
+    }
+
+    &__icon-apply {
+        fill: var(--color-light-green);
+
+        & > g {
+            fill: var(--color-dark-green);
+        }
+    }
+
+    /* Block common */
+    &__skills {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    &__skills-tag {
+        display: block;
+        height: 24px;
+        line-height: 24px;
+        background-color: var(--color-gray-4);
+        font-size: 12px;
+        padding: 6px 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        border-radius: 35px;
+        text-align: center;
+        font-weight: 400;
+        position: relative;
+        margin-right: 4px;
+    }
+
+    &__more-info {
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-shadow-2);
+        border-bottom: 1px dashed var(--color-shadow-2);
+        cursor: pointer;
+        width: fit-content;
+        margin: 16px auto 0;
+    }
+
+    &__control {
+        fill: var(--color-gray-3);
+        display: grid;
+        justify-content: center;
+        justify-items: center;
+        align-items: center;
+        align-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--color-bg-button);
+
+        @media (hover: hover) and (pointer: fine) {
+            cursor: pointer;
+        }
+    }
+
+    &__info-list-role {
+        font-family: Montserrat, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
+        color: var(--color-text-dark);
+    }
+
+    &__info-list-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__list-item {
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-columns: 150px 1fr;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-black);
+
+        strong {
+            font-weight: normal;
+        }
+    }
+
+    &__file-item {
+        display: grid;
+        grid-auto-flow: column;
+        grid-column-gap: 12px;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-black);
+        justify-content: flex-start;
+        align-items: center;
+        fill: var(--color-file-icon);
+
+        a {
+            color: inherit;
+            text-decoration-line: underline;
+            text-decoration-style: dashed;
+            text-underline-offset: 3px;
+        }
+    }
+
+    /* End block common */
+}

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconPlus from 'component/icons/plus';
 import IconPencil from 'component/icons/pencil';
-import IconApproved from 'component/icons/approved';
+import IconApply from 'component/icons/apply';
 
 import style from './index.module.pcss';
 
@@ -19,7 +19,7 @@ export const Education = (props: IProps) => {
 
     return (
         <div id={props.id} className={cn('education')}>
-            <h1 className={cn('education__header')}>{t('routes.person.education.header')}</h1>
+            <h2 className={cn('education__header')}>{t('routes.person.education.header')}</h2>
             <div className={cn('education__controls')}>
                 <div className={cn('education__control', 'education__control_disable')}>
                     <IconPlus />
@@ -32,9 +32,11 @@ export const Education = (props: IProps) => {
                 <div className={cn('education__education')}>
                     <strong className={cn('education__education-title')}>
                         ОГИМ, Кафедра менеджмента, ВУЗ
-                        <IconApproved
+                        <IconApply
                             svg={{
-                                className: cn('education__icon')
+                                width    : 24,
+                                height   : 24,
+                                className: cn('education__icon-apply')
                             }}
                         />
                     </strong>

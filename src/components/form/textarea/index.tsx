@@ -11,17 +11,13 @@ import style from './index.module.pcss';
 
 export interface IProps {
     name: string,
-    type: 'text' | 'search',
     placeholder?: string,
     className?: string | IStyle,
     label?: string,
-    required?: Message | ValidationRule<boolean>,
-    maxLength?: ValidationRule<number | string>,
-    minLength?: ValidationRule<number | string>,
-    pattern?: ValidationRule<RegExp>
+    required?: Message | ValidationRule<boolean>
 }
 
-export const Input = (props: IProps) => {
+export const Textarea = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { formState: { errors, touchedFields, isSubmitted }, register } = useFormContext();
 
@@ -35,13 +31,9 @@ export const Input = (props: IProps) => {
         className: cn('input', {
             'input_invalid': errors?.[props.name]?.message && isWatch
         }),
-        type       : props.type,
         placeholder: props.placeholder,
         ...register(props.name, {
-            required : props.required,
-            maxLength: props.maxLength,
-            minLength: props.minLength,
-            pattern  : props.pattern
+            required: props.required
         })
     };
 
@@ -61,11 +53,7 @@ export const Input = (props: IProps) => {
 
     const elLabel = useMemo(() => {
         if(props.label) {
-            return (
-                <strong className={cn('input__label-text', { 'input__label-text_required': props.required })}>
-                    {props.label}
-                </strong>
-            );
+            return <strong className={cn('input__label-text')}>{props.label}</strong>;
         }
     }, [props.label]);
 
@@ -73,13 +61,13 @@ export const Input = (props: IProps) => {
         return (
             <label className={cn('input__label')}>
                 {elLabel}
-                <input {...attrs} />
+                <textarea {...attrs} />
                 {elError}
             </label>
         );
     }
 
-    return <input {...attrs} />;
+    return <textarea {...attrs} />;
 };
 
-export default Input;
+export default Textarea;

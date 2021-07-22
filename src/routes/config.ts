@@ -29,6 +29,6 @@ export const baseRoutes: Array<IProps> = [{
     isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : '/person/:id',
+    path     : '/user/:id',
     component: Person
 }];

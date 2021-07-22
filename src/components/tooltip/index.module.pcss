@@ -1,15 +1,23 @@
 .tooltip {
-    z-index: 5;
-    background: var(--color-white);
+    z-index: 10;
     box-shadow: 0 0 10px var(--color-shadow);
     border-radius: 5px;
     max-width: 320px;
-    padding: 16px;
+    padding: 8px 12px;
     box-sizing: border-box;
     border: solid 1px var(--color-shadow);
-    font-family: var(--font-family-montserrat);
+    font-family: Montserrat, sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
     line-height: 18px;
+
+    &_light {
+        background: var(--color-white);
+    }
+
+    &_dark {
+        background: var(--color-tooltip-background);
+        color: var(--color-white);
+    }
 }

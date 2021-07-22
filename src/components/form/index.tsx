@@ -14,7 +14,7 @@ export interface IFormData {
 
 export interface IProps {
     className?: IStyle | string,
-    legend: string,
+    legend?: string,
     isLoading?: boolean,
     primaryButton?: string,
     secondaryButton?: string,
