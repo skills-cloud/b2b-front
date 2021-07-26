@@ -33,8 +33,8 @@ const Access = (props: IProps) => {
 
     const methods = useForm({
         defaultValues: {
-            date_start: '',
-            date_end  : '',
+            date_start: format(dayToEdit, 'yyyy-MM-dd', { locale: ru }),
+            date_end  : format(dayToEdit, 'yyyy-MM-dd', { locale: ru }),
             rate_day  : ''
         }
     });
