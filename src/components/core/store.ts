@@ -3,10 +3,11 @@ import { createLogger } from 'redux-logger';
 import { useSelector as useSelectorRedux, useDispatch as useDispatchRedux, TypedUseSelectorHook } from 'react-redux';
 
 import userReducer, { key as keyUser } from 'component/user/reducer';
+import { cv } from 'adapter/api/cv';
 
 import config from 'config';
 
-const middleware = getDefaultMiddleware();
+const middleware = getDefaultMiddleware().concat(cv.middleware);
 
 if(__DEVELOPMENT__) {
     middleware.push(createLogger(config['redux-logger'] || {}));
@@ -15,7 +16,8 @@ if(__DEVELOPMENT__) {
 const store = configureStore({
     devTools: false,
     reducer : {
-        [keyUser]: userReducer
+        [keyUser]       : userReducer,
+        [cv.reducerPath]: cv.reducer
     },
     middleware
 });

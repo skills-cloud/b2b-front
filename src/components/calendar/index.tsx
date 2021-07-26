@@ -1,5 +1,7 @@
 import React, { useCallback, useState, MouseEvent } from 'react';
 import {
+    parse,
+    isWithinInterval,
     addMonths,
     getMonth,
     setMonth,
@@ -40,7 +42,8 @@ export interface IProps {
     maxDate?: Date,
     hidePastDate?: boolean,
     selected?: Array<Date>,
-    onClickDay?(date: Date): void
+    onClickDay?(date: Date): void,
+    busyPeriods?: Array<[string, string]>
 }
 
 export const defaultProps = {
@@ -55,6 +58,23 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
     const [firstDate, setFirstDate] = useState(props.initialDate);
     const [secondDate, setSecondDate] = useState(addMonths(props.initialDate, 1));
     const [showMonthModal, setShowMonthModal] = useState<boolean>(false);
+
+    const isBusy = useCallback((value: Date) => {
+        if(value && props.busyPeriods?.length) {
+            const periods = props.busyPeriods.map((item) => ({
+                start: parse(item[0], 'yyyy-MM-dd', new Date()),
+                end  : parse(item[1], 'yyyy-MM-dd', new Date())
+            }));
+
+            for(const period of periods) {
+                if(isWithinInterval(value, period)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }, [props.busyPeriods]);
 
     const onClickArrow = useCallback((amount: number) => (e: MouseEvent) => {
         e.preventDefault();
@@ -173,8 +193,8 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
                                 key={day.getTime()}
                                 className={cn('date-picker-calendar__day', {
                                     'date-picker-calendar__day_is-another'  : !isSameMonth(isSecond ? secondDate : firstDate, day),
-                                    'date-picker-calendar__day_is-half-busy': Math.random() > 0.5,
-                                    'date-picker-calendar__day_is-full-busy': Math.random() > 0.5,
+                                    // 'date-picker-calendar__day_is-half-busy': Math.random() > 0.5,
+                                    'date-picker-calendar__day_is-full-busy': isBusy(day),
                                     'date-picker-calendar__day_is-select'   : props.selected?.some((item) => isSameDay(item, day))
                                 })}
                                 onClick={() => {

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
+import { cv } from 'adapter/api/cv';
 import useClassnames from 'hook/use-classnames';
 import DatePickerCalendar from 'component/calendar';
 import IconPencil from 'component/icons/pencil';
@@ -22,12 +23,20 @@ export interface IProps {
 const Access = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
+    const { data } = cv.useGetTimeSlotQuery({
+        cv_id: 1
+    });
+    const [setTimeSlot] = cv.useSetTimeSlotMutation();
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [dayToEdit, setDayToEdit] = useState<Date>(new Date());
 
     const methods = useForm({
-        defaultValues: {}
+        defaultValues: {
+            date_start: '',
+            date_end  : '',
+            rate_day  : ''
+        }
     });
 
     const onClickDay = (date: Date) => {
@@ -42,6 +51,19 @@ const Access = (props: IProps) => {
 
     const onSubmit = methods.handleSubmit(
         (formData) => {
+            void setTimeSlot({
+                cv_id                : 1,
+                date_from            : formData.date_start,
+                date_to              : formData.date_end,
+                type_of_employment_id: 1,
+                price                : parseInt(formData.rate_day, 10)
+            })
+                .unwrap()
+                .then(() => {
+                    setIsEdit(false);
+                    methods.reset();
+                });
+
             console.info('FORM DATA', formData);
         },
         (formError) => {
@@ -122,6 +144,14 @@ const Access = (props: IProps) => {
         }
     };
 
+    const busyPeriods = useMemo(() => {
+        if(data?.results) {
+            const periods = data.results.filter((item) => item.date_to && item.date_from);
+
+            return periods.map((item) => [item.date_from, item.date_to]) as Array<[string, string]>;
+        }
+    }, [data?.results]);
+
     return (
         <div id={props.id} className={cn('access')}>
             <div className={cn('access__info-content-header')}>
@@ -135,7 +165,10 @@ const Access = (props: IProps) => {
                     <IconPencil />
                 </div>
             </div>
-            <DatePickerCalendar onClickDay={onClickDay} />
+            <DatePickerCalendar
+                onClickDay={onClickDay}
+                busyPeriods={busyPeriods}
+            />
             {elEditWindow()}
         </div>
     );
