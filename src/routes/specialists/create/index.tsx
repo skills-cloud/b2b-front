@@ -195,6 +195,7 @@ export const SpecialistsCreate = () => {
                             name="citizenship"
                             label="Гражданство"
                             placeholder="Гражданство"
+                            direction="column"
                         />
                         <div className={cn('specialists-create__last-block')}>
                             <InputSelect
