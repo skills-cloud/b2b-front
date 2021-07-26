@@ -100,26 +100,30 @@ export const CommonEdit = (props: IProps) => {
                     <div className={cn('common-edit__field', 'common-edit__field_extend')}>
                         <strong>{t('routes.person.common.fields.name')}</strong>
                         <FormInput
-                            name="last_name"
+                            name="common.last_name"
                             type="text"
                             placeholder={t('routes.person.common.fields.last_name')}
                         />
-                        <FormInput name="first_name" type="text" placeholder={t('routes.person.common.fields.first_name')} />
-                        <FormInput name="middle_name" type="text" placeholder={t('routes.person.common.fields.middle_name')} />
+                        <FormInput name="common.first_name" type="text" placeholder={t('routes.person.common.fields.first_name')} />
+                        <FormInput name="common.middle_name" type="text" placeholder={t('routes.person.common.fields.middle_name')} />
                     </div>
                     <div className={cn('common-edit__field')}>
                         <strong>{t('routes.person.common.fields.citizenship.title')}</strong>
-                        <FormInput name="citizenship" type="text" placeholder={t('routes.person.common.fields.citizenship.placeholder')} />
+                        <FormInput name="common.citizenship.name" type="text" placeholder={t('routes.person.common.fields.citizenship.placeholder')} />
                     </div>
                     <div className={cn('common-edit__field', 'common-edit__field_ext')}>
                         <strong>{t('routes.person.common.fields.location.title')}</strong>
-                        <FormInput name="citizenship" type="text" placeholder={t('routes.person.common.fields.location.country')} />
-                        <FormInput name="citizenship" type="text" placeholder={t('routes.person.common.fields.location.city')} />
+                        <FormInput name="common.country.name" type="text" placeholder={t('routes.person.common.fields.location.country')} />
+                        <FormInput name="common.city.name" type="text" placeholder={t('routes.person.common.fields.location.city')} />
                     </div>
                     <div className={cn('common-edit__field')}>
                         <strong>{t('routes.person.common.fields.gender.title')}</strong>
                         <InputSelect
-                            name="gender"
+                            name="common.gender"
+                            defaultValue={{
+                                label: props.fields?.gender || '',
+                                value: props.fields?.gender || ''
+                            }}
                             options={[{
                                 value: 'male',
                                 label: t('routes.person.common.fields.gender.male')
@@ -131,7 +135,7 @@ export const CommonEdit = (props: IProps) => {
                     </div>
                     <div className={cn('common-edit__field')}>
                         <strong>{t('routes.person.common.fields.birth_date')}</strong>
-                        <DateInput name="birth_date" />
+                        <DateInput name="common.birth_date" />
                     </div>
                 </div>
             );
