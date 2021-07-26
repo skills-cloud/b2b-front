@@ -5,6 +5,7 @@ import Layout from 'component/layout';
 
 import Main from './main';
 import Specialists from './specialists';
+import SpecialistsCreate from './specialists/create';
 import Person from './person';
 import Login from './login';
 
@@ -26,6 +27,12 @@ export const baseRoutes: Array<IProps> = [{
     layout   : Layout,
     path     : '/specialists',
     component: Specialists
+}, {
+    isPublic : true,
+    exact    : true,
+    layout   : Layout,
+    path     : '/specialists/create',
+    component: SpecialistsCreate
 }, {
     isPublic : true,
     exact    : true,
