@@ -8,6 +8,8 @@ import Specialists from './specialists';
 import SpecialistsCreate from './specialists/create';
 import Person from './person';
 import Login from './login';
+import ProjectCreate from './project-request/create';
+import ProjectRequest from './project-request';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -19,30 +21,37 @@ export const baseRoutes: Array<IProps> = [{
     isPublic : true,
     exact    : true,
     layout   : Layout,
+    path     : '/login',
+    component: Login
+}, {
+    exact    : true,
+    layout   : Layout,
     path     : '/',
     component: Main
 }, {
-    isPublic : true,
     exact    : true,
     layout   : Layout,
     path     : '/specialists',
     component: Specialists
 }, {
-    isPublic : true,
     exact    : true,
     layout   : Layout,
     path     : '/specialists/create',
     component: SpecialistsCreate
 }, {
-    isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : ['/user/:id', '/profile'],
+    path     : ['/specialists/:id', '/profile'],
     component: Person
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/project-request/create',
+    component: ProjectCreate
 }, {
     isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : '/login',
-    component: Login
+    path     : '/project-request/:id',
+    component: ProjectRequest
 }];

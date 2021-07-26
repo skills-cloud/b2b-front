@@ -1,0 +1,254 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvCareerRead"
+        }
+    ],
+    "definitions": {
+        "CompetenceInline": {
+            "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "CvCareerFileRead": {
+            "properties": {
+                "cv_career_id": {
+                    "readOnly": true,
+                    "title": "Cv career id",
+                    "type": "string"
+                },
+                "file": {
+                    "format": "uri",
+                    "readOnly": true,
+                    "title": "Файл",
+                    "type": "string"
+                },
+                "file_ext": {
+                    "readOnly": true,
+                    "title": "File ext",
+                    "type": "string"
+                },
+                "file_name": {
+                    "maxLength": 1000,
+                    "title": "Название файла",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "file_size": {
+                    "readOnly": true,
+                    "title": "File size",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "CvCareerRead": {
+            "properties": {
+                "competencies": {
+                    "items": {
+                        "$ref": "#/definitions/CompetenceInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "competencies_ids": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "cv_id": {
+                    "title": "Cv id",
+                    "type": "integer"
+                },
+                "date_from": {
+                    "format": "date",
+                    "title": "Период с",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "date_to": {
+                    "format": "date",
+                    "title": "Период по",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "files": {
+                    "items": {
+                        "$ref": "#/definitions/CvCareerFileRead"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "organization": {
+                    "$ref": "#/definitions/Organization"
+                },
+                "organization_id": {
+                    "title": "Organization id",
+                    "type": "integer"
+                },
+                "position": {
+                    "$ref": "#/definitions/Position"
+                },
+                "position_id": {
+                    "title": "Position id",
+                    "type": "integer"
+                },
+                "projects": {
+                    "items": {
+                        "$ref": "#/definitions/OrganizationProject"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "projects_ids": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                }
+            },
+            "required": [
+                "cv_id",
+                "organization_id",
+                "position_id"
+            ],
+            "type": "object"
+        },
+        "Organization": {
+            "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "OrganizationProject": {
+            "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "organization": {
+                    "$ref": "#/definitions/Organization"
+                },
+                "organization_id": {
+                    "title": "Organization id",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name",
+                "organization",
+                "organization_id"
+            ],
+            "type": "object"
+        },
+        "Position": {
+            "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        }
+    }
+}

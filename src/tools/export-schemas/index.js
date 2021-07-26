@@ -24,8 +24,7 @@ const request = (hostObject) => new Promise((resolve, reject) => {
             port              : hostObject.port,
             rejectUnauthorized: false,
             headers           : {
-                Cookie: '_sec_=0p8c1rKm3G3BoMhlHch1Jh2LWixNeYn2kzrQxnWLZ0ZsXi93g2eS3wAeB2FpTVZQ; _id_=i2xjhck73r38bnh68lxmqj4pu9q2bgh9',
-                'X-CSRFToken': 'QFMzooEJG49xi3dfi24U80BFXTeNBSeTaP5dUkQ8Co5oRz5XRS1Lsf98CDmpgPQH'
+                Cookie: '_sec_=oQ6E3G1G2r9ZdXaKMbC2Doo4L5FWJu9mhSd8CtyloH37iOiW5suD1GjHvGvdMyEs; _id_=rphjo1pey8m4hfc9zsy307reonmqnp6j'
             }
         }, (response) => {
             console.log('Response: %s', hostObject);
@@ -69,7 +68,21 @@ const collectSchemas = (payload, hostObject) => {
 
                         for(const responsesKey of responsesKeys) {
                             if(responses[responsesKey]?.schema) {
-                                const schemaPath = responses[responsesKey]?.schema?.items || responses[responsesKeys]?.schema?.properties?.results?.items || responses[responsesKey]?.schema;
+                                const results = responses[responsesKeys]?.schema?.properties?.results?.items;
+                                const schemaItems = responses[responsesKey]?.schema?.items;
+                                const schemaProperties = responses[responsesKeys]?.schema?.properties;
+                                const schema = responses[responsesKey]?.schema;
+                                let schemaPath = responses[responsesKey]?.schema?.items;
+
+                                if(schemaItems) {
+                                    schemaPath = schemaItems;
+                                } else if(schemaProperties && !results) {
+                                    schemaPath = schemaProperties;
+                                } else if(results) {
+                                    schemaPath = results;
+                                } else if(schema) {
+                                    schemaPath = schema
+                                }
 
                                 if(schemaPath && !accumulator.methods[`${key}/${method}/code-${responsesKey}`]) {
                                     console.log('Collect %s, code: %s', key, responsesKey);

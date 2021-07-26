@@ -7,11 +7,15 @@
 
 export type Code200 = CompetenceTree;
 export type Children = string;
-export type ID = number;
 export type NoName = string;
+export type ID = number;
+export type NoName1 = boolean;
+export type NoName2 = string;
 
 export interface CompetenceTree {
     children?: Children;
+    description?: NoName;
     id?: ID;
-    name: NoName;
+    is_verified?: NoName1;
+    name: NoName2;
 }

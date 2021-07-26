@@ -6,21 +6,29 @@
  */
 
 export type Code200 = City;
-export type ID = number;
 export type NoName = string;
-export type NoName1 = number;
-export type ID1 = number;
+export type ID = number;
+export type NoName1 = boolean;
 export type NoName2 = string;
 export type NoName3 = number;
+export type NoName4 = string;
+export type ID1 = number;
+export type NoName5 = boolean;
+export type NoName6 = string;
+export type NoName7 = number;
 
 export interface City {
     country: Country;
+    description?: NoName4;
     id?: ID1;
-    name: NoName2;
-    sorting?: NoName3;
+    is_verified?: NoName5;
+    name: NoName6;
+    sorting?: NoName7;
 }
 export interface Country {
+    description?: NoName;
     id?: ID;
-    name: NoName;
-    sorting?: NoName1;
+    is_verified?: NoName1;
+    name: NoName2;
+    sorting?: NoName3;
 }

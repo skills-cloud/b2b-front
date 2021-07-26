@@ -1,0 +1,44 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvPosition"
+        }
+    ],
+    "definitions": {
+        "CvPosition": {
+            "properties": {
+                "competencies_ids": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "cv_id": {
+                    "title": "Cv id",
+                    "type": "integer"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "position_id": {
+                    "title": "Position id",
+                    "type": "integer"
+                },
+                "title": {
+                    "maxLength": 2000,
+                    "title": "Произвольное название",
+                    "type": "string",
+                    "x-nullable": true
+                }
+            },
+            "required": [
+                "cv_id",
+                "position_id"
+            ],
+            "type": "object"
+        }
+    }
+}

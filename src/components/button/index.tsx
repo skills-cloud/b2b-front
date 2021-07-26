@@ -1,4 +1,4 @@
-import React, { ReactNode, MouseEvent } from 'react';
+import React, { ReactNode, MouseEvent, Fragment, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useClassnames } from 'hook/use-classnames';
@@ -10,7 +10,7 @@ import style from './index.module.pcss';
 const Button = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
 
-    const elChildren = (): ReactNode => {
+    const elLoader = useMemo(() => {
         if(props.isLoading) {
             return (
                 <div className={cn('button__loader')}>
@@ -18,9 +18,16 @@ const Button = (props: IProps) => {
                 </div>
             );
         }
+    }, [props.isLoading]);
 
-        return props.children;
-    };
+    const elChildren = useMemo((): ReactNode => {
+        return (
+            <Fragment>
+                {elLoader}
+                {props.children}
+            </Fragment>
+        );
+    }, [props.children, props.isLoading]);
 
     const onClick = (e: MouseEvent): void => {
         if(props.onClick) {
@@ -32,10 +39,11 @@ const Button = (props: IProps) => {
         className: cn('button', {
             'button_secondary': props.isSecondary
         }),
-        children: elChildren(),
+        children: elChildren,
         tabIndex: props.tabIndex,
         style   : props.style,
         rel     : props.target === '_blank' ? 'noopener noreferrer' : undefined,
+        form    : props.form ? props.form : undefined,
         onClick
     };
 

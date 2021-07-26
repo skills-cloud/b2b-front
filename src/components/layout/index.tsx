@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import useClassnames from 'hook/use-classnames';
-import Header from 'component/header';
+import Header from 'component/layout/header';
 
 import './index.pcss';
 import style from './index.module.pcss';

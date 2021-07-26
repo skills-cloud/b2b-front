@@ -1,9 +1,7 @@
 import React, { useState, useMemo, Fragment, useCallback } from 'react';
-import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
-import IconPlus from 'component/icons/plus';
 import IconPencil from 'component/icons/pencil';
 import Button from 'component/button';
 import IconFileImage from 'component/icons/file-image';
@@ -11,67 +9,40 @@ import IconFilePdf from 'component/icons/file-pdf';
 import IconFileDocument from 'component/icons/file-document';
 import IconApply from 'component/icons/apply';
 
-import CareerEdit, { IField } from './edit';
+import { career } from 'adapter/api/career';
+
+import CareerEdit from './edit';
 import style from './index.module.pcss';
+import { useParams } from 'react-router';
 
 export interface IProps {
     className?: string | IStyle,
     id?: string
 }
 
-// @TODO: Delete after use API
-const DEFAULT_MOCK_LIST: Array<IField> = [{
-    company    : 'Google',
-    role       : 'Front-end developer',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    projects   : 'Медуза, СМИ',
-    date       : {
-        from: '2021-05-03',
-        to  : '2021-05-31'
-    },
-    skills: [{
-        label: 'Sound Masking',
-        value: '31505'
-    }, {
-        label: 'Flask',
-        value: '13175'
-    }, {
-        label: 'Market Basket Analysis',
-        value: '20525'
-    }],
-    file: {
-        type: 'application/pdf',
-        name: 'Резюме',
-        url : 'https://www.bosch-professional.com/ru/media/country_content/service/downloads/catalogues/bosch_hk_2015_2016_russland_ru_ru.pdf'
-    }
-}];
-
 export const Career = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
+    const { id } = useParams<{ id: string }>();
+
     const [isEdit, setIsEdit] = useState<boolean>(false);
-    const [fields, setFields] = useState<Array<IField>>(DEFAULT_MOCK_LIST);
     const { t } = useTranslation();
+    const { data } = career.useGetCareerQuery({
+        cv_id: parseInt(id, 10)
+    }, {
+        refetchOnMountOrArgChange: true
+    });
 
     const onClickAdd = useCallback(() => {
-        unstable_batchedUpdates(() => {
-            setFields((state) => [
-                ...state,
-                {}
-            ]);
-            setIsEdit(true);
-        });
+        setIsEdit(true);
     }, []);
 
     const elEdit = useMemo(() => {
         if(isEdit) {
             return (
                 <CareerEdit
-                    fields={fields}
-                    onSubmit={(payload) => {
-                        unstable_batchedUpdates(() => {
-                            setFields(payload);
-                            setIsEdit(false);
-                        });
+                    fields={data?.results}
+                    onSubmit={() => {
+                        setIsEdit(false);
                     }}
                     onCancel={() => {
                         setIsEdit(false);
@@ -79,10 +50,10 @@ export const Career = (props: IProps) => {
                 />
             );
         }
-    }, [isEdit, fields]);
+    }, [isEdit, JSON.stringify(data?.results)]);
 
     const elButtonEdit = useMemo(() => {
-        if(fields.length) {
+        if(data?.results?.length) {
             return (
                 <div
                     className={cn('career__control')}
@@ -94,10 +65,10 @@ export const Career = (props: IProps) => {
                 </div>
             );
         }
-    }, [fields.length]);
+    }, [data?.results?.length]);
 
     const elEmpty = useMemo(() => {
-        if(!fields.length) {
+        if(!data?.results?.length) {
             return (
                 <div className={cn('career__empty')}>
                     {t('routes.person.career.empty')}
@@ -109,7 +80,7 @@ export const Career = (props: IProps) => {
                 </div>
             );
         }
-    }, [fields.length]);
+    }, [data?.results?.length]);
 
     const elFileIcon = useCallback((type?: string) => {
         switch (type) {
@@ -131,20 +102,14 @@ export const Career = (props: IProps) => {
             <div id={props.id} className={cn('career')}>
                 <h2 className={cn('career__header')}>{t('routes.person.career.header')}</h2>
                 <div className={cn('career__controls')}>
-                    <div
-                        className={cn('career__control')}
-                        onClick={onClickAdd}
-                    >
-                        <IconPlus />
-                    </div>
                     {elButtonEdit}
                 </div>
                 <div className={cn('career__collection')}>
                     {elEmpty}
-                    {fields.map((field, index) => (
+                    {data?.results?.map((field, index) => (
                         <div key={index} className={cn('career__education')}>
                             <strong className={cn('career__education-title')}>
-                                {field.company}
+                                {field.organization.name}
                                 <IconApply
                                     svg={{
                                         width    : 24,
@@ -156,17 +121,17 @@ export const Career = (props: IProps) => {
                             <ul className={cn('career__list')}>
                                 <li className={cn('career__list-item')}>
                                     <strong>{t('routes.person.career.fields.date')}</strong>
-                                    <span>{field.date?.from} – {field.date?.to}</span>
+                                    <span>{field.date_from} – {field.date_to}</span>
                                 </li>
                                 <li className={cn('career__list-item')}>
                                     <strong>{t('routes.person.career.fields.role')}</strong>
-                                    <span>{field.role}</span>
+                                    <span>{field.position?.name}</span>
                                 </li>
                                 <li className={cn('career__list-item')}>
                                     <strong>{t('routes.person.career.fields.skills')}</strong>
                                     <div className={cn('career__tags')}>
-                                        {field.skills?.map(({ label, value }) => (
-                                            <span key={value} className={cn('career__tag')}>{label}</span>
+                                        {field.competencies?.map((item) => (
+                                            <span key={item.id} className={cn('career__tag')}>{item.name}</span>
                                         ))}
                                     </div>
                                 </li>
@@ -178,19 +143,27 @@ export const Career = (props: IProps) => {
                                     <li className={cn('career__list-item')}>
                                         <strong>{t('routes.person.career.fields.projects')}</strong>
                                         <div className={cn('career__projects')}>
-                                            {field.projects}
+                                            {field.projects.map((project, i) => {
+                                                if(i + 1 === field.projects.length) {
+                                                    return project.name;
+                                                }
+
+                                                return `${project.name}, `;
+                                            })}
                                         </div>
                                     </li>
                                 )}
-                                {field.file && (
-                                    <li className={cn('career__list-item')}>
-                                        <strong>{t('routes.person.career.fields.files')}</strong>
-                                        <span className={cn('career__file-item')}>
-                                            {elFileIcon(field.file.type)}
-                                            <a href={field.file.url} target="_blank" rel="noreferrer">{field.file.name}</a>
-                                        </span>
-                                    </li>
-                                )}
+                                {field.files?.map((file) => {
+                                    return (
+                                        <li key={file.id} className={cn('career__list-item')}>
+                                            <strong>{t('routes.person.career.fields.files')}</strong>
+                                            <span className={cn('career__file-item')}>
+                                                {elFileIcon(file.file_ext)}
+                                                <a href={file.file} target="_blank" rel="noreferrer">{file.file_name}</a>
+                                            </span>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
                     ))}

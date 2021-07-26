@@ -1,11 +1,10 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import { useSelector } from 'component/core/store';
 import Button from 'component/button';
-import Avatar from 'component/avatar';
+import UserAvatar from 'component/user/avatar';
 import history from 'component/core/history';
 
 import { key as keyUser } from './../reducer';
@@ -29,17 +28,6 @@ export const UserHeaderBar = (props: IProps) => {
                         e.preventDefault();
 
                         history.push('/login');
-
-                        // const authInstance = window.gapi.auth2.getAuthInstance();
-                        //
-                        // if(!authInstance.isSignedIn.get()) {
-                        //     authInstance.signIn({
-                        //         fetch_basic_profile: true,
-                        //         ux_mode            : 'redirect',
-                        //         redirect_uri       : window.location.origin
-                        //     })
-                        //         .catch(console.error);
-                        // }
                     }}
                 />
             );
@@ -50,8 +38,12 @@ export const UserHeaderBar = (props: IProps) => {
         if(user.id) {
             return (
                 <div className={cn('user-header-bar__profile')}>
-                    <Avatar src={user.photo} preset="small" />
-                    <Link to="/profile" className={cn('user-header-bar__profile-name')}>{`${user.first_name} ${user.last_name}`}</Link>
+                    <UserAvatar
+                        title={`${user.first_name || ''} ${user.last_name || ''}`.trim()}
+                        titleTo="/profile"
+                        className={cn('user-header-bar__avatar')}
+                        avatar={{ src: user.photo, preset: 'small' }}
+                    />
                 </div>
             );
         }

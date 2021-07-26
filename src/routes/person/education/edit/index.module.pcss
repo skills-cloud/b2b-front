@@ -1,0 +1,59 @@
+.education {
+
+    &__modal-header {
+        display: grid;
+        grid-auto-flow: column;
+        align-items: baseline;
+        justify-content: flex-start;
+    }
+
+    &__modal-body {
+        padding: 32px 32px 24px;
+    }
+
+    &__icon-back {
+        fill: var(--color-gray-100);
+        width: 16px;
+        height: 16px;
+
+        @media (hover: hover) and (pointer: fine) {
+            cursor: pointer;
+        }
+    }
+
+    &__form-footer {
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        column-gap: 12px;
+    }
+
+    &__link-append {
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-blue-primary);
+        text-decoration: underline;
+        text-decoration-style: dashed;
+        text-underline-offset: 2px;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__form-footer-detail {
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-columns: min-content min-content;
+        align-items: center;
+        justify-content: flex-end;
+        column-gap: 12px;
+    }
+}

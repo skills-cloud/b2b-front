@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
-import IconPlus from 'component/icons/plus';
 import IconPencil from 'component/icons/pencil';
-import IconApply from 'component/icons/apply';
+import VerifyIcon from 'component/verify-icon';
 
+import { certificate } from 'adapter/api/certificate';
+
+import CertificateEdit from './edit';
 import style from './index.module.pcss';
 
 export interface IProps {
@@ -14,102 +17,116 @@ export interface IProps {
 }
 
 export const Certificates = (props: IProps) => {
+    const { id } = useParams<{ id: string }>();
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
+
+    const [isEdit, setIsEdit] = useState<boolean>(false);
+
+    const { data, refetch } = certificate.useGetCertificateListQuery({
+        cv_id: id
+    }, {
+        refetchOnMountOrArgChange: true
+    });
+
+    const onClickCancel = () => {
+        setIsEdit(false);
+    };
+
+    const onSubmitCallback = () => {
+        refetch();
+        onClickCancel();
+    };
+
+    const isEditWindow = useMemo(() => {
+        if(isEdit && data?.results) {
+            return <CertificateEdit onCancel={onClickCancel} fields={data.results} onSubmit={onSubmitCallback} />;
+        }
+    }, [isEdit, JSON.stringify(data)]);
+
+    const elDates = (date?: string) => {
+        if(date) {
+            return (
+                <li className={cn('certificates__list-item')}>
+                    <strong>{t('routes.person.certificates.label.issued')}</strong>
+                    <span>{date}</span>
+                </li>
+            );
+        }
+
+        return (
+            <li className={cn('certificates__list-item')}>
+                <strong>{t('routes.person.certificates.label.issued')}</strong>
+                <span>{t('routes.person.certificates.date.empty')}</span>
+            </li>
+        );
+    };
+
+    const elContent = () => {
+        if(data?.results?.length) {
+            return (
+                <div className={cn('certificates__collection')}>
+                    {data.results.map((result) => (
+                        <div key={result.id} className={cn('certificates__certificate')}>
+                            <strong className={cn('certificates__certificate-title')}>
+                                {result.description}
+                                <VerifyIcon isVerify={result.is_verified} />
+                            </strong>
+                            <ul className={cn('certificates__list')}>
+                                {elDates(result.date)}
+                                <li className={cn('certificates__list-item')}>
+                                    <strong>{t('routes.person.certificates.label.specialty')}</strong>
+                                    <span>{result.education_speciality?.name}</span>
+                                </li>
+                                <li className={cn('certificates__list-item')}>
+                                    <strong>{t('routes.person.certificates.label.power')}</strong>
+                                    <span>{result.education_graduate?.name}</span>
+                                </li>
+                                <li className={cn('certificates__list-item')}>
+                                    <strong>{t('routes.person.certificates.label.number')}</strong>
+                                    <span>№1312312313</span>
+                                </li>
+                                <li className={cn('certificates__list-item')}>
+                                    <strong>{t('routes.person.certificates.label.competencies')}</strong>
+                                    <div className={cn('certificates__tags')}>
+                                        {result.competencies?.map((item) => (
+                                            <span key={item.id} className={cn('certificates__tag')}>{item.name}</span>
+                                        ))}
+                                    </div>
+                                </li>
+                                <li className={cn('certificates__list-item')}>
+                                    <strong>{t('routes.person.certificates.label.description')}</strong>
+                                    <span>{result.description}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        return (
+            <div className={cn('certificates__empty')}>
+                {t('routes.person.certificates.empty')}
+            </div>
+        );
+    };
 
     return (
         <div id={props.id} className={cn('certificates')}>
             <h2 className={cn('certificates__header')}>{t('routes.person.certificates.header')}</h2>
             <div className={cn('certificates__controls')}>
-                <div className={cn('certificates__control', 'certificates__control_disable')}>
-                    <IconPlus />
-                </div>
-                <div className={cn('certificates__control', 'certificates__control_disable')}>
+                <div
+                    className={cn('certificates__control')}
+                    onClick={() => {
+                        setIsEdit(true);
+                    }}
+                >
                     <IconPencil />
                 </div>
             </div>
-            <div className={cn('certificates__collection')}>
-                <div className={cn('certificates__certificate')}>
-                    <strong className={cn('certificates__certificate-title')}>
-                        Повышение квалификации
-                        <IconApply
-                            svg={{
-                                width    : 24,
-                                height   : 24,
-                                className: cn('certificates__icon-apply')
-                            }}
-                        />
-                    </strong>
-                    <ul className={cn('certificates__list')}>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.issued')}</strong>
-                            <span>30.12.2013</span>
-                        </li>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.specialty')}</strong>
-                            <span>HR</span>
-                        </li>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.power')}</strong>
-                            <span>Специалист</span>
-                        </li>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.number')}</strong>
-                            <span>№1312312313</span>
-                        </li>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.competencies')}</strong>
-                            <div className={cn('certificates__tags')}>
-                                <span className={cn('certificates__tag')}>Подбор персонала</span>
-                            </div>
-                        </li>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.description')}</strong>
-                            <span>https://link.com</span>
-                        </li>
-                    </ul>
-                </div>
-                <div className={cn('certificates__certificate')}>
-                    <strong className={cn('certificates__certificate-title')}>
-                        Повышение квалификации
-                        <IconApply
-                            svg={{
-                                width    : 24,
-                                height   : 24,
-                                className: cn('certificates__icon-apply')
-                            }}
-                        />
-                    </strong>
-                    <ul className={cn('certificates__list')}>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.issued')}</strong>
-                            <span>30.12.2013</span>
-                        </li>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.specialty')}</strong>
-                            <span>HR</span>
-                        </li>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.power')}</strong>
-                            <span>Специалист</span>
-                        </li>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.number')}</strong>
-                            <span>№1312312313</span>
-                        </li>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.competencies')}</strong>
-                            <div className={cn('certificates__tags')}>
-                                <span className={cn('certificates__tag')}>Подбор персонала</span>
-                            </div>
-                        </li>
-                        <li className={cn('certificates__list-item')}>
-                            <strong>{t('routes.person.certificates.label.description')}</strong>
-                            <span>https://link.com</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            {elContent()}
+            {isEditWindow}
         </div>
     );
 };

@@ -58,6 +58,7 @@
     &__list-item {
         display: grid;
         grid-auto-flow: column;
+        align-items: center;
         grid-template-columns: 150px 1fr;
         font-family: Roboto, sans-serif;
         font-style: normal;
@@ -138,5 +139,18 @@
         & > g {
             fill: var(--color-dark-green);
         }
+    }
+
+    &__empty {
+        display: grid;
+        grid-row-gap: 16px;
+        justify-content: flex-start;
+        justify-items: flex-start;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-black);
     }
 }

@@ -14,6 +14,7 @@ export interface IProps {
     href?: string,
     tabIndex?: number,
     style?: CSSProperties,
+    form?: string,
     to?: LocationDescriptor<{
         modal?: boolean,
         from?: string

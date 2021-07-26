@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, ReactNode } from 'react';
-import { Message, useFormContext } from 'react-hook-form';
+import { Message, useFormContext, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { ValidationRule } from 'react-hook-form/dist/types/validator';
 
@@ -11,6 +11,7 @@ import style from './index.module.pcss';
 export interface IValue {
     label: ReactNode | string,
     value: string,
+    checked?: boolean,
     payload?: unknown
 }
 
@@ -30,7 +31,7 @@ export interface IProps {
 
 const InputRadio = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const { formState: { errors }, watch, trigger, register } = useFormContext();
+    const { formState: { errors }, watch, trigger, control } = useFormContext();
     const direction = useMemo(() => props.direction || 'row', [props.direction]);
     const optionsDirection = useMemo(() => props.optionsDirection || 'row', [props.optionsDirection]);
     const value = watch(props.name);
@@ -64,32 +65,38 @@ const InputRadio = (props: IProps) => {
     return (
         <div className={cn('radio', `radio_${direction}`)}>
             {elLabel}
-            <div className={cn('radio__group', `radio__group_${optionsDirection}`)}>
-                {
-                    props.options.map((option) => (
-                        <label
-                            key={option.value}
-                            className={cn('radio__field')}
-                        >
-                            <input
-                                id={option.value}
-                                type="radio"
-                                key={option.value}
-                                value={option.value}
-                                disabled={props.disabled}
-                                tabIndex={props.tabIndex}
-                                className={cn('radio__input', {
-                                    'radio__input_error': errors[props.name]
-                                })}
-                                {...register(props.name, {
-                                    required: props.required
-                                })}
-                            />
-                            {option.label}
-                        </label>
-                    ))
-                }
-            </div>
+            <Controller
+                name={props.name}
+                control={control}
+                render={({ field: { value: fieldValue, ...rest } }) => {
+                    return (
+                        <div className={cn('radio__group', `radio__group_${optionsDirection}`)}>
+                            {props.options.map((option) => {
+                                return (
+                                    <label key={option.value} className={cn('radio__field')}>
+                                        <input
+                                            id={option.value}
+                                            type="radio"
+                                            key={option.value}
+                                            defaultChecked={parseInt(option.value, 10) === value.value}
+                                            disabled={props.disabled}
+                                            tabIndex={props.tabIndex}
+                                            className={cn('radio__input', {
+                                                'radio__input_error': errors[props.name]
+                                            })}
+                                            {...rest}
+                                            onChange={() => {
+                                                rest.onChange(option);
+                                            }}
+                                        />
+                                        {option.label}
+                                    </label>
+                                );
+                            })}
+                        </div>
+                    );
+                }}
+            />
             {elError}
         </div>
     );

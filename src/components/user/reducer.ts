@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { set, reset, logout } from './actions';
+import { set, reset } from './actions';
 import { IUserData } from 'adapter/api/acc';
 
 export const key = 'user' as const;
@@ -24,11 +24,6 @@ export default createReducer<Partial<IUserData>>({}, (builder) => {
         // Reset
         .addCase(
             reset,
-            () => ({})
-        )
-
-        .addCase(
-            logout.fulfilled,
             () => ({})
         );
 });

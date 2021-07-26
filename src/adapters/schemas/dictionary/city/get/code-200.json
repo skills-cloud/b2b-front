@@ -10,10 +10,19 @@
                 "country": {
                     "$ref": "#/definitions/Country"
                 },
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
                 "id": {
                     "readOnly": true,
                     "title": "ID",
                     "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
                 },
                 "name": {
                     "maxLength": 500,
@@ -37,10 +46,19 @@
         },
         "Country": {
             "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
                 "id": {
                     "readOnly": true,
                     "title": "ID",
                     "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
                 },
                 "name": {
                     "maxLength": 500,

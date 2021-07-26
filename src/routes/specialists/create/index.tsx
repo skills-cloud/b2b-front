@@ -1,72 +1,125 @@
 import React, { useState, useEffect, useMemo, MouseEvent } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
+import { useHistory } from 'react-router';
 
+import { ICv, cv } from 'adapter/api/cv';
+import { contact } from 'adapter/api/contact';
+import { useCancelTokens } from 'hook/cancel-token';
 import useClassnames from 'hook/use-classnames';
 import InputSelect from 'component/form/select';
-import Avatar from 'component/avatar';
 import FormInput from 'component/form/input';
 import DateInput from 'component/form/date';
 import Button from 'component/button';
-import { getCitizenship, getCity, getCountries, IDictionaryItem } from 'adapter/api/dictionary';
+import UserAvatar from 'component/user/avatar';
+import Loader from 'component/loader';
+import { getCitizenship, getCity, getContactsType, getCountries } from 'adapter/api/dictionary';
 
 import style from './index.module.pcss';
-import { useCancelTokens } from 'hook/cancel-token';
 
-export interface IUser {
-    name: string,
-    position: string,
-    photo: string
+export interface IBasicType {
+    label: string,
+    value: string
+}
+
+export interface ICvForm extends Omit<ICv, 'gender' | 'country' | 'city' | 'citizenship'> {
+    country: IBasicType,
+    city: IBasicType,
+    citizenship: IBasicType,
+    gender: IBasicType,
+    common: Array<{
+        contact_type: {
+            value: string,
+            id: string
+        },
+        value: string
+    }>
 }
 
 export const SpecialistsCreate = () => {
     const cn = useClassnames(style);
     const { t, i18n } = useTranslation();
-    const [token, token2, token3] = useCancelTokens(3);
-    const [users, setUsers] = useState<Array<IUser>>([]);
-    const context = useForm({
+    const [
+        tokenCity,
+        tokenCountry,
+        tokenCitizenship,
+        tokenCvList,
+        tokenCreateCv,
+        tokenContacts
+    ] = useCancelTokens(6);
+    const history = useHistory();
+    const context = useForm<ICvForm>({
         mode         : 'onChange',
         defaultValues: {
             common: [{}]
         }
     });
+    const { isValid } = context.formState;
+    const [postCv] = cv.usePostCvMutation();
+    const [postContact] = contact.usePostContactMutation();
+    const { data, isLoading } = cv.useGetCvListQuery({}, {
+        refetchOnMountOrArgChange: true
+    });
     const { fields, append, remove } = useFieldArray({
+        keyName: 'fieldId',
         control: context.control,
         name   : 'common'
     });
     const [mainContact, setMainContact] = useState<number>(0);
-
-    const [cities, setCities] = useState<Array<IDictionaryItem>>([]);
-    const [citizenship, setCitizenship] = useState<Array<IDictionaryItem>>([]);
-    const [countries, setCountries] = useState<Array<IDictionaryItem>>([]);
+    const [postCvLoading, setPostCvLoading] = useState<boolean>(false);
+    const [cities, setCities] = useState<Array<IBasicType>>([]);
+    const [citizenship, setCitizenship] = useState<Array<IBasicType>>([]);
+    const [countries, setCountries] = useState<Array<IBasicType>>([]);
+    const [contacts, setContacts] = useState<Array<IBasicType>>([]);
 
     useEffect(() => {
-        void getCity({
-            cancelToken: token.new()
+        getCity({
+            cancelToken: tokenCity.new()
         })
             .then((payload) => {
-                setCities(payload.results);
+                setCities(payload.results?.map((item) => ({ label: item.name, value: String(item.id) })));
+            })
+            .catch((err) => {
+                console.error(err);
             });
 
-        void getCitizenship({
-            cancelToken: token2.new()
+        getCitizenship({
+            cancelToken: tokenCitizenship.new()
         })
             .then((payload) => {
-                setCitizenship(payload.results);
+                setCitizenship(payload.results?.map((item) => ({ label: item.name, value: String(item.id) })));
+            })
+            .catch((err) => {
+                console.error(err);
             });
 
-        void getCountries({
-            cancelToken: token3.new()
+        getCountries({
+            cancelToken: tokenCountry.new()
         })
             .then((payload) => {
-                setCountries(payload.results);
+                setCountries(payload.results?.map((item) => ({ label: item.name, value: String(item.id) })));
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
+        getContactsType({
+            cancelToken: tokenContacts.new()
+        })
+            .then((payload) => {
+                setContacts(payload.results?.map((item) => ({ label: item.name, value: String(item.id) })));
+            })
+            .catch((err) => {
+                console.error(err);
             });
 
         return () => {
-            token.remove();
-            token2.remove();
-            token3.remove();
+            tokenCountry.remove();
+            tokenCvList.remove();
+            tokenCity.remove();
+            tokenCitizenship.remove();
+            tokenCreateCv.remove();
+            tokenContacts.remove();
         };
     }, []);
 
@@ -74,31 +127,82 @@ export const SpecialistsCreate = () => {
         setMainContact(index);
     };
 
+    const onSubmit = context.handleSubmit(
+        (formData) => {
+            setPostCvLoading(true);
+            const { common, ...rest } = formData;
+            const newContacts = common.map((item, index) => ({
+                contact_type_id: parseInt(item.contact_type.value, 10),
+                value          : item.value,
+                is_primary     : index === mainContact
+            }));
+
+            postCv({
+                ...rest,
+                gender        : formData.gender?.value,
+                city_id       : parseInt(formData.city?.value, 10),
+                citizenship_id: parseInt(formData.citizenship?.value, 10),
+                country_id    : parseInt(formData.country?.value, 10)
+            })
+                .unwrap()
+                .then((resp) => {
+                    setPostCvLoading(false);
+
+                    if(resp.id) {
+                        Promise.all(newContacts.map((newContact) => {
+                            const dataRequest = {
+                                ...newContact,
+                                cv_id: resp.id
+                            };
+
+                            return postContact(dataRequest).unwrap();
+                        }))
+                            .then(() => {
+                                history.push(`/specialists/${resp.id}`);
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                            });
+                    }
+                })
+                .catch((err) => {
+                    setPostCvLoading(false);
+                    console.error(err);
+                });
+        },
+        (err) => {
+            console.error(err);
+        }
+    );
+
     const elUsers = useMemo(() => {
-        if(users.length) {
+        if(isLoading) {
+            return <Loader />;
+        }
+
+        if(data?.results?.length) {
             return (
                 <div className={cn('specialists-create__users')}>
-                    {users.map((user, index) => (
-                        <div key={index} className={cn('specialists-create__user')}>
-                            <Avatar src={user.photo} />
-                            <Link to={`/user/${index}`}>{user.name}</Link>
-                            <span>{user.position}</span>
-                        </div>
-                    ))}
+                    {data.results.map((user, index) => {
+                        const name = `${user.last_name || ''} ${user.first_name || ''}`.trim();
+
+                        return (
+                            <UserAvatar
+                                key={index}
+                                title={name}
+                                titleTo={`/specialists/${user.id}`}
+                                avatar={{
+                                    src: user.photo
+                                }}
+                            />
+                        );
+                    })}
                 </div>
             );
         }
 
         return <span className={cn('specialists-create__users-empty')}>{t('routes.specialists.main.users.empty')}</span>;
-    }, [users, i18n.language]);
-
-    useEffect(() => {
-        import('../mock.json')
-            .then((payload) => {
-                setUsers(payload.default);
-            })
-            .catch(console.error);
-    }, []);
+    }, [data?.results, i18n.language, isLoading]);
 
     return (
         <div className={cn('specialists-create')}>
@@ -107,34 +211,32 @@ export const SpecialistsCreate = () => {
                 <FormProvider {...context}>
                     <form
                         className={cn('specialists-create__form')}
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                        }}
+                        onSubmit={onSubmit}
                     >
                         <div className={cn('specialists-create__block')}>
                             <h3 className={cn('specialists-create__block-title')}>Фамилия, имя, отчество</h3>
                             <div className={cn('specialists-create__block-inputs')}>
                                 <FormInput
                                     type="text"
-                                    name="name"
-                                    placeholder="Имя"
+                                    name="first_name"
+                                    placeholder={t('routes.specialists-create.main.form.first_name')}
                                 />
                                 <FormInput
                                     type="text"
-                                    name="surname"
-                                    placeholder="Фамилия"
+                                    name="last_name"
+                                    placeholder={t('routes.specialists-create.main.form.last_name')}
                                 />
                                 <FormInput
                                     type="text"
-                                    name="lastname"
-                                    placeholder="Отчество"
+                                    name="middle_name"
+                                    placeholder={t('routes.specialists-create.main.form.middle_name')}
                                 />
                             </div>
                         </div>
                         <div className={cn('specialists-create__contacts-wrapper')}>
                             {fields.map((field, index) => (
                                 <div
-                                    key={field.id}
+                                    key={field.fieldId}
                                     className={cn('specialists-create__contacts')}
                                 >
                                     <div className={cn('specialists-create__field')}>
@@ -145,16 +247,10 @@ export const SpecialistsCreate = () => {
                                         </strong>
                                         <div className={cn('specialists-create__field-content', 'specialists-create__field-content_ext')}>
                                             <InputSelect
-                                                name="contact_type"
-                                                options={[{
-                                                    value: 'phone',
-                                                    label: t('routes.person.common.fields.contact.types.phone')
-                                                }, {
-                                                    value: 'email',
-                                                    label: t('routes.person.common.fields.contact.types.email')
-                                                }]}
+                                                name={`common.${index}.contact_type`}
+                                                options={contacts}
                                             />
-                                            <FormInput name={`common.${index}.contact`} type="text" />
+                                            <FormInput name={`common.${index}.value`} type="text" />
                                         </div>
                                     </div>
                                     <div className={cn('specialists-create__contact-controls')}>
@@ -191,48 +287,58 @@ export const SpecialistsCreate = () => {
                             />
                         </div>
                         <InputSelect
-                            options={citizenship.map((item) => ({ label: item.name, value: String(item.id) }))}
+                            options={citizenship}
                             name="citizenship"
-                            label="Гражданство"
-                            placeholder="Гражданство"
+                            label={t('routes.specialists-create.main.form.citizenship')}
+                            placeholder={t('routes.specialists-create.main.form.citizenship')}
                             direction="column"
+                            disableAutocomplete={true}
                         />
                         <div className={cn('specialists-create__last-block')}>
                             <InputSelect
-                                options={countries.map((city) => ({ label: city.name, value: String(city.id) }))}
+                                options={countries}
                                 direction="column"
                                 name="country"
-                                label="Страна"
-                                placeholder="Страна"
+                                label={t('routes.specialists-create.main.form.country')}
+                                placeholder={t('routes.specialists-create.main.form.country')}
+                                disableAutocomplete={true}
                             />
                             <InputSelect
-                                options={cities.map((city) => ({ label: city.name, value: String(city.id) }))}
+                                options={cities}
                                 name="city"
-                                label="Город"
-                                placeholder="Город"
+                                label={t('routes.specialists-create.main.form.city')}
+                                placeholder={t('routes.specialists-create.main.form.city')}
                                 direction="column"
+                                disableAutocomplete={true}
                             />
                             <InputSelect
                                 name="gender"
-                                label="Пол"
+                                label={t('routes.specialists-create.main.form.gender.title')}
                                 direction="column"
-                                placeholder="Пол"
+                                placeholder={t('routes.specialists-create.main.form.gender.title')}
                                 options={[{
                                     value: 'М',
-                                    label: 'Мужской'
+                                    label: t('routes.specialists-create.main.form.gender.M')
                                 }, {
                                     value: 'F',
-                                    label: 'Женский'
+                                    label: t('routes.specialists-create.main.form.gender.F')
                                 }]}
                             />
                             <DateInput
                                 direction="column"
-                                name="date_of_birth"
-                                label="Дата рождения"
-                                placeholder="Дата рождения"
+                                name="birth_date"
+                                label={t('routes.specialists-create.main.form.birth_date')}
+                                placeholder={t('routes.specialists-create.main.form.birth_date')}
                             />
                         </div>
-                        <Button className={cn('specialists-create__button')} type="submit">Создать резюме</Button>
+                        <Button
+                            className={cn('specialists-create__button')}
+                            type="submit"
+                            disabled={postCvLoading || !isValid}
+                            isLoading={postCvLoading}
+                        >
+                            {t('routes.specialists-create.main.form.button-submit')}
+                        </Button>
                     </form>
                 </FormProvider>
             </main>

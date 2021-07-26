@@ -74,7 +74,6 @@
         font-size: 14px;
         line-height: 16px;
         color: var(--color-black);
-        opacity: 0.5;
         text-decoration-style: dashed;
         text-underline-offset: 2px;
     }
@@ -98,5 +97,15 @@
         &_dates {
             grid-template-columns: 102px 1fr auto 1fr;
         }
+    }
+
+    &__controls {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    &__modal-close {
+        margin-left: 12px;
     }
 }

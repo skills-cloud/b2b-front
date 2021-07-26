@@ -54,6 +54,10 @@
         &_extend {
             grid-template-columns: 150px 1fr 1fr 1fr;
         }
+
+        &_hidden {
+            display: none;
+        }
     }
 
     &__tabs {
@@ -131,10 +135,20 @@
         }
     }
 
-    &__contact-control {
+    &__contact-control:not(:last-of-type) {
+        margin-right: 24px;
+    }
 
-        &:not(:last-of-type) {
-            margin-right: 24px;
-        }
+    &__contacts-empty {
+        display: grid;
+        grid-row-gap: 16px;
+        justify-content: flex-start;
+        justify-items: flex-start;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-black);
     }
 }

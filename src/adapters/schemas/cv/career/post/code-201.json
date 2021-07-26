@@ -1,0 +1,71 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvCareer"
+        }
+    ],
+    "definitions": {
+        "CvCareer": {
+            "properties": {
+                "competencies_ids": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "cv_id": {
+                    "title": "Cv id",
+                    "type": "integer"
+                },
+                "date_from": {
+                    "format": "date",
+                    "title": "Период с",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "date_to": {
+                    "format": "date",
+                    "title": "Период по",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "organization_id": {
+                    "title": "Organization id",
+                    "type": "integer"
+                },
+                "position_id": {
+                    "title": "Position id",
+                    "type": "integer"
+                },
+                "projects_ids": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                }
+            },
+            "required": [
+                "cv_id",
+                "organization_id",
+                "position_id"
+            ],
+            "type": "object"
+        }
+    }
+}

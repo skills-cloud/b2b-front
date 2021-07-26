@@ -1,0 +1,42 @@
+.education {
+    --icon-size: 27px;
+    display: block;
+}
+
+.education__date {
+    margin-top: 8px;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.14;
+    color: var(--color-text-dark);
+}
+
+.education__date-distance {
+    color: var(--color-text-light);
+}
+
+.education__row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 68px;
+}
+
+.education__actions {
+    display: grid;
+    grid-auto-flow: column;
+    height: var(--icon-size);
+    column-gap: 14px;
+}
+
+.education__action {
+    padding: 0;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    cursor: pointer;
+}
+
+.education__icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    fill: var(--color-gray-3);
+}

@@ -1,0 +1,75 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvCertificate"
+        }
+    ],
+    "definitions": {
+        "CvCertificate": {
+            "properties": {
+                "competencies_ids": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "cv_id": {
+                    "title": "Cv id",
+                    "type": "integer"
+                },
+                "date": {
+                    "format": "date",
+                    "title": "Выдан",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "education_graduate_id": {
+                    "title": "Education graduate id",
+                    "type": "integer"
+                },
+                "education_place_id": {
+                    "title": "Education place id",
+                    "type": "integer"
+                },
+                "education_speciality_id": {
+                    "title": "Education speciality id",
+                    "type": "integer"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 1000,
+                    "title": "Наименование",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "number": {
+                    "maxLength": 1000,
+                    "title": "Номер",
+                    "type": "string",
+                    "x-nullable": true
+                }
+            },
+            "required": [
+                "cv_id",
+                "education_graduate_id",
+                "education_place_id",
+                "education_speciality_id"
+            ],
+            "type": "object"
+        }
+    }
+}

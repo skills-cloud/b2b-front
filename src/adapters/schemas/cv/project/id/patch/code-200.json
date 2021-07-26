@@ -1,0 +1,75 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvProject"
+        }
+    ],
+    "definitions": {
+        "CvProject": {
+            "properties": {
+                "competencies_ids": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "cv_id": {
+                    "title": "Cv id",
+                    "type": "integer"
+                },
+                "date_from": {
+                    "format": "date",
+                    "title": "Период с",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "date_to": {
+                    "format": "date",
+                    "title": "Период по",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "industry_sector_id": {
+                    "title": "Industry sector id",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 1000,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "organization_id": {
+                    "title": "Organization id",
+                    "type": "integer"
+                },
+                "position_id": {
+                    "title": "Position id",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "cv_id",
+                "name",
+                "organization_id",
+                "position_id"
+            ],
+            "type": "object"
+        }
+    }
+}

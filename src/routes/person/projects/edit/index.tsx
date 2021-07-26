@@ -1,133 +1,167 @@
-import React, { useEffect, MouseEvent } from 'react';
+import React, { MouseEvent, useState, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm, useFieldArray, FormProvider } from 'react-hook-form';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
-import FormInput from 'component/form/input';
-import FormDate from 'component/form/date';
-import FormInputSkills from 'component/form/input-skills';
-import IconClose from 'component/icons/close';
 import Button from 'component/button';
+import Modal from 'component/modal';
+import IconArrowLeft from 'component/icons/arrow-left-full';
 
+import ProjectsList from '../list';
+import ProjectsForm from '../form';
+import RemoveModal from '../remove-modal';
 import style from './index.module.pcss';
-
-export interface IField {
-    name?: string,
-    customer?: string,
-    date?: {
-        from?: string,
-        to?: string
-    },
-    description?: string,
-    role?: string,
-    skills?: Array<{
-        label: string,
-        value: string
-    }>
-}
+import { CvProjectRead } from 'adapter/types/cv/project/get/code-200';
 
 export interface IProps {
     className?: string | IStyle,
-    fields?: Array<IField>,
-    onSubmit?(payload: Array<IField>): void,
+    fields?: Array<CvProjectRead>,
+    onSubmit?(payload: Array<CvProjectRead>): void,
     onCancel?(): void
+}
+
+enum ESteps {
+    List,
+    DetailForm,
+    DeleteForm,
 }
 
 export const ProjectsEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
-    const methods = useForm({
-        defaultValues: {
-            project: props.fields || [{}]
-        }
-    });
-    const { fields, append, remove } = useFieldArray({
-        control: methods.control,
-        name   : 'project'
-    });
 
-    useEffect(() => {
-        if(fields.length) {
-            methods.setFocus(`project.${fields.length - 1}.name` as `project.${number}.name`);
+    const [projectId, setProjectId] = useState<number | null>(null);
+    const [step, setStep] = useState<ESteps>(ESteps.List);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const formValues = projectId !== null && props.fields?.find(({ id }) => id === projectId) ? {
+        defaultValues: {
+            project: props.fields
+                ?.filter(({ id }) => id === projectId)
+                .map((item) => ({
+                    ...item,
+                    competencies_select: item.competencies?.map((competence) => ({
+                        value: competence.id,
+                        label: competence.name
+                    })) || [],
+                    position: {
+                        value: item.position?.id,
+                        label: item.position?.name || ''
+                    },
+                    organization: {
+                        value: item.organization?.id,
+                        label: item.organization?.name || ''
+                    }
+                }))[0]
         }
-    }, [methods.setFocus]);
+    } : undefined;
+
+    const backToList = () => {
+        setProjectId(null);
+        setStep(ESteps.List);
+    };
+
+    const elFooter = () => {
+        return (
+            <Fragment>
+                {step === ESteps.List && (
+                    <div className={cn('projects-edit__form-footer')}>
+                        <a
+                            href="#append"
+                            className={cn('projects-edit__link-append')}
+                            children={t('routes.person.projects.edit.buttons.append')}
+                            onClick={(e: MouseEvent) => {
+                                e.preventDefault();
+                                setStep(ESteps.DetailForm);
+                                setProjectId(null);
+                            }}
+                        />
+                        <Button onClick={props.onCancel}>{t('routes.person.projects.edit.buttons.done')}</Button>
+                    </div>
+                )}
+                {step === ESteps.DetailForm && (
+                    <div className={cn('projects-edit__form-footer-detail')}>
+                        <Button
+                            isSecondary={true}
+                            onClick={backToList}
+                            disabled={loading}
+                        >
+                            {t('routes.person.projects.edit.buttons.cancel')}
+                        </Button>
+                        <Button
+                            form="projects-form"
+                            type="submit"
+                            disabled={loading}
+                            isLoading={loading}
+                        >
+                            {t('routes.person.projects.edit.buttons.save')}
+                        </Button>
+                    </div>
+                )}
+            </Fragment>
+        );
+    };
+
+    const elHeader = () => {
+        if(projectId === null) {
+            return t('routes.person.projects.header');
+        }
+
+        return (
+            <div className={cn('projects-edit__modal-header')}>
+                <button
+                    type="button"
+                    onClick={backToList}
+                >
+                    <IconArrowLeft
+                        svg={{ className: cn('projects-edit__icon-back') }}
+                    />
+                </button>
+                {props.fields?.filter((field) => field.id === projectId)[0]?.position?.name}
+            </div>
+        );
+    };
+
+    const elContent = () => {
+        if(step === ESteps.List) {
+            return (
+                <ProjectsList
+                    fields={props.fields}
+                    setProjectId={setProjectId}
+                    nextStep={(isDeleteAction) => (isDeleteAction ? setStep(ESteps.DeleteForm) : setStep(ESteps.DetailForm))}
+                />
+            );
+        }
+
+        if(step === ESteps.DetailForm) {
+            return (
+                <ProjectsForm
+                    defaultValues={formValues}
+                    onSetLoading={setLoading}
+                    onSubmit={() => {
+                        setLoading(false);
+                        setStep(ESteps.List);
+                    }}
+                />
+            );
+        }
+    };
 
     return (
-        <div className={cn('projects-edit')}>
-            <form
-                className={cn('projects-edit__form')}
-                onSubmit={methods.handleSubmit(({ project }) => {
-                    if(props.onSubmit) {
-                        const payload = project.filter((item) => item.name || item.customer || item.role || item.description || item.skills || item.date?.to || item.date?.from);
-
-                        props.onSubmit(payload);
-                    }
-                })}
+        <Fragment>
+            <Modal
+                className={cn('projects-edit')}
+                header={elHeader()}
+                footer={elFooter()}
             >
-                <div className={cn('projects-edit__form-body')}>
-                    <h2 className={cn('projects-edit__header')}>{t('routes.person.projects.header')}</h2>
-                    <FormProvider {...methods}>
-                        {fields.map((field, index) => (
-                            <div
-                                key={field.id}
-                                className={cn('projects-edit__project')}
-                            >
-                                <IconClose
-                                    svg={{
-                                        width    : 14,
-                                        height   : 14,
-                                        className: cn('projects-edit__project-icon-remove'),
-                                        onClick  : () => {
-                                            remove(index);
-                                        }
-                                    }}
-                                />
-                                <div className={cn('projects-edit__field')}>
-                                    <strong>{t('routes.person.projects.fields.name')}</strong>
-                                    <FormInput name={`project.${index}.name`} type="text" />
-                                </div>
-                                <div className={cn('projects-edit__field')}>
-                                    <strong>{t('routes.person.projects.fields.customer')}</strong>
-                                    <FormInput name={`project.${index}.customer`} type="text" />
-                                </div>
-                                <div className={cn('projects-edit__field', 'projects-edit__field_dates')}>
-                                    <strong>{t('routes.person.projects.fields.date')}</strong>
-                                    <FormDate name={`project.${index}.date.from`} />
-                                    &mdash;
-                                    <FormDate name={`project.${index}.date.to`} />
-                                </div>
-                                <div className={cn('projects-edit__field')}>
-                                    <strong>{t('routes.person.projects.fields.role')}</strong>
-                                    <FormInput name={`project.${index}.role`} type="text" />
-                                </div>
-                                <div className={cn('projects-edit__field')}>
-                                    <strong>{t('routes.person.projects.fields.skills')}</strong>
-                                    <FormInputSkills name={`project.${index}.skills`} />
-                                </div>
-                                <div className={cn('projects-edit__field')}>
-                                    <strong>{t('routes.person.projects.fields.description')}</strong>
-                                    <FormInput name={`project.${index}.description`} type="text" />
-                                </div>
-                            </div>
-                        ))}
-                    </FormProvider>
-                </div>
-                <div className={cn('projects-edit__form-footer')}>
-                    <a
-                        href="#append"
-                        className={cn('projects-edit__link-append')}
-                        children={t('routes.person.projects.edit.buttons.append')}
-                        onClick={(e: MouseEvent) => {
-                            e.preventDefault();
-
-                            append({});
-                        }}
-                    />
-                    <Button isSecondary={true} onClick={props.onCancel}>{t('routes.person.projects.edit.buttons.cancel')}</Button>
-                    <Button type="submit">{t('routes.person.projects.edit.buttons.save')}</Button>
-                </div>
-            </form>
-        </div>
+                {elContent()}
+            </Modal>
+            {step === ESteps.DeleteForm && (
+                <RemoveModal
+                    projectId={projectId}
+                    nextStepAfterDelete={backToList}
+                />
+            )}
+        </Fragment>
     );
 };
 

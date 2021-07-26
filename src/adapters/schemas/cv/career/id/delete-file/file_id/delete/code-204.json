@@ -1,0 +1,31 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/Status"
+        }
+    ],
+    "definitions": {
+        "Status": {
+            "properties": {
+                "details": {
+                    "title": "Details",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "status": {
+                    "enum": [
+                        "error",
+                        "ok",
+                        "warning"
+                    ],
+                    "title": "Status",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "status"
+            ],
+            "type": "object"
+        }
+    }
+}

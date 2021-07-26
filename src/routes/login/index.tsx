@@ -4,6 +4,7 @@ import { parse } from 'query-string';
 import axios from 'axios';
 import { useHistory, Redirect } from 'react-router';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import { useClassnames } from 'hook/use-classnames';
 import { useCancelTokens } from 'hook/cancel-token';
@@ -12,9 +13,10 @@ import Button from 'component/button';
 import Error from 'component/error';
 import Input from 'component/form/input';
 
-import { useDispatch, useSelector } from 'component/core/store';
-import { postAccLogin } from 'adapter/api/acc';
+import { useSelector } from 'component/core/store';
+import { acc } from 'adapter/api/acc';
 import { key as keyUser } from 'component/user/reducer';
+import { set } from 'component/user/actions';
 
 import style from './style.pcss';
 
@@ -23,8 +25,12 @@ const Login = () => {
     const cn = useClassnames(style);
     const { t, i18n } = useTranslation();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
-    const dispatch = useDispatch();
     const [cancelTokenLogin, cancelTokenUserSelfInfo] = useCancelTokens(2);
+    const dispatch = useDispatch();
+    const [postAccLogin] = acc.usePostAccLoginMutation();
+    const { data } = acc.useGetAccWhoAmIQuery({}, {
+        refetchOnMountOrArgChange: true
+    });
 
     const { isAuth } = useSelector((store) => ({
         isAuth: !!store[keyUser].id
@@ -47,23 +53,28 @@ const Login = () => {
             setPending(true);
 
             postAccLogin({
-                cancelToken: cancelTokenLogin.new(),
-                data       : {
-                    email   : formData.email,
-                    password: formData.password
-                }
+                email   : formData.email,
+                password: formData.password
             })
+                .unwrap()
                 .then(() => {
                     setPending(false);
+
+                    if(data) {
+                        dispatch(set({ id: data.id }));
+                    }
                 })
                 .catch((err) => {
                     if(!axios.isCancel(err)) {
                         console.error(err);
+
+                        setPending(false);
+                        setError(err?.data?.details || 'Error');
                     }
                 });
         },
-        (formErr) => {
-            console.log('FORM ERR', formErr)
+        () => {
+            setError('Fields error');
         }
     );
 
@@ -82,7 +93,7 @@ const Login = () => {
             return <Redirect to={qs.from} />;
         }
 
-        return <Redirect to="/" />;
+        return <Redirect to="/specialists" />;
     }
 
     return (
@@ -100,7 +111,7 @@ const Login = () => {
                         type="password"
                         label={t('routes.login.form.password')}
                     />
-                    <Button onClick={onSubmit}>
+                    <Button onClick={onSubmit} disabled={pending} isLoading={pending}>
                         {t('routes.login.form.button')}
                     </Button>
                     {elError}

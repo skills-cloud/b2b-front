@@ -1,0 +1,224 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvCertificateRead"
+        }
+    ],
+    "definitions": {
+        "CompetenceInline": {
+            "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "CvCertificateRead": {
+            "properties": {
+                "competencies": {
+                    "items": {
+                        "$ref": "#/definitions/CompetenceInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "competencies_ids": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "cv_id": {
+                    "title": "Cv id",
+                    "type": "integer"
+                },
+                "date": {
+                    "format": "date",
+                    "title": "Выдан",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "education_graduate": {
+                    "$ref": "#/definitions/EducationGraduate"
+                },
+                "education_graduate_id": {
+                    "title": "Education graduate id",
+                    "type": "integer"
+                },
+                "education_place": {
+                    "$ref": "#/definitions/EducationPlace"
+                },
+                "education_place_id": {
+                    "title": "Education place id",
+                    "type": "integer"
+                },
+                "education_speciality": {
+                    "$ref": "#/definitions/EducationSpecialty"
+                },
+                "education_speciality_id": {
+                    "title": "Education speciality id",
+                    "type": "integer"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 1000,
+                    "title": "Наименование",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "number": {
+                    "maxLength": 1000,
+                    "title": "Номер",
+                    "type": "string",
+                    "x-nullable": true
+                }
+            },
+            "required": [
+                "cv_id",
+                "education_graduate_id",
+                "education_place_id",
+                "education_speciality_id"
+            ],
+            "type": "object"
+        },
+        "EducationGraduate": {
+            "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object",
+            "x-nullable": true
+        },
+        "EducationPlace": {
+            "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object",
+            "x-nullable": true
+        },
+        "EducationSpecialty": {
+            "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object",
+            "x-nullable": true
+        }
+    }
+}

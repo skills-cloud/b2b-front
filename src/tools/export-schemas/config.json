@@ -1,5 +1,5 @@
 {
-    "save-dir": "/src/adapters/api/schemas",
+    "save-dir": "/src/adapters/schemas",
     "hosts": [{
         "host": "test.dev.b2bcloud.com",
         "path": "/api/docs/swagger/?format=openapi",
@@ -10,10 +10,28 @@
             "/acc/whoami/",
             "/acc/whoami/set-photo/",
 
+
+            "/cv/career/",
+            "/cv/career/{id}",
+            "/cv/career/{id}/delete-file/{file_id}/",
+            "/cv/career/{id}/upload-file/",
+            "/cv/certificate/",
+            "/cv/certificate/{id}/",
             "/cv/contact/",
             "/cv/contact/{id}",
             "/cv/cv/",
-            "/cv/cv/{id}",
+            "/cv/cv/{id}/",
+            "/cv/cv/{id}/delete-file/{file_id}/",
+            "/cv/cv/{id}/set-photo/",
+            "/cv/cv/{id}/upload-file/",
+            "/cv/education/",
+            "/cv/education/{id}/",
+            "/cv/position/",
+            "/cv/position/{id}/",
+            "/cv/position/{id}/delete-file/{file_id}/",
+            "/cv/position/{id}/upload-file/",
+            "/cv/project/",
+            "/cv/project/{id}/",
             "/cv/timeslot/",
             "/cv/timeslot/{id}",
 
@@ -26,10 +44,13 @@
             "/dictionary/education-graduate/",
             "/dictionary/education-place/",
             "/dictionary/education-specialty/",
+            "/dictionary/industry-sector/",
+            "/dictionary/physical-limitation/",
             "/dictionary/position/",
             "/dictionary/type-of-employment/",
 
-            "/main/organization/"
+            "/main/organization/",
+            "/main/organization-project/"
         ]
     }]
 }

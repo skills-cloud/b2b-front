@@ -1,5 +1,7 @@
-import { request } from '../request';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { AxiosRequestConfig } from 'axios';
+
+import { request } from 'adapter/request';
 
 export interface IUserData {
     id?: number,
@@ -14,49 +16,67 @@ export interface IUserData {
     photo?: string
 }
 
-export const postAccLogin = (config?: AxiosRequestConfig) => {
-    return request({
-        url   : '/acc/login/',
-        method: 'post',
-        ...config
-    });
-};
-
-export const postAccLogout = (config?: AxiosRequestConfig) => {
-    return request({
-        url   : '/acc/logout/',
-        method: 'post',
-        ...config
-    });
-};
-
-export const postAccSetTimezone = (config?: AxiosRequestConfig) => {
-    return request({
-        url   : '/acc/set-timezone/',
-        method: 'post',
-        ...config
-    });
-};
-
 export const getAccWhoAmI = (config?: AxiosRequestConfig) => {
     return request<IUserData>({
-        url: '/acc/whoami/',
+        url: '/api/acc/whoami/',
         ...config
     });
 };
 
-export const patchAccWhoAmI = (config?: AxiosRequestConfig) => {
-    return request({
-        url   : '/acc/whoami/',
-        method: 'patch',
-        ...config
-    });
-};
-
-export const postAccWhoAmISetPhoto = (config?: AxiosRequestConfig) => {
-    return request<IUserData>({
-        url   : '/acc/whoami/set-photo/',
-        method: 'post',
-        ...config
-    });
-};
+export const acc = createApi({
+    reducerPath: 'api/acc',
+    tagTypes   : ['acc'],
+    baseQuery  : fetchBaseQuery({
+        baseUrl: '/api/acc'
+    }),
+    endpoints: (build) => ({
+        postAccLogin: build.mutation({
+            invalidatesTags: ['acc'],
+            query          : (body) => ({
+                url   : 'login/',
+                method: 'POST',
+                body
+            })
+        }),
+        postAccLogout: build.mutation({
+            invalidatesTags: ['acc'],
+            query          : (body) => ({
+                url   : 'logout/',
+                method: 'POST',
+                body
+            })
+        }),
+        postAccSetTimeZone: build.mutation({
+            invalidatesTags: ['acc'],
+            query          : (body) => ({
+                url   : 'set-timezone/',
+                method: 'POST',
+                body
+            })
+        }),
+        getAccWhoAmI: build.query({
+            providesTags: ['acc'],
+            query       : (params) => ({
+                url   : 'whoami/',
+                method: 'GET',
+                params
+            })
+        }),
+        postAccWhoAmISetPhoto: build.mutation({
+            invalidatesTags: ['acc'],
+            query          : (body) => ({
+                url   : 'whoami/set-photo/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchAccWhoAmI: build.mutation({
+            invalidatesTags: ['acc'],
+            query          : (body) => ({
+                url   : 'whoami/',
+                method: 'PATCH',
+                body
+            })
+        })
+    })
+});

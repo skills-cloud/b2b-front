@@ -19,6 +19,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    position: relative;
     margin: 0;
 
     &:not(:disabled):hover {
@@ -47,9 +48,16 @@
     }
 
     &__loader {
+        position: absolute;
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: inherit;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        border-radius: inherit;
     }
 
     &__loader-icon {

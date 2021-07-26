@@ -5,31 +5,39 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type Code201 = CvDetail;
+export type Code201 = CvDetailWrite;
 export type NoName = string;
 export type CitizenshipId = number;
 export type CityId = number;
 export type CountryId = number;
-export type NoName1 = string;
-export type NoName2 = 'F' | 'М';
-export type NoName3 = boolean;
+export type NoName1 = 'all' | 'weekends' | 'workdays';
+export type NoName2 = string;
+export type NoName3 = 'F' | 'M';
+export type ID = number;
 export type NoName4 = boolean;
 export type NoName5 = string;
 export type NoName6 = string;
 export type Photo = string;
+export type NoName7 = string;
+export type NoName8 = string;
 export type UserId = number;
 
-export interface CvDetail {
+export interface CvDetailWrite {
     birth_date?: NoName;
     citizenship_id?: CitizenshipId;
     city_id?: CityId;
+    competencies_ids?: number[];
     country_id?: CountryId;
-    first_name?: NoName1;
-    gender?: NoName2;
-    is_resource_owner?: NoName3;
-    is_with_disabilities?: NoName4;
+    days_to_contact?: NoName1;
+    first_name?: NoName2;
+    gender?: NoName3;
+    id?: ID;
+    is_resource_owner?: NoName4;
     last_name?: NoName5;
     middle_name?: NoName6;
     photo?: Photo;
+    physical_limitations_ids?: number[];
+    time_to_contact_from?: NoName7;
+    time_to_contact_to?: NoName8;
     user_id?: UserId;
 }

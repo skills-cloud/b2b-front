@@ -1,9 +1,21 @@
-import { Styles } from 'react-select';
+import { OptionTypeBase, Styles } from 'react-select';
 
 import { TProps } from './types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default (props: TProps, isFocus: boolean): Partial<Styles<any, false>> => {
+export default (props: TProps, isFocus: boolean, hasError: boolean): Partial<Styles<OptionTypeBase, false>> => {
+    let borderColor = '#d9d9d9';
+    let boxShadow = 'none';
+
+    if(hasError) {
+        borderColor = '#ff6d6d';
+        boxShadow = '0 0 0 1px #ff6d6d';
+    }
+
+    if(isFocus) {
+        borderColor = '#999';
+        boxShadow = '0 0 0 1px #ff6d6d';
+    }
+
     return {
         placeholder: () => ({
             fontFamily: 'Roboto',
@@ -24,8 +36,8 @@ export default (props: TProps, isFocus: boolean): Partial<Styles<any, false>> =>
             minHeight   : '40px',
             boxSizing   : '-moz-initial',
             position    : 'relative',
-            borderColor : isFocus ? '#999' : '#d9d9d9',
-            boxShadow   : isFocus ? '0 0 0 1px #999' : 'none',
+            borderColor : borderColor,
+            boxShadow   : boxShadow,
             display     : 'flex'
         }),
         control: () => ({

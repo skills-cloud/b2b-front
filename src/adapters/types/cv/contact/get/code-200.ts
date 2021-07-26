@@ -7,14 +7,16 @@
 
 export type Code200 = CvContactRead;
 export type NoName = string;
-export type ID = number;
 export type NoName1 = string;
-export type NoName2 = number;
+export type ID = number;
+export type NoName2 = boolean;
+export type NoName3 = string;
+export type NoName4 = number;
 export type ContactTypeId = number;
 export type CvId = number;
 export type ID1 = number;
-export type NoName3 = boolean;
-export type NoName4 = string;
+export type NoName5 = boolean;
+export type NoName6 = string;
 
 export interface CvContactRead {
     comment?: NoName;
@@ -22,11 +24,13 @@ export interface CvContactRead {
     contact_type_id: ContactTypeId;
     cv_id: CvId;
     id?: ID1;
-    is_primary?: NoName3;
-    value: NoName4;
+    is_primary?: NoName5;
+    value: NoName6;
 }
 export interface ContactType {
+    description?: NoName1;
     id?: ID;
-    name: NoName1;
-    sorting?: NoName2;
+    is_verified?: NoName2;
+    name: NoName3;
+    sorting?: NoName4;
 }

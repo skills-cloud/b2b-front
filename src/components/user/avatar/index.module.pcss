@@ -1,0 +1,55 @@
+.user-avatar {
+    display: grid;
+    grid-template-areas: "a b" "a c";
+    justify-content: flex-start;
+    align-items: center;
+    grid-column-gap: 16px;
+    padding: 16px 0;
+    position: relative;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 16px;
+    color: var(--color-black);
+
+    &::after {
+        content: "";
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 64px;
+        right: 0;
+        height: 1px;
+        background-color: var(--color-border);
+    }
+
+    &:first-child {
+        padding-top: 0;
+
+        &::after {
+            display: none;
+        }
+    }
+
+    &:last-child {
+        padding-bottom: 0;
+    }
+
+    & > * {
+
+        &:nth-child(1) {
+            grid-area: a;
+        }
+
+        &:nth-child(2) {
+            grid-area: b;
+            font-weight: 500;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        &:nth-child(3) {
+            grid-area: c;
+            font-weight: 400;
+        }
+    }
+}

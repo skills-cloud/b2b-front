@@ -1,11 +1,11 @@
-import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
 import { differenceInCalendarYears, format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 import useClassnames from 'hook/use-classnames';
-import { useCancelTokens } from 'hook/cancel-token';
 
 import IconApply from 'component/icons/apply';
 import IconPencil from 'component/icons/pencil';
@@ -17,12 +17,10 @@ import Textarea from 'component/form/textarea';
 
 import { key as keyUser } from 'component/user/reducer';
 import { useSelector } from 'component/core/store';
-import { getCvById, ICvId } from 'adapter/api/cv';
+import { cv } from 'adapter/api/cv';
 
 import CommonEdit from './edit';
 import style from './index.module.pcss';
-import axios from 'axios';
-import { ru } from 'date-fns/locale';
 
 export interface IProps {
     id?: string
@@ -32,7 +30,6 @@ export const Common = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
-    const [tokenGetCv] = useCancelTokens(1);
     const context = useForm({
         mode: 'all'
     });
@@ -40,35 +37,13 @@ export const Common = (props: IProps) => {
     const [more, setMore] = useState<boolean>(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [showVerify, setShowVerify] = useState<boolean>(false);
-    const [user, setUser] = useState<ICvId>();
+    const { data, refetch } = cv.useGetCvByIdQuery({ id }, { refetchOnMountOrArgChange: true });
 
     const { email, first_name, last_name } = useSelector((store) => ({
         email     : store[keyUser].email,
         first_name: store[keyUser].first_name,
         last_name : store[keyUser].last_name
     }));
-
-    useEffect(() => {
-        if(id) {
-            getCvById(id, {
-                cancelToken: tokenGetCv.new()
-            })
-                .then((resp) => {
-                    setUser(resp);
-                })
-                .catch((err) => {
-                    if(!axios.isCancel(err)) {
-                        console.error(err);
-                    }
-                });
-        }
-    }, [id]);
-
-    useEffect(() => {
-        return () => {
-            tokenGetCv.remove();
-        };
-    }, []);
 
     const onClickMore = useCallback(() => {
         setMore(true);
@@ -80,6 +55,11 @@ export const Common = (props: IProps) => {
 
     const onClickCancel = () => {
         setIsEdit(false);
+    };
+
+    const onSubmitCallback = () => {
+        refetch();
+        onClickCancel();
     };
 
     const onSubmitVerify = context.handleSubmit(
@@ -102,7 +82,7 @@ export const Common = (props: IProps) => {
                 </div>
             );
         }
-    }, [more, JSON.stringify(user)]);
+    }, [more, JSON.stringify(data)]);
 
     const elTooltip = useCallback((isVerify: boolean) => {
         if(isVerify) {
@@ -171,16 +151,16 @@ export const Common = (props: IProps) => {
     }, [showVerify]);
 
     const isEditWindow = useMemo(() => {
-        if(isEdit && user) {
-            return <CommonEdit onCancel={onClickCancel} fields={user} />;
+        if(isEdit && data) {
+            return <CommonEdit onCancel={onClickCancel} fields={data} id={id} onSubmit={onSubmitCallback} />;
         }
-    }, [isEdit, user]);
+    }, [isEdit, JSON.stringify(data)]);
 
     const elContacts = useMemo(() => {
-        if(user?.contacts?.length) {
+        if(data?.contacts?.length) {
             return (
                 <div className={cn('person__info-list')}>
-                    {user.contacts.map((contact) => (
+                    {data.contacts.map((contact) => (
                         <div key={contact.id} className={cn('person__list-item')}>
                             <strong>{contact.contact_type.name}</strong>
                             <span>{contact.value}</span>
@@ -206,11 +186,22 @@ export const Common = (props: IProps) => {
                 </div>
             </div>
         );
-    }, [email, JSON.stringify(user?.contacts)]);
+    }, [email, JSON.stringify(data?.contacts)]);
+
+    const elLocation = useMemo(() => {
+        if(data?.city) {
+            return (
+                <div className={cn('person__list-item')}>
+                    <strong>{t('routes.person.blocks.common.base.location')}</strong>
+                    <span>{`${data.city.name || ''}, ${data.country?.name || ''}`}</span>
+                </div>
+            );
+        }
+    }, [data?.city]);
 
     const elUserInfo = useMemo(() => {
-        if(user) {
-            const dateFromBirthdate = new Date(user?.birth_date);
+        if(data) {
+            const dateFromBirthdate = new Date(data?.birth_date as string);
             const age = differenceInCalendarYears(new Date(), dateFromBirthdate);
             const userAges = dateFromBirthdate ? `${age} (${format(dateFromBirthdate, 'dd MMMM yyyy', { locale: ru })})` : age;
 
@@ -220,31 +211,24 @@ export const Common = (props: IProps) => {
                         <strong>{t('routes.person.blocks.common.base.age')}</strong>
                         <span>{userAges}</span>
                     </div>
-                    <div className={cn('person__list-item')}>
-                        <strong>{t('routes.person.blocks.common.base.location')}</strong>
-                        <span>{`${user.city.name}, ${user.country.name}`}</span>
-                    </div>
-                    <div className={cn('person__list-item')}>
-                        <strong>{t('routes.person.blocks.common.base.resource-owner')}</strong>
-                        <span>StarHr</span>
-                    </div>
+                    {elLocation}
                     {elBaseMore}
                 </div>
             );
         }
-    }, [JSON.stringify(user), user]);
+    }, [JSON.stringify(data), data, more]);
 
     const elUserName = useMemo(() => {
-        let userName = `${last_name} ${first_name}`;
+        let userName = `${last_name || ''} ${first_name || ''}`;
 
         if(id) {
-            userName = `${user?.last_name} ${user?.first_name} ${user?.middle_name}`;
+            userName = `${data?.last_name || ''} ${data?.first_name || ''} ${data?.middle_name || ''}`;
         }
 
         return (
             <h1 className={cn('person__title')}>{userName.trim()}</h1>
         );
-    }, [last_name, first_name, user?.first_name, user?.last_name, user?.middle_name]);
+    }, [last_name, first_name, data?.first_name, data?.last_name, data?.middle_name]);
 
     return (
         <div id={props.id} key={id} className={cn('person__block', 'person__info')}>

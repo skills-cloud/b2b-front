@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo, Suspense, Fragment } from 'react';
+import React, { useMemo, Suspense, Fragment } from 'react';
 import { Router, Route, Redirect, Switch, useLocation } from 'react-router';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
+import { parse, stringify } from 'query-string';
 
 import { useSelector } from 'component/core/store';
 import history from 'component/core/history';
@@ -13,8 +14,9 @@ export const Routes = () => {
     const location = useLocation();
     const { t, i18n } = useTranslation();
     const isAuth = useSelector((store) => !!store[userReducerName].id);
+    const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
-    const elRoutes = useCallback((routes: Array<IProps>) => {
+    const elRoutes = (routes: Array<IProps>) => {
         if(Array.isArray(routes)) {
             return routes.map((
                 {
@@ -29,9 +31,15 @@ export const Routes = () => {
                     return (
                         <Route
                             key={index}
-                            render={() => (
-                                <Redirect to="/login" />
-                            )}
+                            {...props}
+                            render={(attrs) => {
+                                const newQueryString = stringify({
+                                    ...qs,
+                                    from: attrs.location.pathname
+                                });
+
+                                return <Redirect to={`/login?${newQueryString}`} />;
+                            }}
                         />
                     );
                 }
@@ -63,7 +71,7 @@ export const Routes = () => {
                 );
             });
         }
-    }, [isAuth]);
+    };
 
     const elHelmet = useMemo(() => (
         <Helmet

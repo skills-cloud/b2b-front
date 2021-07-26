@@ -7,6 +7,16 @@
     "definitions": {
         "Competence": {
             "properties": {
+                "aliases": {
+                    "items": {
+                        "maxLength": 500,
+                        "minLength": 1,
+                        "title": "Aliases",
+                        "type": "string"
+                    },
+                    "type": "array",
+                    "x-nullable": true
+                },
                 "description": {
                     "title": "Описание",
                     "type": "string",
@@ -17,16 +27,39 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "lft": {
+                    "readOnly": true,
+                    "title": "Lft",
+                    "type": "integer"
+                },
+                "mptt_level": {
+                    "readOnly": true,
+                    "title": "Mptt level",
+                    "type": "integer"
+                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
                 },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
+                "parent": {
+                    "title": "Родитель",
+                    "type": "integer",
+                    "x-nullable": true
+                },
+                "rght": {
+                    "readOnly": true,
+                    "title": "Rght",
+                    "type": "integer"
+                },
+                "tree_id": {
+                    "readOnly": true,
+                    "title": "Tree id",
                     "type": "integer"
                 }
             },

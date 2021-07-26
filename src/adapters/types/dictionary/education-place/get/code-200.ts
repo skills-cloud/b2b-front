@@ -8,12 +8,14 @@
 export type Code200 = EducationPlace;
 export type NoName = string;
 export type ID = number;
-export type NoName1 = string;
-export type NoName2 = number;
+export type NoName1 = boolean;
+export type NoName2 = string;
+export type NoName3 = number;
 
 export interface EducationPlace {
     description?: NoName;
     id?: ID;
-    name: NoName1;
-    sorting?: NoName2;
+    is_verified?: NoName1;
+    name: NoName2;
+    sorting?: NoName3;
 }

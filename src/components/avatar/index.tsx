@@ -2,6 +2,7 @@ import React, { MouseEvent, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import useClassnames from 'hook/use-classnames';
+import IconUser from 'component/icons/user';
 
 import style from './index.module.pcss';
 
@@ -23,12 +24,21 @@ export const Avatar = (props: IProps & typeof defaultProps) => {
     const attrs = {
         onClick  : props.onClick,
         className: cn('avatar', {
-            'avatar_small': props.preset === 'small'
+            'avatar_small': props.preset === 'small',
+            'avatar_empty': !props.src
         })
     };
 
     const elPhoto = useMemo(() => {
-        return <img src={props.src} alt={props.title} {...attrs} />;
+        if(props.src) {
+            return <img src={props.src} alt={props.title} {...attrs} />;
+        }
+
+        return (
+            <div {...attrs}>
+                <IconUser svg={{ className: cn('avatar__empty') }} />
+            </div>
+        );
     }, [props.src, props.title]);
 
     if(props.to) {

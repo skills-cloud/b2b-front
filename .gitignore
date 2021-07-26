@@ -3,3 +3,5 @@ build/
 *.log
 .idea/
 .DS_Store
+*.js
+*.js.map

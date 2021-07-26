@@ -17,6 +17,10 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
@@ -33,7 +37,8 @@
             "required": [
                 "name"
             ],
-            "type": "object"
+            "type": "object",
+            "x-nullable": true
         }
     }
 }

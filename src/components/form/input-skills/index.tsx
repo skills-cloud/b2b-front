@@ -1,6 +1,6 @@
 import React, { useState, FC, ReactNode, MouseEvent, useEffect, useMemo } from 'react';
 import { MultiValueRemoveProps } from 'react-select/src/components/MultiValue';
-import { components } from 'react-select';
+import { components, OptionTypeBase } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import debounce from 'lodash.debounce';
@@ -8,17 +8,18 @@ import { ErrorMessage } from '@hookform/error-message';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { useClassnames } from 'hook/use-classnames';
+import { useDispatch } from 'component/core/store';
 
 import Error from 'component/error';
 import IconClose from 'component/icons/close';
 
+import { dictionary } from 'adapter/api/dictionary';
+
 import { IProps, IValue } from './types';
+import getStyles from './style';
 import style from './index.module.pcss';
 
-import MOCK from './skills.json';
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-const MultiValueRemove: FC<MultiValueRemoveProps<{}>> = (props) => {
+const MultiValueRemove: FC<MultiValueRemoveProps<Record<string, unknown>>> = (props) => {
     const onClick = (e: MouseEvent): void => {
         if(!props.selectProps.isDisabled) {
             props.innerProps.onClick(e);
@@ -40,6 +41,7 @@ const MultiValueRemove: FC<MultiValueRemoveProps<{}>> = (props) => {
 const InputSkills = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { formState: { errors }, watch, trigger, control } = useFormContext();
+    const dispatch = useDispatch();
 
     const [isFocus, setIsFocus] = useState(false);
     const value = watch(props.name);
@@ -107,17 +109,21 @@ const InputSkills = (props: IProps) => {
     };
 
     const onLoadOptions = debounce((search_string: string, callback) => {
-        Promise.resolve(MOCK)
-            .then((payload) => {
-                const result = payload.skills.map((item) => ({
-                    label: item.name,
-                    value: item.id
-                }));
+        dispatch(dictionary.endpoints.getCompetence.initiate({ search: search_string }))
+            .then(({ data }) => {
+                if(data?.results?.length) {
+                    const res = data.results.map((item) => ({
+                        label: item.name,
+                        value: String(item.id)
+                    }));
 
-                callback(result);
+                    callback(res);
+                } else {
+                    callback(null);
+                }
             })
-            .catch(() => {
-                callback(null);
+            .catch((err) => {
+                console.error(err);
             });
     }, 150);
 
@@ -141,7 +147,7 @@ const InputSkills = (props: IProps) => {
         }
     }, [props.elError, props.name, errors[props.name]]);
 
-    const elInput = (renderValue: string, onChange: () => void, onBlur: () => void): ReactNode => {
+    const elInput = (renderValue: OptionTypeBase, onChange: () => void, onBlur: () => void): ReactNode => {
         const selectProps = {
             onFocus,
             onBlur,
@@ -160,79 +166,13 @@ const InputSkills = (props: IProps) => {
             className   : cn('input__field', {
                 'input__field_invalid': errors[props.name]
             }),
-            styles: {
-                placeholder: () => ({
-                    fontFamily: 'Roboto',
-                    color     : '#a9a9a9',
-                    fontSize  : '14px',
-                    position  : 'absolute',
-                    top       : '50%',
-                    lineHeight: '40px',
-                    marginTop : '-20px',
-                    marginLeft: '4px'
-                }),
-                container: () => ({
-                    fontFamily  : 'Roboto',
-                    border      : 'solid 1px #d9d9d9',
-                    borderRadius: '4px',
-                    flexGrow    : 1,
-                    minHeight   : '40px',
-                    boxSizing   : 'border-box',
-                    position    : 'relative',
-                    borderColor : isFocus ? '#999' : '#d9d9d9',
-                    boxShadow   : isFocus ? '0 0 0 1px #999' : 'none'
-                }),
-                control: () => ({
-                    alignItems     : 'center',
-                    backgroundColor: props.disabled ? 'rgba(224, 224, 224, 0.25)' : '#fff',
-                    display        : 'flex',
-                    flexWrap       : 'wrap',
-                    justifyContent : 'center',
-                    outline        : 'none',
-                    position       : 'relative',
-                    transition     : 'all 100ms',
-                    minHeight      : '38px',
-                    borderRadius   : '4px'
-                }),
-                multiValue: () => ({
-                    display        : 'block',
-                    height         : '24px',
-                    lineHeight     : '24px',
-                    backgroundColor: 'rgba(170, 170, 170, 0.15)',
-                    fontSize       : '12px',
-                    padding        : '0 24px 0 10px',
-                    color          : '#121212',
-                    whiteSpace     : 'nowrap',
-                    overflow       : 'hidden',
-                    textOverflow   : 'ellipsis',
-                    borderRadius   : '12px',
-                    textAlign      : 'center',
-                    fontWeight     : 500,
-                    position       : 'relative',
-                    margin         : '1px 3px'
-                }),
-                multiValueLabel : () => ({}),
-                multiValueRemove: () => ({
-                    borderRadius   : '50%',
-                    backgroundColor: '#fff',
-                    fill           : '#333',
-                    boxSizing      : 'border-box',
-                    position       : 'absolute',
-                    right          : '4px',
-                    top            : '4px',
-                    bottom         : '4px',
-                    cursor         : 'pointer',
-                    padding        : '3px'
-                })
-            }
+            styles: getStyles(props, isFocus)
         };
 
         if(props.createable) {
-            // @ts-ignore
             return <AsyncCreatableSelect {...selectProps} />;
         }
 
-        // @ts-ignore
         return <AsyncSelect {...selectProps} />;
     };
 

@@ -1,76 +1,31 @@
-import React, { useMemo } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import React, { HTMLAttributes, ReactNode } from 'react';
 
-import useClassnames, { IStyle } from 'hook/use-classnames';
-import UserHeaderBar from 'component/user/header-bar';
+import useClassnames from 'hook/use-classnames';
 
 import style from './index.module.pcss';
 
-export interface IProps {
-    className?: string | IStyle
+interface IHeaderProps extends HTMLAttributes<HTMLElement> {
+    children: ReactNode,
+    level?: 1 | 2 | 3 | 4,
+    tag?: 'span' | 'div' | 'h1' | 'h2' | 'h3' | 'h4',
+    contrast?: boolean
 }
 
-export const Header = (props: IProps) => {
-    const cn = useClassnames(style, props.className, true);
-    const { t, i18n } = useTranslation();
-
-    const elLanguages = useMemo(() => {
-        if(__DEVELOPMENT__) {
-            if(Array.isArray(i18n.options.supportedLngs) && i18n.options.supportedLngs.length) {
-                return (
-                    <ul className={cn('header__languages')}>
-                        {i18n.options.supportedLngs.map((lang) => (
-                            <li
-                                key={lang}
-                                children={lang}
-                                className={cn('header__language', {
-                                    'header__language_active': lang === i18n.language
-                                })}
-                                onClick={() => {
-                                    void i18n.changeLanguage(lang);
-                                }}
-                            />
-                        ))}
-                    </ul>
-                );
-            }
-        }
-    }, [i18n.options.supportedLngs, i18n.language]);
+const Header = ({ children, level = 1, tag, contrast = false, ...props }: IHeaderProps) => {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const Tag = tag || `h${level}`;
+    const cn = useClassnames(style);
 
     return (
-        <header className={cn('header')}>
-            {elLanguages}
-            <div className={cn('header__main')}>
-                <Link
-                    to="/"
-                    className={cn('header__logo')}
-                    children={t('components.header.logo')}
-                />
-                <nav className={cn('header__nav')}>
-                    <NavLink
-                        to="/specialists"
-                        className={cn('header__nav-link')}
-                        activeClassName={cn('header__nav-link_active')}
-                        children={t('components.header.nav.specialists')}
-                    />
-                    <NavLink
-                        to="/teams"
-                        className={cn('header__nav-link')}
-                        activeClassName={cn('header__nav-link_active')}
-                        children={t('components.header.nav.teams')}
-                    />
-                    <NavLink
-                        to="/help"
-                        className={cn('header__nav-link')}
-                        activeClassName={cn('header__nav-link_active')}
-                        children={t('components.header.nav.help')}
-                    />
-                </nav>
-                <UserHeaderBar />
-            </div>
-        </header>
+        <Tag {...props} className={cn('header', { [`header_level-${level}`]: level, 'header_contrasted': contrast })}>
+            {children}
+        </Tag>
     );
 };
+
+export const H1 = (props: IHeaderProps) => <Header {...props} level={1} />;
+export const H2 = (props: IHeaderProps) => <Header {...props} level={2} />;
+export const H3 = (props: IHeaderProps) => <Header {...props} level={3} />;
+export const H4 = (props: IHeaderProps) => <Header {...props} level={4} />;
 
 export default Header;

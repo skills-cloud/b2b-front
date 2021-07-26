@@ -1,29 +1,28 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent, useMemo } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 
+import { cv } from 'adapter/api/cv';
+
 import style from './index.module.pcss';
-import { postAccWhoAmISetPhoto } from 'adapter/api/acc';
-import { useCancelToken } from 'hook/cancel-token';
-import axios from 'axios';
+import Loader from 'component/loader';
 
 export interface IProps {
     className?: string | IStyle,
     alt?: string,
-    src?: string,
     isEdit?: boolean
 }
 
 export const Photo = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const token = useCancelToken();
-    const [src, setSrc] = useState(props.src);
+    const { id } = useParams<{ id: string }>();
 
-    useEffect(() => {
-        return () => {
-            token.remove();
-        };
-    }, []);
+    const { data, isLoading, isSuccess } = cv.useGetCvByIdQuery({ id });
+    const [postPhoto, { isLoading: isPostLoading }] = cv.useSetCvPhotoByIdMutation();
+
+    const [src, setSrc] = useState<string | undefined>(data?.photo);
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         if(e.target.files?.length) {
@@ -33,13 +32,13 @@ export const Photo = (props: IProps) => {
 
             formData.set('photo', file);
 
-            postAccWhoAmISetPhoto({
-                data       : formData,
-                cancelToken: token.new()
+            postPhoto({
+                id,
+                data: formData
             })
+                .unwrap()
                 .then((resp) => {
                     setSrc(resp.photo);
-                    console.log('RESP', resp);
                 })
                 .catch((err) => {
                     if(!axios.isCancel(err)) {
@@ -49,15 +48,47 @@ export const Photo = (props: IProps) => {
         }
     };
 
+    const elLoader = useMemo(() => {
+        if(isLoading || isPostLoading) {
+            return (
+                <div className={cn('photo__loader')}>
+                    <Loader />
+                </div>
+            );
+        }
+    }, [isLoading, isPostLoading]);
+
+    const elImage = useMemo(() => {
+        let photoSrc = src;
+
+        if(isSuccess) {
+            if(data?.photo) {
+                photoSrc = data.photo;
+            } else {
+                photoSrc = 'https://avatars.githubusercontent.com/u/8215396?v=4';
+            }
+        }
+
+        return (
+            <img
+                className={cn('photo__image', 'photo__image_edit')}
+                src={photoSrc || src}
+                alt={props.alt}
+            />
+        );
+    }, [data?.photo, isLoading, isPostLoading]);
+
     if(props.isEdit) {
         return (
             <form className={cn('photo')}>
-                <label>
-                    <img className={cn('photo__image', 'photo__image_edit')} src={src} alt={props.alt} />
+                <label className={cn('photo__label')}>
+                    {elLoader}
+                    {elImage}
                     <input
                         type="file"
                         name="photo"
                         accept="image/*"
+                        multiple={false}
                         className={cn('photo__input-file')}
                         onChange={onChange}
                     />
@@ -68,13 +99,9 @@ export const Photo = (props: IProps) => {
 
     return (
         <div className={cn('photo')}>
-            <img className={cn('photo__image')} src={src} alt={props.alt} />
+            <img className={cn('photo__image')} src={data?.photo || src} alt={props.alt} />
         </div>
     );
-};
-
-Photo.defaultProps = {
-    src: 'https://avatars.githubusercontent.com/u/8215396?v=4'
 };
 
 export default Photo;

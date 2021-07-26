@@ -1,0 +1,160 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvPositionRead"
+        }
+    ],
+    "definitions": {
+        "CompetenceInline": {
+            "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "CvPositionFileRead": {
+            "properties": {
+                "cv_position_id": {
+                    "readOnly": true,
+                    "title": "Cv position id",
+                    "type": "string"
+                },
+                "file": {
+                    "format": "uri",
+                    "readOnly": true,
+                    "title": "Файл",
+                    "type": "string"
+                },
+                "file_ext": {
+                    "readOnly": true,
+                    "title": "File ext",
+                    "type": "string"
+                },
+                "file_name": {
+                    "maxLength": 1000,
+                    "title": "Название файла",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "file_size": {
+                    "readOnly": true,
+                    "title": "File size",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "CvPositionRead": {
+            "properties": {
+                "competencies": {
+                    "items": {
+                        "$ref": "#/definitions/CompetenceInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "competencies_ids": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "cv_id": {
+                    "title": "Cv id",
+                    "type": "integer"
+                },
+                "files": {
+                    "items": {
+                        "$ref": "#/definitions/CvPositionFileRead"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "position": {
+                    "$ref": "#/definitions/Position"
+                },
+                "position_id": {
+                    "title": "Position id",
+                    "type": "integer"
+                },
+                "title": {
+                    "maxLength": 2000,
+                    "title": "Произвольное название",
+                    "type": "string",
+                    "x-nullable": true
+                }
+            },
+            "required": [
+                "cv_id",
+                "position_id"
+            ],
+            "type": "object"
+        },
+        "Position": {
+            "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        }
+    }
+}

@@ -6,14 +6,26 @@
  */
 
 export type Code200 = Competence;
+export type Aliases = string;
 export type NoName = string;
 export type ID = number;
-export type NoName1 = string;
-export type NoName2 = number;
+export type NoName1 = boolean;
+export type Lft = number;
+export type MpttLevel = number;
+export type NoName2 = string;
+export type NoName3 = number;
+export type Rght = number;
+export type TreeId = number;
 
 export interface Competence {
+    aliases?: Aliases[];
     description?: NoName;
     id?: ID;
-    name: NoName1;
-    sorting?: NoName2;
+    is_verified?: NoName1;
+    lft?: Lft;
+    mptt_level?: MpttLevel;
+    name: NoName2;
+    parent?: NoName3;
+    rght?: Rght;
+    tree_id?: TreeId;
 }

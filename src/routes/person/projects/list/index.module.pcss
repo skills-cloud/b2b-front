@@ -1,0 +1,55 @@
+.projects-list {
+    --icon-size: 27px;
+    display: block;
+
+    &__date {
+        margin-top: 8px;
+        font-family: Roboto, sans-serif;
+        font-size: 14px;
+        line-height: 1.14;
+        color: var(--color-text-dark);
+    }
+
+    &__date-distance {
+        color: var(--color-text-light);
+    }
+
+    &__row {
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-columns: 1fr 68px;
+    }
+
+    &__actions {
+        display: grid;
+        grid-auto-flow: column;
+        height: var(--icon-size);
+        column-gap: 14px;
+    }
+
+    &__action {
+        padding: 0;
+        width: var(--icon-size);
+        height: var(--icon-size);
+        cursor: pointer;
+    }
+
+    &__icon {
+        width: var(--icon-size);
+        height: var(--icon-size);
+        fill: var(--color-gray-3);
+    }
+
+    &__empty {
+        display: grid;
+        grid-row-gap: 16px;
+        justify-content: flex-start;
+        justify-items: flex-start;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-black);
+    }
+}

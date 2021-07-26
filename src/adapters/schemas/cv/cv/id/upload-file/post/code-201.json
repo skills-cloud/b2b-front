@@ -1,0 +1,46 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvFileRead"
+        }
+    ],
+    "definitions": {
+        "CvFileRead": {
+            "properties": {
+                "cv_id": {
+                    "readOnly": true,
+                    "title": "Cv id",
+                    "type": "string"
+                },
+                "file": {
+                    "format": "uri",
+                    "readOnly": true,
+                    "title": "Файл",
+                    "type": "string"
+                },
+                "file_ext": {
+                    "readOnly": true,
+                    "title": "File ext",
+                    "type": "string"
+                },
+                "file_name": {
+                    "maxLength": 1000,
+                    "title": "Название файла",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "file_size": {
+                    "readOnly": true,
+                    "title": "File size",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

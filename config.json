@@ -2,11 +2,5 @@
     "redux-logger": {
         "duration": true,
         "collapsed": true
-    },
-    "google": {
-        "api": {
-            "client-id": "592486733838-oqhisug8h7moandf2o3ke2ebbdj9rt44.apps.googleusercontent.com",
-            "scope": "profile email"
-        }
     }
 }

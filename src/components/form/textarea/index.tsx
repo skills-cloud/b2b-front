@@ -14,7 +14,8 @@ export interface IProps {
     placeholder?: string,
     className?: string | IStyle,
     label?: string,
-    required?: Message | ValidationRule<boolean>
+    required?: Message | ValidationRule<boolean>,
+    rows?: number
 }
 
 export const Textarea = (props: IProps) => {
@@ -29,12 +30,14 @@ export const Textarea = (props: IProps) => {
 
     const attrs = {
         className: cn('input', {
-            'input_invalid': errors?.[props.name]?.message && isWatch
+            'input_invalid'   : errors?.[props.name]?.message && isWatch,
+            'input_sized-rows': !!props.rows
         }),
         placeholder: props.placeholder,
         ...register(props.name, {
             required: props.required
-        })
+        }),
+        rows: props.rows
     };
 
     const elError = useMemo(() => {
@@ -53,7 +56,15 @@ export const Textarea = (props: IProps) => {
 
     const elLabel = useMemo(() => {
         if(props.label) {
-            return <strong className={cn('input__label-text')}>{props.label}</strong>;
+            return (
+                <strong
+                    className={cn('input__label-text', {
+                        'input__label-text_required': props.required
+                    })}
+                >
+                    {props.label}
+                </strong>
+            );
         }
     }, [props.label]);
 

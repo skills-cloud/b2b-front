@@ -11,13 +11,10 @@
     align-items: center;
     overflow: auto;
 
-    &__header {
-        font-family: Montserrat, sans-serif;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 24px;
-        line-height: 29px;
-        color: var(--color-black);
+    &__header-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     &__footer {
@@ -27,6 +24,20 @@
         grid-auto-flow: column;
         grid-column-gap: 12px;
         align-items: center;
+    }
+
+    &__button-close {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--color-bg-button);
+    }
+
+    &__icon-close {
+        fill: var(--color-gray-3);
     }
 
     &__content {

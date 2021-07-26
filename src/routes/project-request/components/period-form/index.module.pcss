@@ -1,0 +1,28 @@
+.form {
+    display: grid;
+    grid-gap: 24px;
+}
+
+.field-group {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-gap: 4px;
+    align-items: flex-start;
+}
+
+.field-group__separator {
+    --color: #d6d9de;
+    width: 16px;
+    height: 1px;
+    background: var(--color);
+    margin-top: 43px;
+}
+
+.append {
+    display: inline-block;
+    font-family: Roboto, sans-serif;
+    font-size: 12px;
+    line-height: 1.16;
+    color: var(--color-blue-primary);
+    margin-top: 12px;
+}

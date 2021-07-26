@@ -43,7 +43,10 @@ export interface IProps {
     hidePastDate?: boolean,
     selected?: Array<Date>,
     onClickDay?(date: Date): void,
-    busyPeriods?: Array<[string, string]>
+    busyPeriods?: Array<{
+        dates: Array<string>,
+        emp_id: number
+    }>
 }
 
 export const defaultProps = {
@@ -62,13 +65,14 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
     const isBusy = useCallback((value: Date) => {
         if(value && props.busyPeriods?.length) {
             const periods = props.busyPeriods.map((item) => ({
-                start: parse(item[0], 'yyyy-MM-dd', new Date()),
-                end  : parse(item[1], 'yyyy-MM-dd', new Date())
+                start : parse(item.dates[0], 'yyyy-MM-dd', new Date()),
+                end   : parse(item.dates[1], 'yyyy-MM-dd', new Date()),
+                emp_id: item.emp_id
             }));
 
             for(const period of periods) {
                 if(isWithinInterval(value, period)) {
-                    return true;
+                    return period.emp_id;
                 }
             }
         }
@@ -192,10 +196,9 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
                             <span
                                 key={day.getTime()}
                                 className={cn('date-picker-calendar__day', {
-                                    'date-picker-calendar__day_is-another'  : !isSameMonth(isSecond ? secondDate : firstDate, day),
-                                    // 'date-picker-calendar__day_is-half-busy': Math.random() > 0.5,
-                                    'date-picker-calendar__day_is-full-busy': isBusy(day),
-                                    'date-picker-calendar__day_is-select'   : props.selected?.some((item) => isSameDay(item, day))
+                                    'date-picker-calendar__day_is-another'                         : !isSameMonth(isSecond ? secondDate : firstDate, day),
+                                    'date-picker-calendar__day_is-select'                          : props.selected?.some((item) => isSameDay(item, day)),
+                                    [`date-picker-calendar__day_type-of-employment-${isBusy(day)}`]: isBusy(day)
                                 })}
                                 onClick={() => {
                                     props.onClickDay?.(day);

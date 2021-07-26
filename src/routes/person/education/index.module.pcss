@@ -7,15 +7,6 @@
     display: grid;
     grid-row-gap: 24px;
 
-    &__header {
-        font-family: Montserrat, sans-serif;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 24px;
-        line-height: 29px;
-        color: var(--color-sidebar-header);
-    }
-
     &__controls {
         position: absolute;
         top: 28px;
@@ -48,16 +39,24 @@
     }
 
     &__list {
-        padding: 0;
-        margin: 0;
+        padding: 0 0 32px;
+        margin: 0 0 16px;
         list-style: none;
         display: grid;
         grid-row-gap: 16px;
+        border-bottom: solid 1px var(--color-gray-2);
+    }
+
+    &__list:last-child {
+        padding: 0;
+        margin: 0;
+        border-bottom: none;
     }
 
     &__list-item {
         display: grid;
         grid-auto-flow: column;
+        align-items: center;
         grid-template-columns: 150px 1fr;
         font-family: Roboto, sans-serif;
         font-style: normal;
@@ -78,16 +77,9 @@
     }
 
     &__education-title {
-        font-family: Montserrat, sans-serif;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 16px;
-        line-height: 20px;
-        color: var(--color-black);
-        position: relative;
     }
 
     &__icon {

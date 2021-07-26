@@ -18,7 +18,7 @@ export const request = <T = void>(config?: AxiosRequestConfig): Promise<T> => {
                 return response;
             },
             (error) => {
-                throw error.response.data || error;
+                throw error.response?.data || error;
             }
         );
 };

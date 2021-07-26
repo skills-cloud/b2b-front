@@ -11,7 +11,12 @@ import getStyles from './style';
 import { TProps, IValue } from './types';
 import style from './index.module.pcss';
 
-const InputSelect = (props: TProps) => {
+const defaultProps = {
+    direction          : 'row',
+    disableAutocomplete: false
+};
+
+const InputSelect = (props: TProps & typeof defaultProps) => {
     const cn = useClassnames(style, props.className, true);
 
     const { formState: { errors }, watch, trigger, control } = useFormContext();
@@ -78,7 +83,7 @@ const InputSelect = (props: TProps) => {
 
     const elError = useMemo(() => {
         if(props.elError !== false) {
-            return <ErrorMessage as={Error} name={props.name} errors={errors} className={cn('input__error')} />;
+            return <ErrorMessage as={Error} name={props.name} errors={errors} elIcon={true} className={cn('input__error')} />;
         }
     }, [props.elError, props.name, errors[props.name]]);
 
@@ -102,12 +107,11 @@ const InputSelect = (props: TProps) => {
                     onFocus      : onFocus,
                     options      : suggests,
                     onInputChange: props.loadOptions ? undefined : onInputChange,
+                    autoComplete : props.disableAutocomplete ? 'new-password' : 'on',
                     onChange     : onChange,
-                    styles       : getStyles(props, isFocus),
-                    className    : cn('input__field', {
-                        'input__field_invalid': errors[props.name]
-                    }),
-                    components: {
+                    styles       : getStyles(props, isFocus, !!errors[props.name]),
+                    className    : cn('input__field'),
+                    components   : {
                         Input : SelectInput,
                         Option: Option,
                         ...props.components
@@ -136,8 +140,6 @@ const InputSelect = (props: TProps) => {
     );
 };
 
-InputSelect.defaultProps = {
-    direction: 'row'
-};
+InputSelect.defaultProps = defaultProps;
 
 export default InputSelect;

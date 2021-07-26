@@ -3,7 +3,6 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import store from 'component/core/store';
-import AuthGoogleProvider from 'component/auth/google/provider';
 
 import 'locale';
 
@@ -28,9 +27,7 @@ store
         render(
             (
                 <Provider store={store}>
-                    <AuthGoogleProvider>
-                        <Routes />
-                    </AuthGoogleProvider>
+                    <Routes />
                 </Provider>
             ),
             document.getElementById('app'),

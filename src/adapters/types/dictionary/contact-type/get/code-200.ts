@@ -6,12 +6,16 @@
  */
 
 export type Code200 = ContactType;
-export type ID = number;
 export type NoName = string;
-export type NoName1 = number;
+export type ID = number;
+export type NoName1 = boolean;
+export type NoName2 = string;
+export type NoName3 = number;
 
 export interface ContactType {
+    description?: NoName;
     id?: ID;
-    name: NoName;
-    sorting?: NoName1;
+    is_verified?: NoName1;
+    name: NoName2;
+    sorting?: NoName3;
 }

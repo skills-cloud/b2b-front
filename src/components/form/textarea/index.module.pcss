@@ -12,6 +12,7 @@
     font-size: 14px;
     padding: 0 12px;
     color: var(--color-sidebar-header);
+    resize: vertical;
 
     &_invalid {
         border-color: var(--color-red-error);
@@ -41,9 +42,13 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
 
-        &::after {
-            content: "*";
-        }
+    &__label-text_required::after {
+        content: "*";
+    }
+
+    &_sized-rows {
+        height: auto;
     }
 }

@@ -2,8 +2,8 @@ const { writeFileSync, mkdirSync, readdirSync, existsSync, statSync } = require(
 const { basename, dirname, join } = require('path');
 const { compile } = require('json-schema-to-typescript');
 
-const PATH_SOURCE = '/src/components/api/schemas';
-const PATH_OUT = '/src/components/api/types';
+const PATH_SOURCE = '/src/adapters/schemas';
+const PATH_OUT = '/src/adapters/types';
 
 const collectFiles = (path, result = []) => {
     const currentPath = join(process.cwd(), path);

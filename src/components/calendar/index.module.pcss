@@ -156,7 +156,7 @@
     }
 
     &__item {
-        min-height: 256px;
+        min-height: 315px;
         border: 1px solid var(--color-calendar-border-month);
         box-sizing: border-box;
         border-radius: 8px;
@@ -179,6 +179,10 @@
         border-radius: 50%;
         border: 1px solid var(--color-calendar-border-default);
 
+        @media screen and (prefers-reduced-motion: reduce) {
+            transition: 200ms ease background-color;
+        }
+
         &_is-another {
             visibility: hidden;
         }
@@ -192,15 +196,47 @@
             }
         }
 
-        &_is-half-busy {
+        /* Офис полная */
+        &_type-of-employment-1 {
+            border-color: var(--color-dark-orange);
+            line-height: 26px;
+            border-width: 3px;
+        }
+
+        /* Офис частичная */
+        &_type-of-employment-2 {
+            border-left-color: var(--color-dark-orange);
+            border-bottom-color: var(--color-dark-orange);
+            line-height: 26px;
+            border-width: 3px;
+        }
+
+        /* Удалёнка полная */
+        &_type-of-employment-3 {
+            border-color: var(--color-calendar-border-selected);
+            line-height: 26px;
+            border-width: 3px;
+        }
+
+        /* Удалёнка частичная */
+        &_type-of-employment-4 {
             border-top-color: var(--color-calendar-border-selected);
             border-right-color: var(--color-calendar-border-selected);
             line-height: 26px;
             border-width: 3px;
         }
 
-        &_is-full-busy {
-            border-color: var(--color-calendar-border-selected);
+        /* Офис / Удалёнка полная */
+        &_type-of-employment-5 {
+            border-color: var(--color-calendar-border-selected) var(--color-calendar-border-selected) var(--color-dark-orange) var(--color-dark-orange);
+            line-height: 26px;
+            border-width: 3px;
+        }
+
+        /* Офис / Удалёнка частичная */
+        &_type-of-employment-6 {
+            border-top-color: var(--color-calendar-border-selected);
+            border-bottom-color: var(--color-dark-orange);
             line-height: 26px;
             border-width: 3px;
         }
@@ -209,7 +245,7 @@
 
             &:hover:not(&_is-select) {
                 cursor: pointer;
-                border-color: var(--color-calendar-border-selected);
+                background-color: var(--color-calendar-border-default);
 
                 &::after {
                     background-color: var(--color-calendar-border-selected);

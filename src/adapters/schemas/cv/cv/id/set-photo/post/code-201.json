@@ -1,0 +1,26 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvSetPhoto"
+        }
+    ],
+    "definitions": {
+        "CvSetPhoto": {
+            "properties": {
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "photo": {
+                    "format": "uri",
+                    "readOnly": true,
+                    "title": "Photo",
+                    "type": "string",
+                    "x-nullable": true
+                }
+            },
+            "type": "object"
+        }
+    }
+}
