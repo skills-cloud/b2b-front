@@ -14,7 +14,11 @@ export interface IProps {
     preset?: 'small'
 }
 
-export const Avatar = (props: IProps) => {
+const defaultProps = {
+    src: 'https://avatars.githubusercontent.com/u/8215396?v=4'
+};
+
+export const Avatar = (props: IProps & typeof defaultProps) => {
     const cn = useClassnames(style, props.className, true);
     const attrs = {
         onClick  : props.onClick,
@@ -24,9 +28,7 @@ export const Avatar = (props: IProps) => {
     };
 
     const elPhoto = useMemo(() => {
-        if(props.src) {
-            return <img src={props.src} alt={props.title} {...attrs} />;
-        }
+        return <img src={props.src} alt={props.title} {...attrs} />;
     }, [props.src, props.title]);
 
     if(props.to) {
@@ -39,5 +41,7 @@ export const Avatar = (props: IProps) => {
 
     return elPhoto || null;
 };
+
+Avatar.defaultProps = defaultProps;
 
 export default Avatar;

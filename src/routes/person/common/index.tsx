@@ -1,8 +1,12 @@
-import React, { Fragment, useCallback, useMemo, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useParams } from 'react-router';
+import { differenceInCalendarYears, format } from 'date-fns';
 
 import useClassnames from 'hook/use-classnames';
+import { useCancelTokens } from 'hook/cancel-token';
+
 import IconApply from 'component/icons/apply';
 import IconPencil from 'component/icons/pencil';
 import IconWarning from 'component/icons/warning';
@@ -11,11 +15,14 @@ import Modal from 'component/modal';
 import Button from 'component/button';
 import Textarea from 'component/form/textarea';
 
-import { key as userReducerName } from 'component/user/reducer';
+import { key as keyUser } from 'component/user/reducer';
 import { useSelector } from 'component/core/store';
+import { getCvById, ICvId } from 'adapter/api/cv';
 
 import CommonEdit from './edit';
 import style from './index.module.pcss';
+import axios from 'axios';
+import { ru } from 'date-fns/locale';
 
 export interface IProps {
     id?: string
@@ -24,6 +31,8 @@ export interface IProps {
 export const Common = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
+    const { id } = useParams<{ id: string }>();
+    const [tokenGetCv] = useCancelTokens(1);
     const context = useForm({
         mode: 'all'
     });
@@ -31,10 +40,35 @@ export const Common = (props: IProps) => {
     const [more, setMore] = useState<boolean>(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [showVerify, setShowVerify] = useState<boolean>(false);
+    const [user, setUser] = useState<ICvId>();
 
-    const { isAuth } = useSelector((store) => ({
-        isAuth: !!store[userReducerName].id
+    const { email, first_name, last_name } = useSelector((store) => ({
+        email     : store[keyUser].email,
+        first_name: store[keyUser].first_name,
+        last_name : store[keyUser].last_name
     }));
+
+    useEffect(() => {
+        if(id) {
+            getCvById(id, {
+                cancelToken: tokenGetCv.new()
+            })
+                .then((resp) => {
+                    setUser(resp);
+                })
+                .catch((err) => {
+                    if(!axios.isCancel(err)) {
+                        console.error(err);
+                    }
+                });
+        }
+    }, [id]);
+
+    useEffect(() => {
+        return () => {
+            tokenGetCv.remove();
+        };
+    }, []);
 
     const onClickMore = useCallback(() => {
         setMore(true);
@@ -62,19 +96,13 @@ export const Common = (props: IProps) => {
     const elBaseMore = useMemo(() => {
         if(more) {
             return (
-                <Fragment>
-                    <div className={cn('person__list-item')}>
-                        <strong>{t('routes.person.blocks.common.base.location')}</strong>
-                        <span>Москва</span>
-                    </div>
-                    <div className={cn('person__list-item')}>
-                        <strong>{t('routes.person.blocks.common.base.resource-owner')}</strong>
-                        <span>StarHr</span>
-                    </div>
-                </Fragment>
+                <div className={cn('person__list-item')}>
+                    <strong>{t('routes.person.blocks.common.base.resource-owner')}</strong>
+                    <span>StarHr</span>
+                </div>
             );
         }
-    }, [more]);
+    }, [more, JSON.stringify(user)]);
 
     const elTooltip = useCallback((isVerify: boolean) => {
         if(isVerify) {
@@ -143,15 +171,85 @@ export const Common = (props: IProps) => {
     }, [showVerify]);
 
     const isEditWindow = useMemo(() => {
-        if(isEdit) {
-            return <CommonEdit onCancel={onClickCancel} />;
+        if(isEdit && user) {
+            return <CommonEdit onCancel={onClickCancel} fields={user} />;
         }
-    }, [isEdit]);
+    }, [isEdit, user]);
+
+    const elContacts = useMemo(() => {
+        if(user?.contacts?.length) {
+            return (
+                <div className={cn('person__info-list')}>
+                    {user.contacts.map((contact) => (
+                        <div key={contact.id} className={cn('person__list-item')}>
+                            <strong>{contact.contact_type.name}</strong>
+                            <span>{contact.value}</span>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        return (
+            <div className={cn('person__info-list')}>
+                <div className={cn('person__list-item')}>
+                    <strong>{t('routes.person.blocks.common.contacts.email')}</strong>
+                    <span>{email}</span>
+                </div>
+                <div className={cn('person__list-item')}>
+                    <strong>{t('routes.person.blocks.common.contacts.telephone')}</strong>
+                    <span>+7 922 230 33 56</span>
+                </div>
+                <div className={cn('person__list-item')}>
+                    <strong>{t('routes.person.blocks.common.contacts.skype')}</strong>
+                    <span>anton.s13</span>
+                </div>
+            </div>
+        );
+    }, [email, JSON.stringify(user?.contacts)]);
+
+    const elUserInfo = useMemo(() => {
+        if(user) {
+            const dateFromBirthdate = new Date(user?.birth_date);
+            const age = differenceInCalendarYears(new Date(), dateFromBirthdate);
+            const userAges = dateFromBirthdate ? `${age} (${format(dateFromBirthdate, 'dd MMMM yyyy', { locale: ru })})` : age;
+
+            return (
+                <div className={cn('person__info-list')}>
+                    <div className={cn('person__list-item')}>
+                        <strong>{t('routes.person.blocks.common.base.age')}</strong>
+                        <span>{userAges}</span>
+                    </div>
+                    <div className={cn('person__list-item')}>
+                        <strong>{t('routes.person.blocks.common.base.location')}</strong>
+                        <span>{`${user.city.name}, ${user.country.name}`}</span>
+                    </div>
+                    <div className={cn('person__list-item')}>
+                        <strong>{t('routes.person.blocks.common.base.resource-owner')}</strong>
+                        <span>StarHr</span>
+                    </div>
+                    {elBaseMore}
+                </div>
+            );
+        }
+    }, [JSON.stringify(user), user]);
+
+    const elUserName = useMemo(() => {
+        let userName = `${last_name} ${first_name}`;
+
+        if(id) {
+            userName = `${user?.last_name} ${user?.first_name} ${user?.middle_name}`;
+        }
+
+        return (
+            <h1 className={cn('person__title')}>{userName.trim()}</h1>
+        );
+    }, [last_name, first_name, user?.first_name, user?.last_name, user?.middle_name]);
 
     return (
-        <div id={props.id} className={cn('person__block', 'person__info')}>
+        <div id={props.id} key={id} className={cn('person__block', 'person__info')}>
             <div className={cn('person__info-header')}>
-                <h1 className={cn('person__title')}>Сергей Андреевич Иванов</h1>
+                {elUserName}
                 <div
                     className={cn('person__control')}
                     onClick={() => {
@@ -174,21 +272,7 @@ export const Common = (props: IProps) => {
                         />
                     </TooltipError>
                 </div>
-                <div className={cn('person__info-list')}>
-                    <div className={cn('person__list-item')}>
-                        <strong>{t('routes.person.blocks.common.base.age')}</strong>
-                        <span>29 лет (2 марта 1991)</span>
-                    </div>
-                    <div className={cn('person__list-item')}>
-                        <strong>{t('routes.person.blocks.common.base.location')}</strong>
-                        <span>Москва</span>
-                    </div>
-                    <div className={cn('person__list-item')}>
-                        <strong>{t('routes.person.blocks.common.base.resource-owner')}</strong>
-                        <span>StarHr</span>
-                    </div>
-                    {elBaseMore}
-                </div>
+                {elUserInfo}
                 {!more && <p onClick={onClickMore} className={cn('person__more-info')}>{t('routes.person.blocks.common.base.show-more')}</p>}
             </div>
             <div className={cn('person__info-content')}>
@@ -204,20 +288,7 @@ export const Common = (props: IProps) => {
                         />
                     </TooltipError>
                 </div>
-                <div className={cn('person__info-list')}>
-                    <div className={cn('person__list-item')}>
-                        <strong>{t('routes.person.blocks.common.contacts.email')}</strong>
-                        <span>anton@gmail.com</span>
-                    </div>
-                    <div className={cn('person__list-item')}>
-                        <strong>{t('routes.person.blocks.common.contacts.telephone')}</strong>
-                        <span>+7 922 230 33 56</span>
-                    </div>
-                    <div className={cn('person__list-item')}>
-                        <strong>{t('routes.person.blocks.common.contacts.skype')}</strong>
-                        <span>anton.s13</span>
-                    </div>
-                </div>
+                {elContacts}
             </div>
             {elVerifyWindow}
             {isEditWindow}

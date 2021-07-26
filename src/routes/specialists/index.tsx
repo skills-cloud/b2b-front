@@ -4,23 +4,21 @@ import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import useClassnames from 'hook/use-classnames';
+import { useCancelToken } from 'hook/cancel-token';
 
 import Avatar from 'component/avatar';
 import IconPlus from 'component/icons/plus';
 import FormInput from 'component/form/input';
 
-import style from './index.module.pcss';
+import { getCvList, ICv } from 'adapter/api/cv';
 
-export interface IUser {
-    name: string,
-    position: string,
-    photo: string
-}
+import style from './index.module.pcss';
+import axios from 'axios';
 
 export const Specialists = () => {
     const cn = useClassnames(style);
     const { t, i18n } = useTranslation();
-    const [users, setUsers] = useState<Array<IUser>>([]);
+    const token = useCancelToken();
     const context = useForm({
         mode         : 'onChange',
         defaultValues: {
@@ -28,6 +26,32 @@ export const Specialists = () => {
         }
     });
     const search = context.watch('search');
+
+    const [loading, setLoading] = useState<boolean>(false);
+    const [users, setUsers] = useState<Array<ICv>>([]);
+
+    useEffect(() => {
+        setLoading(true);
+
+        getCvList({
+            params: {
+                count: 10,
+                search
+            },
+            cancelToken: token.new()
+        })
+            .then((resp) => {
+                const results = resp.results.filter((user) => user.user_id);
+
+                setLoading(false);
+                setUsers(results);
+            })
+            .catch((err) => {
+                if(!axios.isCancel(err)) {
+                    console.error(err);
+                }
+            });
+    }, []);
 
 
     const elUsers = useMemo(() => {
@@ -37,8 +61,8 @@ export const Specialists = () => {
                     {users.map((user, index) => (
                         <div key={index} className={cn('specialists__user')}>
                             <Avatar src={user.photo} />
-                            <Link to={`/user/${index}`}>{user.name}</Link>
-                            <span>{user.position}</span>
+                            <Link to={`/user/${user.user_id}`}>{`${user.first_name} ${user.last_name}`}</Link>
+                            <span>Mock</span>
                         </div>
                     ))}
                 </div>
@@ -47,26 +71,6 @@ export const Specialists = () => {
 
         return <span className={cn('specialists__users-empty')}>{t('routes.specialists.main.users.empty')}</span>;
     }, [users, i18n.language]);
-
-    useEffect(() => {
-        fetch('/spec/portfolio/search', {
-            method : 'post',
-            cache  : 'no-cache',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'request': {}
-            })
-        })
-            .catch(console.error);
-
-        import('./mock.json')
-            .then((payload) => {
-                setUsers(payload.default.filter(({ name }) => name.includes(search)));
-            })
-            .catch(console.error);
-    }, [search]);
 
     return (
         <div className={cn('specialists')}>

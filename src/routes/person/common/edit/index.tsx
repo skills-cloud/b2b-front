@@ -1,4 +1,4 @@
-import React, { MouseEvent, useMemo, useState } from 'react';
+import React, { MouseEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, useFieldArray, FormProvider } from 'react-hook-form';
 
@@ -10,31 +10,19 @@ import style from './index.module.pcss';
 import Modal from 'component/modal';
 import InputSelect from 'component/form/select';
 import DateInput from 'component/form/date';
-
-export interface IContact {
-    type: 'phone' | 'email',
-    value: string
-}
-
-export interface IField {
-    first_name?: string,
-    last_name?: string,
-    middle_name?: string,
-    citizenship?: string,
-    location?: {
-        country?: string,
-        city?: string
-    },
-    gender?: 'male' | 'female',
-    birth_date?: string,
-    contact?: Array<IContact>
-}
+import { ICvId } from 'adapter/api/cv';
+import { getContactsType } from 'adapter/api/dictionary';
 
 export interface IProps {
     className?: string | IStyle,
-    fields?: Array<IField>,
-    onSubmit?(payload: Array<IField>): void,
+    fields?: ICvId,
+    onSubmit?(payload: ICvId): void,
     onCancel?(): void
+}
+
+export interface IOption {
+    value: string,
+    label: string
 }
 
 export const CommonEdit = (props: IProps) => {
@@ -42,15 +30,16 @@ export const CommonEdit = (props: IProps) => {
     const { t } = useTranslation();
     const methods = useForm({
         defaultValues: {
-            common: props.fields || [{}]
+            common: props.fields
         }
     });
     const { fields, append, remove } = useFieldArray({
         control: methods.control,
-        name   : 'common'
+        name   : 'common.contacts'
     });
     const [activeTab, setActiveTab] = useState<'main' | 'contacts'>('main');
     const [mainContact, setMainContact] = useState<number>(0);
+    const [contactTypes, setContactTypes] = useState<Array<IOption>>([]);
 
     const onSetActiveTab = (tab: 'main' | 'contacts') => () => {
         setActiveTab(tab);
@@ -59,6 +48,21 @@ export const CommonEdit = (props: IProps) => {
     const onClickMainContact = (index: number) => () => {
         setMainContact(index);
     };
+
+    useEffect(() => {
+        getContactsType()
+            .then((resp) => {
+                const contacts = resp.results.map((contactType) => ({
+                    value: String(contactType.id) || '',
+                    label: contactType.name
+                }));
+
+                setContactTypes(contacts);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }, []);
 
     const elAppend = useMemo(() => {
         if(activeTab === 'contacts') {
@@ -95,7 +99,11 @@ export const CommonEdit = (props: IProps) => {
                 <div className={cn('common-edit__common-data')}>
                     <div className={cn('common-edit__field', 'common-edit__field_extend')}>
                         <strong>{t('routes.person.common.fields.name')}</strong>
-                        <FormInput name="last_name" type="text" placeholder={t('routes.person.common.fields.last_name')} />
+                        <FormInput
+                            name="last_name"
+                            type="text"
+                            placeholder={t('routes.person.common.fields.last_name')}
+                        />
                         <FormInput name="first_name" type="text" placeholder={t('routes.person.common.fields.first_name')} />
                         <FormInput name="middle_name" type="text" placeholder={t('routes.person.common.fields.middle_name')} />
                     </div>
@@ -131,51 +139,47 @@ export const CommonEdit = (props: IProps) => {
 
         return (
             <div className={cn('common-edit__common-data')}>
-                {fields.map((field, index) => (
-                    <div
-                        key={field.id}
-                        className={cn('common-edit__contacts')}
-                    >
-                        <div className={cn('common-edit__field', 'common-edit__field_ext')}>
-                            <strong>
-                                {t('routes.person.common.fields.contact.title', {
-                                    number: index + 1
-                                })}
-                            </strong>
-                            <InputSelect
-                                name="contact_type"
-                                options={[{
-                                    value: 'phone',
-                                    label: t('routes.person.common.fields.contact.types.phone')
-                                }, {
-                                    value: 'email',
-                                    label: t('routes.person.common.fields.contact.types.email')
-                                }]}
-                            />
-                            <FormInput name={`common.${index}.contact`} type="text" />
-                        </div>
-                        <div className={cn('common-edit__contact-controls')}>
-                            <span
-                                onClick={onClickMainContact(index)}
-                                className={cn('common-edit__contact-control', {
-                                    'common-edit__contact-control_active': index === mainContact
-                                })}
-                            >
-                                {t('routes.person.common.fields.contact.controls.main', {
-                                    context: index === mainContact ? 'default' : 'make'
-                                })}
-                            </span>
-                            {fields.length > 1 && (
+                {fields.map((field, index) => {
+                    return (
+                        <div
+                            key={field.id}
+                            className={cn('common-edit__contacts')}
+                        >
+                            <div className={cn('common-edit__field', 'common-edit__field_ext')}>
+                                <strong>
+                                    {t('routes.person.common.fields.contact.title', {
+                                        number: index + 1
+                                    })}
+                                </strong>
+                                <InputSelect
+                                    name="contact_type"
+                                    options={contactTypes}
+                                />
+                                <FormInput name={`common.${index}.contact`} type="text" />
+                            </div>
+                            <div className={cn('common-edit__contact-controls')}>
                                 <span
-                                    onClick={() => remove(index)}
-                                    className={cn('common-edit__contact-control')}
+                                    onClick={onClickMainContact(index)}
+                                    className={cn('common-edit__contact-control', {
+                                        'common-edit__contact-control_active': index === mainContact
+                                    })}
                                 >
-                                    {t('routes.person.common.fields.contact.controls.remove')}
+                                    {t('routes.person.common.fields.contact.controls.main', {
+                                        context: index === mainContact ? 'default' : 'make'
+                                    })}
                                 </span>
-                            )}
+                                {fields.length > 1 && (
+                                    <span
+                                        onClick={() => remove(index)}
+                                        className={cn('common-edit__contact-control')}
+                                    >
+                                        {t('routes.person.common.fields.contact.controls.remove')}
+                                    </span>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         );
     };
@@ -202,7 +206,7 @@ export const CommonEdit = (props: IProps) => {
             </div>
             <form
                 onSubmit={methods.handleSubmit(({ common }) => {
-                    if(props.onSubmit) {
+                    if(props.onSubmit && common) {
                         props.onSubmit(common);
                     }
                 })}
