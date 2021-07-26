@@ -1,0 +1,65 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/City"
+        }
+    ],
+    "definitions": {
+        "City": {
+            "properties": {
+                "country": {
+                    "$ref": "#/definitions/Country"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "country",
+                "name"
+            ],
+            "type": "object",
+            "x-nullable": true
+        },
+        "Country": {
+            "properties": {
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object",
+            "x-nullable": true
+        }
+    }
+}

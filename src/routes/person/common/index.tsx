@@ -11,6 +11,9 @@ import Modal from 'component/modal';
 import Button from 'component/button';
 import Textarea from 'component/form/textarea';
 
+import { key as userReducerName } from 'component/user/reducer';
+import { useSelector } from 'component/core/store';
+
 import CommonEdit from './edit';
 import style from './index.module.pcss';
 
@@ -28,6 +31,10 @@ export const Common = (props: IProps) => {
     const [more, setMore] = useState<boolean>(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [showVerify, setShowVerify] = useState<boolean>(false);
+
+    const { isAuth } = useSelector((store) => ({
+        isAuth: !!store[userReducerName].id
+    }));
 
     const onClickMore = useCallback(() => {
         setMore(true);

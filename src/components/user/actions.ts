@@ -1,19 +1,19 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { user, auth } from 'adapter/api';
+import { IUserData, postAccLogout } from 'adapter/api/acc';
 
-export const sync = createAsyncThunk('user/sync', async () => {
-    const payload = await user.user();
+export const set = createAction<Partial<IUserData>>(
+    '@@user/SET'
+);
 
-    return payload;
+export const reset = createAction(
+    '@@user/RESET'
+);
+
+export const logout = createAsyncThunk('@@user/logout', async (payload, { rejectWithValue }) => {
+    try {
+        await postAccLogout();
+    } catch(error) {
+        return rejectWithValue(error);
+    }
 });
-
-export const authGoogle = createAsyncThunk<void, string>('user/auth/google', async (idToken, thunkAPI) => {
-    await auth.authGoogle(idToken);
-    await thunkAPI.dispatch(sync());
-});
-
-export default {
-    sync,
-    authGoogle
-};

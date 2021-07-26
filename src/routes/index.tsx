@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next';
 
 import { useSelector } from 'component/core/store';
 import history from 'component/core/history';
-import { name as userReducerName } from 'component/user/slice';
+import { key as userReducerName } from 'component/user/reducer';
 
 import { baseRoutes, IProps } from './config';
 
 export const Routes = () => {
     const location = useLocation();
     const { t, i18n } = useTranslation();
-    const isAuth = useSelector((store) => !!store[userReducerName].login);
+    const isAuth = useSelector((store) => !!store[userReducerName].id);
 
     const elRoutes = useCallback((routes: Array<IProps>) => {
         if(Array.isArray(routes)) {

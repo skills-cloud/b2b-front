@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { sync, authGoogle } from './actions';
+import { sync, authGoogle } from './actions-old';
 
 export interface IState {
     image?: string,

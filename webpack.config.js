@@ -35,6 +35,11 @@ module.exports = (env = {}) => {
                 target      : 'http://dev.b2bcloud.com:19000/',
                 secure      : false,
                 changeOrigin: true
+            }, {
+                context     : ['/cv/**', '/acc/**', '/dictionary/**', '/main/**'],
+                target      : 'https://test.dev.b2bcloud.com/api/',
+                secure      : false,
+                changeOrigin: true
             }]
         },
         resolve: {

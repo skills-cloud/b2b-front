@@ -6,6 +6,7 @@ import Layout from 'component/layout';
 import Main from './main';
 import Specialists from './specialists';
 import Person from './person';
+import Login from './login';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -29,6 +30,12 @@ export const baseRoutes: Array<IProps> = [{
     isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : '/user/:id',
+    path     : ['/user/:id', '/profile'],
     component: Person
+}, {
+    isPublic : true,
+    exact    : true,
+    layout   : Layout,
+    path     : '/login',
+    component: Login
 }];

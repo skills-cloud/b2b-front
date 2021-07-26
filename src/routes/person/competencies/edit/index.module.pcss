@@ -38,8 +38,93 @@
         font-size: 14px;
         line-height: 16px;
         color: var(--color-blue-primary);
-        opacity: 0.5;
         text-decoration-style: dashed;
         text-underline-offset: 2px;
+    }
+
+    &__tree-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__expand {
+        width: 24px;
+        height: 24px;
+        fill: var(--color-gray-3);
+        transform: rotate(-90deg);
+
+        &_open {
+            transform: rotate(0);
+        }
+    }
+
+    :global {
+
+        ol {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-auto-flow: row;
+            grid-row-gap: 12px;
+
+            /* stylelint-disable-next-line selector-max-compound-selectors */
+            li {
+                display: block;
+
+                /* stylelint-disable-next-line selector-max-compound-selectors, selector-max-combinators */
+                label {
+                    display: grid;
+                    grid-auto-flow: column;
+                }
+
+                /* stylelint-disable-next-line selector-max-compound-selectors, selector-max-combinators */
+                input[type="checkbox"] {
+                    display: block;
+                    margin: 0 8px 0 0;
+                    padding: 0;
+                    width: 22px;
+                    height: 22px;
+                }
+            }
+
+            /* stylelint-disable-next-line selector-max-compound-selectors */
+            ol {
+                margin: 12px 0 0 32px;
+            }
+        }
+    }
+
+    :global(.rct-text) {
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    :global(.rct-title) {
+        font-size: 14px;
+        line-height: 16px;
+        display: flex;
+        align-items: center;
+    }
+
+    :global(.rct-collapse) {
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+    }
+
+    :global(.rct-collapse-btn) {
+        display: block;
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+        padding: 0;
+    }
+
+    :global(.rct-checkbox) {
+        display: none;
     }
 }

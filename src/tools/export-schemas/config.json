@@ -1,0 +1,35 @@
+{
+    "save-dir": "/src/adapters/api/schemas",
+    "hosts": [{
+        "host": "test.dev.b2bcloud.com",
+        "path": "/api/docs/swagger/?format=openapi",
+        "mapping": [
+            "/acc/login/",
+            "/acc/logout/",
+            "/acc/set-timezone/",
+            "/acc/whoami/",
+            "/acc/whoami/set-photo/",
+
+            "/cv/contact/",
+            "/cv/contact/{id}",
+            "/cv/cv/",
+            "/cv/cv/{id}",
+            "/cv/timeslot/",
+            "/cv/timeslot/{id}",
+
+            "/dictionary/citizenship/",
+            "/dictionary/city/",
+            "/dictionary/competence-tree/",
+            "/dictionary/competence/",
+            "/dictionary/contact-type/",
+            "/dictionary/country/",
+            "/dictionary/education-graduate/",
+            "/dictionary/education-place/",
+            "/dictionary/education-specialty/",
+            "/dictionary/position/",
+            "/dictionary/type-of-employment/",
+
+            "/main/organization/"
+        ]
+    }]
+}

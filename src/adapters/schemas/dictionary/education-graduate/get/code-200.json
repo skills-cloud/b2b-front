@@ -1,0 +1,39 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/EducationGraduate"
+        }
+    ],
+    "definitions": {
+        "EducationGraduate": {
+            "properties": {
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        }
+    }
+}

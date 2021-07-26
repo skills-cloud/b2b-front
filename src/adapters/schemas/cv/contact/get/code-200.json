@@ -1,0 +1,76 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvContactRead"
+        }
+    ],
+    "definitions": {
+        "ContactType": {
+            "properties": {
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "CvContactRead": {
+            "properties": {
+                "comment": {
+                    "maxLength": 1000,
+                    "title": "Комментарий",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "contact_type": {
+                    "$ref": "#/definitions/ContactType"
+                },
+                "contact_type_id": {
+                    "title": "Contact type id",
+                    "type": "integer"
+                },
+                "cv_id": {
+                    "title": "Cv id",
+                    "type": "integer"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_primary": {
+                    "title": "Основной",
+                    "type": "boolean"
+                },
+                "value": {
+                    "maxLength": 1000,
+                    "minLength": 1,
+                    "title": "Значение",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "contact_type_id",
+                "cv_id",
+                "value"
+            ],
+            "type": "object"
+        }
+    }
+}

@@ -2,7 +2,7 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { createLogger } from 'redux-logger';
 import { useSelector as useSelectorRedux, useDispatch as useDispatchRedux, TypedUseSelectorHook } from 'react-redux';
 
-import userReducer, { name as userReducerName } from 'component/user/slice';
+import userReducer, { key as keyUser } from 'component/user/reducer';
 
 import config from 'config';
 
@@ -15,7 +15,7 @@ if(__DEVELOPMENT__) {
 const store = configureStore({
     devTools: false,
     reducer : {
-        [userReducerName]: userReducer
+        [keyUser]: userReducer
     },
     middleware
 });

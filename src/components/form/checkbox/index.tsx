@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, ReactNode } from 'react';
+import React, { useMemo, useEffect, ReactNode, ChangeEvent } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
@@ -17,7 +17,8 @@ export interface IProps {
     tabIndex?: number,
     disabled?: boolean,
     elError?: boolean,
-    defaultChecked?: boolean
+    defaultChecked?: boolean,
+    onChange?(e: ChangeEvent<HTMLInputElement>): void
 }
 
 const Checkbox = (props: IProps) => {

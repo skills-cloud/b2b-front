@@ -1,0 +1,218 @@
+const http = require('http');
+const https = require('https');
+const { mkdirSync, writeFileSync } = require('fs');
+const { join, dirname, basename } = require('path');
+const Ajv = require('ajv');
+
+const sortKeys = require('./sort-keys');
+const config = require('./config.json');
+
+const request = (hostObject) => new Promise((resolve, reject) => {
+    console.log('Request: %s', hostObject);
+
+    let pathName = hostObject.path;
+    const protocol = hostObject.protocol === 'http' ? http : https;
+
+    if(hostObject.part) {
+        pathName = `${hostObject.part}${hostObject.path}`;
+    }
+
+    protocol
+        .get({
+            host              : hostObject.host,
+            path              : pathName,
+            port              : hostObject.port,
+            rejectUnauthorized: false,
+            headers           : {
+                Cookie: '_sec_=0p8c1rKm3G3BoMhlHch1Jh2LWixNeYn2kzrQxnWLZ0ZsXi93g2eS3wAeB2FpTVZQ; _id_=i2xjhck73r38bnh68lxmqj4pu9q2bgh9',
+                'X-CSRFToken': 'QFMzooEJG49xi3dfi24U80BFXTeNBSeTaP5dUkQ8Co5oRz5XRS1Lsf98CDmpgPQH'
+            }
+        }, (response) => {
+            console.log('Response: %s', hostObject);
+            let buffer = '';
+
+            if(response.statusCode > 200) {
+                const errorText = [
+                    `request for ${hostObject.host}${pathName}:${hostObject.port}`,
+                    `failed with status ${response.statusCode} ${response.statusMessage}`
+                ].join(' ');
+
+                reject(new Error(errorText));
+            } else {
+                response.on('data', (chunk) => {
+                    console.log('Response download chunk: %i', chunk.length);
+                    buffer += chunk;
+                });
+
+                response.on('end', () => {
+                    console.log('Response complete: %i', buffer.length);
+                    resolve(JSON.parse(buffer));
+                });
+            }
+        })
+        .on('error', reject);
+});
+
+const collectSchemas = (payload, hostObject) => {
+    console.log('Collecting schemas...');
+
+    if(hostObject.mapping) {
+        return hostObject.mapping.reduce((accumulator, key) => {
+            if(payload.paths[key]) {
+                const methods = Object.keys(payload.paths[key]);
+
+                for(const method of methods) {
+                    const responses = payload.paths[key][method].responses;
+
+                    if(responses) {
+                        const responsesKeys = Object.keys(responses);
+
+                        for(const responsesKey of responsesKeys) {
+                            if(responses[responsesKey]?.schema) {
+                                const schemaPath = responses[responsesKey]?.schema?.items || responses[responsesKeys]?.schema?.properties?.results?.items || responses[responsesKey]?.schema;
+
+                                if(schemaPath && !accumulator.methods[`${key}/${method}/code-${responsesKey}`]) {
+                                    console.log('Collect %s, code: %s', key, responsesKey);
+
+                                    accumulator.methods[`${key}/${method}/code-${responsesKey}`] = schemaPath;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return accumulator;
+        }, {
+            definitions: payload.definitions,
+            methods    : {}
+        });
+    }
+
+    console.error('Empty mapping config');
+
+    return {};
+};
+
+const getDefinitions = (schema, allDefinitions, currentDefinitions) => {
+    try {
+        let definitions = currentDefinitions || {};
+        const schemaKeys = Object.keys(schema);
+
+        for(const schemaKey of schemaKeys) {
+            if(schemaKey === '$ref') {
+                const definitionKey = schema[schemaKey].split('/').pop();
+
+                if(!definitions[definitionKey]) {
+                    definitions[definitionKey] = allDefinitions[definitionKey];
+
+                    definitions = getDefinitions(allDefinitions[definitionKey], allDefinitions, definitions);
+                }
+            }
+        }
+
+        if(schema.allOf) {
+            for(const allOfRef of schema.allOf) {
+                definitions = getDefinitions(allOfRef, allDefinitions, definitions);
+            }
+        }
+
+        if(schema.type === 'object' && schema.properties) {
+            const keys = Object.keys(schema.properties);
+
+            for(const key of keys) {
+                definitions = getDefinitions(schema.properties[key], allDefinitions, definitions);
+            }
+        }
+
+        if(schema.type === 'array') {
+            definitions = getDefinitions(schema.items, allDefinitions, definitions);
+        }
+
+        return definitions;
+    } catch(error) {
+        console.log(error, schema);
+    }
+};
+
+const collectDefinitions = ({ methods, definitions }) => {
+    console.log('Collecting definitions...');
+
+    const keys = Object.keys(methods);
+
+    return keys.reduce((accumulator, key) => {
+        const ref = methods[key].$ref;
+
+        if(ref) {
+            const definitionKey = ref.split('/').pop();
+            const schema = definitions[definitionKey];
+
+            accumulator[key] = {
+                definitions: {
+                    [definitionKey]: schema,
+                    ...getDefinitions(schema, definitions)
+                },
+                allOf: [{
+                    $ref: ref
+                }]
+            };
+        }
+
+        return accumulator;
+    }, {});
+};
+
+const validateSchemas = (collection) => {
+    console.log('Validating schemas...');
+
+    if(typeof collection === 'object') {
+        const keys = Object.keys(collection);
+        const ajv = new Ajv({
+            nullable : true,
+            allErrors: true
+        });
+
+        for(const key of keys) {
+            if(!ajv.validateSchema(collection[key])) {
+                console.log('Invalid schema %s', key);
+            } else {
+                console.log('Schema valid: %s', key);
+            }
+        }
+    }
+
+    return collection;
+};
+
+const saveSchemas = (collection) => {
+    console.log('Saving schemas...');
+
+    if(typeof collection === 'object') {
+        const keys = Object.keys(collection);
+        const path = join(process.cwd(), config['save-dir']);
+
+        for(const key of keys) {
+            const fileName = basename(key);
+            const dirName = dirname(key);
+
+            mkdirSync(join(path, dirName), { recursive: true });
+
+            console.log('Write schema file: %s', fileName);
+
+            writeFileSync(
+                join(path, dirName, `${fileName}.json`),
+                JSON.stringify(collection[key], null, 4)
+            );
+        }
+    }
+};
+
+config.hosts.forEach((hostObject) => {
+    request(hostObject)
+        .then((resp) => collectSchemas(resp, hostObject))
+        .then(collectDefinitions)
+        .then(sortKeys)
+        .then(validateSchemas)
+        .then(saveSchemas)
+        .catch(console.error);
+});

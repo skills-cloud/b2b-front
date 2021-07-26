@@ -1,0 +1,33 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CompetenceTree"
+        }
+    ],
+    "definitions": {
+        "CompetenceTree": {
+            "properties": {
+                "children": {
+                    "readOnly": true,
+                    "title": "Children",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        }
+    }
+}

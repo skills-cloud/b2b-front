@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, ChangeEvent } from 'react';
 import { useFormContext, Message } from 'react-hook-form';
 import { ValidationRule } from 'react-hook-form/dist/types/validator';
 import { ErrorMessage } from '@hookform/error-message';
@@ -11,25 +11,33 @@ import style from './index.module.pcss';
 
 export interface IProps {
     name: string,
-    type: 'text' | 'search',
+    type: 'text' | 'search' | 'password',
     placeholder?: string,
     className?: string | IStyle,
     label?: string,
     required?: Message | ValidationRule<boolean>,
     maxLength?: ValidationRule<number | string>,
     minLength?: ValidationRule<number | string>,
-    pattern?: ValidationRule<RegExp>
+    pattern?: ValidationRule<RegExp>,
+    onChange?(e?: ChangeEvent<HTMLInputElement>): void
 }
 
 export const Input = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const { formState: { errors, touchedFields, isSubmitted }, register } = useFormContext();
+    const { formState: { errors, touchedFields, isSubmitted }, register, trigger, watch } = useFormContext();
+    const value = watch(props.name);
 
     const [isWatch, setIsWatch] = useState<boolean>(touchedFields[props.name]);
 
     useEffect(() => {
         setIsWatch(touchedFields[props.name] || isSubmitted);
     }, [touchedFields[props.name], isSubmitted]);
+
+    useEffect(() => {
+        if(value) {
+            void trigger(props.name);
+        }
+    }, []);
 
     const attrs = {
         className: cn('input', {

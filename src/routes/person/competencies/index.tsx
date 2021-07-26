@@ -54,10 +54,14 @@ const Competencies = (props: IProps) => {
         );
     }, []);
 
+    const onClose = () => {
+        setIsEdit(false);
+    };
+
     const elModalEdit = useMemo(() => {
         if(isEdit) {
             return (
-                <CompetenciesEdit />
+                <CompetenciesEdit onCancel={onClose} />
             );
         }
     }, [isEdit]);

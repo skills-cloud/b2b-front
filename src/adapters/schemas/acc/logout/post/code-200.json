@@ -1,0 +1,80 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/WhoAmI"
+        }
+    ],
+    "definitions": {
+        "WhoAmI": {
+            "properties": {
+                "date_joined": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Дата регистрации",
+                    "type": "string"
+                },
+                "email": {
+                    "format": "email",
+                    "maxLength": 254,
+                    "minLength": 1,
+                    "title": "Адрес электронной почты",
+                    "type": "string"
+                },
+                "first_name": {
+                    "maxLength": 150,
+                    "minLength": 1,
+                    "title": "Имя",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_active": {
+                    "description": "Отметьте, если пользователь должен считаться активным. Уберите эту отметку вместо удаления учётной записи.",
+                    "readOnly": true,
+                    "title": "Активный",
+                    "type": "boolean"
+                },
+                "is_staff": {
+                    "description": "Отметьте, если пользователь может входить в административную часть сайта.",
+                    "readOnly": true,
+                    "title": "Статус персонала",
+                    "type": "boolean"
+                },
+                "is_superuser": {
+                    "description": "Указывает, что пользователь имеет все права без явного их назначения.",
+                    "readOnly": true,
+                    "title": "Статус суперпользователя",
+                    "type": "boolean"
+                },
+                "last_login": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Последний вход",
+                    "type": "string"
+                },
+                "last_name": {
+                    "maxLength": 150,
+                    "minLength": 1,
+                    "title": "Фамилия",
+                    "type": "string"
+                },
+                "photo": {
+                    "format": "uri",
+                    "readOnly": true,
+                    "title": "Photo",
+                    "type": "string",
+                    "x-nullable": true
+                }
+            },
+            "required": [
+                "email",
+                "first_name",
+                "last_name"
+            ],
+            "type": "object"
+        }
+    }
+}

@@ -1,0 +1,82 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvDetail"
+        }
+    ],
+    "definitions": {
+        "CvDetail": {
+            "properties": {
+                "birth_date": {
+                    "format": "date",
+                    "title": "Дата рождения",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "citizenship_id": {
+                    "title": "Citizenship id",
+                    "type": "integer",
+                    "x-nullable": true
+                },
+                "city_id": {
+                    "title": "City id",
+                    "type": "integer",
+                    "x-nullable": true
+                },
+                "country_id": {
+                    "title": "Country id",
+                    "type": "integer",
+                    "x-nullable": true
+                },
+                "first_name": {
+                    "maxLength": 500,
+                    "title": "Имя",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "gender": {
+                    "enum": [
+                        "F",
+                        "М"
+                    ],
+                    "title": "Пол",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "is_resource_owner": {
+                    "title": "Владелец ресурса",
+                    "type": "boolean"
+                },
+                "is_with_disabilities": {
+                    "title": "Ограниченные возможности",
+                    "type": "boolean"
+                },
+                "last_name": {
+                    "maxLength": 500,
+                    "title": "Фамилия",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "middle_name": {
+                    "maxLength": 500,
+                    "title": "Отчество",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "photo": {
+                    "format": "uri",
+                    "readOnly": true,
+                    "title": "Photo",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "user_id": {
+                    "title": "User id",
+                    "type": "integer",
+                    "x-nullable": true
+                }
+            },
+            "type": "object"
+        }
+    }
+}

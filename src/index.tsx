@@ -3,15 +3,27 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import store from 'component/core/store';
-import { actions } from 'component/user/slice';
 import AuthGoogleProvider from 'component/auth/google/provider';
 
 import 'locale';
 
 import Routes from 'route/index';
+import { getAccWhoAmI } from 'adapter/api/acc';
+
+const requestAuth = getAccWhoAmI();
+
+import { set as setUser } from 'component/user/actions';
 
 store
-    .dispatch(actions.sync())
+    .dispatch(async () => {
+        try {
+            const payload = await requestAuth;
+
+            store.dispatch(setUser(payload));
+        } catch(err) {
+            console.error(err);
+        }
+    })
     .finally(() => {
         render(
             (
