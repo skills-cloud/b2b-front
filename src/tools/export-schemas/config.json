@@ -43,6 +43,7 @@
             "/dictionary/country/",
             "/dictionary/education-graduate/",
             "/dictionary/education-place/",
+
             "/dictionary/education-specialty/",
             "/dictionary/industry-sector/",
             "/dictionary/physical-limitation/",
@@ -50,7 +51,10 @@
             "/dictionary/type-of-employment/",
 
             "/main/organization/",
-            "/main/organization-project/"
+            "/main/organization/{id}",
+            "/main/organization-project/",
+            "/main/request/{id}/"
         ]
     }]
 }
+

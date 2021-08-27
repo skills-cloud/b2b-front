@@ -368,10 +368,10 @@
         "project-request": {
             "create": {
                 "title": "Новый проектный запрос",
-                "industry": "Отрасль",
+                "industry_sector": "Отрасль",
                 "employer": "Заказчик",
                 "project": "Проект",
-                "manager": "Ресурсный менеджер",
+                "resource_manager": "Ресурсный менеджер",
                 "recruiter": "Ответственный рекрутер",
                 "requestType": "Тип запроса",
                 "priority": "Приоритет",
@@ -389,20 +389,25 @@
                 },
                 "project-term": "Сроки проекта",
                 "priority": {
-                    "top": "Высокий"
+                    "30": "Низкий",
+                    "20": "Средний",
+                    "10": "Высокий"
                 },
                 "status": {
-                    "in-progress" : "В работе"
+                    "draft": "Черновик",
+                    "done": "Готово",
+                    "in_progress" : "В работе",
+                    "closed": "Закрыт"
                 },
                 "main-info": {
-                    "industry": "Отрасль",
+                    "industry_sector": "Отрасль",
                     "project": "Проект",
-                    "manager": "Рес. менеджер",
+                    "resource_manager": "Рес. менеджер",
                     "recruiter": "Отв. рекрутер",
-                    "request-type": "Тип запроса",
-                    "count": "Общее кол-во",
-                    "description": "Описание проекта",
-                    "employer": "Заказчик"
+                    "type": "Тип запроса",
+                    "requirements": "Общее кол-во",
+                    "project_description": "Описание проекта",
+                    "customer": "Заказчик"
                 },
                 "duration": "Продолжительность",
                 "rest": "Перерыв",
