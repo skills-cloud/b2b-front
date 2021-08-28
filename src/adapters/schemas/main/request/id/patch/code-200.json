@@ -1,0 +1,81 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/Request"
+        }
+    ],
+    "definitions": {
+        "Request": {
+            "properties": {
+                "customer_id": {
+                    "title": "Customer id",
+                    "type": "integer"
+                },
+                "deadline_date": {
+                    "format": "date",
+                    "title": "Срок",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "industry_sector_id": {
+                    "title": "Industry sector id",
+                    "type": "integer",
+                    "x-nullable": true
+                },
+                "priority": {
+                    "enum": [
+                        10,
+                        20,
+                        30
+                    ],
+                    "title": "Приоритет",
+                    "type": "integer"
+                },
+                "project_id": {
+                    "title": "Project id",
+                    "type": "integer",
+                    "x-nullable": true
+                },
+                "recruiter_id": {
+                    "title": "Recruiter id",
+                    "type": "integer",
+                    "x-nullable": true
+                },
+                "resource_manager_id": {
+                    "title": "Resource manager id",
+                    "type": "integer",
+                    "x-nullable": true
+                },
+                "status": {
+                    "enum": [
+                        "closed",
+                        "done",
+                        "draft",
+                        "in_progress"
+                    ],
+                    "title": "Статус",
+                    "type": "string"
+                },
+                "type_id": {
+                    "title": "Type id",
+                    "type": "integer",
+                    "x-nullable": true
+                }
+            },
+            "required": [
+                "customer_id"
+            ],
+            "type": "object"
+        }
+    }
+}

@@ -13,6 +13,7 @@ import { certificate } from 'adapter/api/certificate';
 import { education } from 'adapter/api/education';
 import { position } from 'adapter/api/position';
 import { project } from 'adapter/api/project';
+import { mainRequest } from 'adapter/api/main-request';
 
 import config from 'config';
 
@@ -26,7 +27,8 @@ const middleware = getDefaultMiddleware().concat([
     certificate.middleware,
     education.middleware,
     position.middleware,
-    project.middleware
+    project.middleware,
+    mainRequest.middleware
 ]);
 
 if(__DEVELOPMENT__) {
@@ -46,7 +48,8 @@ const store = configureStore({
         [certificate.reducerPath] : certificate.reducer,
         [education.reducerPath]   : education.reducer,
         [position.reducerPath]    : position.reducer,
-        [project.reducerPath]     : project.reducer
+        [project.reducerPath]     : project.reducer,
+        [mainRequest.reducerPath] : mainRequest.reducer
     },
     middleware
 });
