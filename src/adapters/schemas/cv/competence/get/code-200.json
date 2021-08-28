@@ -1,0 +1,63 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvCompetenceRead"
+        }
+    ],
+    "definitions": {
+        "Competence": {
+            "properties": {
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "parent_id": {
+                    "readOnly": true,
+                    "title": "Parent id",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "CvCompetenceRead": {
+            "properties": {
+                "competence": {
+                    "$ref": "#/definitions/Competence"
+                },
+                "competence_id": {
+                    "title": "Competence id",
+                    "type": "integer"
+                },
+                "cv_id": {
+                    "title": "Cv id",
+                    "type": "integer"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "years": {
+                    "title": "Years",
+                    "type": "integer",
+                    "x-nullable": true
+                }
+            },
+            "required": [
+                "competence_id",
+                "cv_id"
+            ],
+            "type": "object"
+        }
+    }
+}

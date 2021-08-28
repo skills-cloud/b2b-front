@@ -9,7 +9,8 @@
             "properties": {
                 "competencies_ids": {
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "x-nullable": true
                     },
                     "type": "array",
                     "uniqueItems": true

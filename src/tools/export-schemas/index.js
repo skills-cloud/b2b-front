@@ -8,31 +8,23 @@ const sortKeys = require('./sort-keys');
 const config = require('./config.json');
 
 const request = (hostObject) => new Promise((resolve, reject) => {
-    console.log('Request: %s', hostObject);
+    console.log('Request: %s');
 
-    let pathName = hostObject.path;
-    const protocol = hostObject.protocol === 'http' ? http : https;
-
-    if(hostObject.part) {
-        pathName = `${hostObject.part}${hostObject.path}`;
-    }
-
-    protocol
+    https
         .get({
             host              : hostObject.host,
-            path              : pathName,
-            port              : hostObject.port,
+            path              : hostObject.path,
             rejectUnauthorized: false,
             headers           : {
                 Cookie: '_sec_=oQ6E3G1G2r9ZdXaKMbC2Doo4L5FWJu9mhSd8CtyloH37iOiW5suD1GjHvGvdMyEs; _id_=rphjo1pey8m4hfc9zsy307reonmqnp6j'
             }
         }, (response) => {
-            console.log('Response: %s', hostObject);
+            console.log('Response: %s');
             let buffer = '';
 
             if(response.statusCode > 200) {
                 const errorText = [
-                    `request for ${hostObject.host}${pathName}:${hostObject.port}`,
+                    `request for ${hostObject.host}${hostObject.path}`,
                     `failed with status ${response.statusCode} ${response.statusMessage}`
                 ].join(' ');
 
@@ -52,16 +44,33 @@ const request = (hostObject) => new Promise((resolve, reject) => {
         .on('error', reject);
 });
 
-const collectSchemas = (payload, hostObject) => {
+const writeMapping = (payload) => {
+    const path = join(process.cwd(), config['mapping-dir']);
+    const mapping = {
+        paths: [...new Set(Object.keys(payload.paths))]
+    };
+
+    writeFileSync(
+        join(path, `mapping.json`),
+        JSON.stringify(mapping, null, 4)
+    );
+
+    return {
+        data: payload,
+        mapping
+    };
+};
+
+const collectSchemas = (payload) => {
     console.log('Collecting schemas...');
 
-    if(hostObject.mapping) {
-        return hostObject.mapping.reduce((accumulator, key) => {
-            if(payload.paths[key]) {
-                const methods = Object.keys(payload.paths[key]);
+    if(payload.mapping.paths) {
+        return payload.mapping.paths.reduce((accumulator, key) => {
+            if(payload.data.paths[key]) {
+                const methods = Object.keys(payload.data.paths[key]);
 
                 for(const method of methods) {
-                    const responses = payload.paths[key][method].responses;
+                    const responses = payload.data.paths[key][method].responses;
 
                     if(responses) {
                         const responsesKeys = Object.keys(responses);
@@ -97,7 +106,7 @@ const collectSchemas = (payload, hostObject) => {
 
             return accumulator;
         }, {
-            definitions: payload.definitions,
+            definitions: payload.data.definitions,
             methods    : {}
         });
     }
@@ -220,12 +229,11 @@ const saveSchemas = (collection) => {
     }
 };
 
-config.hosts.forEach((hostObject) => {
-    request(hostObject)
-        .then((resp) => collectSchemas(resp, hostObject))
-        .then(collectDefinitions)
-        .then(sortKeys)
-        .then(validateSchemas)
-        .then(saveSchemas)
-        .catch(console.error);
-});
+request(config)
+    .then(writeMapping)
+    .then(collectSchemas)
+    .then(collectDefinitions)
+    .then(sortKeys)
+    .then(validateSchemas)
+    .then(saveSchemas)
+    .catch(console.error);

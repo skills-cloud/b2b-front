@@ -9,7 +9,8 @@
             "properties": {
                 "competencies_ids": {
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "x-nullable": true
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -25,7 +26,8 @@
                 },
                 "position_id": {
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-nullable": true
                 },
                 "title": {
                     "maxLength": 2000,
@@ -35,8 +37,7 @@
                 }
             },
             "required": [
-                "cv_id",
-                "position_id"
+                "cv_id"
             ],
             "type": "object"
         }

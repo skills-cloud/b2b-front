@@ -1,0 +1,28 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/RequestType"
+        }
+    ],
+    "definitions": {
+        "RequestType": {
+            "properties": {
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        }
+    }
+}

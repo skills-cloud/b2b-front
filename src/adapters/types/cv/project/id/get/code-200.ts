@@ -10,6 +10,7 @@ export type NoName = string;
 export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
+export type ParentId = string;
 export type CvId = number;
 export type NoName3 = string;
 export type NoName4 = string;
@@ -19,19 +20,17 @@ export type NoName6 = string;
 export type ID2 = number;
 export type NoName7 = boolean;
 export type NoName8 = string;
-export type NoName9 = number;
 export type IndustrySectorId = number;
-export type NoName10 = boolean;
+export type NoName9 = boolean;
+export type NoName10 = string;
 export type NoName11 = string;
-export type NoName12 = string;
 export type ID3 = number;
-export type NoName13 = string;
+export type NoName12 = string;
 export type OrganizationId = number;
-export type NoName14 = string;
+export type NoName13 = string;
 export type ID4 = number;
-export type NoName15 = boolean;
-export type NoName16 = string;
-export type NoName17 = number;
+export type NoName14 = boolean;
+export type NoName15 = string;
 export type PositionId = number;
 
 export interface CvProjectRead {
@@ -44,8 +43,8 @@ export interface CvProjectRead {
     id?: ID1;
     industry_sector?: IndustrySector;
     industry_sector_id?: IndustrySectorId;
-    is_verified?: NoName10;
-    name: NoName11;
+    is_verified?: NoName9;
+    name: NoName10;
     organization?: Organization;
     organization_id: OrganizationId;
     position?: Position;
@@ -56,23 +55,22 @@ export interface CompetenceInline {
     id?: ID;
     is_verified?: NoName1;
     name: NoName2;
+    parent_id?: ParentId;
 }
 export interface IndustrySector {
     description?: NoName6;
     id?: ID2;
     is_verified?: NoName7;
     name: NoName8;
-    sorting?: NoName9;
 }
 export interface Organization {
-    description?: NoName12;
+    description?: NoName11;
     id?: ID3;
-    name: NoName13;
+    name: NoName12;
 }
 export interface Position {
-    description?: NoName14;
+    description?: NoName13;
     id?: ID4;
-    is_verified?: NoName15;
-    name: NoName16;
-    sorting?: NoName17;
+    is_verified?: NoName14;
+    name: NoName15;
 }

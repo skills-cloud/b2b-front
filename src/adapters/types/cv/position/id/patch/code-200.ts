@@ -15,6 +15,6 @@ export interface CvPosition {
     competencies_ids?: number[];
     cv_id: CvId;
     id?: ID;
-    position_id: PositionId;
+    position_id?: PositionId;
     title?: NoName;
 }
