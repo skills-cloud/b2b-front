@@ -9,8 +9,10 @@
             "properties": {
                 "details": {
                     "title": "Details",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "status": {
                     "enum": [

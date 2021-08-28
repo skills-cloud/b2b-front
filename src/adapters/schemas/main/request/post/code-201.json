@@ -14,13 +14,17 @@
                 "deadline_date": {
                     "format": "date",
                     "title": "Срок",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -29,8 +33,10 @@
                 },
                 "industry_sector_id": {
                     "title": "Industry sector id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "priority": {
                     "enum": [
@@ -43,24 +49,32 @@
                 },
                 "project_id": {
                     "title": "Project id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "recruiter_id": {
                     "title": "Recruiter id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "resource_manager_id": {
                     "title": "Resource manager id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "start_date": {
                     "format": "date",
                     "title": "Дата начала",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "status": {
                     "enum": [
@@ -74,8 +88,10 @@
                 },
                 "type_id": {
                     "title": "Type id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 }
             },
             "required": [

@@ -6,14 +6,14 @@
  */
 
 export type Code200 = EducationGraduate;
-export type NoName = string;
-export type ID = number;
-export type NoName1 = boolean;
-export type NoName2 = string;
-
-export interface EducationGraduate {
+export type EducationGraduate = null | {
     description?: NoName;
     id?: ID;
     is_verified?: NoName1;
     name: NoName2;
-}
+    [k: string]: unknown;
+};
+export type NoName = null | string;
+export type ID = number;
+export type NoName1 = boolean;
+export type NoName2 = string;

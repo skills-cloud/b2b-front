@@ -6,24 +6,46 @@
  */
 
 export type Code200 = CvTimeSlotRead;
-export type NoName = string;
+export type City = null | {
+    country: Country;
+    description?: NoName3;
+    id?: ID1;
+    is_verified?: NoName4;
+    name: NoName5;
+    [k: string]: unknown;
+};
+export type Country = null | {
+    description?: NoName;
+    id?: ID;
+    is_verified?: NoName1;
+    name: NoName2;
+    [k: string]: unknown;
+};
+export type NoName = null | string;
 export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
-export type NoName3 = string;
+export type NoName3 = null | string;
 export type ID1 = number;
 export type NoName4 = boolean;
 export type NoName5 = string;
-export type CityId = number;
-export type CountryId = number;
+export type CityId = number | null;
+export type CountryId = number | null;
 export type CvId = number;
-export type NoName6 = string;
-export type NoName7 = string;
-export type NoName8 = string;
+export type NoName6 = null | string;
+export type NoName7 = null | string;
+export type NoName8 = null | string;
 export type ID2 = number;
 export type NoName9 = boolean;
-export type NoName10 = number;
-export type NoName11 = string;
+export type NoName10 = null | number;
+export type TypeOfEmployment = null | {
+    description?: NoName11;
+    id?: ID3;
+    is_verified?: NoName12;
+    name: NoName13;
+    [k: string]: unknown;
+};
+export type NoName11 = null | string;
 export type ID3 = number;
 export type NoName12 = boolean;
 export type NoName13 = string;
@@ -43,23 +65,4 @@ export interface CvTimeSlotRead {
     price?: NoName10;
     type_of_employment?: TypeOfEmployment;
     type_of_employment_id: TypeOfEmploymentId;
-}
-export interface City {
-    country: Country;
-    description?: NoName3;
-    id?: ID1;
-    is_verified?: NoName4;
-    name: NoName5;
-}
-export interface Country {
-    description?: NoName;
-    id?: ID;
-    is_verified?: NoName1;
-    name: NoName2;
-}
-export interface TypeOfEmployment {
-    description?: NoName11;
-    id?: ID3;
-    is_verified?: NoName12;
-    name: NoName13;
 }

@@ -14,7 +14,7 @@ export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
 export type NoName3 = string;
-export type Photo = string;
+export type Photo = null | string;
 
 export interface User {
     first_name: NoName;

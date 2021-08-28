@@ -7,13 +7,20 @@
 
 export type Code200 = ProjectRead;
 export type NoName = string;
-export type NoName1 = string;
+export type NoName1 = null | string;
 export type ID = number;
 export type NoName2 = string;
+export type UserInline = null | {
+    first_name: NoName3;
+    id?: ID1;
+    last_name: NoName4;
+    photo?: Photo;
+    [k: string]: unknown;
+};
 export type NoName3 = string;
 export type ID1 = number;
 export type NoName4 = string;
-export type Photo = string;
+export type Photo = null | string;
 export type NoName5 = string;
 
 export interface ProjectRead {
@@ -22,14 +29,8 @@ export interface ProjectRead {
     id?: ID;
     name: NoName2;
     recruiters?: UserInline[];
-    recruiters_ids?: number[];
+    recruiters_ids?: (number | null)[];
     resource_managers?: UserInline[];
-    resource_managers_ids?: number[];
+    resource_managers_ids?: (number | null)[];
     updated_at?: NoName5;
-}
-export interface UserInline {
-    first_name: NoName3;
-    id?: ID1;
-    last_name: NoName4;
-    photo?: Photo;
 }

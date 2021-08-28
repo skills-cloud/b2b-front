@@ -6,15 +6,15 @@
  */
 
 export type Code201 = CvTimeSlot;
-export type CityId = number;
-export type CountryId = number;
+export type CityId = number | null;
+export type CountryId = number | null;
 export type CvId = number;
-export type NoName = string;
-export type NoName1 = string;
-export type NoName2 = string;
+export type NoName = null | string;
+export type NoName1 = null | string;
+export type NoName2 = null | string;
 export type ID = number;
 export type NoName3 = boolean;
-export type NoName4 = number;
+export type NoName4 = null | number;
 export type TypeOfEmploymentId = number;
 
 export interface CvTimeSlot {

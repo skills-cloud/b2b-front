@@ -7,10 +7,10 @@
 
 export type Code200 = OrganizationProjectRead;
 export type NoName = string;
-export type NoName1 = string;
+export type NoName1 = null | string;
 export type ID = number;
 export type NoName2 = string;
-export type NoName3 = string;
+export type NoName3 = null | string;
 export type ID1 = number;
 export type NoName4 = string;
 export type OrganizationId = number;

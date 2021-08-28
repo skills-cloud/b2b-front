@@ -1,74 +1,18 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-export interface IFile {
-    id: number,
-    file: string,
-    file_name: string,
-    cv_career_id: number,
-    file_ext: string,
-    file_size: number
-}
-
-export interface IOrganization {
-    id: number,
-    name: string,
-    description: string
-}
-
-export interface IPosition {
-    id: number,
-    name: string,
-    sorting: number,
-    description: string
-}
-
-export interface IProject {
-    id: number,
-    organization_id: number,
-    organization: {
-        id: number,
-        name: string,
-        description: string
-    },
-    name: string,
-    description: string
-}
-
-export interface ICompetence {
-    id: number,
-    name: string
-}
-
-export interface IResultCareer {
-    id: number,
-    cv_id: number,
-    date_from: string,
-    date_to: string,
-    description: string,
-    is_verified: boolean,
-    organization_id: number,
-    position_id: number,
-    competencies_ids: Array<number>,
-    projects_ids: Array<number>,
-    organization: IOrganization,
-    position: IPosition,
-    projects: Array<IProject>,
-    files: Array<IFile>,
-    competencies?: Array<ICompetence>
-}
+import { CvCareerRead as ICareer } from 'adapter/types/cv/career/get/code-200';
+import { CvCareer as IResponsePostCareer } from 'adapter/types/cv/career/post/code-201';
+import { CvCareer as IResponsePatchCareer } from 'adapter/types/cv/career/id/patch/code-200';
+import { CvCareerFileRead } from 'adapter/types/cv/career/id/upload-file/post/code-201';
 
 export interface IResponseGetCareer {
-    total: number,
-    max_page_size: number,
-    page_size: number,
-    page_number: number,
-    page_next: number,
-    page_previous: number,
-    results: Array<IResultCareer>
+    count: number,
+    next: string,
+    previous: string,
+    results: Array<ICareer>
 }
 
 export interface IGetCareerQuery {
-    cv_id: number,
+    cv_id?: number,
     position_id?: Array<number>,
     organization_id?: Array<number>,
     ordering?: string,
@@ -77,30 +21,13 @@ export interface IGetCareerQuery {
     page_size?: number
 }
 
-export interface IPostCareer {
-    cv_id: number,
-    date_from?: string,
-    date_to?: string,
-    description?: string,
-    is_verified?: boolean,
-    organization_id: number,
-    position_id: number,
-    competencies_ids?: Array<number>,
-    projects_ids?: Array<number>
+export interface IPostCareerFileParams {
+    file: FormData,
+    file_name?: string,
+    id: string
 }
 
-export interface IPatchCareer {
-    id: number,
-    cv_id: number,
-    date_from?: string,
-    date_to?: string,
-    description?: string,
-    is_verified?: boolean,
-    organization_id: number,
-    position_id: number,
-    competencies_ids?: Array<number>,
-    projects_ids?: Array<number>
-}
+export type TPostCareerParams = Omit<IResponsePostCareer, 'id'>;
 
 export const career = createApi({
     reducerPath: 'api/career',
@@ -117,7 +44,7 @@ export const career = createApi({
                 params
             })
         }),
-        postCareer: build.mutation<IPostCareer, IPostCareer>({
+        postCareer: build.mutation<IResponsePostCareer, TPostCareerParams>({
             invalidatesTags: ['career'],
             query          : (body) => ({
                 url   : 'career/',
@@ -125,7 +52,7 @@ export const career = createApi({
                 body
             })
         }),
-        patchCareerById: build.mutation<IPostCareer, IPatchCareer>({
+        patchCareerById: build.mutation<IResponsePatchCareer, IResponsePatchCareer>({
             invalidatesTags: ['career'],
             query          : (body) => {
                 const { id, ...rest } = body;
@@ -146,6 +73,29 @@ export const career = createApi({
                     url   : `career/${id}/`,
                     method: 'DELETE',
                     body  : rest
+                };
+            }
+        }),
+        uploadCareerFileById: build.mutation<CvCareerFileRead, IPostCareerFileParams>({
+            invalidatesTags: ['career'],
+            query          : (body) => {
+                const { id, ...rest } = body;
+
+                return {
+                    url   : `career/${id}/upload-file/`,
+                    method: 'POST',
+                    body  : rest
+                };
+            }
+        }),
+        deleteCareerFileById: build.mutation<undefined, { id: number, file_id: string }>({
+            invalidatesTags: ['career'],
+            query          : (body) => {
+                const { id, file_id } = body;
+
+                return {
+                    url   : `career/${id}/delete-file/${file_id}/`,
+                    method: 'DELETE'
                 };
             }
         })

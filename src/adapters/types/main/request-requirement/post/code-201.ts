@@ -6,21 +6,21 @@
  */
 
 export type Code201 = RequestRequirement;
-export type NoName = number;
-export type NoName1 = string;
+export type NoName = number | null;
+export type NoName1 = null | string;
 /**
  * float
  */
-export type NoName2 = number;
+export type NoName2 = null | number;
 export type ID = number;
-export type NoName3 = number;
-export type NoName4 = string;
-export type PositionId = number;
+export type NoName3 = null | number;
+export type NoName4 = null | string;
+export type PositionId = number | null;
 export type RequestId = number;
 export type NoName5 = number;
-export type TypeOfEmploymentId = number;
-export type NoName6 = string;
-export type WorkLocationCityId = number;
+export type TypeOfEmploymentId = number | null;
+export type NoName6 = null | string;
+export type WorkLocationCityId = number | null;
 
 export interface RequestRequirement {
     count?: NoName;

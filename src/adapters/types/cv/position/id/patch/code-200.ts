@@ -8,11 +8,11 @@
 export type Code200 = CvPosition;
 export type CvId = number;
 export type ID = number;
-export type PositionId = number;
-export type NoName = string;
+export type PositionId = number | null;
+export type NoName = null | string;
 
 export interface CvPosition {
-    competencies_ids?: number[];
+    competencies_ids?: (number | null)[];
     cv_id: CvId;
     id?: ID;
     position_id?: PositionId;

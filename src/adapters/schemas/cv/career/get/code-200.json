@@ -9,8 +9,10 @@
             "properties": {
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -59,8 +61,10 @@
                 "file_name": {
                     "maxLength": 1000,
                     "title": "Название файла",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "file_size": {
                     "readOnly": true,
@@ -86,8 +90,10 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -99,19 +105,25 @@
                 "date_from": {
                     "format": "date",
                     "title": "Период с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "date_to": {
                     "format": "date",
                     "title": "Период по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "files": {
                     "items": {
@@ -141,8 +153,10 @@
                 },
                 "position_id": {
                     "title": "Position id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "projects": {
                     "items": {
@@ -153,8 +167,10 @@
                 },
                 "projects_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -170,8 +186,10 @@
             "properties": {
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -200,8 +218,10 @@
                 },
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -235,8 +255,10 @@
             "properties": {
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,

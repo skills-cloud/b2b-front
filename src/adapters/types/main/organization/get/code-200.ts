@@ -6,7 +6,7 @@
  */
 
 export type Code200 = Organization;
-export type NoName = string;
+export type NoName = null | string;
 export type ID = number;
 export type NoName1 = string;
 

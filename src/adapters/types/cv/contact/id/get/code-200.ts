@@ -6,8 +6,8 @@
  */
 
 export type Code200 = CvContactRead;
-export type NoName = string;
-export type NoName1 = string;
+export type NoName = null | string;
+export type NoName1 = null | string;
 export type ID = number;
 export type NoName2 = boolean;
 export type NoName3 = string;

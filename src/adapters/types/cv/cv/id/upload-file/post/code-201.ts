@@ -9,7 +9,7 @@ export type Code201 = CvFileRead;
 export type CvId = string;
 export type NoName = string;
 export type FileExt = string;
-export type NoName1 = string;
+export type NoName1 = null | string;
 export type FileSize = string;
 export type ID = number;
 

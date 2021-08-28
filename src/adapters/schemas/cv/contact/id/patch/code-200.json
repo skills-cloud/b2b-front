@@ -10,8 +10,10 @@
                 "comment": {
                     "maxLength": 1000,
                     "title": "Комментарий",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "contact_type_id": {
                     "title": "Contact type id",

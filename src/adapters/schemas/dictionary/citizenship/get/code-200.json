@@ -9,8 +9,10 @@
             "properties": {
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -31,8 +33,10 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": [
+                "null",
+                "object"
+            ]
         }
     }
 }

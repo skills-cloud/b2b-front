@@ -12,8 +12,10 @@
                 },
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -35,37 +37,10 @@
                 "country",
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
-        },
-        "Country": {
-            "properties": {
-                "description": {
-                    "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
-                },
-                "id": {
-                    "readOnly": true,
-                    "title": "ID",
-                    "type": "integer"
-                },
-                "is_verified": {
-                    "title": "Подтверждено",
-                    "type": "boolean"
-                },
-                "name": {
-                    "maxLength": 500,
-                    "minLength": 1,
-                    "title": "Название",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "name"
-            ],
-            "type": "object",
-            "x-nullable": true
+            "type": [
+                "null",
+                "object"
+            ]
         }
     }
 }

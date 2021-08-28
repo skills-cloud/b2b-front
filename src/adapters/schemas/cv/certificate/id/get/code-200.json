@@ -9,8 +9,10 @@
             "properties": {
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -49,8 +51,10 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -62,13 +66,17 @@
                 "date": {
                     "format": "date",
                     "title": "Выдан",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "education_graduate": {
                     "$ref": "#/definitions/EducationGraduate"
@@ -103,14 +111,18 @@
                 "name": {
                     "maxLength": 1000,
                     "title": "Наименование",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "number": {
                     "maxLength": 1000,
                     "title": "Номер",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 }
             },
             "required": [
@@ -125,8 +137,10 @@
             "properties": {
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -147,15 +161,19 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": [
+                "null",
+                "object"
+            ]
         },
         "EducationPlace": {
             "properties": {
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -176,15 +194,19 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": [
+                "null",
+                "object"
+            ]
         },
         "EducationSpecialty": {
             "properties": {
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -205,8 +227,10 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": [
+                "null",
+                "object"
+            ]
         }
     }
 }

@@ -116,6 +116,43 @@ const collectSchemas = (payload) => {
     return {};
 };
 
+const normalize = (json) => {
+    if(typeof json === 'object' && json !== null) {
+        const keys = Object.keys(json);
+
+        for(const key of keys) {
+            if(key === 'x-nullable') {
+                delete json[key];
+
+                if(json.enum && json.type === 'string') {
+                    const item = { ...json };
+                    const removeKeys = Object.keys(item);
+
+                    removeKeys.forEach((removeKey) => {
+                        delete json[removeKey];
+                    });
+
+                    json.oneOf = [{
+                        type: "null"
+                    }, item];
+                } else {
+                    json.type = ["null", json.type];
+                }
+            } else if(key === 'format') {
+                if(json[key] === 'int32' || json[key] === 'float') {
+                    delete json[key];
+                }
+            } else if(key === 'default') {
+                delete json[key];
+            }
+
+            normalize(json[key]);
+        }
+    }
+
+    return json;
+};
+
 const getDefinitions = (schema, allDefinitions, currentDefinitions) => {
     try {
         let definitions = currentDefinitions || {};
@@ -232,6 +269,7 @@ const saveSchemas = (collection) => {
 request(config)
     .then(writeMapping)
     .then(collectSchemas)
+    .then(normalize)
     .then(collectDefinitions)
     .then(sortKeys)
     .then(validateSchemas)

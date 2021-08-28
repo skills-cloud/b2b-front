@@ -6,7 +6,7 @@
  */
 
 export type Code403 = Status;
-export type Details = string;
+export type Details = null | string;
 export type Status1 = 'error' | 'ok' | 'warning';
 
 export interface Status {

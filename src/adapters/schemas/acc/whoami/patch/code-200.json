@@ -65,8 +65,10 @@
                     "format": "uri",
                     "readOnly": true,
                     "title": "Photo",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 }
             },
             "required": [

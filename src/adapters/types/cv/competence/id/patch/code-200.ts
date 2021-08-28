@@ -9,7 +9,7 @@ export type Code200 = CvCompetence;
 export type CompetenceId = number;
 export type CvId = number;
 export type ID = number;
-export type Years = number;
+export type Years = number | null;
 
 export interface CvCompetence {
     competence_id: CompetenceId;

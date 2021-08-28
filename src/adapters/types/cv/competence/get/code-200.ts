@@ -12,7 +12,7 @@ export type ParentId = string;
 export type CompetenceId = number;
 export type CvId = number;
 export type ID1 = number;
-export type Years = number;
+export type Years = number | null;
 
 export interface CvCompetenceRead {
     competence?: Competence;

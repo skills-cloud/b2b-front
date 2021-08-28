@@ -11,19 +11,25 @@
                     "maximum": 2147483647,
                     "minimum": -2147483648,
                     "title": "Количество",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "experience_years": {
                     "description": "float",
                     "title": "Опыт лет",
-                    "type": "number",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "number"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -32,19 +38,25 @@
                 },
                 "max_price": {
                     "title": "Макс. цена",
-                    "type": "number",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "number"
+                    ]
                 },
                 "name": {
                     "maxLength": 1000,
                     "title": "Название",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "position_id": {
                     "title": "Position id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "request_id": {
                     "title": "Request id",
@@ -58,19 +70,25 @@
                 },
                 "type_of_employment_id": {
                     "title": "Type of employment id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "work_location_address": {
                     "maxLength": 1000,
                     "title": "Адрес",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "work_location_city_id": {
                     "title": "Work location city id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 }
             },
             "required": [

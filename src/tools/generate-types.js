@@ -7,7 +7,6 @@ const PATH_OUT = '/src/adapters/types';
 
 const collectFiles = (path, result = []) => {
     const currentPath = join(process.cwd(), path);
-    console.log('pATH', currentPath)
 
     if(existsSync(currentPath)) {
         const dirs = readdirSync(currentPath);
@@ -51,8 +50,6 @@ if(files) {
 
         try {
             const json = require(join(process.cwd(), file));
-
-            console.log('JSON', json, 'FILE', file)
 
             additionalProperties(json);
 

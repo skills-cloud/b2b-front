@@ -22,8 +22,10 @@
                 },
                 "years": {
                     "title": "Years",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 }
             },
             "required": [

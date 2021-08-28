@@ -12,8 +12,10 @@
                 },
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -35,8 +37,10 @@
                 "country",
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": [
+                "null",
+                "object"
+            ]
         },
         "Competence": {
             "properties": {
@@ -62,41 +66,14 @@
             ],
             "type": "object"
         },
-        "Country": {
-            "properties": {
-                "description": {
-                    "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
-                },
-                "id": {
-                    "readOnly": true,
-                    "title": "ID",
-                    "type": "integer"
-                },
-                "is_verified": {
-                    "title": "Подтверждено",
-                    "type": "boolean"
-                },
-                "name": {
-                    "maxLength": 500,
-                    "minLength": 1,
-                    "title": "Название",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "name"
-            ],
-            "type": "object",
-            "x-nullable": true
-        },
         "Position": {
             "properties": {
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -136,8 +113,10 @@
                         5
                     ],
                     "title": "Опыт лет",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -174,19 +153,25 @@
                     "maximum": 2147483647,
                     "minimum": -2147483648,
                     "title": "Количество",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "experience_years": {
                     "description": "float",
                     "title": "Опыт лет",
-                    "type": "number",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "number"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -195,22 +180,28 @@
                 },
                 "max_price": {
                     "title": "Макс. цена",
-                    "type": "number",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "number"
+                    ]
                 },
                 "name": {
                     "maxLength": 1000,
                     "title": "Название",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "position": {
                     "$ref": "#/definitions/Position"
                 },
                 "position_id": {
                     "title": "Position id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "request_id": {
                     "title": "Request id",
@@ -227,22 +218,28 @@
                 },
                 "type_of_employment_id": {
                     "title": "Type of employment id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "work_location_address": {
                     "maxLength": 1000,
                     "title": "Адрес",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "work_location_city": {
                     "$ref": "#/definitions/City"
                 },
                 "work_location_city_id": {
                     "title": "Work location city id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 }
             },
             "required": [
@@ -254,8 +251,10 @@
             "properties": {
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -276,8 +275,10 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": [
+                "null",
+                "object"
+            ]
         }
     }
 }

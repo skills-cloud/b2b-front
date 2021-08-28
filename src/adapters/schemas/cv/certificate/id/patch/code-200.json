@@ -9,8 +9,10 @@
             "properties": {
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -22,13 +24,17 @@
                 "date": {
                     "format": "date",
                     "title": "Выдан",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "education_graduate_id": {
                     "title": "Education graduate id",
@@ -54,14 +60,18 @@
                 "name": {
                     "maxLength": 1000,
                     "title": "Наименование",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "number": {
                     "maxLength": 1000,
                     "title": "Номер",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 }
             },
             "required": [

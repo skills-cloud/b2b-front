@@ -19,8 +19,10 @@
                         5
                     ],
                     "title": "Опыт лет",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "id": {
                     "readOnly": true,

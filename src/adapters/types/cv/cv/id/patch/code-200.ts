@@ -6,36 +6,36 @@
  */
 
 export type Code200 = CvDetailWrite;
-export type NoName = string;
-export type CitizenshipId = number;
-export type CityId = number;
-export type CountryId = number;
+export type NoName = null | string;
+export type CitizenshipId = number | null;
+export type CityId = number | null;
+export type CountryId = number | null;
 export type NoName1 = 'all' | 'weekends' | 'workdays';
-export type NoName2 = string;
+export type NoName2 = null | string;
 export type NoName3 = 'F' | 'M';
 export type ID = number;
 export type NoName4 = boolean;
-export type NoName5 = string;
-export type NoName6 = string;
-export type Photo = string;
-export type NoName7 = string;
-export type NoName8 = string;
-export type UserId = number;
+export type NoName5 = null | string;
+export type NoName6 = null | string;
+export type Photo = null | string;
+export type NoName7 = null | string;
+export type NoName8 = null | string;
+export type UserId = number | null;
 
 export interface CvDetailWrite {
     birth_date?: NoName;
     citizenship_id?: CitizenshipId;
     city_id?: CityId;
     country_id?: CountryId;
-    days_to_contact?: NoName1;
+    days_to_contact?: null | NoName1;
     first_name?: NoName2;
-    gender?: NoName3;
+    gender?: null | NoName3;
     id?: ID;
     is_resource_owner?: NoName4;
     last_name?: NoName5;
     middle_name?: NoName6;
     photo?: Photo;
-    physical_limitations_ids?: number[];
+    physical_limitations_ids?: (number | null)[];
     time_to_contact_from?: NoName7;
     time_to_contact_to?: NoName8;
     user_id?: UserId;

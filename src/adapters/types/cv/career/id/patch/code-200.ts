@@ -7,16 +7,16 @@
 
 export type Code200 = CvCareer;
 export type CvId = number;
-export type NoName = string;
-export type NoName1 = string;
-export type NoName2 = string;
+export type NoName = null | string;
+export type NoName1 = null | string;
+export type NoName2 = null | string;
 export type ID = number;
 export type NoName3 = boolean;
 export type OrganizationId = number;
-export type PositionId = number;
+export type PositionId = number | null;
 
 export interface CvCareer {
-    competencies_ids?: number[];
+    competencies_ids?: (number | null)[];
     cv_id: CvId;
     date_from?: NoName;
     date_to?: NoName1;
@@ -25,5 +25,5 @@ export interface CvCareer {
     is_verified?: NoName3;
     organization_id: OrganizationId;
     position_id?: PositionId;
-    projects_ids?: number[];
+    projects_ids?: (number | null)[];
 }

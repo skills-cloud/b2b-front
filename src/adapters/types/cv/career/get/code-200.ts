@@ -6,34 +6,34 @@
  */
 
 export type Code200 = CvCareerRead;
-export type NoName = string;
+export type NoName = null | string;
 export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
 export type ParentId = string;
 export type CvId = number;
-export type NoName3 = string;
-export type NoName4 = string;
-export type NoName5 = string;
+export type NoName3 = null | string;
+export type NoName4 = null | string;
+export type NoName5 = null | string;
 export type CvCareerId = string;
 export type NoName6 = string;
 export type FileExt = string;
-export type NoName7 = string;
+export type NoName7 = null | string;
 export type FileSize = string;
 export type ID1 = number;
 export type ID2 = number;
 export type NoName8 = boolean;
-export type NoName9 = string;
+export type NoName9 = null | string;
 export type ID3 = number;
 export type NoName10 = string;
 export type OrganizationId = number;
-export type NoName11 = string;
+export type NoName11 = null | string;
 export type ID4 = number;
 export type NoName12 = boolean;
 export type NoName13 = string;
-export type PositionId = number;
+export type PositionId = number | null;
 export type NoName14 = string;
-export type NoName15 = string;
+export type NoName15 = null | string;
 export type ID5 = number;
 export type NoName16 = string;
 export type OrganizationId1 = number;
@@ -41,7 +41,7 @@ export type NoName17 = string;
 
 export interface CvCareerRead {
     competencies?: CompetenceInline[];
-    competencies_ids?: number[];
+    competencies_ids?: (number | null)[];
     cv_id: CvId;
     date_from?: NoName3;
     date_to?: NoName4;
@@ -54,7 +54,7 @@ export interface CvCareerRead {
     position?: Position;
     position_id?: PositionId;
     projects?: OrganizationProject[];
-    projects_ids?: number[];
+    projects_ids?: (number | null)[];
 }
 export interface CompetenceInline {
     description?: NoName;

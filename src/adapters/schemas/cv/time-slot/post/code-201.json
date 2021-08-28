@@ -9,13 +9,17 @@
             "properties": {
                 "city_id": {
                     "title": "City id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "country_id": {
                     "title": "Country id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "cv_id": {
                     "title": "Cv id",
@@ -24,19 +28,25 @@
                 "date_from": {
                     "format": "date",
                     "title": "Период с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "date_to": {
                     "format": "date",
                     "title": "Период по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "description": {
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -49,8 +59,10 @@
                 },
                 "price": {
                     "title": "Ставка",
-                    "type": "number",
-                    "x-nullable": true
+                    "type": [
+                        "null",
+                        "number"
+                    ]
                 },
                 "type_of_employment_id": {
                     "title": "Type of employment id",

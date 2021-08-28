@@ -7,18 +7,18 @@
 
 export type Code201 = CvCertificate;
 export type CvId = number;
-export type NoName = string;
-export type NoName1 = string;
+export type NoName = null | string;
+export type NoName1 = null | string;
 export type EducationGraduateId = number;
 export type EducationPlaceId = number;
 export type EducationSpecialityId = number;
 export type ID = number;
 export type NoName2 = boolean;
-export type NoName3 = string;
-export type NoName4 = string;
+export type NoName3 = null | string;
+export type NoName4 = null | string;
 
 export interface CvCertificate {
-    competencies_ids?: number[];
+    competencies_ids?: (number | null)[];
     cv_id: CvId;
     date?: NoName;
     description?: NoName1;

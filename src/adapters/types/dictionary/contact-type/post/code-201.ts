@@ -6,7 +6,7 @@
  */
 
 export type Code201 = ContactType;
-export type NoName = string;
+export type NoName = null | string;
 export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;

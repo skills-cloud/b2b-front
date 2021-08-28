@@ -7,17 +7,17 @@
 
 export type Code200 = Request;
 export type CustomerId = number;
-export type NoName = string;
-export type NoName1 = string;
+export type NoName = null | string;
+export type NoName1 = null | string;
 export type ID = number;
-export type IndustrySectorId = number;
+export type IndustrySectorId = number | null;
 export type NoName2 = 10 | 20 | 30;
-export type ProjectId = number;
-export type RecruiterId = number;
-export type ResourceManagerId = number;
-export type NoName3 = string;
+export type ProjectId = number | null;
+export type RecruiterId = number | null;
+export type ResourceManagerId = number | null;
+export type NoName3 = null | string;
 export type NoName4 = 'closed' | 'done' | 'draft' | 'in_progress';
-export type TypeId = number;
+export type TypeId = number | null;
 
 export interface Request {
     customer_id: CustomerId;
