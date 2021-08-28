@@ -23,6 +23,17 @@ export const getAccWhoAmI = (config?: AxiosRequestConfig) => {
     });
 };
 
+interface IQueryParams {
+    ordering?: Array<string>,
+    search?: string,
+    page?: number,
+    page_size?: number
+}
+
+interface IResponseGetAccUser {
+    results: Array<IUserData>
+}
+
 export const acc = createApi({
     reducerPath: 'api/acc',
     tagTypes   : ['acc'],
@@ -30,6 +41,14 @@ export const acc = createApi({
         baseUrl: '/api/acc'
     }),
     endpoints: (build) => ({
+        getAccUser: build.query<IResponseGetAccUser, IQueryParams>({
+            providesTags: ['acc'],
+            query       : (params) => ({
+                url   : 'user/',
+                method: 'GET',
+                params
+            })
+        }),
         postAccLogin: build.mutation({
             invalidatesTags: ['acc'],
             query          : (body) => ({

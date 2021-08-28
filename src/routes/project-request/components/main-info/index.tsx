@@ -16,7 +16,7 @@ import ESectionInvariants from 'route/project-request/components/section-invaria
 import EditModal from 'route/project-request/components/edit-modal';
 import useModalClose from 'component/modal/use-modal-close';
 
-import { mainRequest } from 'adapter/api/main-request';
+import { mainRequest } from 'adapter/api/main';
 
 import { useClassnames } from 'hook/use-classnames';
 import useFormatDistance from 'component/dates/format-distance';
@@ -59,46 +59,67 @@ const MainInfo = () => {
     const { project, priority, status, start_date, deadline_date, requirements } = data;
 
     const renderProjectField = (field: typeof PROJECT_TERM_FIELDS[number]) => {
+        let content;
+
         switch (field) {
             case 'project-term':
                 if(start_date && deadline_date) {
                     const startDate = format(new Date(start_date), FORMAT_DATE);
                     const endDate = format(new Date(deadline_date), FORMAT_DATE);
 
-                    return <React.Fragment>{startDate}&nbsp;&mdash; {endDate}</React.Fragment>;
+                    content = <React.Fragment>{startDate}&nbsp;&mdash; {endDate}</React.Fragment>;
                 }
 
-                return null;
+                break;
             case 'duration':
                 if(start_date && deadline_date) {
-                    return formatDistance({ date: new Date(start_date), baseDate: new Date(deadline_date) });
+                    content = formatDistance({ date: new Date(start_date), baseDate: new Date(deadline_date) });
                 }
-
-                return null;
+                break;
             case 'rest':
-                return (
+                content = (
                     <React.Fragment>
                         {projectRequest.rest}
                         {`\u00a0(${projectRequest.comment})`}
                     </React.Fragment>
                 );
+                break;
             default:
-                return data[field]?.name;
+                content = data[field]?.name;
         }
+
+        if(content === undefined) {
+            content = t('routes.project-request.blocks.empty-field');
+        }
+
+        return content;
     };
 
     const renderField = (field: typeof MAIN_INFO_FIELDS[number]) => {
+        let content;
+
         switch (field) {
             case 'recruiter':
             case 'resource_manager':
-                return `${data[field]?.last_name} ${data[field]?.first_name.slice(0, 1)}.`;
+                if(data[field]?.last_name && data[field]?.first_name) {
+                    content = `${data[field]?.last_name} ${data[field]?.first_name.slice(0, 1)}.`;
+                }
+                break;
             case 'project_description':
-                return project?.description;
+                content = project?.description;
+                break;
             case 'requirements':
-                return requirements?.length;
+                content = requirements?.length;
+                break;
             default:
-                return data[field]?.name;
+                content = data[field]?.name;
         }
+
+        if(content === undefined) {
+            content = t('routes.project-request.blocks.empty-field');
+        }
+
+        return content;
     };
 
     return (
@@ -111,18 +132,22 @@ const MainInfo = () => {
                         }}
                     />
                 }
-                >{project?.name}
+                >{project?.name || t('routes.project-request.blocks.empty-title')}
                 </SectionHeader>
             </div>
 
-            <Tag kind={Tag.kinds.Secondary}>
-                {t(`routes.project-request.blocks.priority.${priority}`)}
-            </Tag>
-            <Tag kind={Tag.kinds.Base}>
-                {t(`routes.project-request.blocks.status.${status}`)}
-                {/* TODO Добавить поле прогресса, как будет готово */}
-                {/* {projectRequest.complete < 100 ? `\u00a0${projectRequest.complete}%` : ''} */}
-            </Tag>
+            {priority && (
+                <Tag kind={Tag.kinds.Secondary}>
+                    {t(`routes.project-request.blocks.priority.${priority}`)}
+                </Tag>
+            )}
+            {status && (
+                <Tag kind={Tag.kinds.Base}>
+                    {t(`routes.project-request.blocks.status.${status}`)}
+                    {/* TODO Добавить поле прогресса, как будет готово */}
+                    {/* {projectRequest.complete < 100 ? `\u00a0${projectRequest.complete}%` : ''} */}
+                </Tag>
+            )}
 
             <SectionContentList>
                 <H3 id="main-info">{t(`routes.project-request.blocks.sections.${ESectionInvariants.MainInfo}`)}</H3>
@@ -143,7 +168,7 @@ const MainInfo = () => {
                     </SectionContentListItem>
                 ))}
             </SectionContentList>
-            {visible && <EditModal setVisible={setVisible} />}
+            {visible && <EditModal setVisible={setVisible} fields={data} />}
         </Section>
     );
 };

@@ -369,11 +369,11 @@
             "create": {
                 "title": "Новый проектный запрос",
                 "industry_sector": "Отрасль",
-                "employer": "Заказчик",
+                "customer": "Заказчик",
                 "project": "Проект",
                 "resource_manager": "Ресурсный менеджер",
                 "recruiter": "Ответственный рекрутер",
-                "requestType": "Тип запроса",
+                "type": "Тип запроса",
                 "priority": "Приоритет",
                 "status": "Статус",
                 "description": "Описание проекта",
@@ -381,6 +381,8 @@
                 "required-error": "Обязательно для заполнения"
             },
             "blocks": {
+                "empty-title": "Название проектного запроса не\u00A0указано",
+                "empty-field": "Не\u00A0указано",
                 "sections": {
                     "main-info": "Основная информация",
                     "requirements": "Требования к сотруднику",
