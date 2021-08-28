@@ -26,6 +26,11 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
+                },
+                "parent_id": {
+                    "readOnly": true,
+                    "title": "Parent id",
+                    "type": "string"
                 }
             },
             "required": [
@@ -44,7 +49,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "x-nullable": true
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -136,12 +142,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -171,12 +171,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -206,12 +200,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [

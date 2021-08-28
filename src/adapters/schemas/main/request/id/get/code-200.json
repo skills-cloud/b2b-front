@@ -288,12 +288,23 @@
                     "readOnly": true,
                     "type": "array"
                 },
+                "requirements_count_sum": {
+                    "readOnly": true,
+                    "title": "Requirements count sum",
+                    "type": "integer"
+                },
                 "resource_manager": {
                     "$ref": "#/definitions/UserInline"
                 },
                 "resource_manager_id": {
                     "title": "Resource manager id",
                     "type": "integer",
+                    "x-nullable": true
+                },
+                "start_date": {
+                    "format": "date",
+                    "title": "Дата начала",
+                    "type": "string",
                     "x-nullable": true
                 },
                 "status": {

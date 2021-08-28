@@ -10,6 +10,7 @@ export type NoName = string;
 export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
+export type ParentId = string;
 export type CvId = number;
 export type CvPositionId = string;
 export type NoName3 = string;
@@ -22,9 +23,8 @@ export type NoName5 = string;
 export type ID3 = number;
 export type NoName6 = boolean;
 export type NoName7 = string;
-export type NoName8 = number;
 export type PositionId = number;
-export type NoName9 = string;
+export type NoName8 = string;
 
 export interface CvPositionRead {
     competencies?: CompetenceInline[];
@@ -33,14 +33,15 @@ export interface CvPositionRead {
     files?: CvPositionFileRead[];
     id?: ID2;
     position?: Position;
-    position_id: PositionId;
-    title?: NoName9;
+    position_id?: PositionId;
+    title?: NoName8;
 }
 export interface CompetenceInline {
     description?: NoName;
     id?: ID;
     is_verified?: NoName1;
     name: NoName2;
+    parent_id?: ParentId;
 }
 export interface CvPositionFileRead {
     cv_position_id?: CvPositionId;
@@ -55,5 +56,4 @@ export interface Position {
     id?: ID3;
     is_verified?: NoName6;
     name: NoName7;
-    sorting?: NoName8;
 }

@@ -24,6 +24,6 @@ export interface CvCareer {
     id?: ID;
     is_verified?: NoName3;
     organization_id: OrganizationId;
-    position_id: PositionId;
+    position_id?: PositionId;
     projects_ids?: number[];
 }

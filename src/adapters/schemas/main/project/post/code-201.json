@@ -1,0 +1,61 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/Project"
+        }
+    ],
+    "definitions": {
+        "Project": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "recruiters_ids": {
+                    "items": {
+                        "type": "integer",
+                        "x-nullable": true
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "resource_managers_ids": {
+                    "items": {
+                        "type": "integer",
+                        "x-nullable": true
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        }
+    }
+}

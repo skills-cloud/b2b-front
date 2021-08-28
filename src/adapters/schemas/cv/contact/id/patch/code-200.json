@@ -1,0 +1,48 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvContact"
+        }
+    ],
+    "definitions": {
+        "CvContact": {
+            "properties": {
+                "comment": {
+                    "maxLength": 1000,
+                    "title": "Комментарий",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "contact_type_id": {
+                    "title": "Contact type id",
+                    "type": "integer"
+                },
+                "cv_id": {
+                    "title": "Cv id",
+                    "type": "integer"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_primary": {
+                    "title": "Основной",
+                    "type": "boolean"
+                },
+                "value": {
+                    "maxLength": 1000,
+                    "minLength": 1,
+                    "title": "Значение",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "contact_type_id",
+                "cv_id",
+                "value"
+            ],
+            "type": "object"
+        }
+    }
+}

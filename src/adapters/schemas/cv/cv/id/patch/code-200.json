@@ -23,13 +23,6 @@
                     "type": "integer",
                     "x-nullable": true
                 },
-                "competencies_ids": {
-                    "items": {
-                        "type": "integer"
-                    },
-                    "type": "array",
-                    "uniqueItems": true
-                },
                 "country_id": {
                     "title": "Country id",
                     "type": "integer",
@@ -90,7 +83,8 @@
                 },
                 "physical_limitations_ids": {
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "x-nullable": true
                     },
                     "type": "array",
                     "uniqueItems": true

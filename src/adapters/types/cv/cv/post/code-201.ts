@@ -26,7 +26,6 @@ export interface CvDetailWrite {
     birth_date?: NoName;
     citizenship_id?: CitizenshipId;
     city_id?: CityId;
-    competencies_ids?: number[];
     country_id?: CountryId;
     days_to_contact?: NoName1;
     first_name?: NoName2;

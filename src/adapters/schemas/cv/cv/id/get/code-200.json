@@ -26,12 +26,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -64,12 +58,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -78,6 +66,30 @@
             ],
             "type": "object",
             "x-nullable": true
+        },
+        "Competence": {
+            "properties": {
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "parent_id": {
+                    "readOnly": true,
+                    "title": "Parent id",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
         },
         "CompetenceInline": {
             "properties": {
@@ -99,6 +111,11 @@
                     "maxLength": 500,
                     "minLength": 1,
                     "title": "Название",
+                    "type": "string"
+                },
+                "parent_id": {
+                    "readOnly": true,
+                    "title": "Parent id",
                     "type": "string"
                 }
             },
@@ -128,12 +145,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -162,12 +173,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -224,7 +229,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "x-nullable": true
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -278,7 +284,8 @@
                 },
                 "position_id": {
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-nullable": true
                 },
                 "projects": {
                     "items": {
@@ -289,7 +296,8 @@
                 },
                 "projects_ids": {
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "x-nullable": true
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -297,8 +305,7 @@
             },
             "required": [
                 "cv_id",
-                "organization_id",
-                "position_id"
+                "organization_id"
             ],
             "type": "object"
         },
@@ -313,7 +320,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "x-nullable": true
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -381,6 +389,36 @@
                 "education_graduate_id",
                 "education_place_id",
                 "education_speciality_id"
+            ],
+            "type": "object"
+        },
+        "CvCompetenceRead": {
+            "properties": {
+                "competence": {
+                    "$ref": "#/definitions/Competence"
+                },
+                "competence_id": {
+                    "title": "Competence id",
+                    "type": "integer"
+                },
+                "cv_id": {
+                    "title": "Cv id",
+                    "type": "integer"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "years": {
+                    "title": "Years",
+                    "type": "integer",
+                    "x-nullable": true
+                }
+            },
+            "required": [
+                "competence_id",
+                "cv_id"
             ],
             "type": "object"
         },
@@ -466,17 +504,10 @@
                 },
                 "competencies": {
                     "items": {
-                        "$ref": "#/definitions/CompetenceInline"
+                        "$ref": "#/definitions/CvCompetenceRead"
                     },
                     "readOnly": true,
                     "type": "array"
-                },
-                "competencies_ids": {
-                    "items": {
-                        "type": "integer"
-                    },
-                    "type": "array",
-                    "uniqueItems": true
                 },
                 "contacts": {
                     "items": {
@@ -569,7 +600,8 @@
                 },
                 "physical_limitations_ids": {
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "x-nullable": true
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -627,7 +659,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "x-nullable": true
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -777,7 +810,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "x-nullable": true
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -803,7 +837,8 @@
                 },
                 "position_id": {
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-nullable": true
                 },
                 "title": {
                     "maxLength": 2000,
@@ -813,8 +848,7 @@
                 }
             },
             "required": [
-                "cv_id",
-                "position_id"
+                "cv_id"
             ],
             "type": "object"
         },
@@ -829,7 +863,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "x-nullable": true
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -865,7 +900,8 @@
                 },
                 "industry_sector_id": {
                     "title": "Industry sector id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-nullable": true
                 },
                 "is_verified": {
                     "title": "Подтверждено",
@@ -988,12 +1024,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -1023,12 +1053,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -1058,12 +1082,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -1093,12 +1111,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -1132,6 +1144,12 @@
         },
         "OrganizationProject": {
             "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
                 "description": {
                     "title": "Описание",
                     "type": "string",
@@ -1148,17 +1166,19 @@
                     "title": "Название",
                     "type": "string"
                 },
-                "organization": {
-                    "$ref": "#/definitions/Organization"
-                },
                 "organization_id": {
                     "title": "Organization id",
                     "type": "integer"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
                 }
             },
             "required": [
                 "name",
-                "organization",
                 "organization_id"
             ],
             "type": "object"
@@ -1184,12 +1204,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -1218,12 +1232,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [
@@ -1252,12 +1260,6 @@
                     "minLength": 1,
                     "title": "Название",
                     "type": "string"
-                },
-                "sorting": {
-                    "maximum": 2147483647,
-                    "minimum": -2147483648,
-                    "title": "Сортировка",
-                    "type": "integer"
                 }
             },
             "required": [

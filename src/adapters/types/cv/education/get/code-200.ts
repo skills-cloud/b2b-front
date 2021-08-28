@@ -10,6 +10,7 @@ export type NoName = string;
 export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
+export type ParentId = string;
 export type CvId = number;
 export type NoName3 = string;
 export type NoName4 = string;
@@ -18,22 +19,19 @@ export type NoName6 = string;
 export type ID1 = number;
 export type NoName7 = boolean;
 export type NoName8 = string;
-export type NoName9 = number;
 export type EducationGraduateId = number;
-export type NoName10 = string;
+export type NoName9 = string;
 export type ID2 = number;
-export type NoName11 = boolean;
-export type NoName12 = string;
-export type NoName13 = number;
+export type NoName10 = boolean;
+export type NoName11 = string;
 export type EducationPlaceId = number;
-export type NoName14 = string;
+export type NoName12 = string;
 export type ID3 = number;
-export type NoName15 = boolean;
-export type NoName16 = string;
-export type NoName17 = number;
+export type NoName13 = boolean;
+export type NoName14 = string;
 export type EducationSpecialityId = number;
 export type ID4 = number;
-export type NoName18 = boolean;
+export type NoName15 = boolean;
 
 export interface CvEducationRead {
     competencies?: CompetenceInline[];
@@ -49,32 +47,30 @@ export interface CvEducationRead {
     education_speciality?: EducationSpecialty;
     education_speciality_id: EducationSpecialityId;
     id?: ID4;
-    is_verified?: NoName18;
+    is_verified?: NoName15;
 }
 export interface CompetenceInline {
     description?: NoName;
     id?: ID;
     is_verified?: NoName1;
     name: NoName2;
+    parent_id?: ParentId;
 }
 export interface EducationGraduate {
     description?: NoName6;
     id?: ID1;
     is_verified?: NoName7;
     name: NoName8;
-    sorting?: NoName9;
 }
 export interface EducationPlace {
-    description?: NoName10;
+    description?: NoName9;
     id?: ID2;
-    is_verified?: NoName11;
-    name: NoName12;
-    sorting?: NoName13;
+    is_verified?: NoName10;
+    name: NoName11;
 }
 export interface EducationSpecialty {
-    description?: NoName14;
+    description?: NoName12;
     id?: ID3;
-    is_verified?: NoName15;
-    name: NoName16;
-    sorting?: NoName17;
+    is_verified?: NoName13;
+    name: NoName14;
 }

@@ -56,6 +56,12 @@
                     "type": "integer",
                     "x-nullable": true
                 },
+                "start_date": {
+                    "format": "date",
+                    "title": "Дата начала",
+                    "type": "string",
+                    "x-nullable": true
+                },
                 "status": {
                     "enum": [
                         "closed",

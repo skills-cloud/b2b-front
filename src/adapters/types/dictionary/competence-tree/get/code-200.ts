@@ -11,6 +11,7 @@ export type NoName = string;
 export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
+export type ParentId = string;
 
 export interface CompetenceTree {
     children?: Children;
@@ -18,4 +19,5 @@ export interface CompetenceTree {
     id?: ID;
     is_verified?: NoName1;
     name: NoName2;
+    parent_id?: ParentId;
 }

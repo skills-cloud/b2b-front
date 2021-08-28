@@ -15,12 +15,12 @@ export type NoName2 = 10 | 20 | 30;
 export type ProjectId = number;
 export type RecruiterId = number;
 export type ResourceManagerId = number;
-export type NoName3 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName3 = string;
+export type NoName4 = 'closed' | 'done' | 'draft' | 'in_progress';
 export type TypeId = number;
 
 export interface Request {
     customer_id: CustomerId;
-    start_date?: NoName;
     deadline_date?: NoName;
     description?: NoName1;
     id?: ID;
@@ -29,6 +29,7 @@ export interface Request {
     project_id?: ProjectId;
     recruiter_id?: RecruiterId;
     resource_manager_id?: ResourceManagerId;
-    status?: NoName3;
+    start_date?: NoName3;
+    status?: NoName4;
     type_id?: TypeId;
 }

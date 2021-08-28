@@ -1,0 +1,50 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/OrganizationProject"
+        }
+    ],
+    "definitions": {
+        "OrganizationProject": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "description": {
+                    "title": "Описание",
+                    "type": "string",
+                    "x-nullable": true
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "organization_id": {
+                    "title": "Organization id",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "organization_id"
+            ],
+            "type": "object"
+        }
+    }
+}
