@@ -2,6 +2,7 @@ import { AxiosRequestConfig } from 'axios';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { request } from '../request';
 import { ContactType } from 'adapter/types/dictionary/contact-type/get/code-200';
+import { IndustrySector } from 'adapter/types/dictionary/industry-sector/get/code-200';
 
 export interface ICompetence {
     id: string,
@@ -91,6 +92,13 @@ export interface IEducationResponse {
     results: Array<IEducationResult>
 }
 
+interface IIndustrySector {
+    count: number,
+    next: string,
+    previous: string,
+    results: Array<IndustrySector>
+}
+
 export interface IResultEmployment {
     id: number,
     name: string,
@@ -114,6 +122,14 @@ export const dictionary = createApi({
         baseUrl: '/api/dictionary'
     }),
     endpoints: (build) => ({
+        getIndustrySector: build.query<IIndustrySector, { search: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : 'industry-sector/',
+                method: 'GET',
+                params
+            })
+        }),
         getCompetenceTree: build.query<Array<ICompetence>, undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({

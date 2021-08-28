@@ -10,7 +10,7 @@ const SectionHeader = ({ children, actions }: { children: ReactNode, actions?: R
     return (
         <div className={cn('section__header-wrapper')}>
             <H1>{children}</H1>
-            {actions}
+            {actions ? <div className={cn('section__header-actions')}>{actions}</div> : null}
         </div>
     );
 };

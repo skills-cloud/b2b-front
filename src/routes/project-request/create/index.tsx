@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import PageCentred from 'component/layout/page-centered';
 import Section from 'component/section';
 import Button from 'component/button';
+import history from 'component/core/history';
 
 import ProjectRequestForm from 'route/project-request/components/form';
 
@@ -20,7 +21,11 @@ const ProjectsCreateForm = () => {
         <PageCentred>
             <Section title={t('routes.project-request.create.title')}>
                 <div className={cn('form')}>
-                    <ProjectRequestForm formId={FORM_ID} />
+                    <ProjectRequestForm
+                        formId={FORM_ID} onSuccess={(id) => {
+                            history.push(`/project-request/${id}`);
+                        }}
+                    />
                     <div className={cn('separator')} />
                     <div className={cn('submit-wrapper')}>
                         <Button type="submit" form={FORM_ID}>{t('routes.project-request.create.submit')}</Button>
