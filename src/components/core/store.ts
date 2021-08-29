@@ -13,7 +13,7 @@ import { certificate } from 'adapter/api/certificate';
 import { education } from 'adapter/api/education';
 import { position } from 'adapter/api/position';
 import { project } from 'adapter/api/project';
-import { mainRequest } from 'adapter/api/main-request';
+import { mainRequest } from 'src/adapters/api/main';
 
 import config from 'config';
 

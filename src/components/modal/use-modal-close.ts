@@ -7,7 +7,9 @@ export const JS_CLASS = 'js-modal-content';
 const useModalClose = (visible: boolean, setVisible: (visible: boolean) => void) => {
     useEffect(() => {
         const onClick = (event: MouseEvent) => {
-            if(visible && event.target && (event.target as HTMLElement).closest(`.${JS_CLASS}`) === null) {
+            const node = event.target as HTMLElement;
+
+            if(visible && node.closest(`.${JS_CLASS}`) === null && node.closest('body') !== null) {
                 setVisible(false);
             }
         };
