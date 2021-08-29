@@ -3,8 +3,9 @@ import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 import { Organization } from 'adapter/types/main/organization/get/code-200';
 import { ProjectRead } from 'adapter/types/main/project/get/code-200';
 import { RequestType } from 'adapter/types/main/request-type/get/code-200';
+import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 
-interface IGetMainRequestById {
+interface IBaseGetById {
     id: number
 }
 
@@ -47,6 +48,13 @@ export const mainRequest = createApi({
         baseUrl: '/api/main'
     }),
     endpoints: (build) => ({
+        getMainRequestRequirementById: build.query<RequestRequirementRead, IBaseGetById>({
+            providesTags: ['main'],
+            query       : ({ id }) => ({
+                url   : `/request-requirement/${id}`,
+                method: 'GET'
+            })
+        }),
         getMainRequestType: build.query<IResponseGetMainRequestType, IQueryParams>({
             providesTags: ['main'],
             query       : (params) => ({
@@ -71,7 +79,7 @@ export const mainRequest = createApi({
                 params
             })
         }),
-        getMainRequestById: build.query<RequestRead, IGetMainRequestById>({
+        getMainRequestById: build.query<RequestRead, IBaseGetById>({
             providesTags: ['main'],
             query       : ({ id }) => ({
                 url   : `/request/${id}`,
