@@ -1,12 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import SidebarLayout from 'component/layout/sidebar';
 import Section from 'component/section';
 
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import MainInfo from 'route/project-request/components/main-info';
+import Requirements from 'route/project-request/components/requirements';
+import { mainRequest } from 'adapter/api/main';
 
 import { useClassnames } from 'hook/use-classnames';
 
@@ -16,6 +19,15 @@ const ProjectRequest = () => {
     const cn = useClassnames(style);
     const { hash } = useLocation();
     const { t } = useTranslation();
+    const { id } = useParams<{ id: string }>();
+    const { data } = mainRequest.useGetMainRequestByIdQuery(
+        { id: parseInt(id, 10) },
+        { refetchOnMountOrArgChange: true }
+    );
+
+    if(!data) {
+        return null;
+    }
 
     return (
         <SidebarLayout
@@ -39,7 +51,11 @@ const ProjectRequest = () => {
                 </Section>
             }
         >
-            <MainInfo />
+            <div className={cn('sections')} >
+                <MainInfo {...data} />
+                <Requirements requirements={data?.requirements} />
+            </div>
+
         </SidebarLayout>
     );
 };

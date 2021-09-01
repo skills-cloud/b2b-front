@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
 import { format } from 'date-fns';
 
 import SectionHeader from 'component/section/header';
-import EditAction from 'component/section/edit-action';
+import EditAction from 'component/section/actions/edit';
 import Tag from 'component/tag';
 import SectionContentList from 'component/section/content-list';
 import { H3 } from 'component/header';
@@ -12,11 +11,10 @@ import SectionContentListItem from 'component/section/content-list-item';
 import Separator from 'component/separator';
 import Section from 'component/section';
 
+import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import EditModal from 'route/project-request/components/edit-modal';
 import useModalClose from 'component/modal/use-modal-close';
-
-import { mainRequest } from 'src/adapters/api/main';
 
 import { useClassnames } from 'hook/use-classnames';
 import useFormatDistance from 'component/dates/format-distance';
@@ -39,24 +37,14 @@ const MAIN_INFO_FIELDS = [
 const PROJECT_TERM_FIELDS = ['project-term', 'duration'];
 const FORMAT_DATE = 'dd.MM.yyyy';
 
-const MainInfo = () => {
+const MainInfo = (data: RequestRead) => {
+    const { project, priority, status, start_date, deadline_date, requirements } = data;
     const { t } = useTranslation();
     const cn = useClassnames(style);
-    const [visible, setVisible] = useState(false);
-    const { id } = useParams<{ id: string }>();
     const formatDistance = useFormatDistance();
-    const { data } = mainRequest.useGetMainRequestByIdQuery(
-        { id: parseInt(id, 10) },
-        { refetchOnMountOrArgChange: true }
-    );
+    const [visible, setVisible] = useState(false);
 
     useModalClose(visible, setVisible);
-
-    if(!data) {
-        return null;
-    }
-
-    const { project, priority, status, start_date, deadline_date, requirements } = data;
 
     const renderProjectField = (field: typeof PROJECT_TERM_FIELDS[number]) => {
         let content;
@@ -124,7 +112,7 @@ const MainInfo = () => {
 
     return (
         <Section>
-            <div className={cn('gap-bottom')}>
+            <div className={cn('gap-bottom')} id={ESectionInvariants.MainInfo}>
                 <SectionHeader actions={
                     <EditAction
                         onClick={() => {
@@ -150,7 +138,7 @@ const MainInfo = () => {
             )}
 
             <SectionContentList>
-                <H3 id="main-info">{t(`routes.project-request.blocks.sections.${ESectionInvariants.MainInfo}`)}</H3>
+                <H3>{t(`routes.project-request.blocks.sections.${ESectionInvariants.MainInfo}`)}</H3>
                 {MAIN_INFO_FIELDS.map((field) => (
                     <SectionContentListItem title={t(`routes.project-request.blocks.main-info.${field}`)} key={field}>
                         {renderField(field)}

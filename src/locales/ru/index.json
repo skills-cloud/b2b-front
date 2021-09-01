@@ -397,6 +397,12 @@
             "blocks": {
                 "empty-title": "Название проектного запроса не\u00A0указано",
                 "empty-field": "Не\u00A0указано",
+                "people_0": "человек",
+                "people_1": "человека",
+                "people_2": "человек",
+                "people_3": "человек",
+                "people_4": "человек",
+                "people_5": "человек",
                 "sections": {
                     "main-info": "Основная информация",
                     "requirements": "Требования к сотруднику",
@@ -404,6 +410,36 @@
                     "applicant": "Кандидаты"
                 },
                 "project-term": "Сроки проекта",
+                "competencies": {
+                    "name": "Навыки",
+                    "experience-content": "{{experience}}\u00A0{{experienceTrl}}",
+                    "experience": "Опыт",
+                    "experience-years_0": "год",
+                    "experience-years_1": "года",
+                    "experience-years_2": "лет",
+                    "experience-years_3": "лет",
+                    "experience-years_4": "лет",
+                    "experience-years_5": "лет"
+                },
+                "location" : {
+                    "title": "Расположение",
+                    "point": "Локация",
+                    "point-content_country_city": "{{country}}, {{city}}",
+                    "point-content_country": "{{country}}",
+                    "point-content_city": "{{city}}",
+                    "point-content_empty": "Адрес не\u00A0указан",
+                    "address": "Адрес",
+                    "type-of-employment": "Формат работы"
+                },
+                "price": {
+                    "title": "Ставка",
+                    "per-hour": "В\u00A0час",
+                    "value": "{{value}}\u00A0руб."
+                },
+                "other": {
+                    "description": "Описание",
+                    "title": "Разное"
+                },
                 "priority": {
                     "30": "Низкий",
                     "20": "Средний",
