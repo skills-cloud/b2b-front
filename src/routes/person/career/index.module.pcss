@@ -52,7 +52,7 @@
         margin: 0;
         list-style: none;
         display: grid;
-        grid-row-gap: 16px;
+        grid-row-gap: 8px;
     }
 
     &__list-item {
@@ -63,12 +63,16 @@
         font-style: normal;
         font-weight: normal;
         font-size: 14px;
-        line-height: 16px;
+        line-height: 24px;
         color: var(--color-black);
-        align-items: flex-start;
+        align-items: baseline;
 
         strong {
             font-weight: normal;
+        }
+
+        &_file {
+            align-items: flex-start;
         }
     }
 
@@ -147,7 +151,14 @@
         color: var(--color-black);
     }
 
+    &__list-item-files {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
     &__file-item {
+        flex-basis: 100%;
         display: grid;
         grid-auto-flow: column;
         grid-column-gap: 12px;

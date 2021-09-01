@@ -48,11 +48,9 @@
                     "type": "integer"
                 },
                 "years": {
+                    "nullable": true,
                     "title": "Years",
-                    "type": [
-                        "integer",
-                        "null"
-                    ]
+                    "type": "integer"
                 }
             },
             "required": [

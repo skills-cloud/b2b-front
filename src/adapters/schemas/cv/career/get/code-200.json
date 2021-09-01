@@ -8,11 +8,9 @@
         "CompetenceInline": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -60,11 +58,9 @@
                 },
                 "file_name": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Название файла",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "file_size": {
                     "readOnly": true,
@@ -90,10 +86,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ]
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -104,26 +98,20 @@
                 },
                 "date_from": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период с",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "date_to": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период по",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "files": {
                     "items": {
@@ -152,11 +140,9 @@
                     "$ref": "#/definitions/Position"
                 },
                 "position_id": {
+                    "nullable": true,
                     "title": "Position id",
-                    "type": [
-                        "integer",
-                        "null"
-                    ]
+                    "type": "integer"
                 },
                 "projects": {
                     "items": {
@@ -167,10 +153,8 @@
                 },
                 "projects_ids": {
                     "items": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ]
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -185,11 +169,9 @@
         "Organization": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -217,11 +199,9 @@
                     "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -254,11 +234,9 @@
         "Position": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,

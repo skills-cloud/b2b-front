@@ -15,10 +15,11 @@ import Input from 'component/form/input';
 import InputRadio from 'component/form/radio';
 import DateInput from 'component/form/date';
 
-import { cv, IResultGetTimeSlot } from 'adapter/api/cv';
+import { timeslot } from 'adapter/api/timeslot';
 import { dictionary } from 'adapter/api/dictionary';
 
 import style from './index.module.pcss';
+import { CvTimeSlotRead } from 'adapter/types/cv/time-slot/get/code-200';
 
 export interface IProps {
     id: string
@@ -28,14 +29,10 @@ const Access = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
-    const { data: timeSlotData } = cv.useGetTimeSlotQuery({
-        cv_id: parseInt(id, 10)
-    }, {
-        refetchOnMountOrArgChange: true
-    });
+    const { data: timeSlotData } = timeslot.useGetTimeSlotQuery({ cv_id: parseInt(id, 10) });
     const { data: typeOfEmployment } = dictionary.useGetTypeOfEmploymentQuery(undefined);
-    const [setTimeSlot, { isLoading }] = cv.useSetTimeSlotMutation();
-    const [patchTimeSlot, { isLoading: isPatchLoading }] = cv.usePatchTimeSlotByIdMutation();
+    const [setTimeSlot, { isLoading }] = timeslot.useSetTimeSlotMutation();
+    const [patchTimeSlot, { isLoading: isPatchLoading }] = timeslot.usePatchTimeSlotByIdMutation();
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [dayToEdit, setDayToEdit] = useState<Date>(new Date());
@@ -58,27 +55,27 @@ const Access = (props: IProps) => {
             const periods = timeSlotData.results.filter((item) => item.date_to && item.date_from);
 
             return periods.map((item) => ({
-                dates : [item.date_from, item.date_to],
-                id    : item.id,
-                emp_id: item.type_of_employment.id
-            })) || [];
+                dates : [item.date_from || '', item.date_to || ''],
+                id    : item.id || '',
+                emp_id: item.type_of_employment?.id || 0
+            }));
         }
     }, [timeSlotData?.results]);
 
     const onClickDay = (date: Date) => {
         const periods = busyPeriodsWithId?.map((item) => ({
-            start : parse(item.dates[0], 'yyyy-MM-dd', new Date()),
-            end   : parse(item.dates[1], 'yyyy-MM-dd', new Date()),
+            start : item.dates[0] ? parse(item.dates[0], 'yyyy-MM-dd', new Date()) : 0,
+            end   : item.dates[1] ? parse(item.dates[1], 'yyyy-MM-dd', new Date()) : 0,
             id    : item.id,
             emp_id: item.emp_id
         })) || [];
 
-        let currentPeriod: IResultGetTimeSlot | undefined;
+        let currentPeriod: CvTimeSlotRead | undefined;
 
         for(const period of periods) {
             if(isWithinInterval(date, period)) {
-                setActiveTimeSlotId(period.id);
-                currentPeriod = timeSlotData?.results.find((item) => period.emp_id === item.type_of_employment.id);
+                setActiveTimeSlotId(period.id as number);
+                currentPeriod = timeSlotData?.results.find((item) => period.emp_id === item.type_of_employment?.id);
             }
         }
 
@@ -87,13 +84,13 @@ const Access = (props: IProps) => {
 
         if(currentPeriod) {
             const newTypeOfEmployment = {
-                value: currentPeriod.type_of_employment.id,
-                label: currentPeriod.type_of_employment.name
+                value: currentPeriod.type_of_employment?.id as number,
+                label: currentPeriod.type_of_employment?.name as string
             };
 
-            methods.setValue('date_from', currentPeriod.date_from);
-            methods.setValue('date_to', currentPeriod.date_to);
-            methods.setValue('price', currentPeriod.price);
+            methods.setValue('date_from', currentPeriod.date_from || '');
+            methods.setValue('date_to', currentPeriod.date_to || '');
+            methods.setValue('price', currentPeriod.price as number);
             methods.setValue('type_of_employment', newTypeOfEmployment);
         } else {
             const value = format(date, 'yyyy-MM-dd', { locale: ru });

@@ -16,7 +16,7 @@ import { dictionary } from 'adapter/api/dictionary';
 import style from './index.module.pcss';
 import { CvProjectRead } from 'adapter/types/cv/project/get/code-200';
 import { project } from 'adapter/api/project';
-import { organization } from 'adapter/api/organization';
+import { mainRequest } from 'adapter/api/main';
 import Error from 'component/error';
 
 export interface IResultForm extends Omit<CvProjectRead, 'competencies_select' | 'organization' | 'position'> {
@@ -41,7 +41,7 @@ interface IProjectForm {
     onSubmit?: () => void
 }
 
-const ProjectsForm = (props: IProjectForm) => {
+const CareerForm = (props: IProjectForm) => {
     const dispatch = useDispatch();
     const cn = useClassnames(style);
     const { t } = useTranslation();
@@ -49,7 +49,7 @@ const ProjectsForm = (props: IProjectForm) => {
     const methods = useForm(props.defaultValues);
     const [postProject, { isLoading: isPostLoading }] = project.usePostProjectMutation();
     const [patchProject, { isLoading: isPatchLoading }] = project.usePatchProjectByIdMutation();
-    const { data: dataOrganizationList } = organization.useGetOrganizationListQuery(undefined);
+    const { data: dataOrganizationList } = mainRequest.useGetMainOrganizationQuery(undefined);
 
     const [error, setError] = useState<Array<string> | string | null>(null);
 
@@ -188,4 +188,4 @@ const ProjectsForm = (props: IProjectForm) => {
     );
 };
 
-export default ProjectsForm;
+export default CareerForm;

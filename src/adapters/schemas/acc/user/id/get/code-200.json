@@ -38,12 +38,10 @@
                 },
                 "photo": {
                     "format": "uri",
+                    "nullable": true,
                     "readOnly": true,
                     "title": "Photo",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 }
             },
             "required": [

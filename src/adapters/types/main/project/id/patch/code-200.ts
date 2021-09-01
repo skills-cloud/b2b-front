@@ -7,7 +7,7 @@
 
 export type Code200 = Project;
 export type NoName = string;
-export type NoName1 = null | string;
+export type NoName1 = string;
 export type ID = number;
 export type NoName2 = string;
 export type NoName3 = string;
@@ -17,7 +17,7 @@ export interface Project {
     description?: NoName1;
     id?: ID;
     name: NoName2;
-    recruiters_ids?: (number | null)[];
-    resource_managers_ids?: (number | null)[];
+    recruiters_ids?: number[];
+    resource_managers_ids?: number[];
     updated_at?: NoName3;
 }

@@ -7,12 +7,11 @@ import Button from 'component/button';
 import Modal from 'component/modal';
 import IconArrowLeft from 'component/icons/arrow-left-full';
 
-import EducationList from 'route/person/education/list';
-import EducationForm from 'route/person/education/form';
-import RemoveModal from 'route/person/education/remove-modal';
+import { CvEducationRead } from 'adapter/types/cv/education/get/code-200';
 
-import { IResultEducation } from 'adapter/api/education';
-
+import EducationList from '../list';
+import EducationForm from '../form';
+import RemoveModal from '../remove-modal';
 import style from './index.module.pcss';
 
 enum ESteps {
@@ -23,7 +22,7 @@ enum ESteps {
 
 export interface IProps {
     className?: string | IStyle,
-    fields?: Array<IResultEducation>,
+    fields?: Array<CvEducationRead>,
     onCancel?(): void,
     onSubmit?(): void
 }
@@ -41,8 +40,8 @@ export const EducationEdit = (props: IProps) => {
                 .map((item) => ({
                     ...item,
                     education_place_select: {
-                        value: item.education_place.id,
-                        label: item.education_place.name
+                        value: item.education_place?.id,
+                        label: item.education_place?.name
                     },
                     education_speciality_select: {
                         value: item.education_speciality?.id,
@@ -55,7 +54,7 @@ export const EducationEdit = (props: IProps) => {
                     competencies_select: item.competencies?.map((competence) => ({
                         value: competence.id,
                         label: competence.name
-                    }))
+                    })) || []
                 }))[0]
         }
     } : undefined;
@@ -81,7 +80,7 @@ export const EducationEdit = (props: IProps) => {
                                         svg={{ className: cn('education__icon-back') }}
                                     />
                                 </button>
-                                {props.fields?.filter((field) => field.id === educationId)[0].education_place.name}
+                                {props.fields?.filter((field) => field.id === educationId)[0].education_place?.name}
                             </div>
                         )}
                     </Fragment>

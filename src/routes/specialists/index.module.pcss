@@ -64,4 +64,42 @@
         font-size: 18px;
         color: var(--color-sidebar-header);
     }
+
+    &__user-info {
+        display: grid;
+        grid-gap: 8px;
+        grid-template-columns: 1fr 160px;
+    }
+
+    &__user-info-avatar {
+        padding: 0;
+    }
+
+    &__user {
+        padding: 24px 0;
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--color-border);
+        }
+
+        &:first-child {
+            padding-top: 0;
+
+            &::after {
+                display: none;
+            }
+        }
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
 }

@@ -16,10 +16,11 @@ import IconDots from 'component/icons/dots';
 import IconArrowLeft from 'component/icons/arrow-left-full';
 
 import { dictionary, ICompetence } from 'adapter/api/dictionary';
-import { IResultPosition, position } from 'adapter/api/position';
+import { position } from 'adapter/api/position';
 
 import style from './index.module.pcss';
 import Error from 'component/error';
+import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
 
 export interface IField {
     role?: string
@@ -68,7 +69,7 @@ export const CompetenciesEdit = (props: IProps) => {
         control: methods.control,
         name   : 'competencies'
     });
-    const { data: positionData, refetch } = position.useGetPositionListQuery({ id }, { refetchOnMountOrArgChange: true });
+    const { data: positionData, refetch } = position.useGetPositionListQuery({ cv_id: parseInt(id, 10) }, { refetchOnMountOrArgChange: true });
     const { data } = dictionary.useGetCompetenceTreeQuery(undefined);
     const [patchPosition, { isLoading }] = position.usePatchPositionByIdMutation();
     const [postPosition, { isLoading: isLoadingPost }] = position.usePostPositionMutation();
@@ -77,7 +78,7 @@ export const CompetenciesEdit = (props: IProps) => {
     const [checked, setChecked] = useState<Array<string>>([]);
     const [expanded, setExpanded] = useState<Array<string>>([]);
     const [options, setOptions] = useState<Array<INodeCheckboxTree>>([]);
-    const [positionItem, setPositionItem] = useState<IResultPosition>();
+    const [positionItem, setPositionItem] = useState<CvPositionRead>();
     const [error, setError] = useState<Array<string> | string | null>(null);
 
     const reMap = (array: Array<ICompetence>) => {
@@ -131,8 +132,8 @@ export const CompetenciesEdit = (props: IProps) => {
         return [...new Set([...ids])];
     };
 
-    const onClickDots = (positionItemParam: IResultPosition) => () => {
-        const newChecked = positionItemParam.competencies.map((item) => String(item.id));
+    const onClickDots = (positionItemParam: CvPositionRead) => () => {
+        const newChecked = positionItemParam.competencies?.map((item) => String(item.id)) || [];
         const newOptions = options.reduce((acc, curr) => {
             if(curr.children) {
                 acc.push(...curr.children);
@@ -187,7 +188,7 @@ export const CompetenciesEdit = (props: IProps) => {
             return postPosition({
                 cv_id           : parseInt(id, 10),
                 position_id     : parseInt(formData.position_id?.value as string, 10),
-                competencies_ids: checked.map((item) => parseInt(item, 10))
+                competencies_ids: formData.competence_ids.map((item) => parseInt(item, 10))
             })
                 .unwrap()
                 .then(() => {
@@ -353,7 +354,7 @@ export const CompetenciesEdit = (props: IProps) => {
 
     const elCompetenciesCheckbox = () => {
         return (
-            <div className={cn('')}>
+            <div className={cn('competencies-edit__list')}>
                 <CheckboxTree
                     checked={checked}
                     expanded={expanded}
@@ -384,35 +385,50 @@ export const CompetenciesEdit = (props: IProps) => {
     };
 
     const elCompetencies = () => {
-        return (
-            <div className={cn('competencies-edit__info-list')}>
-                {positionData?.results?.map((pos) => {
-                    return (
-                        <div className={cn('competencies-edit__info-list-item')} key={pos.id}>
-                            <div className={cn('competencies-edit__info-list-top')}>
-                                <h5 className={cn('competencies-edit__info-list-role')}>{pos.position?.name || pos.title}</h5>
-                                <IconDots
-                                    svg={{
-                                        width    : 24,
-                                        height   : 24,
-                                        className: cn('competencies-edit__icon-dots'),
-                                        onClick  : onClickDots(pos)
-                                    }}
-                                />
-                            </div>
-                            <div className={cn('competencies-edit__list-item')}>
-                                <strong>{t('routes.person.blocks.competencies.skills')}</strong>
-                                <div className={cn('competencies-edit__skills')}>
-                                    {pos.competencies.map((comp) => (
-                                        <Tooltip key={comp.id} content={comp.name} theme="dark">
-                                            <span className={cn('competencies-edit__skills-tag')}>{comp.name}</span>
-                                        </Tooltip>
-                                    ))}
+        if(positionData?.results?.length) {
+            return (
+                <div className={cn('competencies-edit__info-list')}>
+                    {positionData.results.map((pos) => {
+                        return (
+                            <div
+                                className={cn('competencies-edit__info-list-item')}
+                                key={pos.id}
+                            >
+                                <div className={cn('competencies-edit__info-list-top')}>
+                                    <h5 className={cn('competencies-edit__info-list-role')}>{pos.position?.name || pos.title}</h5>
+                                    <IconDots
+                                        svg={{
+                                            width    : 24,
+                                            height   : 24,
+                                            className: cn('competencies-edit__icon-dots'),
+                                            onClick  : onClickDots(pos)
+                                        }}
+                                    />
+                                </div>
+                                <div className={cn('competencies-edit__list-item')}>
+                                    <strong>{t('routes.person.blocks.competencies.skills')}</strong>
+                                    <div className={cn('competencies-edit__skills')}>
+                                        {pos.competencies?.map((comp) => (
+                                            <Tooltip
+                                                key={comp.id}
+                                                content={comp.name}
+                                                theme="dark"
+                                            >
+                                                <span className={cn('competencies-edit__skills-tag')}>{comp.name}</span>
+                                            </Tooltip>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
+            );
+        }
+
+        return (
+            <div className={cn('competencies-edit__empty')}>
+                {t('routes.person.blocks.competencies.empty')}
             </div>
         );
     };

@@ -24,7 +24,7 @@ export type NoName4 = boolean;
 export type NoName5 = boolean;
 export type NoName6 = string;
 export type NoName7 = string;
-export type Photo = null | string;
+export type Photo = string;
 
 export interface WhoAmI {
     date_joined?: NoName;

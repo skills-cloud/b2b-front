@@ -6,7 +6,7 @@ import useClassnames from 'hook/use-classnames';
 import Button from 'component/button';
 import Modal from 'component/modal';
 
-import { education } from 'adapter/api/education';
+import { project } from 'adapter/api/project';
 
 import style from './index.module.pcss';
 
@@ -16,7 +16,7 @@ interface IRemoveModal {
 }
 
 const RemoveModal = ({ nextStepAfterDelete, projectId }: IRemoveModal) => {
-    const [deleteEducation] = education.useDeleteEducationByIdMutation();
+    const [deleteProject] = project.useDeleteProjectByIdMutation();
     const { t } = useTranslation();
     const cn = useClassnames(style);
 
@@ -25,7 +25,7 @@ const RemoveModal = ({ nextStepAfterDelete, projectId }: IRemoveModal) => {
             return;
         }
 
-        deleteEducation({ id: projectId })
+        deleteProject({ id: projectId })
             .unwrap()
             .then(nextStepAfterDelete)
             .catch((err) => {

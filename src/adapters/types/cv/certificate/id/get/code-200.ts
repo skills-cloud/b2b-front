@@ -6,58 +6,37 @@
  */
 
 export type Code200 = CvCertificateRead;
-export type NoName = null | string;
+export type NoName = string;
 export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
 export type ParentId = string;
 export type CvId = number;
-export type NoName3 = null | string;
-export type NoName4 = null | string;
-export type EducationGraduate = null | {
-    description?: NoName5;
-    id?: ID1;
-    is_verified?: NoName6;
-    name: NoName7;
-    [k: string]: unknown;
-};
-export type NoName5 = null | string;
+export type NoName3 = string;
+export type NoName4 = string;
+export type NoName5 = string;
 export type ID1 = number;
 export type NoName6 = boolean;
 export type NoName7 = string;
 export type EducationGraduateId = number;
-export type EducationPlace = null | {
-    description?: NoName8;
-    id?: ID2;
-    is_verified?: NoName9;
-    name: NoName10;
-    [k: string]: unknown;
-};
-export type NoName8 = null | string;
+export type NoName8 = string;
 export type ID2 = number;
 export type NoName9 = boolean;
 export type NoName10 = string;
 export type EducationPlaceId = number;
-export type EducationSpecialty = null | {
-    description?: NoName11;
-    id?: ID3;
-    is_verified?: NoName12;
-    name: NoName13;
-    [k: string]: unknown;
-};
-export type NoName11 = null | string;
+export type NoName11 = string;
 export type ID3 = number;
 export type NoName12 = boolean;
 export type NoName13 = string;
 export type EducationSpecialityId = number;
 export type ID4 = number;
 export type NoName14 = boolean;
-export type NoName15 = null | string;
-export type NoName16 = null | string;
+export type NoName15 = string;
+export type NoName16 = string;
 
 export interface CvCertificateRead {
     competencies?: CompetenceInline[];
-    competencies_ids?: (number | null)[];
+    competencies_ids?: number[];
     cv_id: CvId;
     date?: NoName3;
     description?: NoName4;
@@ -78,4 +57,22 @@ export interface CompetenceInline {
     is_verified?: NoName1;
     name: NoName2;
     parent_id?: ParentId;
+}
+export interface EducationGraduate {
+    description?: NoName5;
+    id?: ID1;
+    is_verified?: NoName6;
+    name: NoName7;
+}
+export interface EducationPlace {
+    description?: NoName8;
+    id?: ID2;
+    is_verified?: NoName9;
+    name: NoName10;
+}
+export interface EducationSpecialty {
+    description?: NoName11;
+    id?: ID3;
+    is_verified?: NoName12;
+    name: NoName13;
 }

@@ -8,11 +8,9 @@
         "CompetenceInline": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -51,10 +49,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ]
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -65,26 +61,20 @@
                 },
                 "date_from": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период с",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "date_to": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период по",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "education_graduate": {
                     "$ref": "#/definitions/EducationGraduate"
@@ -126,13 +116,12 @@
             "type": "object"
         },
         "EducationGraduate": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -153,19 +142,15 @@
             "required": [
                 "name"
             ],
-            "type": [
-                "null",
-                "object"
-            ]
+            "type": "object"
         },
         "EducationPlace": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -186,19 +171,15 @@
             "required": [
                 "name"
             ],
-            "type": [
-                "null",
-                "object"
-            ]
+            "type": "object"
         },
         "EducationSpecialty": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -219,10 +200,7 @@
             "required": [
                 "name"
             ],
-            "type": [
-                "null",
-                "object"
-            ]
+            "type": "object"
         }
     }
 }

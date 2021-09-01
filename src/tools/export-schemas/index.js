@@ -136,7 +136,13 @@ const normalize = (json) => {
                         type: "null"
                     }, item];
                 } else {
-                    json.type = ["null", json.type];
+                    json.nullable = true;
+                    // TODO разобраться с nullable
+                    // const item = { ...json };
+                    //
+                    // json.oneOf = [{
+                    //     type: "null"
+                    // }, item];
                 }
             } else if(key === 'format') {
                 if(json[key] === 'int32' || json[key] === 'float') {

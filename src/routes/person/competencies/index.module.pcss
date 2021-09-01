@@ -21,7 +21,7 @@
     &__info-list-item {
         display: grid;
         grid-row-gap: 16px;
-        padding: 32px 0;
+        padding-bottom: 16px;
         border-bottom: solid 1px var(--color-gray-2);
 
         &:first-of-type {
@@ -34,18 +34,10 @@
         }
     }
 
-    &__icon-apply {
-        fill: var(--color-light-green);
-
-        & > g {
-            fill: var(--color-dark-green);
-        }
-    }
-
-    /* Block common */
     &__skills {
         display: flex;
         flex-wrap: wrap;
+        gap: 8px;
     }
 
     &__skills-tag {
@@ -63,19 +55,6 @@
         font-weight: 400;
         position: relative;
         margin-right: 4px;
-    }
-
-    &__more-info {
-        font-family: Roboto, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 16px;
-        color: var(--color-shadow-2);
-        border-bottom: 1px dashed var(--color-shadow-2);
-        cursor: pointer;
-        width: fit-content;
-        margin: 16px auto 0;
     }
 
     &__control {
@@ -113,7 +92,7 @@
     &__list-item {
         display: grid;
         grid-auto-flow: column;
-        align-items: center;
+        align-items: baseline;
         grid-template-columns: 150px 1fr;
         font-family: Roboto, sans-serif;
         font-style: normal;
@@ -128,27 +107,12 @@
         }
     }
 
-    &__file-item {
-        display: grid;
-        grid-auto-flow: column;
-        grid-column-gap: 12px;
+    &__empty {
         font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;
         line-height: 16px;
         color: var(--color-black);
-        justify-content: flex-start;
-        align-items: center;
-        fill: var(--color-file-icon);
-
-        a {
-            color: inherit;
-            text-decoration-line: underline;
-            text-decoration-style: dashed;
-            text-underline-offset: 3px;
-        }
     }
-
-    /* End block common */
 }

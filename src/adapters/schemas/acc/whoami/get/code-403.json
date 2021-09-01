@@ -8,11 +8,9 @@
         "Status": {
             "properties": {
                 "details": {
+                    "nullable": true,
                     "title": "Details",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "status": {
                     "enum": [

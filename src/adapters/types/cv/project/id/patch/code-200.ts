@@ -7,18 +7,18 @@
 
 export type Code200 = CvProject;
 export type CvId = number;
-export type NoName = null | string;
-export type NoName1 = null | string;
-export type NoName2 = null | string;
+export type NoName = string;
+export type NoName1 = string;
+export type NoName2 = string;
 export type ID = number;
-export type IndustrySectorId = number | null;
+export type IndustrySectorId = number;
 export type NoName3 = boolean;
 export type NoName4 = string;
 export type OrganizationId = number;
 export type PositionId = number;
 
 export interface CvProject {
-    competencies_ids?: (number | null)[];
+    competencies_ids?: number[];
     cv_id: CvId;
     date_from?: NoName;
     date_to?: NoName1;

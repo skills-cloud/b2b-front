@@ -6,7 +6,7 @@
  */
 
 export type Code200 = CvContact;
-export type NoName = null | string;
+export type NoName = string;
 export type ContactTypeId = number;
 export type CvId = number;
 export type ID = number;

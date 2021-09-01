@@ -6,7 +6,7 @@
  */
 
 export type Code204 = Status;
-export type Details = null | string;
+export type Details = string;
 export type Status1 = 'error' | 'ok' | 'warning';
 
 export interface Status {

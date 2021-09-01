@@ -6,127 +6,84 @@
  */
 
 export type Code200 = CvList;
-export type NoName = null | string;
-export type NoName1 = null | string;
+export type NoName = string;
+export type NoName1 = string;
 export type ID = number;
 export type NoName2 = boolean;
 export type NoName3 = string;
 export type ParentId = string;
 export type CvId = number;
-export type NoName4 = null | string;
-export type NoName5 = null | string;
-export type NoName6 = null | string;
+export type NoName4 = string;
+export type NoName5 = string;
+export type NoName6 = string;
 export type CvCareerId = string;
 export type NoName7 = string;
 export type FileExt = string;
-export type NoName8 = null | string;
+export type NoName8 = string;
 export type FileSize = string;
 export type ID1 = number;
 export type ID2 = number;
 export type NoName9 = boolean;
-export type NoName10 = null | string;
+export type NoName10 = string;
 export type ID3 = number;
 export type NoName11 = string;
 export type OrganizationId = number;
-export type NoName12 = null | string;
+export type NoName12 = string;
 export type ID4 = number;
 export type NoName13 = boolean;
 export type NoName14 = string;
-export type PositionId = number | null;
+export type PositionId = number;
 export type NoName15 = string;
-export type NoName16 = null | string;
+export type NoName16 = string;
 export type ID5 = number;
 export type NoName17 = string;
 export type OrganizationId1 = number;
 export type NoName18 = string;
 export type CvId1 = number;
-export type NoName19 = null | string;
-export type NoName20 = null | string;
-export type EducationGraduate = null | {
-    description?: NoName21;
-    id?: ID6;
-    is_verified?: NoName22;
-    name: NoName23;
-    [k: string]: unknown;
-};
-export type NoName21 = null | string;
+export type NoName19 = string;
+export type NoName20 = string;
+export type NoName21 = string;
 export type ID6 = number;
 export type NoName22 = boolean;
 export type NoName23 = string;
 export type EducationGraduateId = number;
-export type EducationPlace = null | {
-    description?: NoName24;
-    id?: ID7;
-    is_verified?: NoName25;
-    name: NoName26;
-    [k: string]: unknown;
-};
-export type NoName24 = null | string;
+export type NoName24 = string;
 export type ID7 = number;
 export type NoName25 = boolean;
 export type NoName26 = string;
 export type EducationPlaceId = number;
-export type EducationSpecialty = null | {
-    description?: NoName27;
-    id?: ID8;
-    is_verified?: NoName28;
-    name: NoName29;
-    [k: string]: unknown;
-};
-export type NoName27 = null | string;
+export type NoName27 = string;
 export type ID8 = number;
 export type NoName28 = boolean;
 export type NoName29 = string;
 export type EducationSpecialityId = number;
 export type ID9 = number;
 export type NoName30 = boolean;
-export type NoName31 = null | string;
-export type NoName32 = null | string;
-export type Citizenship = null | {
-    description?: NoName33;
-    id?: ID10;
-    is_verified?: NoName34;
-    name: NoName35;
-    [k: string]: unknown;
-};
-export type NoName33 = null | string;
+export type NoName31 = string;
+export type NoName32 = string;
+export type NoName33 = string;
 export type ID10 = number;
 export type NoName34 = boolean;
 export type NoName35 = string;
-export type CitizenshipId = number | null;
-export type City = null | {
-    country: Country;
-    description?: NoName39;
-    id?: ID12;
-    is_verified?: NoName40;
-    name: NoName41;
-    [k: string]: unknown;
-};
-export type Country = null | {
-    description?: NoName36;
-    id?: ID11;
-    is_verified?: NoName37;
-    name: NoName38;
-    [k: string]: unknown;
-};
-export type NoName36 = null | string;
+export type CitizenshipId = number;
+export type NoName36 = string;
 export type ID11 = number;
 export type NoName37 = boolean;
 export type NoName38 = string;
-export type NoName39 = null | string;
+export type NoName39 = string;
 export type ID12 = number;
 export type NoName40 = boolean;
 export type NoName41 = string;
-export type CityId = number | null;
+export type CityId = number;
 export type ID13 = number;
 export type NoName42 = string;
 export type ParentId1 = string;
 export type CompetenceId = number;
 export type CvId2 = number;
 export type ID14 = number;
-export type Years = number | null;
-export type NoName43 = null | string;
-export type NoName44 = null | string;
+export type Years = number;
+export type NoName43 = string;
+export type NoName44 = string;
 export type ID15 = number;
 export type NoName45 = boolean;
 export type NoName46 = string;
@@ -135,12 +92,12 @@ export type CvId3 = number;
 export type ID16 = number;
 export type NoName47 = boolean;
 export type NoName48 = string;
-export type CountryId = number | null;
+export type CountryId = number;
 export type NoName49 = 'all' | 'weekends' | 'workdays';
 export type CvId4 = number;
-export type NoName50 = null | string;
-export type NoName51 = null | string;
-export type NoName52 = null | string;
+export type NoName50 = string;
+export type NoName51 = string;
+export type NoName52 = string;
 export type EducationGraduateId1 = number;
 export type EducationPlaceId1 = number;
 export type EducationSpecialityId1 = number;
@@ -149,17 +106,17 @@ export type NoName53 = boolean;
 export type CvId5 = string;
 export type NoName54 = string;
 export type FileExt1 = string;
-export type NoName55 = null | string;
+export type NoName55 = string;
 export type FileSize1 = string;
 export type ID18 = number;
-export type NoName56 = null | string;
+export type NoName56 = string;
 export type NoName57 = 'F' | 'M';
 export type ID19 = number;
 export type NoName58 = boolean;
-export type NoName59 = null | string;
-export type NoName60 = null | string;
-export type Photo = null | string;
-export type NoName61 = null | string;
+export type NoName59 = string;
+export type NoName60 = string;
+export type Photo = string;
+export type NoName61 = string;
 export type ID20 = number;
 export type NoName62 = boolean;
 export type NoName63 = string;
@@ -167,61 +124,47 @@ export type CvId6 = number;
 export type CvPositionId = string;
 export type NoName64 = string;
 export type FileExt2 = string;
-export type NoName65 = null | string;
+export type NoName65 = string;
 export type FileSize2 = string;
 export type ID21 = number;
 export type ID22 = number;
-export type PositionId1 = number | null;
-export type NoName66 = null | string;
+export type PositionId1 = number;
+export type NoName66 = string;
 export type CvId7 = number;
-export type NoName67 = null | string;
-export type NoName68 = null | string;
-export type NoName69 = null | string;
+export type NoName67 = string;
+export type NoName68 = string;
+export type NoName69 = string;
 export type ID23 = number;
-export type NoName70 = null | string;
+export type NoName70 = string;
 export type ID24 = number;
 export type NoName71 = boolean;
 export type NoName72 = string;
-export type IndustrySectorId = number | null;
+export type IndustrySectorId = number;
 export type NoName73 = boolean;
 export type NoName74 = string;
 export type OrganizationId2 = number;
 export type PositionId2 = number;
-export type CityId1 = number | null;
-export type CountryId1 = number | null;
+export type CityId1 = number;
+export type CountryId1 = number;
 export type CvId8 = number;
-export type NoName75 = null | string;
-export type NoName76 = null | string;
-export type NoName77 = null | string;
+export type NoName75 = string;
+export type NoName76 = string;
+export type NoName77 = string;
 export type ID25 = number;
 export type NoName78 = boolean;
-export type NoName79 = null | number;
-export type TypeOfEmployment = null | {
-    description?: NoName80;
-    id?: ID26;
-    is_verified?: NoName81;
-    name: NoName82;
-    [k: string]: unknown;
-};
-export type NoName80 = null | string;
+export type NoName79 = number;
+export type NoName80 = string;
 export type ID26 = number;
 export type NoName81 = boolean;
 export type NoName82 = string;
 export type TypeOfEmploymentId = number;
-export type NoName83 = null | string;
-export type NoName84 = null | string;
-export type UserInline = null | {
-    first_name: NoName85;
-    id?: ID27;
-    last_name: NoName86;
-    photo?: Photo1;
-    [k: string]: unknown;
-};
+export type NoName83 = string;
+export type NoName84 = string;
 export type NoName85 = string;
 export type ID27 = number;
 export type NoName86 = string;
-export type Photo1 = null | string;
-export type UserId = number | null;
+export type Photo1 = string;
+export type UserId = number;
 
 export interface CvList {
     birth_date?: NoName;
@@ -246,7 +189,7 @@ export interface CvList {
     middle_name?: NoName60;
     photo?: Photo;
     physical_limitations?: PhysicalLimitation[];
-    physical_limitations_ids?: (number | null)[];
+    physical_limitations_ids?: number[];
     positions?: CvPositionRead[];
     projects?: CvProjectRead[];
     time_slots?: CvTimeSlotRead[];
@@ -257,7 +200,7 @@ export interface CvList {
 }
 export interface CvCareerRead {
     competencies?: CompetenceInline[];
-    competencies_ids?: (number | null)[];
+    competencies_ids?: number[];
     cv_id: CvId;
     date_from?: NoName4;
     date_to?: NoName5;
@@ -270,7 +213,7 @@ export interface CvCareerRead {
     position?: Position;
     position_id?: PositionId;
     projects?: OrganizationProject[];
-    projects_ids?: (number | null)[];
+    projects_ids?: number[];
 }
 export interface CompetenceInline {
     description?: NoName1;
@@ -308,7 +251,7 @@ export interface OrganizationProject {
 }
 export interface CvCertificateRead {
     competencies?: CompetenceInline[];
-    competencies_ids?: (number | null)[];
+    competencies_ids?: number[];
     cv_id: CvId1;
     date?: NoName19;
     description?: NoName20;
@@ -322,6 +265,43 @@ export interface CvCertificateRead {
     is_verified?: NoName30;
     name?: NoName31;
     number?: NoName32;
+}
+export interface EducationGraduate {
+    description?: NoName21;
+    id?: ID6;
+    is_verified?: NoName22;
+    name: NoName23;
+}
+export interface EducationPlace {
+    description?: NoName24;
+    id?: ID7;
+    is_verified?: NoName25;
+    name: NoName26;
+}
+export interface EducationSpecialty {
+    description?: NoName27;
+    id?: ID8;
+    is_verified?: NoName28;
+    name: NoName29;
+}
+export interface Citizenship {
+    description?: NoName33;
+    id?: ID10;
+    is_verified?: NoName34;
+    name: NoName35;
+}
+export interface City {
+    country: Country;
+    description?: NoName39;
+    id?: ID12;
+    is_verified?: NoName40;
+    name: NoName41;
+}
+export interface Country {
+    description?: NoName36;
+    id?: ID11;
+    is_verified?: NoName37;
+    name: NoName38;
 }
 export interface CvCompetenceRead {
     competence?: Competence;
@@ -352,7 +332,7 @@ export interface ContactType {
 }
 export interface CvEducationRead {
     competencies?: CompetenceInline[];
-    competencies_ids?: (number | null)[];
+    competencies_ids?: number[];
     cv_id: CvId4;
     date_from?: NoName50;
     date_to?: NoName51;
@@ -382,7 +362,7 @@ export interface PhysicalLimitation {
 }
 export interface CvPositionRead {
     competencies?: CompetenceInline[];
-    competencies_ids?: (number | null)[];
+    competencies_ids?: number[];
     cv_id: CvId6;
     files?: CvPositionFileRead[];
     id?: ID22;
@@ -400,7 +380,7 @@ export interface CvPositionFileRead {
 }
 export interface CvProjectRead {
     competencies?: CompetenceInline[];
-    competencies_ids?: (number | null)[];
+    competencies_ids?: number[];
     cv_id: CvId7;
     date_from?: NoName67;
     date_to?: NoName68;
@@ -435,4 +415,16 @@ export interface CvTimeSlotRead {
     price?: NoName79;
     type_of_employment?: TypeOfEmployment;
     type_of_employment_id: TypeOfEmploymentId;
+}
+export interface TypeOfEmployment {
+    description?: NoName80;
+    id?: ID26;
+    is_verified?: NoName81;
+    name: NoName82;
+}
+export interface UserInline {
+    first_name: NoName85;
+    id?: ID27;
+    last_name: NoName86;
+    photo?: Photo1;
 }

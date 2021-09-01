@@ -6,28 +6,28 @@
  */
 
 export type Code200 = CvProjectRead;
-export type NoName = null | string;
+export type NoName = string;
 export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
 export type ParentId = string;
 export type CvId = number;
-export type NoName3 = null | string;
-export type NoName4 = null | string;
-export type NoName5 = null | string;
+export type NoName3 = string;
+export type NoName4 = string;
+export type NoName5 = string;
 export type ID1 = number;
-export type NoName6 = null | string;
+export type NoName6 = string;
 export type ID2 = number;
 export type NoName7 = boolean;
 export type NoName8 = string;
-export type IndustrySectorId = number | null;
+export type IndustrySectorId = number;
 export type NoName9 = boolean;
 export type NoName10 = string;
-export type NoName11 = null | string;
+export type NoName11 = string;
 export type ID3 = number;
 export type NoName12 = string;
 export type OrganizationId = number;
-export type NoName13 = null | string;
+export type NoName13 = string;
 export type ID4 = number;
 export type NoName14 = boolean;
 export type NoName15 = string;
@@ -35,7 +35,7 @@ export type PositionId = number;
 
 export interface CvProjectRead {
     competencies?: CompetenceInline[];
-    competencies_ids?: (number | null)[];
+    competencies_ids?: number[];
     cv_id: CvId;
     date_from?: NoName3;
     date_to?: NoName4;

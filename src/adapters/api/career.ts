@@ -22,8 +22,7 @@ export interface IGetCareerQuery {
 }
 
 export interface IPostCareerFileParams {
-    file: FormData,
-    file_name?: string,
+    data: FormData,
     id: string
 }
 
@@ -79,25 +78,21 @@ export const career = createApi({
         uploadCareerFileById: build.mutation<CvCareerFileRead, IPostCareerFileParams>({
             invalidatesTags: ['career'],
             query          : (body) => {
-                const { id, ...rest } = body;
+                const { id, data } = body;
 
                 return {
                     url   : `career/${id}/upload-file/`,
                     method: 'POST',
-                    body  : rest
+                    body  : data
                 };
             }
         }),
         deleteCareerFileById: build.mutation<undefined, { id: number, file_id: string }>({
             invalidatesTags: ['career'],
-            query          : (body) => {
-                const { id, file_id } = body;
-
-                return {
-                    url   : `career/${id}/delete-file/${file_id}/`,
-                    method: 'DELETE'
-                };
-            }
+            query          : (body) => ({
+                url   : `career/${body.id}/delete-file/${body.file_id}/`,
+                method: 'DELETE'
+            })
         })
     })
 });

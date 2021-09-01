@@ -14,11 +14,9 @@
                     "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -33,20 +31,16 @@
                 },
                 "recruiters_ids": {
                     "items": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ]
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "resource_managers_ids": {
                     "items": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ]
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true

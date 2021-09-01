@@ -1,0 +1,49 @@
+.input-file {
+    display: grid;
+    grid-gap: 16px;
+
+    &__label {
+
+        @media (hover: hover) and (pointer: fine) {
+            cursor: pointer;
+        }
+    }
+
+    &__field {
+        display: none;
+    }
+
+    &__list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        grid-row-gap: 12px;
+    }
+
+    &__list-item {
+        display: grid;
+        grid-template-columns: 24px 1fr 24px;
+        align-items: center;
+        grid-column-gap: 12px;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-black);
+        justify-content: flex-start;
+        fill: var(--color-file-icon);
+    }
+
+    &__link-append {
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-blue-primary);
+        text-decoration-style: dashed;
+        text-underline-offset: 2px;
+    }
+}

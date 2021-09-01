@@ -5,17 +5,18 @@ import { useParams } from 'react-router';
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import Button from 'component/button';
 import Modal from 'component/modal';
-
-import { IResultCertificate, certificate } from 'adapter/api/certificate';
-
-import style from './index.module.pcss';
 import { IconDelete } from 'component/icons/delete';
 import IconPencil from 'component/icons/pencil';
 import EditForm from 'route/person/certificates/edit/form';
 
+import { certificate } from 'adapter/api/certificate';
+import { CvCertificateRead } from 'adapter/types/cv/certificate/get/code-200';
+
+import style from './index.module.pcss';
+
 export interface IProps {
     className?: string | IStyle,
-    fields?: Array<IResultCertificate>,
+    fields?: Array<CvCertificateRead>,
     onCancel?(): void,
     onSubmit?(): void
 }
@@ -25,24 +26,24 @@ export const CertificatesEdit = (props: IProps) => {
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
 
-    const [itemToRemove, setItemToRemove] = useState<IResultCertificate | null>(null);
-    const [itemToEdit, setItemToEdit] = useState<IResultCertificate | Record<string, unknown> | null>(null);
+    const [itemToRemove, setItemToRemove] = useState<CvCertificateRead | null>(null);
+    const [itemToEdit, setItemToEdit] = useState<CvCertificateRead | null>(null);
 
     const { data, refetch } = certificate.useGetCertificateListQuery({ cv_id: id });
     const [deleteCertificate] = certificate.useDeleteCertificateByIdMutation();
 
-    const onClickDelete = (result: IResultCertificate) => () => {
+    const onClickDelete = (result: CvCertificateRead) => () => {
         setItemToRemove(result);
     };
 
-    const onClickEdit = (result: IResultCertificate) => () => {
+    const onClickEdit = (result: CvCertificateRead) => () => {
         setItemToEdit(result);
     };
 
     const onClickAppend = (e: MouseEvent) => {
         e.preventDefault();
 
-        setItemToEdit({});
+        setItemToEdit(null);
     };
 
     const onCancelEditDelete = () => {
@@ -121,8 +122,8 @@ export const CertificatesEdit = (props: IProps) => {
                     {data?.results.map((result) => (
                         <div key={result.id} className={cn('certificate-edit__item')}>
                             <div className={cn('certificate-edit__item-description')}>
-                                <h5 className={cn('certificate-edit__item-description-title')}>{result.education_place?.name}</h5>
-                                <p className={cn('certificate-edit__item-description-text')}>{result.education_speciality?.name}</p>
+                                <h5 className={cn('certificate-edit__item-description-title')}>{result.name}</h5>
+                                <p className={cn('certificate-edit__item-description-text')}>{result.education_place?.name}</p>
                             </div>
                             <div className={cn('certificate-edit__item-controls')}>
                                 <IconDelete svg={{ className: cn('certificate-edit__item-control'), onClick: onClickDelete(result) }} />

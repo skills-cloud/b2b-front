@@ -1,4 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { CvCertificate as IResponsePostCertificate } from 'adapter/types/cv/certificate/post/code-201';
+import { CvCertificate as IResponsePatchCertificate } from 'adapter/types/cv/certificate/id/patch/code-200';
+import { CvCertificateRead } from 'adapter/types/cv/certificate/get/code-200';
 
 export interface IQueryParamsGetCertificateList {
     ordering?: Array<string>,
@@ -8,61 +11,13 @@ export interface IQueryParamsGetCertificateList {
     cv_id: string
 }
 
-export interface IEducationItem {
-    id?: number,
-    name: string,
-    sorting?: number,
-    description?: string
-}
-
-export interface ICompetence {
-    id: number,
-    name: string
-}
-
-export interface IResultCertificate {
-    id?: number,
-    cv_id: number,
-    date?: string,
-    description?: string,
-    is_verified?: boolean,
-    education_place_id: number,
-    education_speciality_id: number,
-    education_graduate_id: number,
-    competencies_ids?: Array<number>,
-    competencies?: Array<ICompetence>,
-    education_place?: IEducationItem,
-    education_speciality?: IEducationItem,
-    education_graduate?: IEducationItem
-}
-
-export interface IQueryParamsPostCertificate {
-    id?: number,
-    cv_id: number,
-    date?: string,
-    name?: string,
-    number?: string,
-    description?: string,
-    is_verified?: boolean,
-    education_place_id: number,
-    education_speciality_id: number,
-    education_graduate_id: number,
-    competencies_ids?: Array<number>
-}
-
-export interface IResponsePostCertificate extends IQueryParamsPostCertificate {
-    id?: number
-}
-
-export interface IQueryParamsPatchCertificateById extends IQueryParamsPostCertificate {
-    id: number
-}
+export type TDataPostCertificate = Omit<IResponsePostCertificate, 'id'>;
 
 export interface IResponseGetCertificateList {
     count: number,
     next: string,
     previous: string,
-    results: Array<IResultCertificate>
+    results: Array<CvCertificateRead>
 }
 
 export const certificate = createApi({
@@ -80,7 +35,7 @@ export const certificate = createApi({
                 params
             })
         }),
-        postCertificate: build.mutation<IResponsePostCertificate, IQueryParamsPostCertificate>({
+        postCertificate: build.mutation<IResponsePostCertificate, TDataPostCertificate>({
             invalidatesTags: ['certificate'],
             query          : (body) => ({
                 url   : 'certificate/',
@@ -88,7 +43,7 @@ export const certificate = createApi({
                 body
             })
         }),
-        patchCertificateById: build.mutation<IResponsePostCertificate, IQueryParamsPatchCertificateById>({
+        patchCertificateById: build.mutation<IResponsePatchCertificate, IResponsePatchCertificate>({
             invalidatesTags: ['certificate'],
             query          : (body) => {
                 const { id, ...rest } = body;
@@ -102,15 +57,10 @@ export const certificate = createApi({
         }),
         deleteCertificateById: build.mutation<undefined, { id: number }>({
             invalidatesTags: ['certificate'],
-            query          : (body) => {
-                const { id, ...rest } = body;
-
-                return {
-                    url   : `certificate/${id}/`,
-                    method: 'DELETE',
-                    body  : rest
-                };
-            }
+            query          : (body) => ({
+                url   : `certificate/${body.id}/`,
+                method: 'DELETE'
+            })
         })
     })
 });

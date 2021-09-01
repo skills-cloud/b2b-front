@@ -25,11 +25,9 @@
                 },
                 "file_name": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Название файла",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "file_size": {
                     "readOnly": true,

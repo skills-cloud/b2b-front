@@ -6,7 +6,7 @@
  */
 
 export type Code200 = CvPositionRead;
-export type NoName = null | string;
+export type NoName = string;
 export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
@@ -15,20 +15,20 @@ export type CvId = number;
 export type CvPositionId = string;
 export type NoName3 = string;
 export type FileExt = string;
-export type NoName4 = null | string;
+export type NoName4 = string;
 export type FileSize = string;
 export type ID1 = number;
 export type ID2 = number;
-export type NoName5 = null | string;
+export type NoName5 = string;
 export type ID3 = number;
 export type NoName6 = boolean;
 export type NoName7 = string;
-export type PositionId = number | null;
-export type NoName8 = null | string;
+export type PositionId = number;
+export type NoName8 = string;
 
 export interface CvPositionRead {
     competencies?: CompetenceInline[];
-    competencies_ids?: (number | null)[];
+    competencies_ids?: number[];
     cv_id: CvId;
     files?: CvPositionFileRead[];
     id?: ID2;

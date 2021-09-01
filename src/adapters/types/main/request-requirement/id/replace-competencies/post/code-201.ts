@@ -7,7 +7,7 @@
 
 export type Code201 = RequestRequirementCompetence;
 export type CompetenceId = number;
-export type NoName = (1 | 100 | 3 | 5) | null;
+export type NoName = 1 | 100 | 3 | 5;
 export type ID = number;
 export type RequestRequirementId = string;
 export type NoName1 = number;

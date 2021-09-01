@@ -7,7 +7,7 @@
 
 export type Code201 = CvSetPhoto;
 export type ID = number;
-export type Photo = null | string;
+export type Photo = string;
 
 export interface CvSetPhoto {
     id?: ID;

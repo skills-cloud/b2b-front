@@ -63,7 +63,7 @@ export const mainRequest = createApi({
                 params
             })
         }),
-        getMainOrganization: build.query<IResponseGetOrganization, IQueryParams>({
+        getMainOrganization: build.query<IResponseGetOrganization, IQueryParams | undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization/',

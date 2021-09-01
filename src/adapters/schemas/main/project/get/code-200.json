@@ -14,11 +14,9 @@
                     "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -40,10 +38,8 @@
                 },
                 "recruiters_ids": {
                     "items": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ]
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -57,10 +53,8 @@
                 },
                 "resource_managers_ids": {
                     "items": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ]
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -78,6 +72,7 @@
             "type": "object"
         },
         "UserInline": {
+            "nullable": true,
             "properties": {
                 "first_name": {
                     "maxLength": 150,
@@ -98,22 +93,17 @@
                 },
                 "photo": {
                     "format": "uri",
+                    "nullable": true,
                     "readOnly": true,
                     "title": "Photo",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 }
             },
             "required": [
                 "first_name",
                 "last_name"
             ],
-            "type": [
-                "null",
-                "object"
-            ]
+            "type": "object"
         }
     }
 }

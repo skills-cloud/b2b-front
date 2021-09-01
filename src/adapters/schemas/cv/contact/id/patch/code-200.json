@@ -9,11 +9,9 @@
             "properties": {
                 "comment": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Комментарий",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "type": "string"
                 },
                 "contact_type_id": {
                     "title": "Contact type id",

@@ -11,16 +11,17 @@ import FormInput from 'component/form/input';
 import Button from 'component/button';
 import InputSelect from 'component/form/select';
 import { useDispatch } from 'component/core/store';
+import FormInputSkills from 'component/form/input-skills';
 
-import { certificate, IResultCertificate } from 'adapter/api/certificate';
+import { certificate } from 'adapter/api/certificate';
 import { dictionary } from 'adapter/api/dictionary';
+import { CvCertificateRead } from 'adapter/types/cv/certificate/get/code-200';
 
 import style from './form.module.pcss';
 
 export interface IProps {
     className?: string | IStyle,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    field?: IResultCertificate | Record<string, any>,
+    field?: CvCertificateRead,
     onCancel?(): void,
     onSubmit?(): void
 }
@@ -39,7 +40,11 @@ const EditForm = (props: IProps) => {
         defaultValues: {
             certificate: {
                 ...props.field,
-                id                  : props.field?.id,
+                id          : props.field?.id,
+                competencies: props.field?.competencies?.map((item) => ({
+                    value: item.id,
+                    label: item.name
+                })),
                 education_speciality: {
                     value: props.field?.education_speciality?.id,
                     label: props.field?.education_speciality?.name
@@ -126,9 +131,10 @@ const EditForm = (props: IProps) => {
                     ...formData.certificate,
                     cv_id                  : parseInt(id, 10),
                     id                     : formData.certificate.id,
-                    education_graduate_id  : formData.certificate.education_graduate.value,
-                    education_speciality_id: formData.certificate.education_speciality.value,
-                    education_place_id     : formData.certificate.education_place.value
+                    education_graduate_id  : formData.certificate.education_graduate.value as number,
+                    education_speciality_id: formData.certificate.education_speciality.value as number,
+                    education_place_id     : formData.certificate.education_place.value as number,
+                    competencies_ids       : formData.certificate.competencies?.map((item) => item.value as number)
                 })
                     .unwrap()
                     .then(() => {
@@ -141,9 +147,10 @@ const EditForm = (props: IProps) => {
                 postCertificate({
                     ...formData.certificate,
                     cv_id                  : parseInt(id, 10),
-                    education_graduate_id  : formData.certificate.education_graduate.value,
-                    education_speciality_id: formData.certificate.education_speciality.value,
-                    education_place_id     : formData.certificate.education_place.value
+                    education_graduate_id  : formData.certificate.education_graduate.value as number,
+                    education_speciality_id: formData.certificate.education_speciality.value as number,
+                    education_place_id     : formData.certificate.education_place.value as number,
+                    competencies_ids       : formData.certificate.competencies?.map((item) => item.value as number)
                 })
                     .unwrap()
                     .then(() => {
@@ -170,6 +177,10 @@ const EditForm = (props: IProps) => {
                 <FormProvider {...methods}>
                     <div className={cn('edit-form__career')}>
                         <div className={cn('edit-form__field')}>
+                            <strong>{t('routes.person.certificates.fields.name')}</strong>
+                            <FormInput name="certificate.name" type="text" />
+                        </div>
+                        <div className={cn('edit-form__field')}>
                             <strong>{t('routes.person.certificates.fields.date')}</strong>
                             <FormDate name="certificate.date" />
                         </div>
@@ -195,6 +206,17 @@ const EditForm = (props: IProps) => {
                                 name="certificate.education_speciality"
                                 loadOptions={onLoadSpecialityOptions}
                                 placeholder="Начните вводить специальность"
+                            />
+                        </div>
+                        <div className={cn('edit-form__field')}>
+                            <strong>{t('routes.person.certificates.fields.number')}</strong>
+                            <FormInput name="certificate.number" type="text" />
+                        </div>
+                        <div className={cn('edit-form__field')}>
+                            <strong>{t('routes.person.certificates.fields.competencies')}</strong>
+                            <FormInputSkills
+                                name="certificate.competencies"
+                                placeholder={t('routes.person.certificates.fields.competencies')}
                             />
                         </div>
                         <div className={cn('edit-form__field')}>
