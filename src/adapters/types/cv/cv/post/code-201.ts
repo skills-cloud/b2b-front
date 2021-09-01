@@ -27,9 +27,9 @@ export interface CvDetailWrite {
     citizenship_id?: CitizenshipId;
     city_id?: CityId;
     country_id?: CountryId;
-    days_to_contact?: NoName1;
+    days_to_contact?: null | NoName1;
     first_name?: NoName2;
-    gender?: NoName3;
+    gender?: null | NoName3;
     id?: ID;
     is_resource_owner?: NoName4;
     last_name?: NoName5;

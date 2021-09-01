@@ -1,4 +1,4 @@
-import React, { useMemo, Fragment } from 'react';
+import React, { useMemo, Fragment, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
 import { IStyle, useClassnames } from 'hook/use-classnames';
@@ -9,8 +9,9 @@ import style from './index.module.pcss';
 export interface IProps {
     className?: IStyle | string,
     titleTo?: string,
-    title?: string,
+    title?: ReactNode,
     subTitle?: string,
+    titleTarget?: '_blank' | '_self',
     avatar: {
         src?: string,
         to?: string,
@@ -27,11 +28,30 @@ const UserAvatar = (props: IProps) => {
         }
     }, [props.subTitle]);
 
+    const elTitle = useMemo(() => {
+        if(props.title) {
+            const attrs = {
+                className: cn('mini-info__title'),
+                children : props.title
+            };
+
+            if(props.titleTo) {
+                return <Link {...attrs} to={props.titleTo} target={props.titleTarget || undefined} />;
+            }
+
+            if(typeof props.title !== 'string') {
+                return <div {...attrs} />;
+            }
+
+            return <strong {...attrs} />;
+        }
+    }, [props.title, props.titleTo, props.titleTarget]);
+
     const elContent = useMemo(() => {
         return (
             <Fragment>
-                <Avatar {...props.avatar} to={props.titleTo ? undefined : props.avatar.to} />
-                {props.title}
+                <Avatar {...props.avatar} to={props.avatar.to || props.titleTo} />
+                {elTitle}
                 {elSubTitle}
             </Fragment>
         );
@@ -39,9 +59,9 @@ const UserAvatar = (props: IProps) => {
 
     if(props.titleTo) {
         return (
-            <Link to={props.titleTo} className={cn('user-avatar')}>
+            <div className={cn('user-avatar')}>
                 {elContent}
-            </Link>
+            </div>
         );
     }
 

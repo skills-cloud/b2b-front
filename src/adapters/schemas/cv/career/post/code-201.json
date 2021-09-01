@@ -9,8 +9,8 @@
             "properties": {
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -21,20 +21,20 @@
                 },
                 "date_from": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "date_to": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -50,14 +50,14 @@
                     "type": "integer"
                 },
                 "position_id": {
+                    "nullable": true,
                     "title": "Position id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "projects_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true

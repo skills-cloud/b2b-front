@@ -9,8 +9,8 @@
             "properties": {
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -25,15 +25,15 @@
                     "type": "integer"
                 },
                 "position_id": {
+                    "nullable": true,
                     "title": "Position id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "title": {
                     "maxLength": 2000,
+                    "nullable": true,
                     "title": "Произвольное название",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             },
             "required": [

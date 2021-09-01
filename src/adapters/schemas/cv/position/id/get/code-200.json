@@ -8,9 +8,9 @@
         "CompetenceInline": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -58,9 +58,9 @@
                 },
                 "file_name": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Название файла",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "file_size": {
                     "readOnly": true,
@@ -86,8 +86,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -112,15 +112,15 @@
                     "$ref": "#/definitions/Position"
                 },
                 "position_id": {
+                    "nullable": true,
                     "title": "Position id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "title": {
                     "maxLength": 2000,
+                    "nullable": true,
                     "title": "Произвольное название",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             },
             "required": [
@@ -131,9 +131,9 @@
         "Position": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,

@@ -63,10 +63,10 @@
                 },
                 "photo": {
                     "format": "uri",
+                    "nullable": true,
                     "readOnly": true,
                     "title": "Photo",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             },
             "required": [

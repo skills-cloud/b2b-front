@@ -6,14 +6,15 @@
     ],
     "definitions": {
         "City": {
+            "nullable": true,
             "properties": {
                 "country": {
                     "$ref": "#/definitions/Country"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -35,15 +36,15 @@
                 "country",
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "Country": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -64,8 +65,7 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "CvTimeSlotRead": {
             "properties": {
@@ -73,17 +73,17 @@
                     "$ref": "#/definitions/City"
                 },
                 "city_id": {
+                    "nullable": true,
                     "title": "City id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "country": {
                     "$ref": "#/definitions/Country"
                 },
                 "country_id": {
+                    "nullable": true,
                     "title": "Country id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "cv_id": {
                     "title": "Cv id",
@@ -91,20 +91,20 @@
                 },
                 "date_from": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "date_to": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -116,9 +116,9 @@
                     "type": "boolean"
                 },
                 "price": {
+                    "nullable": true,
                     "title": "Ставка",
-                    "type": "number",
-                    "x-nullable": true
+                    "type": "number"
                 },
                 "type_of_employment": {
                     "$ref": "#/definitions/TypeOfEmployment"
@@ -135,11 +135,12 @@
             "type": "object"
         },
         "TypeOfEmployment": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -160,8 +161,7 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         }
     }
 }

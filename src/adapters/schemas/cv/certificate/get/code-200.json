@@ -8,9 +8,9 @@
         "CompetenceInline": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -49,8 +49,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -61,14 +61,14 @@
                 },
                 "date": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Выдан",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "education_graduate": {
                     "$ref": "#/definitions/EducationGraduate"
@@ -102,15 +102,15 @@
                 },
                 "name": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Наименование",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "number": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Номер",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             },
             "required": [
@@ -122,11 +122,12 @@
             "type": "object"
         },
         "EducationGraduate": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -147,15 +148,15 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "EducationPlace": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -176,15 +177,15 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "EducationSpecialty": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -205,8 +206,7 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         }
     }
 }

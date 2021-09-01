@@ -8,9 +8,9 @@
         "ContactType": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -37,9 +37,9 @@
             "properties": {
                 "comment": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Комментарий",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "contact_type": {
                     "$ref": "#/definitions/ContactType"

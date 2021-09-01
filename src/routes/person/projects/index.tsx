@@ -4,9 +4,10 @@ import { useParams } from 'react-router';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconPencil from 'component/icons/pencil';
-import IconApply from 'component/icons/apply';
 
 import { project } from 'adapter/api/project';
+
+import VerifyIcon from 'component/verify-icon';
 
 import ProjectsEdit from './edit';
 import style from './index.module.pcss';
@@ -77,13 +78,7 @@ export const Projects = (props: IProps) => {
                         <div key={index} className={cn('projects__education')}>
                             <strong className={cn('projects__education-title')}>
                                 {field.name}
-                                <IconApply
-                                    svg={{
-                                        width    : 24,
-                                        height   : 24,
-                                        className: cn('projects__icon-apply')
-                                    }}
-                                />
+                                <VerifyIcon isVerify={field.is_verified} />
                             </strong>
                             <ul className={cn('projects__list')}>
                                 <li className={cn('projects__list-item')}>

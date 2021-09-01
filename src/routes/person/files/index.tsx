@@ -1,24 +1,21 @@
 import React, { useCallback, useState, ChangeEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
+
 import IconPlus from 'component/icons/plus';
 import IconPencil from 'component/icons/pencil';
 import IconFilePdf from 'component/icons/file-pdf';
 import IconFileDocument from 'component/icons/file-document';
 import IconFileImage from 'component/icons/file-image';
-import style from './index.module.pcss';
-import { useParams } from 'react-router';
-import { cv } from 'adapter/api/cv';
 import Modal from 'component/modal';
-import { IconDelete } from 'component/icons/delete';
+import IconDelete from 'component/icons/delete';
 import Button from 'component/button';
 
-export interface IFile {
-    name: string,
-    type?: string,
-    url?: string
-}
+import { cv } from 'adapter/api/cv';
+
+import style from './index.module.pcss';
 
 export interface IProps {
     className?: string | IStyle,
@@ -30,7 +27,7 @@ export const Files = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
 
-    const { data } = cv.useGetCvByIdQuery({ id }, { refetchOnMountOrArgChange: true });
+    const { data } = cv.useGetCvByIdQuery({ id });
     const [uploadFile, { isLoading }] = cv.useUploadCvFileByIdMutation();
     const [deleteFile, { isLoading: isLoadingDelete }] = cv.useDeleteCvFileByIdMutation();
 
@@ -57,6 +54,10 @@ export const Files = (props: IProps) => {
         switch (type) {
             case 'image/png':
             case 'image/jpg':
+            case 'image/jpeg':
+            case 'jpg':
+            case 'png':
+            case 'jpeg':
                 return <IconFileImage />;
 
             case 'application/pdf':
@@ -92,15 +93,17 @@ export const Files = (props: IProps) => {
         setIsEdit(false);
     };
 
-    const onClickDelete = (fileId: number) => () => {
-        deleteFile({
-            id,
-            file_id: String(fileId)
-        })
-            .unwrap()
-            .catch((err) => {
-                console.error(err);
-            });
+    const onClickDelete = (fileId?: number) => () => {
+        if(fileId) {
+            deleteFile({
+                id,
+                file_id: String(fileId)
+            })
+                .unwrap()
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
     };
 
     const elFooter = useMemo(() => {

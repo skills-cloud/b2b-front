@@ -9,8 +9,8 @@
             "properties": {
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -21,20 +21,20 @@
                 },
                 "date_from": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "date_to": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -42,9 +42,9 @@
                     "type": "integer"
                 },
                 "industry_sector_id": {
+                    "nullable": true,
                     "title": "Industry sector id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "is_verified": {
                     "title": "Подтверждено",

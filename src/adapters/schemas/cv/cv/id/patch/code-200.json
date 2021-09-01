@@ -9,49 +9,61 @@
             "properties": {
                 "birth_date": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Дата рождения",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "citizenship_id": {
+                    "nullable": true,
                     "title": "Citizenship id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "city_id": {
+                    "nullable": true,
                     "title": "City id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "country_id": {
+                    "nullable": true,
                     "title": "Country id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "days_to_contact": {
-                    "enum": [
-                        "all",
-                        "weekends",
-                        "workdays"
-                    ],
-                    "title": "Дни для связи",
-                    "type": "string",
-                    "x-nullable": true
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "all",
+                                "weekends",
+                                "workdays"
+                            ],
+                            "title": "Дни для связи",
+                            "type": "string"
+                        }
+                    ]
                 },
                 "first_name": {
                     "maxLength": 500,
+                    "nullable": true,
                     "title": "Имя",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "gender": {
-                    "enum": [
-                        "F",
-                        "M"
-                    ],
-                    "title": "Пол",
-                    "type": "string",
-                    "x-nullable": true
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "F",
+                                "M"
+                            ],
+                            "title": "Пол",
+                            "type": "string"
+                        }
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -64,45 +76,45 @@
                 },
                 "last_name": {
                     "maxLength": 500,
+                    "nullable": true,
                     "title": "Фамилия",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "middle_name": {
                     "maxLength": 500,
+                    "nullable": true,
                     "title": "Отчество",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "photo": {
                     "format": "uri",
+                    "nullable": true,
                     "readOnly": true,
                     "title": "Photo",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "physical_limitations_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "time_to_contact_from": {
+                    "nullable": true,
                     "title": "Время для связи / с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "time_to_contact_to": {
+                    "nullable": true,
                     "title": "Время для связи / по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "user_id": {
+                    "nullable": true,
                     "title": "User id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 }
             },
             "type": "object"

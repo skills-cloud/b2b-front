@@ -178,11 +178,11 @@ export interface CvDetailRead {
     contacts?: CvContactRead[];
     country?: Country;
     country_id?: CountryId;
-    days_to_contact?: NoName49;
+    days_to_contact?: null | NoName49;
     education?: CvEducationRead[];
     files?: CvFileRead[];
     first_name?: NoName56;
-    gender?: NoName57;
+    gender?: null | NoName57;
     id?: ID19;
     is_resource_owner?: NoName58;
     last_name?: NoName59;

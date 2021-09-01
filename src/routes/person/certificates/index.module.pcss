@@ -58,7 +58,7 @@
     &__list-item {
         display: grid;
         grid-auto-flow: column;
-        align-items: center;
+        align-items: baseline;
         grid-template-columns: 150px 1fr;
         font-family: Roboto, sans-serif;
         font-style: normal;
@@ -117,6 +117,7 @@
     &__tags {
         display: flex;
         gap: 8px;
+        flex-wrap: wrap;
     }
 
     &__tag {
@@ -152,5 +153,9 @@
         font-size: 14px;
         line-height: 16px;
         color: var(--color-black);
+    }
+
+    &__certificate-title-icon {
+        margin-left: auto;
     }
 }

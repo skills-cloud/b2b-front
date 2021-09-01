@@ -13,6 +13,7 @@ import Loader from 'component/loader';
 import { cv } from 'adapter/api/cv';
 
 import style from './index.module.pcss';
+import { CvCareerRead } from 'adapter/types/cv/cv/get/code-200';
 
 export const Specialists = () => {
     const cn = useClassnames(style);
@@ -24,11 +25,19 @@ export const Specialists = () => {
         }
     });
     const search = context.watch('search');
-    const { data, isLoading } = cv.useGetCvListQuery({
-        search
-    }, {
-        refetchOnMountOrArgChange: true
-    });
+    const { data, isLoading } = cv.useGetCvListQuery({ search });
+
+    const elAdditionalBlock = (cvItem?: CvCareerRead) => {
+        if(cvItem) {
+            const experience = '';
+
+            return (
+                <div className={cn('specialists__user-info-exp')}>
+                    {experience}
+                </div>
+            );
+        }
+    };
 
     const elUsers = useMemo(() => {
         if(isLoading) {
@@ -38,20 +47,35 @@ export const Specialists = () => {
         if(data?.results?.length) {
             return (
                 <div className={cn('specialists__users')}>
-                    {data.results.map((cvItem, index) => {
+                    {data.results.map((cvItem) => {
                         const firstName = cvItem.first_name || t('routes.specialists.main.first-name');
                         const lastName = cvItem.last_name || t('routes.specialists.main.last-name');
                         const title = `${firstName} ${lastName}`.trim();
 
                         return (
-                            <UserAvatar
-                                key={index}
-                                title={title}
-                                titleTo={`/specialists/${cvItem.id}`}
-                                avatar={{
-                                    src: cvItem.photo
-                                }}
-                            />
+                            <div key={cvItem.id} className={cn('specialists__user')}>
+                                <div className={cn('specialists__user-info')}>
+                                    <UserAvatar
+                                        className={cn('specialists__user-info-avatar')}
+                                        title={title}
+                                        titleTo={`/specialists/${cvItem.id}`}
+                                        avatar={{
+                                            src: cvItem.photo
+                                        }}
+                                    />
+                                    {elAdditionalBlock(cvItem.career?.[0])}
+                                </div>
+                                <div className={cn('specialists__user-competencies')}>
+                                    <p className={cn('specialists__block-title')}>
+                                        {t('')}
+                                    </p>
+                                </div>
+                                <div className={cn('specialists__user-rate')}>
+                                    <p className={cn('specialists__block-title')}>
+                                        {t('')}
+                                    </p>
+                                </div>
+                            </div>
                         );
                     })}
                 </div>

@@ -6,14 +6,15 @@
     ],
     "definitions": {
         "City": {
+            "nullable": true,
             "properties": {
                 "country": {
                     "$ref": "#/definitions/Country"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -35,15 +36,15 @@
                 "country",
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "Country": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -64,8 +65,7 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         }
     }
 }

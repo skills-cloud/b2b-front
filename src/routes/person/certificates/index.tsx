@@ -69,8 +69,8 @@ export const Certificates = (props: IProps) => {
                     {data.results.map((result) => (
                         <div key={result.id} className={cn('certificates__certificate')}>
                             <strong className={cn('certificates__certificate-title')}>
-                                {result.description}
-                                <VerifyIcon isVerify={result.is_verified} />
+                                {result.name}
+                                <VerifyIcon isVerify={result.is_verified} className={cn('certificates__certificate-title-icon')} />
                             </strong>
                             <ul className={cn('certificates__list')}>
                                 {elDates(result.date)}
@@ -79,12 +79,16 @@ export const Certificates = (props: IProps) => {
                                     <span>{result.education_speciality?.name}</span>
                                 </li>
                                 <li className={cn('certificates__list-item')}>
+                                    <strong>{t('routes.person.certificates.label.place')}</strong>
+                                    <span>{result.education_place?.name}</span>
+                                </li>
+                                <li className={cn('certificates__list-item')}>
                                     <strong>{t('routes.person.certificates.label.power')}</strong>
                                     <span>{result.education_graduate?.name}</span>
                                 </li>
                                 <li className={cn('certificates__list-item')}>
                                     <strong>{t('routes.person.certificates.label.number')}</strong>
-                                    <span>№1312312313</span>
+                                    <span>{result.number}</span>
                                 </li>
                                 <li className={cn('certificates__list-item')}>
                                     <strong>{t('routes.person.certificates.label.competencies')}</strong>

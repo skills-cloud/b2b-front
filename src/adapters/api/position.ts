@@ -1,36 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-export interface IFile {
-    id: number,
-    file: string,
-    file_name: string,
-    cv_career_id: string,
-    file_ext: string,
-    file_size: string
-}
-
-export interface IPosition {
-    id: number,
-    name: string,
-    description: string,
-    sorting: number
-}
-
-export interface ICompetence {
-    id: number,
-    name: string
-}
-
-export interface IResultPosition {
-    title?: string,
-    id: number,
-    cv_id: number,
-    position_id: number,
-    competencies_ids: Array<number>,
-    position: IPosition,
-    files: Array<IFile>,
-    competencies: Array<ICompetence>
-}
+import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
+import { CvPosition as IResponsePostPosition } from 'adapter/types/cv/position/post/code-201';
+import { CvPosition as IResponsePatchPosition } from 'adapter/types/cv/position/id/patch/code-200';
+import { CvPositionFileRead } from 'adapter/types/cv/position/id/upload-file/post/code-201';
 
 export interface IResponseGetPositionList {
     total: number,
@@ -39,17 +11,23 @@ export interface IResponseGetPositionList {
     page_number: number,
     page_next: number,
     page_previous: number,
-    results: Array<IResultPosition>
+    results: Array<CvPositionRead>
 }
 
-export interface ISetPositionData {
-    cv_id: number,
-    position_id: number,
-    competencies_ids?: Array<number>
+export interface IGetPositionListFilters {
+    cv_id?: number,
+    position_id?: Array<number>,
+    ordering?: string,
+    search?: string,
+    page?: number,
+    page_size?: number
 }
 
-export interface ISetPositionRequestData extends ISetPositionData {
-    id: number
+export type TDataPostPosition = Omit<IResponsePostPosition, 'id'>;
+
+export interface IPostPositionFileParams {
+    data: FormData,
+    id: string
 }
 
 export const position = createApi({
@@ -59,7 +37,7 @@ export const position = createApi({
         baseUrl: '/api/cv'
     }),
     endpoints: (build) => ({
-        getPositionList: build.query<IResponseGetPositionList, { id: string } | undefined>({
+        getPositionList: build.query<IResponseGetPositionList, IGetPositionListFilters | undefined>({
             providesTags: ['position'],
             query       : (params) => ({
                 url   : 'position/',
@@ -74,7 +52,7 @@ export const position = createApi({
                 method: 'GET'
             })
         }),
-        patchPositionById: build.mutation<ISetPositionData, ISetPositionRequestData>({
+        patchPositionById: build.mutation<IResponsePatchPosition, IResponsePatchPosition>({
             query: (body) => {
                 const { id, ...rest } = body;
 
@@ -85,11 +63,31 @@ export const position = createApi({
                 };
             }
         }),
-        postPosition: build.mutation<ISetPositionData, ISetPositionData>({
+        postPosition: build.mutation<IResponsePostPosition, TDataPostPosition>({
             query: (body) => ({
                 url   : 'position/',
                 method: 'POST',
                 body
+            })
+        }),
+        postUploadFileToPosition: build.mutation<CvPositionFileRead, IPostPositionFileParams>({
+            query: (body) => ({
+                url   : 'position/',
+                method: 'POST',
+                body
+            })
+        }),
+        deletePositionFileById: build.mutation<undefined, { id: number, file_id: string }>({
+            invalidatesTags: ['position'],
+            query          : (body) => ({
+                url   : `position/${body.id}/delete-file/${body.file_id}/`,
+                method: 'DELETE'
+            })
+        }),
+        deletePosition: build.mutation<undefined, { id: number }>({
+            query: (body) => ({
+                url   : `position/${body.id}`,
+                method: 'DELETE'
             })
         })
     })

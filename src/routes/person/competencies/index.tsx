@@ -5,9 +5,9 @@ import { useParams } from 'react-router';
 import useClassnames from 'hook/use-classnames';
 
 import IconPencil from 'component/icons/pencil';
-import IconApply from 'component/icons/apply';
 import Tooltip from 'component/tooltip';
 import Loader from 'component/loader';
+import VerifyIcon from 'component/verify-icon';
 
 import { position } from 'adapter/api/position';
 
@@ -24,7 +24,7 @@ const Competencies = (props: IProps) => {
     const { t } = useTranslation();
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
-    const { data, isLoading } = position.useGetPositionListQuery({ id }, { refetchOnMountOrArgChange: true });
+    const { data, isLoading } = position.useGetPositionListQuery({ cv_id: parseInt(id, 10) });
 
     const onClose = () => {
         setIsEdit(false);
@@ -41,38 +41,47 @@ const Competencies = (props: IProps) => {
             return <Loader />;
         }
 
-        return (
-            <div className={cn('competencies__info-list')}>
-                {data?.results?.map((pos) => {
-                    if(pos.position || pos.title) {
-                        return (
-                            <div className={cn('competencies__info-list-item')} key={pos.id}>
-                                <div className={cn('competencies__info-list-top')}>
-                                    <h5 className={cn('competencies__info-list-role')}>{pos.position?.name || pos.title}</h5>
-                                    <IconApply
-                                        svg={{
-                                            width    : 24,
-                                            height   : 24,
-                                            className: cn('competencies__icon-apply')
-                                        }}
-                                    />
-                                </div>
-                                <div className={cn('competencies__list-item')}>
-                                    <strong>{t('routes.person.blocks.competencies.skills')}</strong>
-                                    <div className={cn('competencies__skills')}>
-                                        {pos.competencies.map((comp) => (
-                                            <Tooltip key={comp.id} content={comp.name} theme="dark">
-                                                <span className={cn('competencies__skills-tag')}>{comp.name}</span>
-                                            </Tooltip>
-                                        ))}
+        if(data?.results?.length) {
+            return (
+                <div className={cn('competencies__info-list')}>
+                    {data.results.map((pos) => {
+                        if(pos.position || pos.title) {
+                            return (
+                                <div
+                                    className={cn('competencies__info-list-item')}
+                                    key={pos.id}
+                                >
+                                    <div className={cn('competencies__info-list-top')}>
+                                        <h5 className={cn('competencies__info-list-role')}>{pos.position?.name || pos.title}</h5>
+                                        <VerifyIcon isVerify={pos.competencies?.every((comp) => comp.is_verified)} />
+                                    </div>
+                                    <div className={cn('competencies__list-item')}>
+                                        <strong>{t('routes.person.blocks.competencies.skills')}</strong>
+                                        <div className={cn('competencies__skills')}>
+                                            {pos.competencies?.map((comp) => (
+                                                <Tooltip
+                                                    key={comp.id}
+                                                    content={comp.name}
+                                                    theme="dark"
+                                                >
+                                                    <span className={cn('competencies__skills-tag')}>{comp.name}</span>
+                                                </Tooltip>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        );
-                    }
+                            );
+                        }
 
-                    return null;
-                })}
+                        return null;
+                    })}
+                </div>
+            );
+        }
+
+        return (
+            <div className={cn('competencies__empty')}>
+                {t('routes.person.blocks.competencies.empty')}
             </div>
         );
     };

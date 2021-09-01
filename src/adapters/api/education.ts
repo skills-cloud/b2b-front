@@ -1,53 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-export interface IEducationPlace {
-    id: number,
-    name: string,
-    sorting: number,
-    description: string
-}
-
-export interface IEducationSpecialty {
-    id: number,
-    name: string,
-    sorting: number,
-    description: string
-}
-
-export interface IEducationGraduate {
-    id: number,
-    name: string,
-    sorting: number,
-    description: string
-}
-
-interface IEducationCompetencies {
-    id: number,
-    name: string
-}
-
-export interface IResultEducation {
-    id: number,
-    cv_id: number,
-    date_from: string,
-    date_to: string,
-    description: string,
-    is_verified: boolean,
-    education_place_id: number,
-    education_speciality_id: number,
-    education_graduate_id: number,
-    competencies_ids: Array<number>,
-    education_place: IEducationPlace,
-    education_speciality: IEducationSpecialty,
-    education_graduate: IEducationGraduate,
-    competencies: Array<IEducationCompetencies>
-}
+import { CvEducationRead } from 'adapter/types/cv/education/get/code-200';
+import { CvEducation as IResponsePostEducation } from 'adapter/types/cv/education/post/code-201';
+import { CvEducation as IResponsePatchEducation } from 'adapter/types/cv/education/id/patch/code-200';
 
 export interface IResponseGetEducation {
     count: number,
     next: string,
     previous: string,
-    results: Array<IResultEducation>
+    results: Array<CvEducationRead>
 }
 
 export interface IGetEducationQuery {
@@ -61,18 +21,7 @@ export interface IGetEducationQuery {
     date_range_to?: string
 }
 
-export interface IPostEducation {
-    id?: number,
-    cv_id: number,
-    date_from: string,
-    date_to: string,
-    description: string,
-    is_verified: boolean,
-    education_place_id: number,
-    education_speciality_id: number,
-    education_graduate_id: number,
-    competencies_ids: Array<number>
-}
+export type TDataPostEducation = Omit<IResponsePostEducation, 'id'>;
 
 export const education = createApi({
     reducerPath: 'api/education',
@@ -89,7 +38,7 @@ export const education = createApi({
                 params
             })
         }),
-        postEducation: build.mutation<IPostEducation, IPostEducation>({
+        postEducation: build.mutation<IResponsePostEducation, TDataPostEducation>({
             invalidatesTags: ['education'],
             query          : (body) => ({
                 url   : 'education/',
@@ -97,7 +46,8 @@ export const education = createApi({
                 body
             })
         }),
-        patchEducation: build.mutation<IPostEducation, IPostEducation>({ invalidatesTags: ['education'],
+        patchEducation: build.mutation<IResponsePatchEducation, IResponsePatchEducation>({
+            invalidatesTags: ['education'],
             query          : (body) => {
                 const { id, ...rest } = body;
 
@@ -106,7 +56,8 @@ export const education = createApi({
                     method: 'PATCH',
                     body  : rest
                 };
-            } }),
+            }
+        }),
         deleteEducationById: build.mutation<undefined, { id: number }>({
             invalidatesTags: ['education'],
             query          : (body) => {

@@ -6,10 +6,10 @@ import { education } from 'adapter/api/education';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconPencil from 'component/icons/pencil';
-import IconApply from 'component/icons/apply';
 import Header, { H3 } from 'component/header';
-import ModalEdit from './edit';
+import VerifyIcon from 'component/verify-icon';
 
+import ModalEdit from './edit';
 import style from './index.module.pcss';
 
 export interface IProps {
@@ -57,15 +57,7 @@ export const Education = (props: IProps) => {
                             <Fragment key={result.id}>
                                 <div className={cn('education__education-title')}>
                                     <H3 contrast={true}>{education_place?.name}</H3>
-                                    {is_verified && (
-                                        <IconApply
-                                            svg={{
-                                                width    : 24,
-                                                height   : 24,
-                                                className: cn('education__icon-apply')
-                                            }}
-                                        />
-                                    )}
+                                    <VerifyIcon isVerify={is_verified} />
                                 </div>
                                 <ul className={cn('education__list')}>
                                     <li className={cn('education__list-item')}>
@@ -87,12 +79,12 @@ export const Education = (props: IProps) => {
                                         {/* TODO нет поля в ответе от бека, хак для демо*/}
                                         <span>{`№123456789-${id}`}</span>
                                     </li>
-                                    {competencies.length > 0 && (
+                                    {competencies && competencies.length > 0 && (
                                         <li className={cn('education__list-item')}>
                                             <strong>{t('routes.person.education.label.competencies')}</strong>
 
                                             <div className={cn('education__tags')}>
-                                                {competencies.map((competence) => (
+                                                {competencies?.map((competence) => (
                                                     <span className={cn('education__tag')} key={competence.id}>
                                                         {competence.name}
                                                     </span>

@@ -17,7 +17,10 @@
             }
         },
         "form": {
-            "submit": "Submit"
+            "submit": "Submit",
+            "input-file": {
+                "add": "Добавить файл"
+            }
         }
     },
     "routes": {
@@ -95,6 +98,7 @@
                 },
                 "competencies": {
                     "title": "Компетенции",
+                    "empty": "Нет связанных компетенций",
                     "role": "Роль",
                     "skills": "Навыки",
                     "files": "Файлы",
@@ -128,10 +132,13 @@
                     "empty": "Даты не указаны"
                 },
                 "fields": {
+                    "number": "Номер сертификата",
+                    "name": "Название",
                     "grade": "Степень",
                     "date": "Дата выдачи",
                     "place": "Место обучения",
                     "speciality": "Специальность",
+                    "competencies": "Компетенции",
                     "description": "Описание",
                     "files": "Файлы",
                     "projects": "Проекты"
@@ -139,6 +146,7 @@
                 "label": {
                     "issued": "Выдан",
                     "specialty": "Специальность",
+                    "place": "Место обучения",
                     "power": "Степень",
                     "number": "Номер",
                     "competencies": "Компетенции",
@@ -202,20 +210,26 @@
                     "cancel": "Отмена"
                 },
                 "fields": {
-                    "company": "Компания",
+                    "organization": "Компания",
                     "date": "Период",
-                    "role": "Роль",
-                    "skills": "Компетенции",
+                    "position": "Позиция",
+                    "competencies": "Компетенции",
                     "description": "Описание",
-                    "files": "Файлы",
-                    "projects": "Проекты"
+                    "files": "Связанные файлы",
+                    "projects": "Связанные проекты",
+                    "placeholder": {
+                        "position": "Начните вводить название позиции",
+                        "competencies": "Начните вводить название компетенции",
+                        "organization": "Выберите организацию"
+                    }
                 },
                 "empty": "Опыт работы не указан",
                 "edit": {
                     "buttons": {
                         "append": "Добавить опыт работы",
                         "cancel": "Отмена",
-                        "save": "Сохранить"
+                        "save": "Сохранить",
+                        "done": "Готово"
                     }
                 }
             },
@@ -414,7 +428,7 @@
                     "point-content_country": "{{country}}",
                     "point-content_city": "{{city}}",
                     "point-content_empty": "Адрес не\u00A0указан",
-                    "address": "Адрес", 
+                    "address": "Адрес",
                     "type-of-employment": "Формат работы"
                 },
                 "price": {

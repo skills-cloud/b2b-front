@@ -11,10 +11,12 @@ import FormInputSkills from 'component/form/input-skills';
 import InputSelect from 'component/form/select';
 
 import { useDispatch } from 'component/core/store';
-import { IResultEducation, education, IPostEducation } from 'adapter/api/education';
+import { education } from 'adapter/api/education';
 import { dictionary } from 'adapter/api/dictionary';
+import { CvEducationRead } from 'adapter/types/cv/education/get/code-200';
 
 import style from './index.module.pcss';
+import { CvEducation } from 'adapter/types/cv/education/post/code-201';
 
 type TCustomFields =
     | 'education_place_select'
@@ -22,27 +24,27 @@ type TCustomFields =
     | 'education_graduate_select'
     | 'competencies_select';
 
-export interface IResultForm extends Omit<IResultEducation, TCustomFields> {
+export interface IResultForm extends Omit<CvEducationRead, TCustomFields> {
     education_place_select: {
-        value: number,
-        label: string
+        value?: number,
+        label?: string
     },
     education_speciality_select: {
-        value: number,
-        label: string
+        value?: number,
+        label?: string
     },
     education_graduate_select: {
-        value: number,
-        label: string
+        value?: number,
+        label?: string
     },
     competencies_select: Array<{
-        value: number,
+        value?: number,
         label: string
     }>
 }
 
 interface IEducationForm {
-    fields?: Array<IResultEducation>,
+    fields?: Array<CvEducationRead>,
     defaultValues: { defaultValues: { education: IResultForm } } | undefined,
     onSubmit?: () => void
 }
@@ -65,13 +67,13 @@ const EducationForm = (props: IEducationForm) => {
             competencies_select,
             ...inputs
         } = educationForm;
-        const data: IPostEducation = {
+        const data: CvEducation = {
             ...inputs,
             cv_id                  : parseInt(id, 10),
-            education_place_id     : education_place_select.value,
-            education_speciality_id: education_speciality_select.value,
-            education_graduate_id  : education_graduate_select.value,
-            competencies_ids       : competencies_select?.map(({ value }) => value) || []
+            education_place_id     : education_place_select.value as number,
+            education_speciality_id: education_speciality_select.value as number,
+            education_graduate_id  : education_graduate_select.value as number,
+            competencies_ids       : competencies_select?.map(({ value }) => value as number) || []
         };
         const request = educationForm.id ? patchEducation(data) : postEducation(data);
 

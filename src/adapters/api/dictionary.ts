@@ -43,13 +43,6 @@ export interface IGetPositionListQuery {
     results: Array<IBasicResultInterface>
 }
 
-export const getCompetence = (config?: AxiosRequestConfig) => {
-    return request<ICompetenceRequest>({
-        url: '/api/dictionary/competence/',
-        ...config
-    });
-};
-
 export const getCitizenship = (config?: AxiosRequestConfig) => {
     return request<IDictionary>({
         url: '/api/dictionary/citizenship/',

@@ -6,11 +6,12 @@
     ],
     "definitions": {
         "Citizenship": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -31,18 +32,18 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "City": {
+            "nullable": true,
             "properties": {
                 "country": {
                     "$ref": "#/definitions/Country"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -64,8 +65,7 @@
                 "country",
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "Competence": {
             "properties": {
@@ -94,9 +94,9 @@
         "CompetenceInline": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -127,9 +127,9 @@
         "ContactType": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -153,11 +153,12 @@
             "type": "object"
         },
         "Country": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -178,8 +179,7 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "CvCareerFileRead": {
             "properties": {
@@ -201,9 +201,9 @@
                 },
                 "file_name": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Название файла",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "file_size": {
                     "readOnly": true,
@@ -229,8 +229,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -241,20 +241,20 @@
                 },
                 "date_from": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "date_to": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "files": {
                     "items": {
@@ -283,9 +283,9 @@
                     "$ref": "#/definitions/Position"
                 },
                 "position_id": {
+                    "nullable": true,
                     "title": "Position id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "projects": {
                     "items": {
@@ -296,8 +296,8 @@
                 },
                 "projects_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -320,8 +320,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -332,14 +332,14 @@
                 },
                 "date": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Выдан",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "education_graduate": {
                     "$ref": "#/definitions/EducationGraduate"
@@ -373,15 +373,15 @@
                 },
                 "name": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Наименование",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "number": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Номер",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             },
             "required": [
@@ -411,9 +411,9 @@
                     "type": "integer"
                 },
                 "years": {
+                    "nullable": true,
                     "title": "Years",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 }
             },
             "required": [
@@ -426,9 +426,9 @@
             "properties": {
                 "comment": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Комментарий",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "contact_type": {
                     "$ref": "#/definitions/ContactType"
@@ -468,9 +468,9 @@
             "properties": {
                 "birth_date": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Дата рождения",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "career": {
                     "items": {
@@ -490,17 +490,17 @@
                     "$ref": "#/definitions/Citizenship"
                 },
                 "citizenship_id": {
+                    "nullable": true,
                     "title": "Citizenship id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "city": {
                     "$ref": "#/definitions/City"
                 },
                 "city_id": {
+                    "nullable": true,
                     "title": "City id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "competencies": {
                     "items": {
@@ -520,19 +520,25 @@
                     "$ref": "#/definitions/Country"
                 },
                 "country_id": {
+                    "nullable": true,
                     "title": "Country id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "days_to_contact": {
-                    "enum": [
-                        "all",
-                        "weekends",
-                        "workdays"
-                    ],
-                    "title": "Дни для связи",
-                    "type": "string",
-                    "x-nullable": true
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "all",
+                                "weekends",
+                                "workdays"
+                            ],
+                            "title": "Дни для связи",
+                            "type": "string"
+                        }
+                    ]
                 },
                 "education": {
                     "items": {
@@ -550,18 +556,24 @@
                 },
                 "first_name": {
                     "maxLength": 500,
+                    "nullable": true,
                     "title": "Имя",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "gender": {
-                    "enum": [
-                        "F",
-                        "M"
-                    ],
-                    "title": "Пол",
-                    "type": "string",
-                    "x-nullable": true
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "F",
+                                "M"
+                            ],
+                            "title": "Пол",
+                            "type": "string"
+                        }
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -574,22 +586,22 @@
                 },
                 "last_name": {
                     "maxLength": 500,
+                    "nullable": true,
                     "title": "Фамилия",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "middle_name": {
                     "maxLength": 500,
+                    "nullable": true,
                     "title": "Отчество",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "photo": {
                     "format": "uri",
+                    "nullable": true,
                     "readOnly": true,
                     "title": "Photo",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "physical_limitations": {
                     "items": {
@@ -600,8 +612,8 @@
                 },
                 "physical_limitations_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -628,22 +640,22 @@
                     "type": "array"
                 },
                 "time_to_contact_from": {
+                    "nullable": true,
                     "title": "Время для связи / с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "time_to_contact_to": {
+                    "nullable": true,
                     "title": "Время для связи / по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "user": {
                     "$ref": "#/definitions/UserInline"
                 },
                 "user_id": {
+                    "nullable": true,
                     "title": "User id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 }
             },
             "type": "object"
@@ -659,8 +671,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -671,20 +683,20 @@
                 },
                 "date_from": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "date_to": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "education_graduate": {
                     "$ref": "#/definitions/EducationGraduate"
@@ -745,9 +757,9 @@
                 },
                 "file_name": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Название файла",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "file_size": {
                     "readOnly": true,
@@ -782,9 +794,9 @@
                 },
                 "file_name": {
                     "maxLength": 1000,
+                    "nullable": true,
                     "title": "Название файла",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "file_size": {
                     "readOnly": true,
@@ -810,8 +822,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -836,15 +848,15 @@
                     "$ref": "#/definitions/Position"
                 },
                 "position_id": {
+                    "nullable": true,
                     "title": "Position id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "title": {
                     "maxLength": 2000,
+                    "nullable": true,
                     "title": "Произвольное название",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             },
             "required": [
@@ -863,8 +875,8 @@
                 },
                 "competencies_ids": {
                     "items": {
-                        "type": "integer",
-                        "x-nullable": true
+                        "nullable": true,
+                        "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -875,20 +887,20 @@
                 },
                 "date_from": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "date_to": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -899,9 +911,9 @@
                     "$ref": "#/definitions/IndustrySector"
                 },
                 "industry_sector_id": {
+                    "nullable": true,
                     "title": "Industry sector id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "is_verified": {
                     "title": "Подтверждено",
@@ -942,17 +954,17 @@
                     "$ref": "#/definitions/City"
                 },
                 "city_id": {
+                    "nullable": true,
                     "title": "City id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "country": {
                     "$ref": "#/definitions/Country"
                 },
                 "country_id": {
+                    "nullable": true,
                     "title": "Country id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "cv_id": {
                     "title": "Cv id",
@@ -960,20 +972,20 @@
                 },
                 "date_from": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "date_to": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -985,9 +997,9 @@
                     "type": "boolean"
                 },
                 "price": {
+                    "nullable": true,
                     "title": "Ставка",
-                    "type": "number",
-                    "x-nullable": true
+                    "type": "number"
                 },
                 "type_of_employment": {
                     "$ref": "#/definitions/TypeOfEmployment"
@@ -1004,11 +1016,12 @@
             "type": "object"
         },
         "EducationGraduate": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -1029,15 +1042,15 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "EducationPlace": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -1058,15 +1071,15 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "EducationSpecialty": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -1087,15 +1100,14 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "IndustrySector": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -1121,9 +1133,9 @@
         "Organization": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -1151,9 +1163,9 @@
                     "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -1186,9 +1198,9 @@
         "PhysicalLimitation": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -1214,9 +1226,9 @@
         "Position": {
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -1240,11 +1252,12 @@
             "type": "object"
         },
         "TypeOfEmployment": {
+            "nullable": true,
             "properties": {
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -1265,10 +1278,10 @@
             "required": [
                 "name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         },
         "UserInline": {
+            "nullable": true,
             "properties": {
                 "first_name": {
                     "maxLength": 150,
@@ -1289,18 +1302,17 @@
                 },
                 "photo": {
                     "format": "uri",
+                    "nullable": true,
                     "readOnly": true,
                     "title": "Photo",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 }
             },
             "required": [
                 "first_name",
                 "last_name"
             ],
-            "type": "object",
-            "x-nullable": true
+            "type": "object"
         }
     }
 }

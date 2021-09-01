@@ -8,14 +8,14 @@
         "CvTimeSlot": {
             "properties": {
                 "city_id": {
+                    "nullable": true,
                     "title": "City id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "country_id": {
+                    "nullable": true,
                     "title": "Country id",
-                    "type": "integer",
-                    "x-nullable": true
+                    "type": "integer"
                 },
                 "cv_id": {
                     "title": "Cv id",
@@ -23,20 +23,20 @@
                 },
                 "date_from": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период с",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "date_to": {
                     "format": "date",
+                    "nullable": true,
                     "title": "Период по",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "description": {
+                    "nullable": true,
                     "title": "Описание",
-                    "type": "string",
-                    "x-nullable": true
+                    "type": "string"
                 },
                 "id": {
                     "readOnly": true,
@@ -48,9 +48,9 @@
                     "type": "boolean"
                 },
                 "price": {
+                    "nullable": true,
                     "title": "Ставка",
-                    "type": "number",
-                    "x-nullable": true
+                    "type": "number"
                 },
                 "type_of_employment_id": {
                     "title": "Type of employment id",

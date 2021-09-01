@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
 import { useHistory } from 'react-router';
 
-import { ICv, cv } from 'adapter/api/cv';
+import { cv } from 'adapter/api/cv';
 import { contact } from 'adapter/api/contact';
 import { useCancelTokens } from 'hook/cancel-token';
 import useClassnames from 'hook/use-classnames';
@@ -13,7 +13,10 @@ import DateInput from 'component/form/date';
 import Button from 'component/button';
 import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
+
 import { getCitizenship, getCity, getContactsType, getCountries } from 'adapter/api/dictionary';
+import { CvCareerId } from 'adapter/types/cv/career/id/get/code-200';
+import { NoName3 as IGenderType } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
 
@@ -22,11 +25,14 @@ export interface IBasicType {
     value: string
 }
 
-export interface ICvForm extends Omit<ICv, 'gender' | 'country' | 'city' | 'citizenship'> {
+export interface ICvForm extends Omit<CvCareerId, 'gender' | 'country' | 'city' | 'citizenship'> {
     country: IBasicType,
     city: IBasicType,
     citizenship: IBasicType,
-    gender: IBasicType,
+    gender: {
+        label: string,
+        value: IGenderType
+    },
     common: Array<{
         contact_type: {
             value: string,
@@ -152,7 +158,7 @@ export const SpecialistsCreate = () => {
                         Promise.all(newContacts.map((newContact) => {
                             const dataRequest = {
                                 ...newContact,
-                                cv_id: resp.id
+                                cv_id: resp.id as number
                             };
 
                             return postContact(dataRequest).unwrap();
@@ -188,6 +194,7 @@ export const SpecialistsCreate = () => {
 
                         return (
                             <UserAvatar
+                                className={cn('specialists-create__user')}
                                 key={index}
                                 title={name}
                                 titleTo={`/specialists/${user.id}`}
