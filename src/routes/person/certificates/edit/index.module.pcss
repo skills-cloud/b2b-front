@@ -63,12 +63,14 @@
         fill: var(--color-white);
 
         @media (hover: hover) and (pointer: fine) {
-            cursor: pointer;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
     }
 
     &__link-append {
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;
@@ -83,7 +85,6 @@
         grid-auto-flow: column;
         grid-template-columns: 102px 1fr;
         grid-column-gap: 16px;
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-size: 14px;
         color: var(--color-sidebar-header);

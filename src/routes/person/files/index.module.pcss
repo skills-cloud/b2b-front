@@ -38,7 +38,10 @@
         background-color: var(--color-bg-button);
 
         @media (hover: hover) and (pointer: fine) {
-            cursor: pointer;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
 
         &_disable {
@@ -64,7 +67,6 @@
         grid-auto-flow: column;
         align-items: center;
         grid-column-gap: 12px;
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;
@@ -119,7 +121,6 @@
     }
 
     &__empty {
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;

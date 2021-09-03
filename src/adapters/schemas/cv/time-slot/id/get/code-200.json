@@ -135,7 +135,6 @@
             "type": "object"
         },
         "TypeOfEmployment": {
-            "nullable": true,
             "properties": {
                 "description": {
                     "nullable": true,

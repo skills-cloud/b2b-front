@@ -1,101 +1,77 @@
-import { AxiosRequestConfig } from 'axios';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { request } from '../request';
 import { ContactType } from 'adapter/types/dictionary/contact-type/get/code-200';
 import { IndustrySector } from 'adapter/types/dictionary/industry-sector/get/code-200';
+import { Country } from 'adapter/types/dictionary/country/get/code-200';
+import { Country as CountryById } from 'adapter/types/dictionary/country/id/get/code-200';
+import { City } from 'adapter/types/dictionary/city/get/code-200';
+import { City as CityById } from 'adapter/types/dictionary/city/id/get/code-200';
+import { TypeOfEmployment } from 'adapter/types/dictionary/type-of-employment/get/code-200';
+import { EducationGraduate } from 'adapter/types/dictionary/education-graduate/get/code-200';
+import { EducationPlace } from 'adapter/types/dictionary/education-place/get/code-200';
+import { EducationSpecialty } from 'adapter/types/dictionary/education-specialty/get/code-200';
+import { Position } from 'adapter/types/dictionary/position/get/code-200';
+import { Competence } from 'adapter/types/dictionary/competence/get/code-200';
+import { Competence as CompetenceById } from 'adapter/types/dictionary/competence/id/get/code-200';
+import { Citizenship } from 'adapter/types/dictionary/citizenship/get/code-200';
+import { CompetenceTree } from 'adapter/types/dictionary/competence-tree/get/code-200';
 
-export interface ICompetence {
-    id: string,
-    name: string,
-    children?: Array<ICompetence>
+export interface IResponseGetCityList {
+    count: number,
+    next?: string,
+    previous?: string,
+    results: Array<City>
 }
 
-export interface IDictionaryItem {
-    id: number,
-    name: string
+export interface IResponseGetCitizenshipList {
+    count: number,
+    next?: string,
+    previous?: string,
+    results: Array<Citizenship>
 }
 
-export interface IDictionary {
-    results: Array<IDictionaryItem>
+export interface IResponseGetCountryList {
+    count: number,
+    next?: string,
+    previous?: string,
+    results: Array<Country>
 }
 
-export interface IBasicResultInterface {
-    id: number,
-    name: string,
-    sorting: string,
-    description: string
+export interface IResponseGetContactList {
+    count: number,
+    next?: string,
+    previous?: string,
+    results: Array<ContactType>
 }
 
-export interface ICompetenceRequest {
+export interface IResponseGetCompetenceList {
     total: number,
     max_page_size: number,
     page_size: number,
     page_number: number,
     page_next: string,
     page_previous: string,
-    results: Array<IBasicResultInterface>
+    results: Array<Competence>
 }
 
-export interface IGetPositionListQuery {
+export interface IResponseGetPositionList {
     count: number,
     next: string,
     previous: string,
-    results: Array<IBasicResultInterface>
-}
-
-export const getCitizenship = (config?: AxiosRequestConfig) => {
-    return request<IDictionary>({
-        url: '/api/dictionary/citizenship/',
-        ...config
-    });
-};
-
-export const getCity = (config?: AxiosRequestConfig) => {
-    return request<IDictionary>({
-        url: '/api/dictionary/city/',
-        ...config
-    });
-};
-
-export const getCountries = (config?: AxiosRequestConfig) => {
-    return request<IDictionary>({
-        url: '/api/dictionary/country/',
-        ...config
-    });
-};
-
-export const getContactsType = (config?: AxiosRequestConfig) => {
-    return request<{ results: Array<ContactType> }>({
-        url: '/api/dictionary/contact-type/',
-        ...config
-    });
-};
-
-export interface IEducationResult {
-    id: number,
-    name: string,
-    sorting: number,
-    description: string
+    results: Array<Position>
 }
 
 export interface IEducationResponse {
     count: number,
     next: string,
     previous: string,
-    results: Array<IEducationResult>
+    results: Array<EducationGraduate | EducationPlace | EducationSpecialty>
 }
 
-interface IIndustrySector {
+interface IResponseIndustrySector {
     count: number,
     next: string,
     previous: string,
     results: Array<IndustrySector>
-}
-
-export interface IResultEmployment {
-    id: number,
-    name: string,
-    sorting: number
 }
 
 export interface IResponseGetTypeOfEmployment {
@@ -105,7 +81,7 @@ export interface IResponseGetTypeOfEmployment {
     page_number: number,
     page_next: number,
     page_previous: number,
-    results: Array<IResultEmployment>
+    results: Array<TypeOfEmployment>
 }
 
 export const dictionary = createApi({
@@ -115,7 +91,7 @@ export const dictionary = createApi({
         baseUrl: '/api/dictionary'
     }),
     endpoints: (build) => ({
-        getIndustrySector: build.query<IIndustrySector, { search: string }>({
+        getIndustrySector: build.query<IResponseIndustrySector, { search: string }>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'industry-sector/',
@@ -123,7 +99,7 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getCompetenceTree: build.query<Array<ICompetence>, undefined>({
+        getCompetenceTree: build.query<Array<CompetenceTree>, undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'competence-tree/',
@@ -131,7 +107,7 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getCompetence: build.query<ICompetenceRequest, { search: string }>({
+        getCompetence: build.query<IResponseGetCompetenceList, { search: string }>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'competence/',
@@ -139,7 +115,60 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getPositionList: build.query<IGetPositionListQuery, { search: string }>({
+        getCompetenceById: build.query<CompetenceById, { id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : `competence/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        getContactType: build.query<IResponseGetContactList, { search: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : 'contact-type/',
+                method: 'GET',
+                params
+            })
+        }),
+        getCountryList: build.query<IResponseGetCountryList, { search: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : 'country/',
+                method: 'GET',
+                params
+            })
+        }),
+        getCountryById: build.query<CountryById, { id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : `country/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        getCityList: build.query<IResponseGetCityList, { search: string, country_id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : 'city/',
+                method: 'GET',
+                params
+            })
+        }),
+        getCityById: build.query<CityById, { id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : `city/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        getCitizenshipList: build.query<IResponseGetCitizenshipList, { search: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : 'citizenship/',
+                method: 'GET',
+                params
+            })
+        }),
+        getPositionList: build.query<IResponseGetPositionList, { search: string }>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'position/',

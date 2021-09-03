@@ -25,12 +25,13 @@ export type NoName9 = boolean;
 export type NoName10 = string;
 export type NoName11 = string;
 export type ID3 = number;
-export type NoName12 = string;
-export type OrganizationId = number;
+export type NoName12 = boolean;
 export type NoName13 = string;
+export type OrganizationId = number;
+export type NoName14 = string;
 export type ID4 = number;
-export type NoName14 = boolean;
-export type NoName15 = string;
+export type NoName15 = boolean;
+export type NoName16 = string;
 export type PositionId = number;
 
 export interface CvProjectRead {
@@ -66,11 +67,12 @@ export interface IndustrySector {
 export interface Organization {
     description?: NoName11;
     id?: ID3;
-    name: NoName12;
+    is_customer?: NoName12;
+    name: NoName13;
 }
 export interface Position {
-    description?: NoName13;
+    description?: NoName14;
     id?: ID4;
-    is_verified?: NoName14;
-    name: NoName15;
+    is_verified?: NoName15;
+    name: NoName16;
 }

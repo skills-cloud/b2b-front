@@ -8,10 +8,12 @@
 export type Code201 = Organization;
 export type NoName = string;
 export type ID = number;
-export type NoName1 = string;
+export type NoName1 = boolean;
+export type NoName2 = string;
 
 export interface Organization {
     description?: NoName;
     id?: ID;
-    name: NoName1;
+    is_customer?: NoName1;
+    name: NoName2;
 }

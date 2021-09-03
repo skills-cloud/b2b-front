@@ -178,6 +178,10 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "is_customer": {
+                    "title": "Заказчик?",
+                    "type": "boolean"
+                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,

@@ -94,7 +94,7 @@ export default (props: TProps, isFocus: boolean, hasError: boolean): Partial<Sty
             top            : '4px',
             bottom         : '4px',
             cursor         : 'pointer',
-            padding        : '4px'
+            padding        : '3px'
         })
     };
 };

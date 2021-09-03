@@ -1,20 +1,21 @@
 import React, { HTMLAttributes, ReactNode } from 'react';
 
-import useClassnames from 'hook/use-classnames';
+import useClassnames, { IStyle } from 'hook/use-classnames';
 
 import style from './index.module.pcss';
 
-interface IHeaderProps extends HTMLAttributes<HTMLElement> {
+interface IHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'className'> {
     children: ReactNode,
     level?: 1 | 2 | 3 | 4,
     tag?: 'span' | 'div' | 'h1' | 'h2' | 'h3' | 'h4',
-    contrast?: boolean
+    contrast?: boolean,
+    className?: string | IStyle
 }
 
 const Header = ({ children, level = 1, tag, contrast = false, ...props }: IHeaderProps) => {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const Tag = tag || `h${level}`;
-    const cn = useClassnames(style);
+    const cn = useClassnames(style, props.className, true);
 
     return (
         <Tag {...props} className={cn('header', { [`header_level-${level}`]: level, 'header_contrasted': contrast })}>

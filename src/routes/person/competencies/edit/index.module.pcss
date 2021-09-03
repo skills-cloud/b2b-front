@@ -41,7 +41,10 @@
         margin-right: 12px;
 
         @media (hover: hover) and (pointer: fine) {
-            cursor: pointer;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
     }
 
@@ -122,7 +125,6 @@
         grid-auto-flow: column;
         align-items: baseline;
         grid-template-columns: 150px 1fr;
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;
@@ -155,20 +157,21 @@
         text-align: center;
         font-weight: 400;
         position: relative;
-        margin-right: 4px;
     }
 
     &__icon-dots {
         fill: var(--color-gray-100);
 
         @media (hover: hover) and (pointer: fine) {
-            cursor: pointer;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
     }
 
     &__link-append,
     &__checkbox-control {
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;
@@ -179,7 +182,10 @@
         text-underline-offset: 2px;
 
         @media (hover: hover) and (pointer: fine) {
-            cursor: pointer;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
     }
 
@@ -190,7 +196,6 @@
     }
 
     &__empty {
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;

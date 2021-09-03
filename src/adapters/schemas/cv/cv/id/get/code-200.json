@@ -590,6 +590,14 @@
                     "title": "Фамилия",
                     "type": "string"
                 },
+                "linked_ids": {
+                    "items": {
+                        "nullable": true,
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
                 "middle_name": {
                     "maxLength": 500,
                     "nullable": true,
@@ -625,6 +633,11 @@
                     "readOnly": true,
                     "type": "array"
                 },
+                "price": {
+                    "nullable": true,
+                    "title": "Ставка",
+                    "type": "number"
+                },
                 "projects": {
                     "items": {
                         "$ref": "#/definitions/CvProjectRead"
@@ -648,6 +661,21 @@
                     "nullable": true,
                     "title": "Время для связи / по",
                     "type": "string"
+                },
+                "types_of_employment": {
+                    "items": {
+                        "$ref": "#/definitions/TypeOfEmployment"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "types_of_employment_ids": {
+                    "items": {
+                        "nullable": true,
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
                 },
                 "user": {
                     "$ref": "#/definitions/UserInline"
@@ -1142,6 +1170,10 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "is_customer": {
+                    "title": "Заказчик?",
+                    "type": "boolean"
+                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
@@ -1252,7 +1284,6 @@
             "type": "object"
         },
         "TypeOfEmployment": {
-            "nullable": true,
             "properties": {
                 "description": {
                     "nullable": true,

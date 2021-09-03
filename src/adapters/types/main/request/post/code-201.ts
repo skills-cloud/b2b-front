@@ -6,6 +6,9 @@
  */
 
 export type Code201 = Request;
+/**
+ * организации отмеченные как заказчики<br>`/api/main/organization/?is_customer=true`
+ */
 export type CustomerId = number;
 export type NoName = string;
 export type NoName1 = string;

@@ -13,7 +13,7 @@ export interface IProps {
     name: string,
     direction?: 'row' | 'column',
     required?: boolean,
-    children?: ReactNode,
+    label?: ReactNode,
     createable?: boolean,
     autoFocus?: boolean,
     clearable?: boolean,
