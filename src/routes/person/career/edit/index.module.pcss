@@ -28,7 +28,10 @@
         height: 16px;
 
         @media (hover: hover) and (pointer: fine) {
-            cursor: pointer;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
     }
 
@@ -50,7 +53,6 @@
     }
 
     &__link-append {
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;

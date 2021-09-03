@@ -80,6 +80,14 @@
                     "title": "Фамилия",
                     "type": "string"
                 },
+                "linked_ids": {
+                    "items": {
+                        "nullable": true,
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
                 "middle_name": {
                     "maxLength": 500,
                     "nullable": true,
@@ -101,6 +109,11 @@
                     "type": "array",
                     "uniqueItems": true
                 },
+                "price": {
+                    "nullable": true,
+                    "title": "Ставка",
+                    "type": "number"
+                },
                 "time_to_contact_from": {
                     "nullable": true,
                     "title": "Время для связи / с",
@@ -110,6 +123,14 @@
                     "nullable": true,
                     "title": "Время для связи / по",
                     "type": "string"
+                },
+                "types_of_employment_ids": {
+                    "items": {
+                        "nullable": true,
+                        "type": "integer"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
                 },
                 "user_id": {
                     "nullable": true,

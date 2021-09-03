@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconeClose from 'component/icons/close';
@@ -18,12 +18,20 @@ export interface IProps {
 export const Modal = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
 
+    const elHeader = useMemo(() => {
+        if(typeof props.header === 'string') {
+            return <Header level={1} tag="h2">{props.header}</Header>;
+        }
+
+        return props.header;
+    }, [props.header]);
+
     return (
         <div className={cn('modal')}>
             <div className={cn('modal__content', { [`${JS_CLASS}`]: true })}>
                 <div className={cn('modal__body')}>
                     <div className={cn('modal__header-wrapper')}>
-                        <Header level={1} tag="h2">{props.header}</Header>
+                        {elHeader}
                         {!!props.onClose && (
                             <button
                                 type="button"
@@ -36,7 +44,7 @@ export const Modal = (props: IProps) => {
                     </div>
                     {props.children}
                 </div>
-                <div className={cn('modal__footer')}>{props.footer}</div>
+                {props.footer && <div className={cn('modal__footer')}>{props.footer}</div>}
             </div>
         </div>
     );

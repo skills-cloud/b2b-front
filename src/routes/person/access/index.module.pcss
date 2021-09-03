@@ -55,7 +55,10 @@
         background-color: var(--color-bg-button);
 
         @media (hover: hover) and (pointer: fine) {
-            cursor: pointer;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
 
         &_disable {

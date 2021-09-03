@@ -13,8 +13,11 @@ import DateInput from 'component/form/date';
 import Button from 'component/button';
 import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
+import InputCountry from 'component/form/input-country';
+import InputCity from 'component/form/input-city';
+import InputCitizenship from 'component/form/input-citizenship';
 
-import { getCitizenship, getCity, getContactsType, getCountries } from 'adapter/api/dictionary';
+import { dictionary } from 'adapter/api/dictionary';
 import { CvCareerId } from 'adapter/types/cv/career/id/get/code-200';
 import { NoName3 as IGenderType } from 'adapter/types/cv/cv/post/code-201';
 
@@ -46,13 +49,10 @@ export const SpecialistsCreate = () => {
     const cn = useClassnames(style);
     const { t, i18n } = useTranslation();
     const [
-        tokenCity,
-        tokenCountry,
-        tokenCitizenship,
         tokenCvList,
         tokenCreateCv,
         tokenContacts
-    ] = useCancelTokens(6);
+    ] = useCancelTokens(3);
     const history = useHistory();
     const context = useForm<ICvForm>({
         mode         : 'onChange',
@@ -73,57 +73,12 @@ export const SpecialistsCreate = () => {
     });
     const [mainContact, setMainContact] = useState<number>(0);
     const [postCvLoading, setPostCvLoading] = useState<boolean>(false);
-    const [cities, setCities] = useState<Array<IBasicType>>([]);
-    const [citizenship, setCitizenship] = useState<Array<IBasicType>>([]);
-    const [countries, setCountries] = useState<Array<IBasicType>>([]);
-    const [contacts, setContacts] = useState<Array<IBasicType>>([]);
+
+    const { data: contacts } = dictionary.useGetContactTypeQuery({ search: '' });
 
     useEffect(() => {
-        getCity({
-            cancelToken: tokenCity.new()
-        })
-            .then((payload) => {
-                setCities(payload.results?.map((item) => ({ label: item.name, value: String(item.id) })));
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-
-        getCitizenship({
-            cancelToken: tokenCitizenship.new()
-        })
-            .then((payload) => {
-                setCitizenship(payload.results?.map((item) => ({ label: item.name, value: String(item.id) })));
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-
-        getCountries({
-            cancelToken: tokenCountry.new()
-        })
-            .then((payload) => {
-                setCountries(payload.results?.map((item) => ({ label: item.name, value: String(item.id) })));
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-
-        getContactsType({
-            cancelToken: tokenContacts.new()
-        })
-            .then((payload) => {
-                setContacts(payload.results?.map((item) => ({ label: item.name, value: String(item.id) })));
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-
         return () => {
-            tokenCountry.remove();
             tokenCvList.remove();
-            tokenCity.remove();
-            tokenCitizenship.remove();
             tokenCreateCv.remove();
             tokenContacts.remove();
         };
@@ -255,7 +210,10 @@ export const SpecialistsCreate = () => {
                                         <div className={cn('specialists-create__field-content', 'specialists-create__field-content_ext')}>
                                             <InputSelect
                                                 name={`common.${index}.contact_type`}
-                                                options={contacts}
+                                                options={contacts?.results.map((contactItem) => ({
+                                                    value: String(contactItem.id),
+                                                    label: contactItem.name
+                                                })) || []}
                                             />
                                             <FormInput name={`common.${index}.value`} type="text" />
                                         </div>
@@ -293,30 +251,24 @@ export const SpecialistsCreate = () => {
                                 }}
                             />
                         </div>
-                        <InputSelect
-                            options={citizenship}
+                        <InputCitizenship
                             name="citizenship"
                             label={t('routes.specialists-create.main.form.citizenship')}
                             placeholder={t('routes.specialists-create.main.form.citizenship')}
                             direction="column"
-                            disableAutocomplete={true}
                         />
                         <div className={cn('specialists-create__last-block')}>
-                            <InputSelect
-                                options={countries}
+                            <InputCountry
                                 direction="column"
                                 name="country"
                                 label={t('routes.specialists-create.main.form.country')}
                                 placeholder={t('routes.specialists-create.main.form.country')}
-                                disableAutocomplete={true}
                             />
-                            <InputSelect
-                                options={cities}
+                            <InputCity
                                 name="city"
                                 label={t('routes.specialists-create.main.form.city')}
                                 placeholder={t('routes.specialists-create.main.form.city')}
                                 direction="column"
-                                disableAutocomplete={true}
                             />
                             <InputSelect
                                 name="gender"

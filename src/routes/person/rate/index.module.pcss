@@ -38,7 +38,10 @@
         background-color: var(--color-bg-button);
 
         @media (hover: hover) and (pointer: fine) {
-            cursor: pointer;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
 
         &_disable {
@@ -74,7 +77,6 @@
         margin: 0;
         display: flex;
         justify-content: space-between;
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;

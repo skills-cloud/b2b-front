@@ -18,8 +18,9 @@ export type NoName4 = boolean;
 export type NoName5 = string;
 export type NoName6 = string;
 export type Photo = string;
-export type NoName7 = string;
+export type NoName7 = number;
 export type NoName8 = string;
+export type NoName9 = string;
 export type UserId = number;
 
 export interface CvDetailWrite {
@@ -33,10 +34,13 @@ export interface CvDetailWrite {
     id?: ID;
     is_resource_owner?: NoName4;
     last_name?: NoName5;
+    linked_ids?: number[];
     middle_name?: NoName6;
     photo?: Photo;
     physical_limitations_ids?: number[];
-    time_to_contact_from?: NoName7;
-    time_to_contact_to?: NoName8;
+    price?: NoName7;
+    time_to_contact_from?: NoName8;
+    time_to_contact_to?: NoName9;
+    types_of_employment_ids?: number[];
     user_id?: UserId;
 }

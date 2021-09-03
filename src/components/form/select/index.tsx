@@ -1,4 +1,4 @@
-import React, { useState, useMemo, FC, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, FC, useEffect, useCallback, MouseEvent } from 'react';
 import ReactSelect, { components } from 'react-select';
 import ReactSelectAsync from 'react-select/async';
 import { useFormContext, Controller } from 'react-hook-form';
@@ -10,10 +10,31 @@ import Error from 'component/error';
 import getStyles from './style';
 import { TProps, IValue } from './types';
 import style from './index.module.pcss';
+import { MultiValueRemoveProps } from 'react-select/src/components/MultiValue';
+import IconClose from 'component/icons/close';
 
 const defaultProps = {
     direction          : 'row',
     disableAutocomplete: false
+};
+
+const MultiValueRemove: FC<MultiValueRemoveProps<Record<string, unknown>>> = (props) => {
+    const onClick = (e: MouseEvent): void => {
+        if(!props.selectProps.isDisabled) {
+            props.innerProps.onClick(e);
+        }
+    };
+
+    return (
+        <IconClose
+            svg={{
+                ...props.innerProps,
+                onClick,
+                width : 16,
+                height: 16
+            }}
+        />
+    );
 };
 
 const InputSelect = (props: TProps & typeof defaultProps) => {
@@ -44,7 +65,6 @@ const InputSelect = (props: TProps & typeof defaultProps) => {
             setSuggests(props.options);
         }
     }, [JSON.stringify(props.options)]);
-
     useEffect(() => {
         if(value) {
             void trigger(props.name);
@@ -97,7 +117,7 @@ const InputSelect = (props: TProps & typeof defaultProps) => {
                 const selectProps = {
                     autoFocus    : props.autoFocus,
                     placeholder  : props.placeholder,
-                    isMulti      : false,
+                    isMulti      : props.isMulti,
                     isSearchable : props.isSearchable ? true : props.isSearchable,
                     isClearable  : props.clearable,
                     tabIndex     : props.tabIndex,
@@ -108,10 +128,14 @@ const InputSelect = (props: TProps & typeof defaultProps) => {
                     options      : suggests,
                     onInputChange: props.loadOptions ? undefined : onInputChange,
                     autoComplete : props.disableAutocomplete ? 'new-password' : 'on',
-                    onChange     : onChange,
-                    styles       : getStyles(props, isFocus, !!errors[props.name]),
-                    className    : cn('input__field'),
-                    components   : {
+                    onChange     : (e: IValue) => {
+                        onChange(e);
+                        props.onChange?.(e);
+                    },
+                    styles    : getStyles(props, isFocus, !!errors[props.name]),
+                    className : cn('input__field'),
+                    components: {
+                        MultiValueRemove,
                         Input : SelectInput,
                         Option: Option,
                         ...props.components

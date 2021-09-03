@@ -29,7 +29,9 @@ export interface ICommon {
     placeholder?: string,
     tabIndex?: string,
     disabled?: boolean,
-    elError?: boolean
+    elError?: boolean,
+    isMulti?: boolean,
+    onChange?(value: IValue): void
 }
 
 export interface IAsyncSelect extends ICommon {

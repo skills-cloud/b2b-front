@@ -70,7 +70,10 @@
         background-color: var(--color-bg-button);
 
         @media (hover: hover) and (pointer: fine) {
-            cursor: pointer;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
     }
 
@@ -94,7 +97,6 @@
         grid-auto-flow: column;
         align-items: baseline;
         grid-template-columns: 150px 1fr;
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;
@@ -108,7 +110,6 @@
     }
 
     &__empty {
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;

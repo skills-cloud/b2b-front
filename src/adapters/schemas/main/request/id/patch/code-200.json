@@ -8,6 +8,7 @@
         "Request": {
             "properties": {
                 "customer_id": {
+                    "description": "организации отмеченные как заказчики<br>`/api/main/organization/?is_customer=true`",
                     "title": "Customer id",
                     "type": "integer"
                 },

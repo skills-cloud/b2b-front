@@ -38,7 +38,10 @@
         background-color: var(--color-bg-button);
 
         @media (hover: hover) and (pointer: fine) {
-            cursor: pointer;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
 
         &_disable {
@@ -60,7 +63,6 @@
         grid-auto-flow: column;
         align-items: baseline;
         grid-template-columns: 150px 1fr;
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;
@@ -126,7 +128,6 @@
         padding: 0 11px;
         line-height: 27px;
         border-radius: calc(27px / 2);
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 13px;
@@ -139,7 +140,6 @@
         grid-row-gap: 16px;
         justify-content: flex-start;
         justify-items: flex-start;
-        font-family: Roboto, sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 14px;

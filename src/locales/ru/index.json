@@ -342,14 +342,44 @@
                     "empty": "Поиск не дал результатов."
                 },
                 "first-name": "Имя не указано",
-                "last-name": "Фамилия не указана"
+                "last-name": "Фамилия не указана",
+                "competencies": "Ключевые навыки",
+                "show-linked": "Связанные кандидаты ({{count}})",
+                "rate": "Ставка в час",
+                "experience_0": "{{count}} год",
+                "experience_1": "{{count}} года",
+                "experience_2": "{{count}} лет",
+                "experience_3": "{{count}} лет",
+                "experience_4": "{{count}} лет",
+                "experience_5": "{{count}} лет",
+                "linked": {
+                    "title": "Связанные кандидаты",
+                    "why": "Почему связаны?"
+                }
             },
             "sidebar": {
-                "search": {
-                    "title": "Поиск",
+                "filters": {
+                    "title": "Фильтры",
                     "form": {
-                        "input": {
+                        "search": {
+                            "label": "Имя специалиста",
                             "placeholder": "Введите имя..."
+                        },
+                        "position": {
+                            "label": "Специализация",
+                            "placeholder": "Введите специализацию"
+                        },
+                        "country": {
+                            "label": "Страна",
+                            "placeholder": "Введите страну"
+                        },
+                        "city": {
+                            "label": "Город",
+                            "placeholder": "Введите город"
+                        },
+                        "competencies": {
+                            "label": "Навыки",
+                            "placeholder": "Введите навык"
                         }
                     }
                 }

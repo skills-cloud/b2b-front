@@ -162,7 +162,7 @@ export const Common = (props: IProps) => {
                 <div className={cn('person__info-list')}>
                     {data.contacts.map((contact) => (
                         <div key={contact.id} className={cn('person__list-item')}>
-                            <strong>{contact.contact_type.name}</strong>
+                            <strong>{contact.contact_type?.name}</strong>
                             <span>{contact.value}</span>
                         </div>
                     ))}

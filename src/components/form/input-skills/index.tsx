@@ -40,7 +40,7 @@ const MultiValueRemove: FC<MultiValueRemoveProps<Record<string, unknown>>> = (pr
 
 const InputSkills = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const { formState: { errors }, watch, trigger, control } = useFormContext();
+    const { formState: { errors }, watch, trigger, control, setValue } = useFormContext();
     const dispatch = useDispatch();
 
     const [isFocus, setIsFocus] = useState(false);
@@ -97,7 +97,23 @@ const InputSkills = (props: IProps) => {
             }
 
             if(ids.length) {
-                // TODO API request
+                Promise.all(ids.map((id) => {
+                    return dispatch(dictionary.endpoints.getCompetenceById.initiate({ id: String(id) }))
+                        .then(({ data }) => data);
+                }))
+                    .then((resp) => {
+                        const newValue = resp.map((item) => ({
+                            value: item?.id,
+                            label: item?.name
+                        }));
+
+                        setValue(props.name, newValue);
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+            } else if(values.length) {
+                setValue(props.name, values);
             }
         }
     }, []);
@@ -128,14 +144,14 @@ const InputSkills = (props: IProps) => {
     }, 150);
 
     const elLabel = (): ReactNode => {
-        if(props.children) {
+        if(props.label) {
             return (
                 <strong
                     className={cn('input__label', {
                         'input__label_required': props.required
                     })}
                 >
-                    {props.children}
+                    {props.label}
                 </strong>
             );
         }

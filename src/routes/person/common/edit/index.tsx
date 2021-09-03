@@ -3,38 +3,36 @@ import { useTranslation } from 'react-i18next';
 import { useForm, useFieldArray, FormProvider } from 'react-hook-form';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
-import { useCancelTokens } from 'hook/cancel-token';
 import FormInput from 'component/form/input';
 import Button from 'component/button';
 
 import Modal from 'component/modal';
 import InputSelect from 'component/form/select';
 import DateInput from 'component/form/date';
+import InputCity from 'component/form/input-city';
+import InputCountry from 'component/form/input-country';
+import InputCitizenship from 'component/form/input-citizenship';
 
-import { IBasicType } from 'route/specialists/create';
-import { cv, ICv, IPostCv } from 'adapter/api/cv';
-import { getCitizenship, getCity, getContactsType, getCountries } from 'adapter/api/dictionary';
+import { cv } from 'adapter/api/cv';
+import { contact } from 'adapter/api/contact';
+import { CvDetailRead, NoName57 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
+import { CvDetailWrite } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
-import { contact } from 'adapter/api/contact';
+import { dictionary } from 'adapter/api/dictionary';
 
 export interface IProps {
     className?: string | IStyle,
-    fields: ICv,
+    fields: CvDetailRead,
     id: string,
-    onSubmit?(payload?: IPostCv): void,
+    onSubmit?(payload?: CvDetailWrite): void,
     onCancel?(): void
-}
-
-export interface IOption {
-    value: string,
-    label: string
 }
 
 export interface IFormValues {
     common: {
         gender: {
-            value: string,
+            value: IGenderType,
             label: string
         },
         city: {
@@ -57,17 +55,13 @@ export interface IFormValues {
             label: string,
             value: number
         }
-    }>
+    }>,
+    main_contact: number | null
 }
 
 export const CommonEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
-    const [
-        tokenCity,
-        tokenCountry,
-        tokenCitizenship
-    ] = useCancelTokens(3);
     const { contacts, ...other } = props.fields;
     const methods = useForm<IFormValues>({
         defaultValues: {
@@ -78,7 +72,7 @@ export const CommonEdit = (props: IProps) => {
                     value: other.gender
                 } : {
                     label: '',
-                    value: ''
+                    value: undefined
                 },
                 city       : { label: other.city?.name, value: String(other.city?.id) },
                 citizenship: { label: other.citizenship?.name, value: String(other.citizenship?.id) },
@@ -88,58 +82,27 @@ export const CommonEdit = (props: IProps) => {
                 value       : contactElem.value,
                 id          : contactElem.id,
                 contact_type: {
-                    label: contactElem.contact_type.name,
-                    value: contactElem.contact_type.id
+                    label: contactElem.contact_type?.name,
+                    value: contactElem.contact_type?.id
                 }
-            }))
+            })),
+            main_contact: null
         }
     });
     const [patchCvById] = cv.usePatchCvByIdMutation();
+    const [postContact] = contact.usePostContactMutation();
     const [patchContact] = contact.usePatchContactMutation();
     const [deleteContact] = contact.useDeleteContactMutation();
+
+    const { data } = dictionary.useGetContactTypeQuery({ search: '' });
+
     const { fields, append, remove } = useFieldArray({
         keyName: 'fieldId',
         control: methods.control,
         name   : 'contacts'
     });
     const [activeTab, setActiveTab] = useState<'main' | 'contacts'>('main');
-    const [mainContact, setMainContact] = useState<number | null>(null);
-    const [contactTypes, setContactTypes] = useState<Array<IOption>>([]);
-    const [cities, setCities] = useState<Array<IBasicType>>([]);
-    const [citizenship, setCitizenship] = useState<Array<IBasicType>>([]);
-    const [countries, setCountries] = useState<Array<IBasicType>>([]);
-
-    useEffect(() => {
-        getCity({
-            cancelToken: tokenCity.new()
-        })
-            .then((payload) => {
-                setCities(payload.results?.map((item) => ({ label: item.name, value: String(item.id) })));
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-
-        getCitizenship({
-            cancelToken: tokenCitizenship.new()
-        })
-            .then((payload) => {
-                setCitizenship(payload.results?.map((item) => ({ label: item.name, value: String(item.id) })));
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-
-        getCountries({
-            cancelToken: tokenCountry.new()
-        })
-            .then((payload) => {
-                setCountries(payload.results?.map((item) => ({ label: item.name, value: String(item.id) })));
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, []);
+    const [mainContact, setMainContact] = useState<number>();
 
     useEffect(() => {
         if(props.fields?.contacts) {
@@ -157,34 +120,26 @@ export const CommonEdit = (props: IProps) => {
 
     const onClickMainContact = (contactId: number) => () => {
         setMainContact(contactId);
+        methods.setValue('main_contact', contactId);
     };
 
-    useEffect(() => {
-        getContactsType()
-            .then((resp) => {
-                const newContacts = resp.results?.map((contactType) => ({
-                    value: String(contactType.id) || '',
-                    label: contactType.name
-                }));
-
-                setContactTypes(newContacts);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, []);
-
     const onRemove = (index: number, id: number) => () => {
-        deleteContact({
-            id
-        })
-            .unwrap()
-            .then(() => {
-                remove(index);
+        const itemExist = props.fields.contacts?.find((item) => item.id === id);
+
+        if(itemExist) {
+            deleteContact({
+                id
             })
-            .catch((err) => {
-                console.error(err);
-            });
+                .unwrap()
+                .then(() => {
+                    remove(index);
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        } else {
+            remove(index);
+        }
     };
 
     const onSubmit = methods.handleSubmit(
@@ -208,14 +163,19 @@ export const CommonEdit = (props: IProps) => {
             }
 
             if(activeTab === 'contacts') {
-                Promise.all(formData.contacts.map((item, index) => {
+                Promise.all(formData.contacts.map((item) => {
+                    const itemExist = props.fields.contacts?.find((contactItem) => contactItem.id === item.id);
                     const dataRequest = {
                         id             : item.id,
                         contact_type_id: item.contact_type.value,
                         value          : item.value,
-                        is_primary     : index === mainContact,
+                        is_primary     : item.id === formData.main_contact || itemExist?.is_primary,
                         cv_id          : parseInt(props.id, 10)
                     };
+
+                    if(!itemExist) {
+                        return postContact(dataRequest).unwrap();
+                    }
 
                     return patchContact(dataRequest).unwrap();
                 }))
@@ -277,28 +237,22 @@ export const CommonEdit = (props: IProps) => {
                     </div>
                     <div className={cn('common-edit__field')}>
                         <strong>{t('routes.person.common.fields.citizenship.title')}</strong>
-                        <InputSelect
-                            options={citizenship}
+                        <InputCitizenship
                             name="common.citizenship"
                             placeholder={t('routes.specialists-create.main.form.citizenship')}
-                            disableAutocomplete={true}
                         />
                     </div>
                     <div className={cn('common-edit__field', 'common-edit__field_ext')}>
                         <strong>{t('routes.person.common.fields.location.title')}</strong>
-                        <InputSelect
-                            options={countries}
+                        <InputCountry
                             direction="column"
                             name="common.country"
                             placeholder={t('routes.specialists-create.main.form.country')}
-                            disableAutocomplete={true}
                         />
-                        <InputSelect
-                            options={cities}
+                        <InputCity
                             name="common.city"
                             placeholder={t('routes.specialists-create.main.form.city')}
                             direction="column"
-                            disableAutocomplete={true}
                         />
                     </div>
                     <div className={cn('common-edit__field')}>
@@ -340,7 +294,10 @@ export const CommonEdit = (props: IProps) => {
                                     </strong>
                                     <InputSelect
                                         name={`contacts[${index}].contact_type`}
-                                        options={contactTypes}
+                                        options={data?.results.map((contactItem) => ({
+                                            value: String(contactItem.id),
+                                            label: contactItem.name
+                                        })) || []}
                                     />
                                     <FormInput name={`contacts[${index}].value`} type="text" />
                                 </div>
@@ -348,11 +305,11 @@ export const CommonEdit = (props: IProps) => {
                                     <span
                                         onClick={onClickMainContact(field.id)}
                                         className={cn('common-edit__contact-control', {
-                                            'common-edit__contact-control_active': field.id === mainContact
+                                            'common-edit__contact-control_active': mainContact && field.id === mainContact
                                         })}
                                     >
                                         {t('routes.person.common.fields.contact.controls.main', {
-                                            context: field.id === mainContact ? 'default' : 'make'
+                                            context: mainContact && field.id === mainContact ? 'default' : 'make'
                                         })}
                                     </span>
                                     {fields.length > 1 && (

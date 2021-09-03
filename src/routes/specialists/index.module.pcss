@@ -43,8 +43,12 @@
         right: 32px;
     }
 
+    &__users-modal {
+        max-height: 500px;
+        overflow: scroll;
+    }
+
     &__users-empty {
-        font-family: Roboto, sans-serif;
         font-size: 14px;
         line-height: 16px;
         color: var(--color-black);
@@ -78,6 +82,8 @@
     &__user {
         padding: 24px 0;
         position: relative;
+        display: grid;
+        grid-gap: 16px;
 
         &::after {
             content: "";
@@ -101,5 +107,173 @@
         &:last-child {
             padding-bottom: 0;
         }
+    }
+
+    &__user-info-exp {
+        display: grid;
+        grid-gap: 8px;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        grid-template-rows: max-content;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__user-info-exp-years {
+        border: 1px solid var(--color-gray-40);
+        border-radius: 16px;
+        font-size: 12px;
+        line-height: 14px;
+        color: var(--color-gray-120);
+        padding: 5px 10px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__block-title {
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        text-transform: uppercase;
+        color: var(--color-text-light);
+    }
+
+    &__user-competencies,
+    &__user-rate {
+        margin-left: 64px;
+    }
+
+    &__user-info-block {
+        display: grid;
+        grid-gap: 8px;
+        grid-auto-rows: max-content;
+    }
+
+    &__user-info-exp-stars {
+        padding: 5px 10px;
+        border-radius: 16px;
+        background-color: var(--color-gray-10);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-gray-120);
+        font-size: 12px;
+        line-height: 14px;
+    }
+
+    &__user-info-exp-star-icon {
+        width: 12px;
+        height: 12px;
+        fill: var(--color-gray-120);
+        margin-right: 4px;
+    }
+
+    &__user-info-exp-add {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        background-color: var(--color-blue-primary);
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__user-info-exp-add-icon {
+        width: 16px;
+        height: 16px;
+        fill: var(--color-white);
+    }
+
+    &__competencies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+    }
+
+    &__competence {
+        display: block;
+        height: 24px;
+        line-height: 24px;
+        background-color: var(--color-gray-4);
+        font-size: 12px;
+        padding: 6px 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        border-radius: 35px;
+        text-align: center;
+        font-weight: 400;
+        position: relative;
+    }
+
+    &__user-linked {
+        font-size: 12px;
+        line-height: 14px;
+        color: var(--color-blue-primary);
+        text-decoration: underline;
+        text-decoration-style: dotted;
+        text-underline-offset: 2px;
+        text-align: right;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__modal-header {
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__modal-header-text {
+        font-family: Montserrat, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 32px;
+        color: var(--color-text-dark);
+    }
+
+    &__modal-header-close {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--color-gray-20);
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__modal-header-close-icon {
+        width: 20px;
+        height: 20px;
+        fill: var(--color-gray-100);
+    }
+
+    &__form {
+        display: grid;
+        grid-gap: 24px;
     }
 }
