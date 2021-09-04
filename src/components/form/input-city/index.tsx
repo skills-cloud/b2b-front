@@ -97,24 +97,23 @@ const InputCity = (props: IProps) => {
             }
 
             if(ids.length) {
-                dispatch(dictionary.endpoints.getCityById.initiate({
-                    id: String(ids[0])
+                Promise.all(ids.map((item) => {
+                    return dispatch(dictionary.endpoints.getCityById.initiate({
+                        id: String(item)
+                    }))
+                        .then((resp) => ({
+                            label: resp.data?.name || '',
+                            value: String(resp.data?.id) || ''
+                        }));
                 }))
-                    .then(({ data: loadData }) => {
-                        if(loadData) {
-                            const newValue = {
-                                label: loadData.name,
-                                value: String(loadData.id)
-                            };
-
-                            setValue(props.name, [newValue]);
-                        }
+                    .then((resp: Array<IValue>) => {
+                        setValue(props.name, resp, { shouldDirty: true });
                     })
                     .catch((err) => {
                         console.error(err);
                     });
             } else if(values.length) {
-                setValue(props.name, values);
+                setValue(props.name, values, { shouldDirty: values.some((item) => !!item) });
             }
         }
     }, []);
@@ -126,27 +125,24 @@ const InputCity = (props: IProps) => {
     };
 
     const onLoadOptions = debounce((search_string: string, callback) => {
-        if(props.countryId) {
-            dispatch(dictionary.endpoints.getCityList.initiate({
-                search    : search_string,
-                country_id: props.countryId
-            }))
-                .then(({ data: loadData }) => {
-                    if(loadData?.results?.length) {
-                        const res = loadData.results.map((item) => ({
-                            label: item.name,
-                            value: String(item.id)
-                        }));
+        dispatch(dictionary.endpoints.getCityList.initiate({
+            search: search_string
+        }))
+            .then(({ data: loadData }) => {
+                if(loadData?.results?.length) {
+                    const res = loadData.results.map((item) => ({
+                        label: item.name,
+                        value: String(item.id)
+                    }));
 
-                        callback(res);
-                    } else {
-                        callback(null);
-                    }
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        }
+                    callback(res);
+                } else {
+                    callback(null);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     }, 150);
 
     const elLabel = (): ReactNode => {
@@ -169,19 +165,16 @@ const InputCity = (props: IProps) => {
         }
     }, [props.elError, props.name, errors[props.name]]);
 
-    const elInput = (renderValue: OptionTypeBase, onChange: (e: IValue) => void, onBlur: () => void): ReactNode => {
+    const elInput = (renderValue: OptionTypeBase, onChange: () => void, onBlur: () => void): ReactNode => {
         const selectProps = {
             onFocus,
             onBlur,
-            onChange: (e: IValue) => {
-                onChange(e);
-                props.onChange?.(e);
-            },
+            onChange,
             value       : renderValue,
             defaultValue: renderValue,
             placeholder : props.placeholder,
             autoFocus   : props.autoFocus,
-            isMulti     : false,
+            isMulti     : true,
             isClearable : props.clearable,
             tabIndex    : props.tabIndex,
             cacheOption : true,
@@ -205,7 +198,6 @@ const InputCity = (props: IProps) => {
         <Controller
             name={props.name}
             control={control}
-            defaultValue={props.defaultValue}
             rules={{ required: props.required }}
             render={({ field: { onChange, onBlur, value: renderValue } }) => {
                 return (

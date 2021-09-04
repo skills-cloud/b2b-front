@@ -25,6 +25,5 @@ export interface IProps {
     requestLimit?: number,
     requestOffset?: number,
     elError?: boolean,
-    countryId?: string,
     onChange?(value: IValue): void
 }
