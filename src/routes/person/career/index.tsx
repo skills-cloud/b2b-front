@@ -151,7 +151,7 @@ export const Career = (props: IProps) => {
                                         </div>
                                     </li>
                                 )}
-                                {field.files?.length && (
+                                {field.files && field.files.length > 0 && (
                                     <li className={cn('career__list-item', 'career__list-item_file')}>
                                         <strong>{t('routes.person.career.fields.files')}</strong>
                                         <div className={cn('career__list-item-files')}>

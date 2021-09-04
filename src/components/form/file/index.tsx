@@ -19,7 +19,8 @@ export interface IProps {
     children?: ReactNode,
     required?: boolean,
     multiple?: boolean,
-    files?: Array<CvCareerFileRead>
+    onDeleteFile?(file: CvCareerFileRead): void,
+    defaultValue?: Array<CvCareerFileRead>
 }
 
 export interface IFile {
@@ -39,16 +40,16 @@ const InputFile = (props: IProps) => {
     const [value, setValue] = useState<string>('');
 
     useEffect(() => {
-        if(val?.length) {
+        if(val?.length || props.defaultValue) {
             void trigger(props.name);
-            setFormDataFiles((oldState) => ([
-                ...oldState,
-                ...val
-            ]));
-        }
-    }, [val]);
 
-    const onChange = useCallback((filesArr: FileList | null) => {
+            if(props.defaultValue) {
+                setFormDataFiles(props.defaultValue);
+            }
+        }
+    }, [props.defaultValue]);
+
+    const onChange = useCallback((filesArr: Array<File> | null) => {
         const formDataArr: Array<Partial<CvCareerFileRead>> = [];
 
         if(filesArr?.length) {
@@ -73,6 +74,8 @@ const InputFile = (props: IProps) => {
 
     const onClickDelete = (index: number) => () => {
         const files = [...formDataFiles];
+
+        props.onDeleteFile?.(files[index]);
 
         files.splice(index, 1);
 
@@ -133,7 +136,7 @@ const InputFile = (props: IProps) => {
                 <Controller
                     name={props.name}
                     control={control}
-                    render={({ field: { onChange: onChangeField, value: fieldValue } }) => {
+                    render={({ field: { onChange: onChangeField } }) => {
                         return (
                             <input
                                 type="file"
@@ -144,8 +147,8 @@ const InputFile = (props: IProps) => {
                                     const files = e.target.files ? Array.from(e.target.files) : [];
 
                                     setValue(e.target.value);
-                                    onChangeField(...files);
-                                    onChange(e.target.files);
+                                    onChangeField(files);
+                                    onChange(files);
                                 }}
                             />
                         );

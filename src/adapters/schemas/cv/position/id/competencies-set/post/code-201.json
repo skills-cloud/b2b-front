@@ -1,0 +1,31 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/CvPositionCompetence"
+        }
+    ],
+    "definitions": {
+        "CvPositionCompetence": {
+            "properties": {
+                "competence_id": {
+                    "title": "Competence id",
+                    "type": "integer"
+                },
+                "cv_position_id": {
+                    "readOnly": true,
+                    "title": "Cv position id",
+                    "type": "string"
+                },
+                "years": {
+                    "nullable": true,
+                    "title": "Years",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "competence_id"
+            ],
+            "type": "object"
+        }
+    }
+}

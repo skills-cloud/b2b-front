@@ -9,15 +9,15 @@ import FormInput from 'component/form/input';
 import FormDate from 'component/form/date';
 import FormInputSkills from 'component/form/input-skills';
 import InputSelect from 'component/form/select';
+import Error from 'component/error';
 
 import { useDispatch } from 'component/core/store';
 import { dictionary } from 'adapter/api/dictionary';
-
-import style from './index.module.pcss';
 import { CvProjectRead } from 'adapter/types/cv/project/get/code-200';
 import { project } from 'adapter/api/project';
 import { mainRequest } from 'adapter/api/main';
-import Error from 'component/error';
+
+import style from './index.module.pcss';
 
 export interface IResultForm extends Omit<CvProjectRead, 'competencies_select' | 'organization' | 'position'> {
     competencies_select: Array<{
@@ -35,7 +35,6 @@ export interface IResultForm extends Omit<CvProjectRead, 'competencies_select' |
 }
 
 interface IProjectForm {
-    fields?: Array<CvProjectRead>,
     defaultValues: { defaultValues: { project: IResultForm } } | undefined,
     onSetLoading: (loading: boolean) => void,
     onSubmit?: () => void

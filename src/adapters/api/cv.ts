@@ -17,13 +17,17 @@ export type TQueryParamsPostTimeSlot = Omit<IPostCvResponse, 'id'>;
 export type TOrderingValues = 'id' | '-id' | 'first_name' | '-first_name' | 'middle_name' | '-middle_name' | 'last_name' | '-last_name' | 'created_at' | '-created_at' | 'updated_at' | '-updated_at';
 
 export interface IGetCvListFilters {
+    id?: Array<number>,
     country_id?: Array<number>,
     city_id?: Array<number>,
+    positions_ids_any?: Array<number>,
+    positions_ids_all?: Array<number>,
     citizenship_id?: Array<number>,
     competencies_ids_any?: Array<number>,
     competencies_ids_all?: Array<number>,
     ordering?: Array<TOrderingValues>,
     search?: string,
+    years?: number,
     page?: number,
     page_size?: number
 }
@@ -55,11 +59,14 @@ export const cv = createApi({
         }),
         getCvList: build.query<ICvRequest, IGetCvListFilters | undefined>({
             providesTags: ['cv'],
-            query       : (params) => ({
-                url   : 'cv/',
-                method: 'GET',
-                params
-            })
+            query       : (params) => {
+                console.log('PARAMS', params)
+                return {
+                    url   : 'cv/',
+                    method: 'GET',
+                    params
+                };
+            }
         }),
         getCvById: build.query<CvDetailRead, { id: string }>({
             providesTags: ['cv'],

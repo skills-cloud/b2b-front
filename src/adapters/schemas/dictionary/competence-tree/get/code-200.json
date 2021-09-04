@@ -8,9 +8,10 @@
         "CompetenceTree": {
             "properties": {
                 "children": {
-                    "readOnly": true,
-                    "title": "Children",
-                    "type": "string"
+                    "items": {
+                        "$ref": "#/definitions/CompetenceTree"
+                    },
+                    "type": "array"
                 },
                 "description": {
                     "nullable": true,
@@ -39,6 +40,7 @@
                 }
             },
             "required": [
+                "children",
                 "name"
             ],
             "type": "object"

@@ -27,7 +27,7 @@ export const CertificatesEdit = (props: IProps) => {
     const { id } = useParams<{ id: string }>();
 
     const [itemToRemove, setItemToRemove] = useState<CvCertificateRead | null>(null);
-    const [itemToEdit, setItemToEdit] = useState<CvCertificateRead | null>(null);
+    const [itemToEdit, setItemToEdit] = useState<CvCertificateRead | Record<string, unknown> | null>(null);
 
     const { data, refetch } = certificate.useGetCertificateListQuery({ cv_id: id });
     const [deleteCertificate] = certificate.useDeleteCertificateByIdMutation();
@@ -43,7 +43,7 @@ export const CertificatesEdit = (props: IProps) => {
     const onClickAppend = (e: MouseEvent) => {
         e.preventDefault();
 
-        setItemToEdit(null);
+        setItemToEdit({});
     };
 
     const onCancelEditDelete = () => {
@@ -98,6 +98,14 @@ export const CertificatesEdit = (props: IProps) => {
         );
     }, [itemToRemove]);
 
+    const elSubmitButton = useMemo(() => {
+        if(itemToRemove || itemToEdit) {
+            return <Button type="submit">{t('routes.person.certificates.edit.buttons.save')}</Button>;
+        }
+
+        return <Button type="button" onClick={props.onCancel}>{t('routes.person.certificates.edit.buttons.done')}</Button>;
+    }, [itemToRemove, itemToEdit]);
+
     const elContent = () => {
         if(itemToRemove) {
             return (
@@ -112,7 +120,7 @@ export const CertificatesEdit = (props: IProps) => {
         }
 
         if(itemToEdit) {
-            return <EditForm field={itemToEdit} onCancel={onCancelEditDelete} onSubmit={onSubmitCertificates} />;
+            return <EditForm field={itemToEdit as CvCertificateRead} onCancel={onCancelEditDelete} onSubmit={onSubmitCertificates} />;
         }
 
         return (
@@ -139,8 +147,12 @@ export const CertificatesEdit = (props: IProps) => {
                         children={t('routes.person.certificates.edit.buttons.append')}
                         onClick={onClickAppend}
                     />
-                    <Button isSecondary={true} onClick={props.onCancel}>{t('routes.person.certificates.edit.buttons.cancel')}</Button>
-                    <Button type="submit">{t('routes.person.certificates.edit.buttons.save')}</Button>
+                    {itemToEdit || itemToRemove && (
+                        <Button isSecondary={true} onClick={props.onCancel}>
+                            {t('routes.person.certificates.edit.buttons.cancel')}
+                        </Button>
+                    )}
+                    {elSubmitButton}
                 </div>
             </div>
         );

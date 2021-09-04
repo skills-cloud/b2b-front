@@ -14,13 +14,14 @@ import InputSelect from 'component/form/select';
 import Tooltip from 'component/tooltip';
 import IconDots from 'component/icons/dots';
 import IconArrowLeft from 'component/icons/arrow-left-full';
+import Error from 'component/error';
 
-import { dictionary, ICompetence } from 'adapter/api/dictionary';
+import { dictionary } from 'adapter/api/dictionary';
 import { position } from 'adapter/api/position';
+import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
+import { CompetenceTree } from 'adapter/types/dictionary/competence-tree/get/code-200';
 
 import style from './index.module.pcss';
-import Error from 'component/error';
-import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
 
 export interface IField {
     role?: string
@@ -73,6 +74,7 @@ export const CompetenciesEdit = (props: IProps) => {
     const { data } = dictionary.useGetCompetenceTreeQuery(undefined);
     const [patchPosition, { isLoading }] = position.usePatchPositionByIdMutation();
     const [postPosition, { isLoading: isLoadingPost }] = position.usePostPositionMutation();
+    const [postPositionCompetencies] = position.usePostPositionCompetenciesByIdMutation();
 
     const [activeWindow, setActiveWindow] = useState<'role' | 'competence' | 'checkbox' | null>('competence');
     const [checked, setChecked] = useState<Array<string>>([]);
@@ -81,7 +83,7 @@ export const CompetenciesEdit = (props: IProps) => {
     const [positionItem, setPositionItem] = useState<CvPositionRead>();
     const [error, setError] = useState<Array<string> | string | null>(null);
 
-    const reMap = (array: Array<ICompetence>) => {
+    const reMap = (array: Array<CompetenceTree>) => {
         return array.map((item) => {
             const params = {
                 value: item.id,
@@ -133,7 +135,7 @@ export const CompetenciesEdit = (props: IProps) => {
     };
 
     const onClickDots = (positionItemParam: CvPositionRead) => () => {
-        const newChecked = positionItemParam.competencies?.map((item) => String(item.id)) || [];
+        const newChecked = positionItemParam.competencies?.map((item) => String(item.competence_id)) || [];
         const newOptions = options.reduce((acc, curr) => {
             if(curr.children) {
                 acc.push(...curr.children);
@@ -160,19 +162,33 @@ export const CompetenciesEdit = (props: IProps) => {
         setActiveWindow(null);
     };
 
+    const requestUpdateCompetencies = (competenciesArr: Array<string>, positionId: number) => {
+        const dataComp = competenciesArr.map((item) => ({
+            competence_id: parseInt(item, 10)
+        }));
+
+        postPositionCompetencies({
+            data: dataComp,
+            id  : positionId
+        })
+            .then(() => {
+                refetch();
+                onCancel();
+            })
+            .catch(console.error);
+    };
+
     const onSubmit = methods.handleSubmit(
         (formData) => {
             if(positionItem) {
                 return patchPosition({
-                    id              : positionItem.id,
-                    cv_id           : parseInt(id, 10),
-                    position_id     : positionItem.position_id,
-                    competencies_ids: formData.competence_ids.map((item) => parseInt(item, 10))
+                    id         : positionItem.id,
+                    cv_id      : parseInt(id, 10),
+                    position_id: positionItem.position_id
                 })
                     .unwrap()
                     .then(() => {
-                        refetch();
-                        onCancel();
+                        requestUpdateCompetencies(formData.competence_ids, positionItem.id as number);
                     })
                     .catch((err) => {
                         console.error(err);
@@ -186,14 +202,12 @@ export const CompetenciesEdit = (props: IProps) => {
             }
 
             return postPosition({
-                cv_id           : parseInt(id, 10),
-                position_id     : parseInt(formData.position_id?.value as string, 10),
-                competencies_ids: formData.competence_ids.map((item) => parseInt(item, 10))
+                cv_id      : parseInt(id, 10),
+                position_id: parseInt(formData.position_id?.value as string, 10)
             })
                 .unwrap()
-                .then(() => {
-                    refetch();
-                    onCancel();
+                .then((resp) => {
+                    requestUpdateCompetencies(formData.competence_ids, resp.id as number);
                 })
                 .catch((err) => {
                     console.error(err);
@@ -222,10 +236,9 @@ export const CompetenciesEdit = (props: IProps) => {
         if(data) {
             const newOptions = data.map((item) => {
                 return {
-                    label       : item.name,
-                    value       : item.id,
-                    showCheckbox: false,
-                    children    : item.children ? reMap(item.children) : undefined
+                    label   : item.name,
+                    value   : String(item.id),
+                    children: item.children?.length ? reMap(item.children) : undefined
                 };
             });
 
@@ -410,11 +423,11 @@ export const CompetenciesEdit = (props: IProps) => {
                                     <div className={cn('competencies-edit__skills')}>
                                         {pos.competencies?.map((comp) => (
                                             <Tooltip
-                                                key={comp.id}
-                                                content={comp.name}
+                                                key={comp.competence_id}
+                                                content={comp.competence?.name}
                                                 theme="dark"
                                             >
-                                                <span className={cn('competencies-edit__skills-tag')}>{comp.name}</span>
+                                                <span className={cn('competencies-edit__skills-tag')}>{comp.competence?.name}</span>
                                             </Tooltip>
                                         ))}
                                     </div>

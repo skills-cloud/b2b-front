@@ -10,11 +10,14 @@ export type CvId = number;
 export type ID = number;
 export type PositionId = number;
 export type NoName = string;
+export type YearStarted = number;
+export type Years = number;
 
 export interface CvPosition {
-    competencies_ids?: number[];
     cv_id: CvId;
     id?: ID;
     position_id?: PositionId;
     title?: NoName;
+    year_started?: YearStarted;
+    years?: Years;
 }
