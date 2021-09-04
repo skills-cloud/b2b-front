@@ -2,6 +2,7 @@ import React, { ReactNode, useMemo } from 'react';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconeClose from 'component/icons/close';
+import IconArrowLeft from 'component/icons/arrow-left-full';
 import Header from 'component/header';
 
 import style from './index.module.pcss';
@@ -12,7 +13,8 @@ export interface IProps {
     header?: ReactNode,
     footer?: ReactNode,
     children: ReactNode,
-    onClose?: () => void
+    onClose?: () => void,
+    onBack?: () => void
 }
 
 export const Modal = (props: IProps) => {
@@ -30,12 +32,26 @@ export const Modal = (props: IProps) => {
         <div className={cn('modal')}>
             <div className={cn('modal__content', { [`${JS_CLASS}`]: true })}>
                 <div className={cn('modal__body')}>
-                    <div className={cn('modal__header-wrapper')}>
+                    <div className={cn('modal__header-wrapper', {
+                        'modal__header-wrapper_with-back' : !!props.onBack,
+                        'modal__header-wrapper_with-close': !!props.onClose
+                    })}
+                    >
+                        {!!props.onBack && (
+                            <button
+                                type="button"
+                                onClick={props.onBack}
+                            >
+                                <IconArrowLeft
+                                    svg={{ className: cn('modal__icon-back') }}
+                                />
+                            </button>
+                        )}
                         {elHeader}
                         {!!props.onClose && (
                             <button
                                 type="button"
-                                className={cn('modal__button-close')}
+                                className={cn('modal__button')}
                                 onClick={props.onClose}
                             >
                                 <IconeClose svg={{ className: cn('modal__icon-close') }} />

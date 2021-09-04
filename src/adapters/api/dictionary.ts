@@ -22,6 +22,13 @@ export interface IResponseGetCityList {
     results: Array<City>
 }
 
+export interface ICompetence {
+    id: number,
+    name: string,
+    children?: Array<ICompetence>,
+    parent_id: number
+}
+
 export interface IResponseGetCitizenshipList {
     count: number,
     next?: string,

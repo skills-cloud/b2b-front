@@ -4,6 +4,7 @@ import { Organization } from 'adapter/types/main/organization/get/code-200';
 import { ProjectRead } from 'adapter/types/main/project/get/code-200';
 import { RequestType } from 'adapter/types/main/request-type/get/code-200';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
+import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 
 interface IBaseGetById {
     id: number
@@ -41,6 +42,13 @@ interface IPostMainRequestResponse {
     id: number
 }
 
+interface IPostMainRequestRequirement {
+    data: {
+        id: number
+    }
+}
+
+
 export const mainRequest = createApi({
     reducerPath: 'api/main/request',
     tagTypes   : ['main'],
@@ -53,6 +61,14 @@ export const mainRequest = createApi({
             query       : ({ id }) => ({
                 url   : `/request-requirement/${id}`,
                 method: 'GET'
+            })
+        }),
+        postMainRequestRequirement: build.mutation<IPostMainRequestRequirement, RequestRequirement>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/request-requirement/',
+                method: 'POST',
+                body
             })
         }),
         getMainRequestType: build.query<IResponseGetMainRequestType, IQueryParams>({
@@ -90,6 +106,14 @@ export const mainRequest = createApi({
             invalidatesTags: ['main'],
             query          : (body) => ({
                 url   : '/request/',
+                method: 'POST',
+                body
+            })
+        }),
+        postRequestRequirementCompetenciesSet: build.mutation<IPostMainRequestResponse, RequestRead>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...body }) => ({
+                url   : `/request-requirement/${id}/competencies-set/`,
                 method: 'POST',
                 body
             })
