@@ -108,49 +108,11 @@ export const CompetenciesEdit = (props: IProps) => {
         });
     };
 
-    const getCheckedNodes = (nodes: Array<INodeCheckboxTree>, checkedItems: Array<string>, isChildren = false) => {
-        let ids: Array<string> = [];
-
-        nodes?.forEach(({ value, children }) => {
-            const childrenNodes = checkedItems.includes(String(value)) && children ? getCheckedNodes(children, checkedItems, true) : '';
-            const includedValue = checkedItems.includes(String(value)) || isChildren ? value : '';
-            const childrenChecked = children?.filter((item) => checkedItems.includes(String(item.value)));
-
-            ids = [...ids];
-
-            if(childrenChecked?.length && children) {
-                ids = [...ids, ...childrenChecked.map((item) => item.value)];
-            }
-
-            if(childrenNodes) {
-                ids = [...ids, ...childrenNodes];
-            }
-
-            if(includedValue) {
-                ids = [...ids, includedValue];
-            }
-        });
-
-        return [...new Set([...ids])];
-    };
-
     const onClickDots = (positionItemParam: CvPositionRead) => () => {
         const newChecked = positionItemParam.competencies?.map((item) => String(item.competence_id)) || [];
-        const newOptions = options.reduce((acc, curr) => {
-            if(curr.children) {
-                acc.push(...curr.children);
-            }
-
-            return acc;
-        }, [] as Array<INodeCheckboxTree>);
-        const nodes = getCheckedNodes(newOptions, newChecked);
 
         setPositionItem(positionItemParam);
-        setChecked(nodes);
-        setExpanded((oldState) => ([
-            ...oldState,
-            ...nodes
-        ]));
+        setChecked(newChecked);
         setActiveWindow('checkbox');
     };
 

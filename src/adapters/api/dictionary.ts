@@ -150,7 +150,7 @@ export const dictionary = createApi({
                 method: 'GET'
             })
         }),
-        getCityList: build.query<IResponseGetCityList, { search: string, country_id: string }>({
+        getCityList: build.query<IResponseGetCityList, { search: string, country_id?: string }>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'city/',

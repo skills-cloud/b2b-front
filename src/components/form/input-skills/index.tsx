@@ -104,13 +104,13 @@ const InputSkills = (props: IProps) => {
                             label: item?.name
                         }));
 
-                        setValue(props.name, newValue);
+                        setValue(props.name, newValue, { shouldDirty: true });
                     })
                     .catch((err) => {
                         console.error(err);
                     });
             } else if(values.length) {
-                setValue(props.name, values);
+                setValue(props.name, values, { shouldDirty: values.some((item) => !!item) });
             }
         }
     }, []);
@@ -193,7 +193,6 @@ const InputSkills = (props: IProps) => {
         <Controller
             name={props.name}
             control={control}
-            defaultValue={props.defaultValue}
             rules={{ required: props.required }}
             render={({ field: { onChange, onBlur, value: renderValue } }) => {
                 return (

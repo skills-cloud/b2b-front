@@ -97,24 +97,23 @@ const InputCountry = (props: IProps) => {
             }
 
             if(ids.length) {
-                dispatch(dictionary.endpoints.getCountryById.initiate({
-                    id: String(ids[0])
+                Promise.all(ids.map((item) => {
+                    return dispatch(dictionary.endpoints.getCountryById.initiate({
+                        id: String(item)
+                    }))
+                        .then((resp) => ({
+                            label: resp.data?.name || '',
+                            value: String(resp.data?.id) || ''
+                        }));
                 }))
-                    .then(({ data: loadData }) => {
-                        if(loadData) {
-                            const newValue = {
-                                label: loadData.name,
-                                value: String(loadData.id)
-                            };
-
-                            setValue(props.name, [newValue]);
-                        }
+                    .then((resp: Array<IValue>) => {
+                        setValue(props.name, resp, { shouldDirty: true });
                     })
                     .catch((err) => {
                         console.error(err);
                     });
             } else if(values.length) {
-                setValue(props.name, values);
+                setValue(props.name, values, { shouldDirty: values.some((item) => !!item) });
             }
         }
     }, []);
@@ -166,19 +165,16 @@ const InputCountry = (props: IProps) => {
         }
     }, [props.elError, props.name, errors[props.name]]);
 
-    const elInput = (renderValue: OptionTypeBase, onChange: (e: IValue) => void, onBlur: () => void): ReactNode => {
+    const elInput = (renderValue: OptionTypeBase, onChange: () => void, onBlur: () => void): ReactNode => {
         const selectProps = {
             onFocus,
             onBlur,
-            onChange: (e: IValue) => {
-                onChange(e);
-                props.onChange?.(e);
-            },
+            onChange,
             value       : renderValue,
             defaultValue: renderValue,
             placeholder : props.placeholder,
             autoFocus   : props.autoFocus,
-            isMulti     : false,
+            isMulti     : true,
             isClearable : props.clearable,
             tabIndex    : props.tabIndex,
             cacheOption : true,
@@ -202,7 +198,6 @@ const InputCountry = (props: IProps) => {
         <Controller
             name={props.name}
             control={control}
-            defaultValue={props.defaultValue}
             rules={{ required: props.required }}
             render={({ field: { onChange, onBlur, value: renderValue } }) => {
                 return (

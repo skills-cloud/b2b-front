@@ -59,14 +59,11 @@ export const cv = createApi({
         }),
         getCvList: build.query<ICvRequest, IGetCvListFilters | undefined>({
             providesTags: ['cv'],
-            query       : (params) => {
-                console.log('PARAMS', params)
-                return {
-                    url   : 'cv/',
-                    method: 'GET',
-                    params
-                };
-            }
+            query       : (params) => ({
+                url   : 'cv/',
+                method: 'GET',
+                params
+            })
         }),
         getCvById: build.query<CvDetailRead, { id: string }>({
             providesTags: ['cv'],

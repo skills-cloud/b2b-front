@@ -1,4 +1,4 @@
-import React, { useMemo, useState, Fragment, useEffect } from 'react';
+import React, { useMemo, useState, Fragment, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +17,7 @@ import FormInput from 'component/form/input';
 import InputSelect from 'component/form/select';
 import InputSkills from 'component/form/input-skills';
 import InputCountry from 'component/form/input-country';
+import InputCity from 'component/form/input-city';
 import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
 import Modal from 'component/modal';
@@ -31,39 +32,33 @@ import { IValue } from 'component/form/select/types';
 import { normalizeObject } from 'src/helper/normalize-object';
 
 import style from './index.module.pcss';
-import InputCity from 'component/form/input-city';
+
+export interface IFormValues {
+    search?: string,
+    country?: Array<IValue> | null,
+    city?: Array<IValue> | null,
+    competencies?: Array<IValue>
+}
 
 export const Specialists = () => {
     const cn = useClassnames(style);
     const history = useHistory();
     const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
+    const firstRenderRef = useRef<number>(0);
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
-    const context = useForm({
-        mode         : 'all',
-        defaultValues: {
-            search : qs.search,
-            country: {
-                value: ''
-            },
-            city: {
-                value: ''
-            },
-            competencies: []
-        }
-    });
+    const context = useForm<IFormValues>({ mode: 'all' });
 
     const onChangeFilters = () => {
         const formData = context.getValues();
         const objectToNormalize = {
-            search              : formData.search || qs.search,
-            country_id          : formData.country?.value || qs.country_id,
-            city_id             : formData.city?.value || qs.city_id,
-            competencies_ids_any: formData.competencies.length ? formData.competencies.map((comp: IValue) => comp.value) : qs.competencies_ids_any
+            search              : qs.search || formData.search,
+            country_id          : formData.country?.map((item) => item?.value),
+            city_id             : formData.city?.map((item) => item?.value),
+            competencies_ids_any: formData.competencies?.length ? formData.competencies.map((comp: IValue) => comp.value) : qs.competencies_ids_any
         };
 
-        const searchString = normalizeObject(objectToNormalize);
         const isReplace = Object.values(objectToNormalize).some((item) => {
             if(Array.isArray(item)) {
                 return item?.length > 0;
@@ -72,11 +67,11 @@ export const Specialists = () => {
             return !!item;
         });
 
-        if(isReplace) {
-            history.replace({
-                search: stringify(searchString)
-            });
-        }
+        history.replace({
+            search: isReplace ? stringify(normalizeObject(objectToNormalize)) : ''
+        });
+
+        firstRenderRef.current += 1;
     };
 
     useEffect(() => {
@@ -90,7 +85,6 @@ export const Specialists = () => {
     }, [JSON.stringify(qs)]);
 
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [countryId, setCountryId] = useState<string>(qs.country_id as string);
 
     useModalClose(showModal, setShowModal);
 
@@ -117,10 +111,6 @@ export const Specialists = () => {
                 console.error(err);
             });
     }, 150);
-
-    const onChangeCountry = (countryValue: IValue) => {
-        setCountryId(countryValue.value);
-    };
 
     const onClickLinked = (cvId?: number) => () => {
         if(cvId) {
@@ -287,7 +277,6 @@ export const Specialists = () => {
                             onSubmit={(e) => {
                                 e.preventDefault();
                             }}
-                            onChange={onChangeFilters}
                             className={cn('specialists__form')}
                         >
                             <FormInput
@@ -303,23 +292,23 @@ export const Specialists = () => {
                                 placeholder={t('routes.specialists.sidebar.filters.form.position.placeholder')}
                                 label={t('routes.specialists.sidebar.filters.form.position.label')}
                                 isMulti={true}
+                                clearable={true}
                             />
                             <InputCountry
-                                defaultValue={[qs.country_id as string]}
+                                defaultValue={qs.country_id as Array<string>}
                                 name="country"
                                 direction="column"
                                 placeholder={t('routes.specialists.sidebar.filters.form.country.placeholder')}
                                 label={t('routes.specialists.sidebar.filters.form.country.label')}
-                                onChange={onChangeCountry}
+                                clearable={true}
                             />
                             <InputCity
-                                defaultValue={[qs.city_id as string]}
-                                countryId={countryId}
+                                defaultValue={qs.city_id as Array<string>}
                                 name="city"
                                 direction="column"
-                                disabled={!countryId}
                                 placeholder={t('routes.specialists.sidebar.filters.form.city.placeholder')}
                                 label={t('routes.specialists.sidebar.filters.form.city.label')}
+                                clearable={true}
                             />
                             <InputSkills
                                 defaultValue={qs.competencies_ids_any as Array<string>}
