@@ -97,12 +97,9 @@ const InputSkills = (props: IProps) => {
             }
 
             if(ids.length) {
-                Promise.all(ids.map((id) => {
-                    return dispatch(dictionary.endpoints.getCompetenceById.initiate({ id: String(id) }))
-                        .then(({ data }) => data);
-                }))
-                    .then((resp) => {
-                        const newValue = resp.map((item) => ({
+                dispatch(dictionary.endpoints.getCompetence.initiate({ id: ids as Array<number> }))
+                    .then(({ data }) => {
+                        const newValue = data?.results?.map((item) => ({
                             value: item?.id,
                             label: item?.name
                         }));

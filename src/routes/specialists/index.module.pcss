@@ -5,6 +5,7 @@
     grid-template-columns: 1fr 320px;
     width: 100%;
     max-width: 992px;
+    align-items: flex-start;
 
     &__search,
     &__main {
@@ -20,6 +21,7 @@
         display: grid;
         grid-auto-flow: row;
         grid-row-gap: 32px;
+        grid-template-rows: max-content;
     }
 
     &__main-header {

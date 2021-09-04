@@ -9,19 +9,18 @@ import FormInput from 'component/form/input';
 import FormDate from 'component/form/date';
 import FormInputSkills from 'component/form/input-skills';
 import InputSelect from 'component/form/select';
-
-import { useDispatch } from 'component/core/store';
-import { dictionary } from 'adapter/api/dictionary';
-
-import style from './index.module.pcss';
-import { CvCareerRead } from 'adapter/types/cv/career/get/code-200';
-import { career } from 'adapter/api/career';
-import { mainRequest } from 'adapter/api/main';
 import Error from 'component/error';
 import InputFile from 'component/form/file';
 
+import { useDispatch } from 'component/core/store';
+import { dictionary } from 'adapter/api/dictionary';
+import { career } from 'adapter/api/career';
+import { mainRequest } from 'adapter/api/main';
+import { CvCareerRead, CvCareerFileRead } from 'adapter/types/cv/career/get/code-200';
 
-export interface IResultForm extends Omit<CvCareerRead, 'competencies_select' | 'organization' | 'position' | 'files'> {
+import style from './index.module.pcss';
+
+export interface IResultForm extends Omit<CvCareerRead, 'competencies_select' | 'organization' | 'position'> {
     competencies_select: Array<{
         value?: number,
         label: string
@@ -34,11 +33,11 @@ export interface IResultForm extends Omit<CvCareerRead, 'competencies_select' | 
         value?: number,
         label: string
     },
-    files: File
+    filesArray?: Array<File>
 }
 
 interface IProjectForm {
-    defaultValues: { defaultValues: { career: IResultForm, files?: FileList } } | undefined,
+    defaultValues: { defaultValues: { career: IResultForm } } | undefined,
     onSetLoading: (loading: boolean) => void,
     onSubmit?: () => void
 }
@@ -52,6 +51,7 @@ const CareerForm = (props: IProjectForm) => {
     const [postCareer, { isLoading: isPostLoading }] = career.usePostCareerMutation();
     const [patchCareer, { isLoading: isPatchLoading }] = career.usePatchCareerByIdMutation();
     const [uploadFile] = career.useUploadCareerFileByIdMutation();
+    const [deleteFile] = career.useDeleteCareerFileByIdMutation();
     const { data: dataOrganizationList } = mainRequest.useGetMainOrganizationQuery(undefined);
 
     const [error, setError] = useState<Array<string> | string | null>(null);
@@ -64,6 +64,15 @@ const CareerForm = (props: IProjectForm) => {
         setError(null);
     };
 
+    const onDeleteFile = (file: CvCareerFileRead) => {
+        if(file) {
+            void deleteFile({
+                id     : parseInt(id, 10),
+                file_id: String(file.id)
+            });
+        }
+    };
+
     const onSubmit = methods.handleSubmit((formData) => {
         const data = {
             ...formData.career,
@@ -72,22 +81,26 @@ const CareerForm = (props: IProjectForm) => {
             organization_id : formData.career?.organization?.value as number,
             position_id     : formData.career?.position?.value
         };
-        const request = formData.career.id ? patchCareer(data) : postCareer(data);
+        const request = formData.career?.id ? patchCareer(data) : postCareer(data);
 
         request
             .unwrap()
             .then((resp) => {
-                if(formData.career.files) {
-                    const formDataFile = new FormData();
+                if(formData.career?.filesArray) {
+                    const files = formData.career.filesArray;
 
-                    formDataFile.set('file', formData.career.files);
+                    files.forEach((file) => {
+                        const formDataFile = new FormData();
 
-                    uploadFile({
-                        data: formDataFile,
-                        id  : String(resp.id)
-                    })
-                        .unwrap()
-                        .catch(console.error);
+                        formDataFile.set('file', file);
+
+                        uploadFile({
+                            data: formDataFile,
+                            id  : String(resp.id)
+                        })
+                            .unwrap()
+                            .catch(console.error);
+                    });
                 }
 
                 props.onSubmit?.();
@@ -205,7 +218,12 @@ const CareerForm = (props: IProjectForm) => {
                     <label className={cn('career-form__label')}>
                         {t('routes.person.career.fields.position')}
                     </label>
-                    <InputFile name="career.files" />
+                    <InputFile
+                        name="career.filesArray"
+                        multiple={true}
+                        defaultValue={props.defaultValues?.defaultValues?.career?.files}
+                        onDeleteFile={onDeleteFile}
+                    />
                 </div>
             </form>
             {elError}

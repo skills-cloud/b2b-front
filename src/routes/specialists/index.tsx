@@ -25,7 +25,7 @@ import { H2 } from 'component/header';
 
 import { cv } from 'adapter/api/cv';
 import { dictionary } from 'adapter/api/dictionary';
-import { CvList, CvCareerRead, CvCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
+import { CvList, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 import { IValue } from 'component/form/select/types';
 
 import { normalizeObject } from 'src/helper/normalize-object';
@@ -83,7 +83,11 @@ export const Specialists = () => {
         onChangeFilters();
     }, [JSON.stringify(context.getValues())]);
 
-    const { data, isLoading } = cv.useGetCvListQuery({ search: '' }, { refetchOnMountOrArgChange: true });
+    const { data, isLoading, refetch } = cv.useGetCvListQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
+
+    useEffect(() => {
+        refetch();
+    }, [JSON.stringify(qs)]);
 
     const [showModal, setShowModal] = useState<boolean>(false);
     const [countryId, setCountryId] = useState<string>(qs.country_id as string);
@@ -177,12 +181,12 @@ export const Specialists = () => {
         }
     };
 
-    const elCompetencies = (competencies?: Array<CvCompetenceRead>) => {
+    const elCompetencies = (competencies?: Array<CvPositionCompetenceRead>) => {
         if(competencies?.length) {
             return (
                 <div className={cn('specialists__competencies')}>
                     {competencies.map((comp) => (
-                        <div key={comp.id} className={cn('specialists__competence')}>
+                        <div key={comp.competence_id} className={cn('specialists__competence')}>
                             {comp.competence?.name}
                         </div>
                     ))}
@@ -221,7 +225,7 @@ export const Specialists = () => {
                     <p className={cn('specialists__block-title')}>
                         {t('routes.specialists.main.competencies')}
                     </p>
-                    {elCompetencies(cvItem.competencies)}
+                    {elCompetencies(cvItem.positions?.[0].competencies)}
                 </div>
                 <div className={cn('specialists__user-rate')}>
                     <p className={cn('specialists__block-title')}>

@@ -5,21 +5,12 @@
         }
     ],
     "definitions": {
-        "CompetenceInline": {
+        "Competence": {
             "properties": {
-                "description": {
-                    "nullable": true,
-                    "title": "Описание",
-                    "type": "string"
-                },
                 "id": {
                     "readOnly": true,
                     "title": "ID",
                     "type": "integer"
-                },
-                "is_verified": {
-                    "title": "Подтверждено",
-                    "type": "boolean"
                 },
                 "name": {
                     "maxLength": 500,
@@ -35,6 +26,31 @@
             },
             "required": [
                 "name"
+            ],
+            "type": "object"
+        },
+        "CvPositionCompetenceRead": {
+            "properties": {
+                "competence": {
+                    "$ref": "#/definitions/Competence"
+                },
+                "competence_id": {
+                    "title": "Competence id",
+                    "type": "integer"
+                },
+                "cv_position_id": {
+                    "readOnly": true,
+                    "title": "Cv position id",
+                    "type": "string"
+                },
+                "years": {
+                    "nullable": true,
+                    "title": "Years",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "competence_id"
             ],
             "type": "object"
         },
@@ -79,7 +95,7 @@
             "properties": {
                 "competencies": {
                     "items": {
-                        "$ref": "#/definitions/CompetenceInline"
+                        "$ref": "#/definitions/CvPositionCompetenceRead"
                     },
                     "readOnly": true,
                     "type": "array"
@@ -121,6 +137,16 @@
                     "nullable": true,
                     "title": "Произвольное название",
                     "type": "string"
+                },
+                "year_started": {
+                    "readOnly": true,
+                    "title": "Year started",
+                    "type": "integer"
+                },
+                "years": {
+                    "nullable": true,
+                    "title": "Years",
+                    "type": "integer"
                 }
             },
             "required": [

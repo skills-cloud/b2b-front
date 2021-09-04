@@ -5,6 +5,7 @@ import useClassnames, { IStyle } from 'hook/use-classnames';
 import Button from 'component/button';
 import Modal from 'component/modal';
 import IconArrowLeft from 'component/icons/arrow-left-full';
+import { H2 } from 'component/header';
 
 import { CvCareerRead } from 'adapter/types/cv/career/get/code-200';
 
@@ -51,7 +52,8 @@ export const CareerEdit = (props: IProps) => {
                     organization: {
                         value: item.organization?.id,
                         label: item.organization?.name || ''
-                    }
+                    },
+                    files: item.files
                 }))[0]
         }
     } : undefined;
@@ -108,7 +110,7 @@ export const CareerEdit = (props: IProps) => {
         }
 
         return (
-            <div className={cn('career-edit__modal-header')}>
+            <H2 className={cn('career-edit__modal-header')}>
                 <button
                     type="button"
                     onClick={backToList}
@@ -118,7 +120,7 @@ export const CareerEdit = (props: IProps) => {
                     />
                 </button>
                 {props.fields?.filter((field) => field.id === careerId)[0]?.organization?.name}
-            </div>
+            </H2>
         );
     };
 

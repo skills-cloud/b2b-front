@@ -17,144 +17,141 @@ import { useClassnames } from 'hook/use-classnames';
 
 import style from './index.module.pcss';
 
-const Requirements = ({ requirements }: {requirements: Array<RequestRequirementRead> | undefined}) => {
+const Requirements = ({ requirements }: { requirements: Array<RequestRequirementRead> | undefined }) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
 
-    return requirements?.map((requirement, index) => {
-        const {
-            name,
-            id:requirementId,
-            position,
-            count,
-            competencies,
-            experience_years,
-            max_price,
-            description,
-            work_location_city: location,
-            work_location_address: address,
-            type_of_employment
-        } = requirement;
-        const ancor = index === 0 ? { id: ESectionInvariants.Requirements } : {};
+    return (
+        <div className={cn('requirements')}>
+            {requirements?.map((requirement, index) => {
+                const {
+                    name,
+                    id:requirementId,
+                    position,
+                    count,
+                    competencies,
+                    experience_years,
+                    max_price,
+                    description,
+                    work_location_city: location,
+                    work_location_address: address,
+                    type_of_employment
+                } = requirement;
+                const ancor = index === 0 ? { id: ESectionInvariants.Requirements } : {};
 
-        let contextLocation = 'empty';
+                let contextLocation = 'empty';
 
-        if(location?.country.name && location?.name) {
-            contextLocation = 'country_city';
-        } else if(location?.country.name) {
-            contextLocation = 'country';
-        } else if(location?.name) {
-            contextLocation = 'city';
-        }
+                if(location?.country.name && location?.name) {
+                    contextLocation = 'country_city';
+                } else if(location?.country.name) {
+                    contextLocation = 'country';
+                } else if(location?.name) {
+                    contextLocation = 'city';
+                }
 
-        return (
-            <Section key={requirementId}>
-                <div className={cn('gap-bottom')}>
-                    <SectionHeader actions={
-                        <div className={cn('actions')}>
-                            <EditAction />
-                            <DeleteAction />
-                            <SearchAction />
-                        </div>
-                    }
-                    >{name || t('routes.project-request.blocks.empty-title')}
-                    </SectionHeader>
-                </div>
-
-                <div className={cn('gap-bottom')}>
-                    <H3 {...ancor}>
-                        {position?.name} ({count} {t('routes.project-request.blocks.people', { count })})
-                    </H3>
-                </div>
-
-                {competencies && competencies?.length > 0 || experience_years !== undefined && (
-                    <SectionContentList>
-                        {competencies && competencies?.length > 0 && (
-                            <SectionContentListItem
-                                title={
-                                    <div className={cn('skills-head')}>
-                                        {t('routes.project-request.blocks.competencies.name')}
+                return (
+                    <Section key={requirementId}>
+                        <div className={cn('requirements__gap-bottom')}>
+                            <SectionHeader
+                                actions={
+                                    <div className={cn('requirements__actions')}>
+                                        <EditAction />
+                                        <DeleteAction />
+                                        <SearchAction />
                                     </div>
                                 }
                             >
-                                {competencies?.map(({ competence, id:competenceId }) => (
-                                    <div className={cn('skills-tag')} key={competenceId}>
-                                        {competence?.name}
-                                    </div>
-                                ))}
-                            </SectionContentListItem>
+                                {name || t('routes.project-request.blocks.empty-title')}
+                            </SectionHeader>
+                        </div>
+
+                        <div className={cn('gap-bottom')}>
+                            <H3 {...ancor}>
+                                {position?.name} ({count} {t('routes.project-request.blocks.people', { count })})
+                            </H3>
+                        </div>
+
+                        {competencies && competencies?.length > 0 || experience_years !== undefined && (
+                            <SectionContentList>
+                                {competencies && competencies?.length > 0 && (
+                                    <SectionContentListItem
+                                        title={
+                                            <div className={cn('skills-head')}>
+                                                {t('routes.project-request.blocks.competencies.name')}
+                                            </div>
+                                        }
+                                    >
+                                        {competencies?.map(({ competence, id:competenceId }) => (
+                                            <div className={cn('skills-tag')} key={competenceId}>
+                                                {competence?.name}
+                                            </div>
+                                        ))}
+                                    </SectionContentListItem>
+                                )}
+                                {experience_years && (
+                                    <SectionContentListItem title={t('routes.project-request.blocks.competencies.experience')}>
+                                        {t('routes.project-request.blocks.competencies.experience-content', {
+                                            experience   : experience_years,
+                                            experienceTrl: t(
+                                                'routes.project-request.blocks.competencies.experience-years',
+                                                { count: experience_years }
+                                            )
+                                        })}
+                                    </SectionContentListItem>
+                                )}
+                                <Separator />
+                            </SectionContentList>
                         )}
-                        {experience_years !== undefined && (
-                            <SectionContentListItem title={t('routes.project-request.blocks.competencies.experience')}>
-                                {t('routes.project-request.blocks.competencies.experience-content', {
-                                    experience   : experience_years,
-                                    experienceTrl: t(
-                                        'routes.project-request.blocks.competencies.experience-years',
-                                        { count: experience_years }
-                                    )
-                                })}
-                            </SectionContentListItem>
+
+                        {location && (
+                            <React.Fragment>
+                                <H3>{t('routes.project-request.blocks.location.title')}</H3>
+                                <SectionContentList>
+                                    <SectionContentListItem title={t('routes.project-request.blocks.location.point')}>
+                                        {t('routes.project-request.blocks.location.point-content', {
+                                            context: contextLocation,
+                                            country: location.country.name,
+                                            city   : location.name
+                                        })}
+                                    </SectionContentListItem>
+                                    <SectionContentListItem title={t('routes.project-request.blocks.location.address')}>
+                                        {address}
+                                    </SectionContentListItem>
+                                    <SectionContentListItem title={t('routes.project-request.blocks.location.type-of-employment')}>
+                                        {type_of_employment?.name}
+                                    </SectionContentListItem>
+                                    <Separator />
+                                </SectionContentList>
+                            </React.Fragment>
                         )}
-                        <Separator />
-                    </SectionContentList>
-                )}
 
-                {location && (
-                    <React.Fragment>
-                        <H3>
-                            {t('routes.project-request.blocks.location.title')}
-                        </H3>
-                        <SectionContentList>
-                            <SectionContentListItem title={t('routes.project-request.blocks.location.point')}>
-                                {t(
-                                    'routes.project-request.blocks.location.point-content',
-                                    {
-                                        context: contextLocation,
-                                        country: location.country.name,
-                                        city   : location.name
-                                    })}
-                            </SectionContentListItem>
-                            <SectionContentListItem title={t('routes.project-request.blocks.location.address')}>
-                                {address}
-                            </SectionContentListItem>
-                            <SectionContentListItem title={t('routes.project-request.blocks.location.type-of-employment')}>
-                                {type_of_employment?.name}
-                            </SectionContentListItem>
-                            <Separator />
-                        </SectionContentList>
-                    </React.Fragment>
-                )}
+                        {max_price && (
+                            <React.Fragment>
+                                <H3>{t('routes.project-request.blocks.price.title')}</H3>
+                                <SectionContentList>
+                                    <SectionContentListItem title={t('routes.project-request.blocks.price.per-hour')}>
+                                        {t('routes.project-request.blocks.price.value', { value: max_price })}
+                                    </SectionContentListItem>
+                                    <Separator />
+                                </SectionContentList>
+                            </React.Fragment>
+                        )}
 
-                {max_price && (
-                    <React.Fragment>
-                        <H3>
-                            {t('routes.project-request.blocks.price.title')}
-                        </H3>
-                        <SectionContentList>
-                            <SectionContentListItem title={t('routes.project-request.blocks.price.per-hour')}>
-                                {t('routes.project-request.blocks.price.value', { value: max_price })}
-                            </SectionContentListItem>
-                            <Separator />
-                        </SectionContentList>
-                    </React.Fragment>
-                )}
-
-                {description && (
-                    <React.Fragment>
-
-                        <H3>
-                            {t('routes.project-request.blocks.other.title')}
-                        </H3>
-                        <SectionContentList>
-                            <SectionContentListItem title={t('routes.project-request.blocks.other.description')}>
-                                {description}
-                            </SectionContentListItem>
-                        </SectionContentList>
-                    </React.Fragment>
-                )}
-            </Section>
-        );
-    });
+                        {description && (
+                            <React.Fragment>
+                                <H3>{t('routes.project-request.blocks.other.title')}</H3>
+                                <SectionContentList>
+                                    <SectionContentListItem title={t('routes.project-request.blocks.other.description')}>
+                                        {description}
+                                    </SectionContentListItem>
+                                </SectionContentList>
+                            </React.Fragment>
+                        )}
+                    </Section>
+                );
+            })}
+        </div>
+    );
 };
 
 export default Requirements;

@@ -5,12 +5,14 @@ import useClassnames, { IStyle } from 'hook/use-classnames';
 import Button from 'component/button';
 import Modal from 'component/modal';
 import IconArrowLeft from 'component/icons/arrow-left-full';
+import { H2 } from 'component/header';
+
+import { CvProjectRead } from 'adapter/types/cv/project/get/code-200';
 
 import ProjectsList from '../list';
 import ProjectsForm from '../form';
 import RemoveModal from '../remove-modal';
 import style from './index.module.pcss';
-import { CvProjectRead } from 'adapter/types/cv/project/get/code-200';
 
 export interface IProps {
     className?: string | IStyle,
@@ -107,7 +109,7 @@ export const ProjectsEdit = (props: IProps) => {
         }
 
         return (
-            <div className={cn('projects-edit__modal-header')}>
+            <H2 className={cn('projects-edit__modal-header')}>
                 <button
                     type="button"
                     onClick={backToList}
@@ -117,7 +119,7 @@ export const ProjectsEdit = (props: IProps) => {
                     />
                 </button>
                 {props.fields?.filter((field) => field.id === projectId)[0]?.position?.name}
-            </div>
+            </H2>
         );
     };
 

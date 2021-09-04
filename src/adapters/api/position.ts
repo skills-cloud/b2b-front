@@ -3,6 +3,7 @@ import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
 import { CvPosition as IResponsePostPosition } from 'adapter/types/cv/position/post/code-201';
 import { CvPosition as IResponsePatchPosition } from 'adapter/types/cv/position/id/patch/code-200';
 import { CvPositionFileRead } from 'adapter/types/cv/position/id/upload-file/post/code-201';
+import { CvPositionCompetence as IResponsePostCompetence } from 'adapter/types/cv/position/id/competencies-set/post/code-201';
 
 export interface IResponseGetPositionList {
     total: number,
@@ -24,6 +25,11 @@ export interface IGetPositionListFilters {
 }
 
 export type TDataPostPosition = Omit<IResponsePostPosition, 'id'>;
+
+export interface IDataPostCompetence {
+    data: Array<Omit<IResponsePostCompetence, 'cv_position_id'>>,
+    id: number
+}
 
 export interface IPostPositionFileParams {
     data: FormData,
@@ -68,6 +74,13 @@ export const position = createApi({
                 url   : 'position/',
                 method: 'POST',
                 body
+            })
+        }),
+        postPositionCompetenciesById: build.mutation<IResponsePostPosition, IDataPostCompetence>({
+            query: ({ id, data }) => ({
+                url   : `position/${id}/competencies-set/`,
+                method: 'POST',
+                body  : data
             })
         }),
         postUploadFileToPosition: build.mutation<CvPositionFileRead, IPostPositionFileParams>({

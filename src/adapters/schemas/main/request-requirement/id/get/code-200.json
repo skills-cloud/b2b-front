@@ -392,36 +392,6 @@
             ],
             "type": "object"
         },
-        "CvCompetenceRead": {
-            "properties": {
-                "competence": {
-                    "$ref": "#/definitions/Competence"
-                },
-                "competence_id": {
-                    "title": "Competence id",
-                    "type": "integer"
-                },
-                "cv_id": {
-                    "title": "Cv id",
-                    "type": "integer"
-                },
-                "id": {
-                    "readOnly": true,
-                    "title": "ID",
-                    "type": "integer"
-                },
-                "years": {
-                    "nullable": true,
-                    "title": "Years",
-                    "type": "integer"
-                }
-            },
-            "required": [
-                "competence_id",
-                "cv_id"
-            ],
-            "type": "object"
-        },
         "CvContactRead": {
             "properties": {
                 "comment": {
@@ -616,13 +586,6 @@
                     "title": "City id",
                     "type": "integer"
                 },
-                "competencies": {
-                    "items": {
-                        "$ref": "#/definitions/CvCompetenceRead"
-                    },
-                    "readOnly": true,
-                    "type": "array"
-                },
                 "contacts": {
                     "items": {
                         "$ref": "#/definitions/CvContactRead"
@@ -802,6 +765,31 @@
             },
             "type": "object"
         },
+        "CvPositionCompetenceRead": {
+            "properties": {
+                "competence": {
+                    "$ref": "#/definitions/Competence"
+                },
+                "competence_id": {
+                    "title": "Competence id",
+                    "type": "integer"
+                },
+                "cv_position_id": {
+                    "readOnly": true,
+                    "title": "Cv position id",
+                    "type": "string"
+                },
+                "years": {
+                    "nullable": true,
+                    "title": "Years",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "competence_id"
+            ],
+            "type": "object"
+        },
         "CvPositionFileRead": {
             "properties": {
                 "cv_position_id": {
@@ -843,7 +831,7 @@
             "properties": {
                 "competencies": {
                     "items": {
-                        "$ref": "#/definitions/CompetenceInline"
+                        "$ref": "#/definitions/CvPositionCompetenceRead"
                     },
                     "readOnly": true,
                     "type": "array"
@@ -885,6 +873,16 @@
                     "nullable": true,
                     "title": "Произвольное название",
                     "type": "string"
+                },
+                "year_started": {
+                    "readOnly": true,
+                    "title": "Year started",
+                    "type": "integer"
+                },
+                "years": {
+                    "nullable": true,
+                    "title": "Years",
+                    "type": "integer"
                 }
             },
             "required": [

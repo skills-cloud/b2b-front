@@ -7,7 +7,6 @@ import useClassnames from 'hook/use-classnames';
 import IconPencil from 'component/icons/pencil';
 import Tooltip from 'component/tooltip';
 import Loader from 'component/loader';
-import VerifyIcon from 'component/verify-icon';
 
 import { position } from 'adapter/api/position';
 
@@ -53,18 +52,17 @@ const Competencies = (props: IProps) => {
                                 >
                                     <div className={cn('competencies__info-list-top')}>
                                         <h5 className={cn('competencies__info-list-role')}>{pos.position?.name || pos.title}</h5>
-                                        <VerifyIcon isVerify={pos.competencies?.every((comp) => comp.is_verified)} />
                                     </div>
                                     <div className={cn('competencies__list-item')}>
                                         <strong>{t('routes.person.blocks.competencies.skills')}</strong>
                                         <div className={cn('competencies__skills')}>
                                             {pos.competencies?.map((comp) => (
                                                 <Tooltip
-                                                    key={comp.id}
-                                                    content={comp.name}
+                                                    key={comp.competence_id}
+                                                    content={comp.competence?.name}
                                                     theme="dark"
                                                 >
-                                                    <span className={cn('competencies__skills-tag')}>{comp.name}</span>
+                                                    <span className={cn('competencies__skills-tag')}>{comp.competence?.name}</span>
                                                 </Tooltip>
                                             ))}
                                         </div>

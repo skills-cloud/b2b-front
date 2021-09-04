@@ -84,6 +84,11 @@ export interface IResponseGetTypeOfEmployment {
     results: Array<TypeOfEmployment>
 }
 
+export interface IGetCompetenceListParams {
+    search?: string,
+    id?: Array<number>
+}
+
 export const dictionary = createApi({
     reducerPath: 'api/dictionary',
     tagTypes   : ['dictionary'],
@@ -107,7 +112,7 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getCompetence: build.query<IResponseGetCompetenceList, { search: string }>({
+        getCompetence: build.query<IResponseGetCompetenceList, IGetCompetenceListParams>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'competence/',

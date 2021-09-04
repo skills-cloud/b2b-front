@@ -6,6 +6,7 @@ import useClassnames, { IStyle } from 'hook/use-classnames';
 import Button from 'component/button';
 import Modal from 'component/modal';
 import IconArrowLeft from 'component/icons/arrow-left-full';
+import { H2 } from 'component/header';
 
 import { CvEducationRead } from 'adapter/types/cv/education/get/code-200';
 
@@ -71,7 +72,7 @@ export const EducationEdit = (props: IProps) => {
                     <Fragment>
                         {educationId === null && t('routes.person.education.header')}
                         {educationId !== null && (
-                            <div className={cn('education__modal-header')}>
+                            <H2 className={cn('education__modal-header')}>
                                 <button
                                     type="button"
                                     onClick={backToList}
@@ -81,7 +82,7 @@ export const EducationEdit = (props: IProps) => {
                                     />
                                 </button>
                                 {props.fields?.filter((field) => field.id === educationId)[0].education_place?.name}
-                            </div>
+                            </H2>
                         )}
                     </Fragment>
                 }
