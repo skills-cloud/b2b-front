@@ -22,17 +22,19 @@
         }
 
         .rct-text {
-            display: flex;
+            display: grid;
             align-items: center;
             color: var(--color-text-dark);
             font-family: Roboto, sans-serif;
             font-size: 14px;
+            grid-template-columns: auto 1fr;
         }
 
         /* stylelint-disable-next-line selector-max-compound-selectors */
         .rct-text label {
-            display: flex;
+            display: grid;
             align-items: center;
+            grid-template-columns: min-content min-content min-content auto;
         }
 
         .rct-node {
@@ -101,4 +103,23 @@
     height: 100%;
     align-items: center;
     justify-content: center;
+}
+
+.checkbox-label {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding-right: 40px;
+}
+
+.checkbox-set-expirience {
+    color: var(--color-text-light);
+    text-decoration: underline dotted;
+
+    @media (hover: hover) and (pointer: fine) {
+
+        &:hover {
+            cursor: pointer;
+            text-decoration: none;
+        }
+    }
 }
