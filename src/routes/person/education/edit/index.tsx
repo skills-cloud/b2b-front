@@ -5,8 +5,7 @@ import useClassnames, { IStyle } from 'hook/use-classnames';
 
 import Button from 'component/button';
 import Modal from 'component/modal';
-import IconArrowLeft from 'component/icons/arrow-left-full';
-import { H2 } from 'component/header';
+import Header from 'component/header';
 
 import { CvEducationRead } from 'adapter/types/cv/education/get/code-200';
 
@@ -68,21 +67,18 @@ export const EducationEdit = (props: IProps) => {
     return (
         <Fragment>
             <Modal
+                onBack={educationId !== null ? backToList : undefined}
                 header={
                     <Fragment>
-                        {educationId === null && t('routes.person.education.header')}
+                        {educationId === null && (
+                            <Header level={1} tag="h2">
+                                {t('routes.person.education.header')}
+                            </Header>
+                        )}
                         {educationId !== null && (
-                            <H2 className={cn('education__modal-header')}>
-                                <button
-                                    type="button"
-                                    onClick={backToList}
-                                >
-                                    <IconArrowLeft
-                                        svg={{ className: cn('education__icon-back') }}
-                                    />
-                                </button>
+                            <Header level={1} tag="h2">
                                 {props.fields?.filter((field) => field.id === educationId)[0].education_place?.name}
-                            </H2>
+                            </Header>
                         )}
                     </Fragment>
                 }

@@ -3,7 +3,8 @@ import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 import { Organization } from 'adapter/types/main/organization/get/code-200';
 import { ProjectRead } from 'adapter/types/main/project/get/code-200';
 import { RequestType } from 'adapter/types/main/request-type/get/code-200';
-import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
+import { RequestRequirementRead, RequestRequirementCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
+import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 
 interface IBaseGetById {
     id: number
@@ -37,9 +38,19 @@ interface IResponseGetMainRequestType {
     results: Array<RequestType>
 }
 
-interface IPostMainRequestResponse {
+interface IPostBaseResponse {
     id: number
 }
+
+interface IParamsBaseDeleteById {
+    id: number
+}
+
+interface IParamsCompetenciesSet {
+    id: number,
+    competencies: Array<RequestRequirementCompetenceRead>
+}
+
 
 export const mainRequest = createApi({
     reducerPath: 'api/main/request',
@@ -53,6 +64,21 @@ export const mainRequest = createApi({
             query       : ({ id }) => ({
                 url   : `/request-requirement/${id}`,
                 method: 'GET'
+            })
+        }),
+        postMainRequestRequirement: build.mutation<IPostBaseResponse, RequestRequirement>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/request-requirement/',
+                method: 'POST',
+                body
+            })
+        }),
+        deleteMainRequestRequirementById: build.mutation<IPostBaseResponse, IParamsBaseDeleteById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/request-requirement/${id}/`,
+                method: 'DELETE'
             })
         }),
         getMainRequestType: build.query<IResponseGetMainRequestType, IQueryParams>({
@@ -86,7 +112,7 @@ export const mainRequest = createApi({
                 method: 'GET'
             })
         }),
-        postMainRequest: build.mutation<IPostMainRequestResponse, RequestRead>({
+        postMainRequest: build.mutation<IPostBaseResponse, RequestRead>({
             invalidatesTags: ['main'],
             query          : (body) => ({
                 url   : '/request/',
@@ -94,7 +120,15 @@ export const mainRequest = createApi({
                 body
             })
         }),
-        patchMainRequest: build.mutation<IPostMainRequestResponse, RequestRead>({
+        postRequestRequirementCompetenciesSet: build.mutation<IPostBaseResponse, IParamsCompetenciesSet>({
+            invalidatesTags: ['main'],
+            query          : ({ id, competencies }) => ({
+                url   : `/request-requirement/${id}/competencies-set/`,
+                method: 'POST',
+                body  : competencies
+            })
+        }),
+        patchMainRequest: build.mutation<IPostBaseResponse, RequestRead>({
             invalidatesTags: ['main'],
             query          : ({ id, ...body }) => ({
                 url   : `/request/${id}/`,

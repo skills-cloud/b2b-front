@@ -53,7 +53,7 @@ const ProjectRequest = () => {
         >
             <div className={cn('sections')} >
                 <MainInfo {...data} />
-                <Requirements requirements={data?.requirements} />
+                {data.id && <Requirements requirements={data?.requirements} requestId={data.id} />}
             </div>
 
         </SidebarLayout>

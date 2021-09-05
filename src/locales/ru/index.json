@@ -425,6 +425,26 @@
                 "submit": "Создать запрос",
                 "required-error": "Обязательно для заполнения"
             },
+            "requirements": {
+                "edit-modal": {
+                    "header_competence": "Компетенции",
+                    "header_not_competence": "Условия работы",
+                    "cancel": "Отмена",
+                    "save": "Сохранить",
+                    "tab_competence": "Компетенции",
+                    "tab_location": "Расположение",
+                    "tab_price": "Ставка",
+                    "tab_other": "Разное",
+                    "people" : "{{position}} ({{people}} чел.)",
+                    "addRole": "Добавить роль",
+                    "new-role": "Новая роль",
+                    "people-in-roles" : "{{people}} чел.",
+                    "position": "Начните вводить, например, “Front-end Dev”"
+                },
+                "edit-role": {
+                    "search": "Поиск"
+                }
+            },
             "blocks": {
                 "empty-title": "Название проектного запроса не\u00A0указано",
                 "empty-field": "Не\u00A0указано",
@@ -444,6 +464,7 @@
                 "competencies": {
                     "name": "Навыки",
                     "experience-content": "{{experience}}\u00A0{{experienceTrl}}",
+                    "experience-empty": "Опыт не\u00A0указан",
                     "experience": "Опыт",
                     "experience-years_0": "год",
                     "experience-years_1": "года",

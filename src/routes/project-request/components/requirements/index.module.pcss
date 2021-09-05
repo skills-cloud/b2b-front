@@ -1,12 +1,55 @@
-.requirements {
 
-    &__actions {
-        display: grid;
-        grid-gap: 16px;
-        grid-template-columns: auto auto auto;
-    }
+.actions {
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: auto auto auto;
+}
 
-    &__gap-bottom {
-        margin-bottom: 12px;
+.gap-bottom {
+    margin-bottom: 12px;
+}
+
+.position {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-gap: 16px;
+}
+
+.position-edit {
+
+    @media (hover: hover) and (pointer: fine) {
+        cursor: pointer;
     }
+}
+
+.icon-dots {
+    fill: var(--color-gray-100);
+}
+
+.add-role {
+    color: var(--color-button-secondary-text);
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+}
+
+.skills-head {
+    margin-top: 4px;
+}
+
+.skills-tag {
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
+    background-color: var(--color-gray-4);
+    font-size: 12px;
+    padding: 0 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 35px;
+    text-align: center;
+    font-weight: 400;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    box-sizing: border-box;
 }
