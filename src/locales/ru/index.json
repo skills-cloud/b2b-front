@@ -464,6 +464,7 @@
                 "competencies": {
                     "name": "Навыки",
                     "experience-content": "{{experience}}\u00A0{{experienceTrl}}",
+                    "experience-empty": "Опыт не\u00A0указан",
                     "experience": "Опыт",
                     "experience-years_0": "год",
                     "experience-years_1": "года",

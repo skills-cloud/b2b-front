@@ -38,20 +38,12 @@ interface IResponseGetMainRequestType {
     results: Array<RequestType>
 }
 
-interface IPostMainRequestResponse {
+interface IPostBaseResponse {
     id: number
 }
 
-interface IPostMainRequestRequirement {
-    data: {
-        id: number
-    }
-}
-
-interface IPostCompetenciesSet {
-    data: {
-        id: number
-    }
+interface IParamsBaseDeleteById {
+    id: number
 }
 
 interface IParamsCompetenciesSet {
@@ -74,12 +66,19 @@ export const mainRequest = createApi({
                 method: 'GET'
             })
         }),
-        postMainRequestRequirement: build.mutation<IPostMainRequestRequirement, RequestRequirement>({
+        postMainRequestRequirement: build.mutation<IPostBaseResponse, RequestRequirement>({
             invalidatesTags: ['main'],
             query          : (body) => ({
                 url   : '/request-requirement/',
                 method: 'POST',
                 body
+            })
+        }),
+        deleteMainRequestRequirementById: build.mutation<IPostBaseResponse, IParamsBaseDeleteById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/request-requirement/${id}/`,
+                method: 'DELETE'
             })
         }),
         getMainRequestType: build.query<IResponseGetMainRequestType, IQueryParams>({
@@ -113,7 +112,7 @@ export const mainRequest = createApi({
                 method: 'GET'
             })
         }),
-        postMainRequest: build.mutation<IPostMainRequestResponse, RequestRead>({
+        postMainRequest: build.mutation<IPostBaseResponse, RequestRead>({
             invalidatesTags: ['main'],
             query          : (body) => ({
                 url   : '/request/',
@@ -121,7 +120,7 @@ export const mainRequest = createApi({
                 body
             })
         }),
-        postRequestRequirementCompetenciesSet: build.mutation<IPostCompetenciesSet, IParamsCompetenciesSet>({
+        postRequestRequirementCompetenciesSet: build.mutation<IPostBaseResponse, IParamsCompetenciesSet>({
             invalidatesTags: ['main'],
             query          : ({ id, competencies }) => ({
                 url   : `/request-requirement/${id}/competencies-set/`,
@@ -129,7 +128,7 @@ export const mainRequest = createApi({
                 body  : competencies
             })
         }),
-        patchMainRequest: build.mutation<IPostMainRequestResponse, RequestRead>({
+        patchMainRequest: build.mutation<IPostBaseResponse, RequestRead>({
             invalidatesTags: ['main'],
             query          : ({ id, ...body }) => ({
                 url   : `/request/${id}/`,

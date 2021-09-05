@@ -82,12 +82,8 @@ const Requirements = ({ onBack, requestId, nextStep }: IRequirements) => {
 
         post(body)
             .unwrap()
-            .then((request) => {
-                const data = request?.data;
-
-                if(data) {
-                    nextStep(data.id);
-                }
+            .then((data) => {
+                nextStep(data.id);
             })
             .catch(console.error);
     };

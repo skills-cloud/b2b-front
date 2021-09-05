@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useClassnames } from 'hook/use-classnames';
 
 import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
@@ -14,15 +15,17 @@ import SectionContentListItem from 'component/section/content-list-item';
 import Separator from 'component/separator';
 import Section from 'component/section';
 import Button from 'component/button';
-
 import Tabs, { Tab } from 'component/tabs';
 import IconDots from 'component/icons/dots';
+import Tooltip from 'component/tooltip';
 
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import AddRole from 'route/project-request/components/add-role';
 import EditRoleModal from 'route/project-request/components/edit-role';
+
+import { mainRequest } from 'adapter/api/main';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
-import { useClassnames } from 'hook/use-classnames';
+
 import style from './index.module.pcss';
 
 const MAIN_REQUIREMENTS_FORM_ID = 'MAIN_REQUIREMENTS_FORM_ID';
@@ -49,15 +52,27 @@ interface IRequirements {
 const Requirements = ({ requirements, requestId }: IRequirements) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
+    const [deleteMainRequestById] = mainRequest.useDeleteMainRequestRequirementByIdMutation();
     const [activeTab, setActiveTab] = useState<ETabs>(ETabs.Competence);
     const [editID, setEditID] = useState<number>();
-    const [, setEditRoleID] = useState<number>();
-    const editRequirements = requirements && editID !== undefined ? requirements[editID] : null;
+    const editRequirements = requirements?.find(({ id }) => id === editID);
     const [step, setModalStep] = useState<EModalSteps>(EModalSteps.Close);
 
     useModalClose(step !== EModalSteps.Close, () => {
         setModalStep(EModalSteps.Close);
     });
+
+    const getExpirienceTrl = (experience: number | null | undefined) => (
+        typeof experience === 'number' ? t(
+            'routes.project-request.blocks.competencies.experience-content',
+            {
+                experience   : experience,
+                experienceTrl: t(
+                    'routes.project-request.blocks.competencies.experience-years',
+                    { count: experience }
+                )
+            }) : t('routes.project-request.blocks.competencies.experience-empty')
+    );
 
     return (
         <React.Fragment>
@@ -92,11 +107,18 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                             <SectionHeader actions={
                                 <div className={cn('actions')}>
                                     <EditAction onClick={() => {
-                                        setEditID(index);
+                                        setEditID(requirementId);
                                         setModalStep(EModalSteps.Base);
                                     }}
                                     />
-                                    <DeleteAction />
+                                    <DeleteAction onClick={() => {
+                                        if(requirementId) {
+                                            deleteMainRequestById({ id: requirementId })
+                                                .unwrap()
+                                                .catch(console.error);
+                                        }
+                                    }}
+                                    />
                                     <SearchAction />
                                 </div>
                             }
@@ -120,30 +142,28 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                             </div>
                                         }
                                     >
-                                        {competencies.map(({ competence, id:competenceId }) => (
-                                            <div className={cn('skills-tag')} key={competenceId}>
-                                                {competence?.name}
-                                            </div>
+                                        {competencies.map(({ competence, id:competenceId, experience_years: experienceYears }) => (
+                                            <Tooltip
+                                                key={competenceId}
+                                                content={getExpirienceTrl(experienceYears)}
+                                                theme="dark"
+                                            >
+                                                <div className={cn('skills-tag')} key={competenceId}>
+                                                    {competence?.name}
+                                                </div>
+                                            </Tooltip>
                                         ))}
                                     </SectionContentListItem>
                                 )}
-                                {experience_years !== undefined && (
-                                    <SectionContentListItem title={t('routes.project-request.blocks.competencies.experience')}>
-                                        {t('routes.project-request.blocks.competencies.experience-content', {
-                                            experience   : experience_years,
-                                            experienceTrl: t(
-                                                'routes.project-request.blocks.competencies.experience-years',
-                                                { count: experience_years }
-                                            )
-                                        })}
-                                    </SectionContentListItem>
-                                )}
-                                <Separator />
+                                <SectionContentListItem title={t('routes.project-request.blocks.competencies.experience')}>
+                                    {getExpirienceTrl(experience_years)}
+                                </SectionContentListItem>
                             </SectionContentList>
                         )}
 
                         {location && (
                             <React.Fragment>
+                                <Separator />
                                 <H3>
                                     {t('routes.project-request.blocks.location.title')}
                                 </H3>
@@ -163,13 +183,13 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                     <SectionContentListItem title={t('routes.project-request.blocks.location.type-of-employment')}>
                                         {type_of_employment?.name}
                                     </SectionContentListItem>
-                                    <Separator />
                                 </SectionContentList>
                             </React.Fragment>
                         )}
 
                         {max_price && (
                             <React.Fragment>
+                                <Separator />
                                 <H3>
                                     {t('routes.project-request.blocks.price.title')}
                                 </H3>
@@ -177,14 +197,13 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                     <SectionContentListItem title={t('routes.project-request.blocks.price.per-hour')}>
                                         {t('routes.project-request.blocks.price.value', { value: max_price })}
                                     </SectionContentListItem>
-                                    <Separator />
                                 </SectionContentList>
                             </React.Fragment>
                         )}
 
                         {description && (
                             <React.Fragment>
-
+                                <Separator />
                                 <H3>
                                     {t('routes.project-request.blocks.other.title')}
                                 </H3>
@@ -267,7 +286,6 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                             type="button"
                                             className={cn('position-edit')}
                                             onClick={() => {
-                                                setEditRoleID(editRequirements.position?.id);
                                                 setModalStep(EModalSteps.EditRole);
                                             }}
                                         >
@@ -297,7 +315,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                         setModalStep(EModalSteps.Base);
                     }}
                     nextStep={(id) => {
-                        setEditRoleID(id);
+                        setEditID(id);
                         setModalStep(EModalSteps.EditRole);
                     }}
                 />
