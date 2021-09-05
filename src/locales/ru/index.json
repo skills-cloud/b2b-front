@@ -386,7 +386,15 @@
                         "competencies": {
                             "label": "Навыки",
                             "placeholder": "Введите навык"
+                        },
+                        "years": {
+                            "label": "Опыт",
+                            "placeholder": "Укажите количество лет опыта"
                         }
+                    },
+                    "buttons": {
+                        "submit": "Применить",
+                        "clear": "Очистить"
                     }
                 }
             }
@@ -494,6 +502,10 @@
                     "project": {
                         "label": "Проект",
                         "placeholder": "Любой"
+                    },
+                    "buttons": {
+                        "submit": "Применить",
+                        "clear": "Очистить"
                     }
                 }
             }
@@ -549,6 +561,9 @@
                     "requirements": "Требования к сотруднику",
                     "employer": "Заказчик",
                     "applicant": "Кандидаты"
+                },
+                "specialists-sections": {
+                    "all": "Все кандидаты"
                 },
                 "project-term": "Сроки проекта",
                 "competencies": {

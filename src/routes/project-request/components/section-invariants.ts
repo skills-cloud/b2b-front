@@ -1,8 +1,7 @@
 enum ESectionInvariants {
     MainInfo = 'main-info',
     Requirements = 'requirements',
-    Employer = 'employer',
-    Applicant = 'applicant',
+    Employer = 'employer'
 }
 
 export default ESectionInvariants;

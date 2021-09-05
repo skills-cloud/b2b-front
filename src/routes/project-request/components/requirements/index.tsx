@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { stringify } from 'query-string';
+
 import { useClassnames } from 'hook/use-classnames';
+import { normalizeObject } from 'src/helper/normalize-object';
 
 import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
@@ -26,6 +29,7 @@ import { mainRequest } from 'adapter/api/main';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 
 import style from './index.module.pcss';
+import { useHistory } from 'react-router';
 
 enum EModalSteps {
     NewRole,
@@ -42,6 +46,7 @@ interface IRequirements {
 const Requirements = ({ requirements, requestId }: IRequirements) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
+    const history = useHistory();
     const [deleteMainRequestById] = mainRequest.useDeleteMainRequestRequirementByIdMutation();
     const [activeTab, setActiveTab] = useState<ETabs>(ETabs.Competence);
     const [editID, setEditID] = useState<number>();
@@ -52,6 +57,22 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
     }, []);
 
     useModalClose(step !== EModalSteps.Close, onClose);
+
+    const onClickSearch = (requirementId?: number) => () => {
+        if(requirementId) {
+            const req = requirements?.find((item) => item.id === requirementId);
+
+            if(req) {
+                const params = {
+                    position_id : req.position_id,
+                    years       : req.id,
+                    competencies: req.competencies
+                };
+
+                history.push(`/specialists?${stringify(normalizeObject(params))}`);
+            }
+        }
+    };
 
     const getExpirienceTrl = (experience: number | null | undefined) => (
         typeof experience === 'number' ? t(
@@ -110,7 +131,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                         }
                                     }}
                                     />
-                                    <SearchAction />
+                                    <SearchAction onClick={onClickSearch(requirementId)} />
                                 </div>
                             }
                             >{name || t('routes.project-request.blocks.empty-title')}

@@ -110,7 +110,7 @@ export const mainRequest = createApi({
         getMainRequestRequirementById: build.query<RequestRequirementRead, IBaseGetById>({
             providesTags: ['main'],
             query       : ({ id }) => ({
-                url   : `/request-requirement/${id}`,
+                url   : `/request-requirement/${id}/`,
                 method: 'GET'
             })
         }),
@@ -172,7 +172,7 @@ export const mainRequest = createApi({
         getMainRequestById: build.query<RequestRead, IBaseGetById>({
             providesTags: ['main'],
             query       : ({ id }) => ({
-                url   : `/request/${id}`,
+                url   : `/request/${id}/`,
                 method: 'GET'
             })
         }),

@@ -11,9 +11,10 @@ import { useClassnames } from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
 import { useDispatch } from 'component/core/store';
 
-import FormInput from 'component/form/input';
 import InputSelect from 'component/form/select';
+import { IValue } from 'component/form/select/types';
 import Loader from 'component/loader';
+import Button from 'component/button';
 
 import { mainRequest } from 'adapter/api/main';
 import { RequestRead } from 'adapter/types/main/request/get/code-200';
@@ -22,6 +23,23 @@ import EditAction from 'component/section/actions/edit';
 import DeleteAction from 'component/section/actions/delete';
 
 import style from './index.module.pcss';
+import { dictionary } from 'adapter/api/dictionary';
+
+export interface IDefaultValues {
+    industry_sector?: IValue | null,
+    priority?: IValue | null,
+    status?: IValue | null,
+    customer?: IValue | null,
+    project?: IValue | null
+}
+
+const defaultValues: IDefaultValues = {
+    industry_sector: null,
+    priority       : null,
+    status         : null,
+    customer       : null,
+    project        : null
+};
 
 const ProjectRequestList = () => {
     const cn = useClassnames(style);
@@ -32,33 +50,40 @@ const ProjectRequestList = () => {
     const [deleteMainRequestById] = mainRequest.useDeleteMainRequestByIdMutation();
 
     const context = useForm({
-        mode: 'all'
+        mode: 'all',
+        defaultValues
     });
 
-    const { data, isLoading } = mainRequest.useGetRequestListQuery(normalizeObject(qs));
+    const { data, isLoading, refetch } = mainRequest.useGetRequestListQuery(normalizeObject(qs));
 
-    const onChangeFilters = () => {
-        const formData = context.getValues();
-        const objectToNormalize = {
-            ...qs,
-            industry_sector_id: formData.industry_sector,
-            priority          : formData.priority?.value,
-            status            : formData.status?.value,
-            customer_id       : formData.customer?.value,
-            project_id        : formData.project?.value
-        };
+    const onSubmit = context.handleSubmit(
+        (formData) => {
+            const objectToNormalize = {
+                industry_sector_id: formData.industry_sector?.value,
+                priority          : formData.priority?.value,
+                status            : formData.status?.value,
+                customer_id       : formData.customer?.value,
+                project_id        : formData.project?.value
+            };
 
-        const isReplace = Object.values(objectToNormalize).some((item) => {
-            if(Array.isArray(item)) {
-                return item?.length > 0;
-            }
+            history.replace({
+                search: stringify(normalizeObject(objectToNormalize))
+            });
+        },
+        (formError) => {
+            console.error(formError);
+        }
+    );
 
-            return !!item;
-        });
+    useEffect(() => {
+        refetch();
+    }, [JSON.stringify(qs)]);
 
+    const onClearFilter = () => {
         history.replace({
-            search: isReplace ? stringify(normalizeObject(objectToNormalize)) : ''
+            search: ''
         });
+        context.reset(defaultValues);
     };
 
     const onLoadOrganization = debounce((search: string, callback) => {
@@ -91,16 +116,27 @@ const ProjectRequestList = () => {
             .catch(console.error);
     }, 150);
 
-    useEffect(() => {
-        onChangeFilters();
-    }, [JSON.stringify(context.getValues())]);
+    const onLoadIndustrySector = debounce((search: string, callback) => {
+        dispatch(dictionary.endpoints.getIndustrySector.initiate({ search }))
+            .then(({ data: organizationData }) => {
+                if(organizationData?.results?.length) {
+                    callback(organizationData.results.map((item) => ({
+                        label: item.name,
+                        value: String(item.id)
+                    })));
+                } else {
+                    callback(null);
+                }
+            })
+            .catch(console.error);
+    }, 150);
 
     const elRequestItem = (requestItem: RequestRead) => {
         return (
             <div key={requestItem.id} className={cn('request-list__request')}>
                 <div className={cn('request-list__request-top')}>
                     <div className={cn('request-list__request-top-left')}>
-                        <Link to={`/project-request/${requestItem.id}`} className={cn('request-list__request-top-left-title')}>
+                        <Link to={`/project-request/${requestItem.id}#main-info`} className={cn('request-list__request-top-left-title')}>
                             {requestItem.project?.name || t('routes.project-request-list.requests.request-item.title')}
                         </Link>
                         <span className={cn('request-list__request-top-left-subtitle')}>
@@ -216,16 +252,17 @@ const ProjectRequestList = () => {
                 <h3 className={cn('request-list__search-header')}>{t('routes.project-request-list.sidebar.filters.title')}</h3>
                 <FormProvider {...context}>
                     <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                        }}
+                        onSubmit={onSubmit}
                         className={cn('request-list__form')}
                     >
-                        <FormInput
+                        <InputSelect
+                            defaultValue={[qs.industry_sector as string]}
                             name="industry_sector"
-                            type="text"
+                            direction="column"
+                            clearable={true}
                             label={t('routes.project-request-list.sidebar.filters.industry-sector.label')}
                             placeholder={t('routes.project-request-list.sidebar.filters.industry-sector.placeholder')}
+                            loadOptions={onLoadIndustrySector}
                         />
                         <InputSelect
                             defaultValue={[qs.priority as string]}
@@ -284,6 +321,12 @@ const ProjectRequestList = () => {
                             placeholder={t('routes.project-request-list.sidebar.filters.project.placeholder')}
                             loadOptions={onLoadOrganizationProject}
                         />
+                        <Button type="submit">
+                            {t('routes.project-request-list.sidebar.filters.buttons.submit')}
+                        </Button>
+                        <Button type="button" onClick={onClearFilter} isSecondary={true}>
+                            {t('routes.project-request-list.sidebar.filters.buttons.clear')}
+                        </Button>
                     </form>
                 </FormProvider>
             </aside>

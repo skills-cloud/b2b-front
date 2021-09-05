@@ -60,7 +60,7 @@ export const baseRoutes: Array<IProps> = [{
     isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : ['/project-request/:id', '/project-request/:id/:edit(edit)'],
+    path     : ['/project-request/:id', '/project-request/:id/:subpage(edit|specialists)'],
     component: ProjectRequest
 }, {
     isPublic : true,
