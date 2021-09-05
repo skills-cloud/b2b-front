@@ -18,6 +18,9 @@ import Loader from 'component/loader';
 import { mainRequest } from 'adapter/api/main';
 import { RequestRead } from 'adapter/types/main/request/get/code-200';
 
+import EditAction from 'component/section/actions/edit';
+import DeleteAction from 'component/section/actions/delete';
+
 import style from './index.module.pcss';
 
 const ProjectRequestList = () => {
@@ -26,6 +29,7 @@ const ProjectRequestList = () => {
     const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
+    const [deleteMainRequestById] = mainRequest.useDeleteMainRequestByIdMutation();
 
     const context = useForm({
         mode: 'all'
@@ -105,6 +109,7 @@ const ProjectRequestList = () => {
                             })}
                         </span>
                     </div>
+
                     <div className={cn('request-list__request-top-right')}>
                         <div className={cn('request-list__request-top-right-status')}>
                             {t(`routes.project-request-list.requests.request-item.status.value.${requestItem.status}`)}
@@ -114,6 +119,21 @@ const ProjectRequestList = () => {
                         >
                             {t(`routes.project-request-list.requests.request-item.priority.value.${requestItem.priority}`)}
                         </div>
+                        <EditAction
+                            className={cn('request-list__action')}
+                            onClick={() => {
+                                history.push(`/project-request/${requestItem.id}/edit`);
+                            }}
+                        />
+                        <DeleteAction
+                            className={cn('request-list__action')}
+                            onClick={() => {
+                                if(requestItem.id) {
+                                    deleteMainRequestById({ id: requestItem.id })
+                                        .catch(console.error);
+                                }
+                            }}
+                        />
                     </div>
                 </div>
                 <div className={cn('request-list__request-content')}>

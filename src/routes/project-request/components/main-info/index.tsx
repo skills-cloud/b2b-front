@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
+import { useParams } from 'react-router';
+
 
 import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
@@ -39,10 +41,11 @@ const FORMAT_DATE = 'dd.MM.yyyy';
 
 const MainInfo = (data: RequestRead) => {
     const { project, priority, status, start_date, deadline_date, requirements } = data;
+    const params = useParams<{edit?: string, id: string}>();
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const formatDistance = useFormatDistance();
-    const [visible, setVisible] = useState(false);
+    const [visible, setVisible] = useState(!!params?.edit);
 
     useModalClose(visible, setVisible);
 

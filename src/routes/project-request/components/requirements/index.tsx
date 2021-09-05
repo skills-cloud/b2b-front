@@ -53,7 +53,6 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
 
     useModalClose(step !== EModalSteps.Close, onClose);
 
-
     const getExpirienceTrl = (experience: number | null | undefined) => (
         typeof experience === 'number' ? t(
             'routes.project-request.blocks.competencies.experience-content',
@@ -118,11 +117,13 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                             </SectionHeader>
                         </div>
 
-                        <div className={cn('gap-bottom')}>
-                            <H3 {...ancor}>
-                                {position?.name} ({count} {t('routes.project-request.blocks.people', { count })})
-                            </H3>
-                        </div>
+                        {position?.name && (
+                            <div className={cn('gap-bottom')}>
+                                <H3 {...ancor}>
+                                    {position?.name} ({count} {t('routes.project-request.blocks.people', { count })})
+                                </H3>
+                            </div>
+                        )}
 
                         {((competencies && competencies.length > 0) || experience_years !== null) && (
                             <SectionContentList>
@@ -209,7 +210,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     </Section>
                 );
             })}
-            {step === EModalSteps.Base && editRequirements && (
+            {step === EModalSteps.Base && (
                 <Modal
                     onClose={onClose}
                     header={
@@ -254,6 +255,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                         setActiveTab={setActiveTab}
                         editRequirements={editRequirements}
                         onClose={onClose}
+                        requestId={requestId}
                         onEditRole={() => {
                             setModalStep(EModalSteps.EditRole);
                         }}
@@ -277,12 +279,24 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
             {step === EModalSteps.EditRole && editRequirements && (
                 <EditRoleModal
                     requirements={editRequirements}
-                    onClose={onClose}
+                    onClose={() => {
+                        setModalStep(EModalSteps.Base);
+                    }}
                     onBack={() => {
                         setModalStep(EModalSteps.Base);
                     }}
                 />
             )}
+            <Section>
+                <div
+                    className={cn('add-request')} onClick={() => {
+                        setEditID(undefined);
+                        setModalStep(EModalSteps.NewRole);
+                    }}
+                >
+                    {t('routes.project-request.requirements.edit-modal.add-request')}
+                </div>
+            </Section>
         </React.Fragment>
     );
 };

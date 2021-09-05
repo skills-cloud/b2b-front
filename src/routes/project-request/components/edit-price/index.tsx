@@ -12,7 +12,7 @@ const EditPrice = () => {
 
     return (
         <div className={cn('field')}>
-            <Input name="max_price" type="text" label={t('routes.project-request.blocks.price.field')} />
+            <Input name="max_price" type="number" label={t('routes.project-request.blocks.price.field')} />
         </div>
     );
 };
