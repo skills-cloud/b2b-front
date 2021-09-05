@@ -10,6 +10,8 @@ import Person from './person';
 import Login from './login';
 import ProjectCreate from './project-request/create';
 import ProjectRequest from './project-request';
+import NotFound from 'route/not-found';
+import ProjectRequestList from 'route/project-request/list';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -52,6 +54,18 @@ export const baseRoutes: Array<IProps> = [{
     isPublic : true,
     exact    : true,
     layout   : Layout,
+    path     : '/project-request',
+    component: ProjectRequestList
+}, {
+    isPublic : true,
+    exact    : true,
+    layout   : Layout,
     path     : '/project-request/:id',
     component: ProjectRequest
+}, {
+    isPublic : true,
+    exact    : true,
+    layout   : Layout,
+    path     : '/404',
+    component: NotFound
 }];

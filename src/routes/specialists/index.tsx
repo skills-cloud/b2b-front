@@ -1,4 +1,4 @@
-import React, { useMemo, useState, Fragment, useEffect, useRef } from 'react';
+import React, { useMemo, useState, Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -8,8 +8,10 @@ import { parse, stringify } from 'query-string';
 import debounce from 'lodash.debounce';
 
 import useClassnames from 'hook/use-classnames';
-
+import { normalizeObject } from 'src/helper/normalize-object';
 import { useDispatch } from 'component/core/store';
+import useModalClose from 'component/modal/use-modal-close';
+
 import IconPlus from 'component/icons/plus';
 import IconStar from 'component/icons/star';
 import IconClose from 'component/icons/close';
@@ -21,15 +23,12 @@ import InputCity from 'component/form/input-city';
 import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
 import Modal from 'component/modal';
-import useModalClose from 'component/modal/use-modal-close';
 import { H2 } from 'component/header';
 
 import { cv } from 'adapter/api/cv';
 import { dictionary } from 'adapter/api/dictionary';
 import { CvList, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 import { IValue } from 'component/form/select/types';
-
-import { normalizeObject } from 'src/helper/normalize-object';
 
 import style from './index.module.pcss';
 
@@ -45,7 +44,6 @@ export const Specialists = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
-    const firstRenderRef = useRef<number>(0);
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
     const context = useForm<IFormValues>({ mode: 'all' });
@@ -53,7 +51,8 @@ export const Specialists = () => {
     const onChangeFilters = () => {
         const formData = context.getValues();
         const objectToNormalize = {
-            search              : qs.search || formData.search,
+            // TODO поиск некорректно работает, подумать
+            search              : formData.search,
             country_id          : formData.country?.map((item) => item?.value),
             city_id             : formData.city?.map((item) => item?.value),
             competencies_ids_any: formData.competencies?.length ? formData.competencies.map((comp: IValue) => comp.value) : qs.competencies_ids_any
@@ -70,8 +69,6 @@ export const Specialists = () => {
         history.replace({
             search: isReplace ? stringify(normalizeObject(objectToNormalize)) : ''
         });
-
-        firstRenderRef.current += 1;
     };
 
     useEffect(() => {
@@ -258,8 +255,8 @@ export const Specialists = () => {
     }, [JSON.stringify(data?.results), i18n.language, isLoading]);
 
     return (
-        <div className={cn('specialists')}>
-            <main className={cn('specialists__main')}>
+        <main className={cn('specialists')}>
+            <section className={cn('specialists__main')}>
                 <h2 className={cn('specialists__main-header')}>{t('routes.specialists.main.title')}</h2>
                 {elUsers}
                 <Link
@@ -268,7 +265,7 @@ export const Specialists = () => {
                 >
                     <IconPlus />
                 </Link>
-            </main>
+            </section>
             <aside>
                 <div className={cn('specialists__search')}>
                     <h3 className={cn('specialists__search-header')}>{t('routes.specialists.sidebar.filters.title')}</h3>
@@ -323,7 +320,7 @@ export const Specialists = () => {
                 </div>
             </aside>
             {elModal}
-        </div>
+        </main>
     );
 };
 

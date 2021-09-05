@@ -5,6 +5,7 @@ import { ProjectRead } from 'adapter/types/main/project/get/code-200';
 import { RequestType } from 'adapter/types/main/request-type/get/code-200';
 import { RequestRequirementRead, RequestRequirementCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
+import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
 
 interface IBaseGetById {
     id: number
@@ -15,6 +16,24 @@ interface IQueryParams {
     search?: string,
     page?: number,
     page_size?: number
+}
+
+export interface IGetOrganizationListQueryParams extends IQueryParams {
+    is_customer?: 'true' | 'false'
+}
+
+export interface IResponseGetOrganizationProject {
+    total: number,
+    max_page_size: number,
+    page_size: number,
+    page_number: number,
+    page_next: number,
+    page_previous: number,
+    results: Array<OrganizationProjectRead>
+}
+
+export interface IGetOrganizationProjectListQueryParams extends IQueryParams {
+    organization_id?: string
 }
 
 interface IResponseGetOrganization {
@@ -51,6 +70,27 @@ interface IParamsCompetenciesSet {
     competencies: Array<RequestRequirementCompetenceRead>
 }
 
+export interface IGetRequestListParams {
+    type_id?: string,
+    customer_id?: string,
+    status?: string,
+    priority?: string,
+    industry_sector_id?: string,
+    project_id?: string,
+    resource_manager_id?: string,
+    recruiter_id?: string,
+    ordering?: Array<string>,
+    search?: string,
+    page?: number,
+    page_size?: number
+}
+
+interface IResponseGetRequestList {
+    count: number,
+    next: string,
+    previous: string,
+    results: Array<RequestRead>
+}
 
 export const mainRequest = createApi({
     reducerPath: 'api/main/request',
@@ -59,6 +99,14 @@ export const mainRequest = createApi({
         baseUrl: '/api/main'
     }),
     endpoints: (build) => ({
+        getRequestList: build.query<IResponseGetRequestList, IGetRequestListParams | undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : 'request/',
+                method: 'GET',
+                params
+            })
+        }),
         getMainRequestRequirementById: build.query<RequestRequirementRead, IBaseGetById>({
             providesTags: ['main'],
             query       : ({ id }) => ({
@@ -105,10 +153,18 @@ export const mainRequest = createApi({
                 params
             })
         }),
-        getMainOrganization: build.query<IResponseGetOrganization, IQueryParams | undefined>({
+        getMainOrganization: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization/',
+                method: 'GET',
+                params
+            })
+        }),
+        getMainOrganizationProjectList: build.query<IResponseGetOrganizationProject, IGetOrganizationProjectListQueryParams | undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/organization-project/',
                 method: 'GET',
                 params
             })

@@ -4,6 +4,7 @@
             "logo": "SKILLCLOUD",
             "nav": {
                 "specialists": "Специалисты",
+                "requests": "Запросы",
                 "teams": "Команды",
                 "help": "Помощь"
             }
@@ -24,6 +25,10 @@
         }
     },
     "routes": {
+        "not-found": {
+            "header": "Запрашиваемая страница не найдена",
+            "desc": "Ошибка #404"
+        },
         "login": {
             "title": "Авторизация",
             "form": {
@@ -410,6 +415,89 @@
                 "title": "Похожие"
             }
         },
+        "project-request-list": {
+            "title": "Список проектных запросов",
+            "requests": {
+                "empty": "Список запросов пуст",
+                "request-item": {
+                    "title": "Название проектного запроса не указано",
+                    "date": "Создан {{date}}",
+                    "status": {
+                        "value": {
+                            "draft": "Черновик",
+                            "in_progress": "В работе",
+                            "done": "Завершён",
+                            "closed": "Закрыт"
+                        }
+                    },
+                    "priority": {
+                        "value": {
+                            "30": "Низкий",
+                            "20": "Средний",
+                            "10": "Высокий"
+                        }
+                    }
+                },
+                "content": {
+                    "empty": "Не указано",
+                    "creator": "Создатель",
+                    "industry-sector": "Сфера",
+                    "resource-manager": "Ответственный",
+                    "count": {
+                        "title": "Объём",
+                        "value": "{{count}} чел."
+                    },
+                    "rate": {
+                        "title": "Ставка",
+                        "value": "{{count}} руб."
+                    },
+                    "candidates": {
+                        "title": "Кол-во кандидатов",
+                        "value": "{{total}} / {{chose}} / {{ready}}"
+                    }
+                }
+            },
+            "sidebar": {
+                "filters": {
+                    "title": "Фильтры",
+                    "industry-sector": {
+                        "label": "Сфера",
+                        "placeholder": "Любая"
+                    },
+                    "priority": {
+                        "label": "Приоритет",
+                        "placeholder": "Любой",
+                        "value": {
+                            "30": "Низкий",
+                            "20": "Средний",
+                            "10": "Высокий"
+                        }
+                    },
+                    "status": {
+                        "label": "Статус",
+                        "placeholder": "Любой",
+                        "value": {
+                            "draft": "Черновик",
+                            "in_progress": "В работе",
+                            "done": "Завершён",
+                            "closed": "Закрыт"
+                        }
+                    },
+                    "customer": {
+                        "label": "Заказчик",
+                        "placeholder": "Любой"
+                    },
+                    "resource-manager": {
+                        "label": "Ответственный",
+                        "placeholder": "Любой"
+                    },
+                    "project": {
+                        "label": "Проект",
+                        "placeholder": "Любой"
+                    }
+                }
+            }
+        },
         "project-request": {
             "create": {
                 "title": "Новый проектный запрос",
@@ -525,7 +613,7 @@
                     "main": "Основное",
                     "project-timing": "Сроки проекта"
                 },
-                "perion-form": {
+                "period-form": {
                     "add": "Добавить период приостановки проекта",
                     "date_from": "Начало проекта",
                     "date_to": "Окончание проекта"
@@ -534,7 +622,10 @@
         }
     },
     "helmet": {
-        "title": "SkillsCloud",
+        "title": {
+            "main": "SkillsCloud",
+            "not-found": "404 Не найдено"
+        },
         "description": "SkillsCloud описание",
         "keywords": "skills, cloud"
     }

@@ -111,10 +111,11 @@ const InputSelect = (props: TProps & typeof defaultProps) => {
         <Controller
             name={props.name}
             control={control}
-            defaultValue={props.defaultValue}
             rules={{ required: props.required }}
             render={({ field: { onChange, onBlur, value: renderValue } }) => {
                 const selectProps = {
+                    onChange,
+                    onFocus,
                     autoFocus    : props.autoFocus,
                     placeholder  : props.placeholder,
                     isMulti      : props.isMulti,
@@ -124,17 +125,12 @@ const InputSelect = (props: TProps & typeof defaultProps) => {
                     isDisabled   : props.disabled,
                     value        : renderValue,
                     defaultValue : renderValue,
-                    onFocus      : onFocus,
                     options      : suggests,
                     onInputChange: props.loadOptions ? undefined : onInputChange,
                     autoComplete : props.disableAutocomplete ? 'new-password' : 'on',
-                    onChange     : (e: IValue) => {
-                        onChange(e);
-                        props.onChange?.(e);
-                    },
-                    styles    : getStyles(props, isFocus, !!errors[props.name]),
-                    className : cn('input__field'),
-                    components: {
+                    styles       : getStyles(props, isFocus, !!errors[props.name]),
+                    className    : cn('input__field'),
+                    components   : {
                         MultiValueRemove,
                         Input : SelectInput,
                         Option: Option,
