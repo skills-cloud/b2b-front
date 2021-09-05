@@ -130,7 +130,7 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
             }
         });
 
-        nextData = [...setNodes].map((id: number) => newNodeById[id]);
+        nextData = [...setNodes].map((id: number) => newNodeById[id]).filter((item) => !!item);
     }
 
     useEffect(() => {

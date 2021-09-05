@@ -6,6 +6,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { H3 } from 'component/header';
 
 import Tabs, { Tab } from 'component/tabs';
+import Input from 'component/form/input';
 import IconDots from 'component/icons/dots';
 
 import EditLocation from 'route/project-request/components/edit-location';
@@ -28,11 +29,12 @@ export enum ETabs {
 }
 
 interface IEditRequirements {
-    editRequirements: RequestRequirementRead,
+    editRequirements: RequestRequirementRead | undefined,
     onClose: () => void,
     onEditRole: () => void,
     activeTab: ETabs,
-    setActiveTab: (tab: ETabs) => void
+    setActiveTab: (tab: ETabs) => void,
+    requestId: number
 }
 
 interface IForm extends RequestRequirement{
@@ -47,11 +49,12 @@ interface IForm extends RequestRequirement{
     }
 }
 
-const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, setActiveTab }: IEditRequirements) => {
+const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, setActiveTab, requestId }: IEditRequirements) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
 
-    const [patch] = mainRequest.usePatchMainRequestRequirementMutation({});
+    const [patch] = mainRequest.usePatchMainRequestRequirementMutation();
+    const [post] = mainRequest.usePostMainRequestRequirementMutation();
     const form = useForm();
 
     useEffect(() => {
@@ -66,6 +69,7 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
         } : undefined);
         form.setValue('max_price', editRequirements?.max_price);
         form.setValue('description', editRequirements?.description);
+        form.setValue('name', editRequirements?.name);
     }, [editRequirements]);
 
     const onSubmit = ({
@@ -73,29 +77,40 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
         location,
         city,
         max_price,
-        description
+        description,
+        name
     }: IForm) => {
         const cityId = city?.value;
         const valueTypeOfEmployment = type_of_employment?.value;
         const id = editRequirements?.id;
-        const request_id = editRequirements?.request_id;
 
-        if(id && request_id) {
-            const body: RequestRequirement = {
-                id                   : id,
-                request_id           : request_id,
-                work_location_address: location,
-                work_location_city_id: cityId ? parseInt(cityId, 10) : undefined,
-                type_of_employment_id: valueTypeOfEmployment ? parseInt(valueTypeOfEmployment, 10) : undefined,
-                max_price            : max_price,
-                description          : description
-            };
+        const body = {
+            request_id           : requestId,
+            work_location_address: location,
+            work_location_city_id: cityId ? parseInt(cityId, 10) : undefined,
+            type_of_employment_id: valueTypeOfEmployment ? parseInt(valueTypeOfEmployment, 10) : undefined,
+            max_price            : max_price,
+            description          : description,
+            name                 : name
+        };
 
-            patch(body)
+
+        if(id) {
+            patch({
+                ...body,
+                id: id
+            })
                 .unwrap()
                 .then(onClose)
                 .catch(console.error);
+
+            return;
         }
+
+        post(body)
+            .unwrap()
+            .then(onClose)
+            .catch(console.error);
     };
 
     return (
@@ -105,6 +120,14 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
                 id={MAIN_REQUIREMENTS_FORM_ID}
                 onSubmit={form.handleSubmit(onSubmit)}
             >
+                <div className={cn('name-gap')}>
+                    <Input
+                        name="name"
+                        type="text"
+                        label={t('routes.project-request.requirements.edit-modal.title-field')}
+                    />
+                </div>
+
                 <Tabs>
                     {Object.values(ETabs).map((tab) => (
                         <Tab
@@ -120,14 +143,14 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
                 </Tabs>
 
                 <div className={cn('tab-content')}>
-                    {activeTab === ETabs.Competence && editRequirements && (
+                    {activeTab === ETabs.Competence && editRequirements?.position?.name && (
                         <div className={cn('position')}>
                             <H3>
                                 {t(
                                     'routes.project-request.requirements.edit-modal.people',
                                     {
                                         people  : editRequirements.count,
-                                        position: editRequirements.position?.name
+                                        position: editRequirements.position.name
                                     })}
                             </H3>
 
@@ -147,13 +170,13 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
                         </div>
                     )}
 
-                    {activeTab === ETabs.Location && editRequirements && (
+                    {activeTab === ETabs.Location && (
                         <EditLocation />
                     )}
-                    {activeTab === ETabs.Price && editRequirements && (
+                    {activeTab === ETabs.Price && (
                         <EditPrice />
                     )}
-                    {activeTab === ETabs.Other && editRequirements && (
+                    {activeTab === ETabs.Other && (
                         <EditOuther />
                     )}
                 </div>

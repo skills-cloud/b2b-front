@@ -527,7 +527,9 @@
                     "addRole": "Добавить роль",
                     "new-role": "Новая роль",
                     "people-in-roles" : "{{people}} чел.",
-                    "position": "Начните вводить, например, “Front-end Dev”"
+                    "position": "Начните вводить, например, “Front-end Dev”",
+                    "title-field": "Название проекта",
+                    "add-request": "Добавить требование"
                 },
                 "edit-role": {
                     "search": "Поиск"
