@@ -362,14 +362,14 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                             <div className={cn('field-group-date')} key={field.fieldId}>
                                 <FormDate
                                     name={`period.${index}.start_date`}
-                                    label={t('routes.project-request.blocks.perion-form.date_from')}
+                                    label={t('routes.project-request.blocks.period-form.date_from')}
                                     direction="column"
                                     defaultValue={field?.start_date}
                                 />
                                 <div className={cn('field-group-date__separator')} />
                                 <FormDate
                                     name={`period.${index}.deadline_date`}
-                                    label={t('routes.project-request.blocks.perion-form.date_to')}
+                                    label={t('routes.project-request.blocks.period-form.date_to')}
                                     direction="column"
                                     defaultValue={field?.deadline_date}
                                 />
@@ -383,7 +383,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                                 event.preventDefault();
                                 append({});
                             }}
-                        >{t('routes.project-request.blocks.perion-form.add')}
+                        >{t('routes.project-request.blocks.period-form.add')}
                         </a> */}
                     </div>
                 </form>

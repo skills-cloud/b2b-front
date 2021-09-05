@@ -41,11 +41,11 @@ const FORMAT_DATE = 'dd.MM.yyyy';
 
 const MainInfo = (data: RequestRead) => {
     const { project, priority, status, start_date, deadline_date, requirements } = data;
-    const params = useParams<{edit?: string, id: string}>();
+    const params = useParams<{ subpage?: string, id: string }>();
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const formatDistance = useFormatDistance();
-    const [visible, setVisible] = useState(!!params?.edit);
+    const [visible, setVisible] = useState(params?.subpage === 'edit');
 
     useModalClose(visible, setVisible);
 

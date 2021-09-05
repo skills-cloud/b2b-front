@@ -24,6 +24,7 @@ import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
 import Modal from 'component/modal';
 import { H2 } from 'component/header';
+import Button from 'component/button';
 
 import { cv } from 'adapter/api/cv';
 import { dictionary } from 'adapter/api/dictionary';
@@ -34,6 +35,7 @@ import style from './index.module.pcss';
 
 export interface IFormValues {
     search?: string,
+    years?: string,
     country?: Array<IValue> | null,
     city?: Array<IValue> | null,
     competencies?: Array<IValue>
@@ -46,34 +48,16 @@ export const Specialists = () => {
     const { t, i18n } = useTranslation();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
-    const context = useForm<IFormValues>({ mode: 'all' });
-
-    const onChangeFilters = () => {
-        const formData = context.getValues();
-        const objectToNormalize = {
-            // TODO поиск некорректно работает, подумать
-            search              : formData.search,
-            country_id          : formData.country?.map((item) => item?.value),
-            city_id             : formData.city?.map((item) => item?.value),
-            competencies_ids_any: formData.competencies?.length ? formData.competencies.map((comp: IValue) => comp.value) : qs.competencies_ids_any
-        };
-
-        const isReplace = Object.values(objectToNormalize).some((item) => {
-            if(Array.isArray(item)) {
-                return item?.length > 0;
-            }
-
-            return !!item;
-        });
-
-        history.replace({
-            search: isReplace ? stringify(normalizeObject(objectToNormalize)) : ''
-        });
+    const defaultValues = {
+        country     : [],
+        city        : [],
+        competencies: []
     };
 
-    useEffect(() => {
-        onChangeFilters();
-    }, [JSON.stringify(context.getValues())]);
+    const context = useForm<IFormValues>({
+        mode: 'all',
+        defaultValues
+    });
 
     const { data, isLoading, refetch } = cv.useGetCvListQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
 
@@ -117,6 +101,32 @@ export const Specialists = () => {
 
     const onClickClose = () => {
         setShowModal(false);
+    };
+
+    const onSubmit = context.handleSubmit(
+        (formData) => {
+            const objectToNormalize = {
+                search              : formData.search,
+                years               : formData.years,
+                country_id          : formData.country?.map((item) => item?.value),
+                city_id             : formData.city?.map((item) => item?.value),
+                competencies_ids_any: formData.competencies?.map((comp: IValue) => comp.value)
+            };
+
+            history.replace({
+                search: stringify(normalizeObject(objectToNormalize))
+            });
+        },
+        (formError) => {
+            console.error(formError);
+        }
+    );
+
+    const onClearFilter = () => {
+        history.replace({
+            search: ''
+        });
+        context.reset(defaultValues);
     };
 
     const elModalHeader = () => {
@@ -270,12 +280,7 @@ export const Specialists = () => {
                 <div className={cn('specialists__search')}>
                     <h3 className={cn('specialists__search-header')}>{t('routes.specialists.sidebar.filters.title')}</h3>
                     <FormProvider {...context}>
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                            }}
-                            className={cn('specialists__form')}
-                        >
+                        <form className={cn('specialists__form')} onSubmit={onSubmit}>
                             <FormInput
                                 name="search"
                                 type="search"
@@ -309,12 +314,24 @@ export const Specialists = () => {
                             />
                             <InputSkills
                                 defaultValue={qs.competencies_ids_any as Array<string>}
+                                clearable={true}
                                 name="competencies"
                                 direction="column"
                                 placeholder={t('routes.specialists.sidebar.filters.form.competencies.placeholder')}
                                 label={t('routes.specialists.sidebar.filters.form.competencies.label')}
                             />
-
+                            <FormInput
+                                name="years"
+                                type="text"
+                                label={t('routes.specialists.sidebar.filters.form.years.label')}
+                                placeholder={t('routes.specialists.sidebar.filters.form.years.placeholder')}
+                            />
+                            <Button type="submit">
+                                {t('routes.specialists.sidebar.filters.buttons.submit')}
+                            </Button>
+                            <Button type="button" onClick={onClearFilter} isSecondary={true}>
+                                {t('routes.specialists.sidebar.filters.buttons.clear')}
+                            </Button>
                         </form>
                     </FormProvider>
                 </div>
