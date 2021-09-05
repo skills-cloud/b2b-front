@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useClassnames } from 'hook/use-classnames';
 
@@ -7,35 +7,25 @@ import EditAction from 'component/section/actions/edit';
 import DeleteAction from 'component/section/actions/delete';
 import SearchAction from 'component/section/actions/search';
 import Modal from 'component/modal';
-import ModalFooterSubmit from 'component/modal/footer-submit';
 import useModalClose from 'component/modal/use-modal-close';
+import ModalFooterSubmit from 'component/modal/footer-submit';
 import SectionContentList from 'component/section/content-list';
 import Header, { H3 } from 'component/header';
 import SectionContentListItem from 'component/section/content-list-item';
 import Separator from 'component/separator';
 import Section from 'component/section';
 import Button from 'component/button';
-import Tabs, { Tab } from 'component/tabs';
-import IconDots from 'component/icons/dots';
 import Tooltip from 'component/tooltip';
 
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import AddRole from 'route/project-request/components/add-role';
 import EditRoleModal from 'route/project-request/components/edit-role';
+import EditRequirements, { ETabs, MAIN_REQUIREMENTS_FORM_ID } from 'route/project-request/components/edit-requirements';
 
 import { mainRequest } from 'adapter/api/main';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 
 import style from './index.module.pcss';
-
-const MAIN_REQUIREMENTS_FORM_ID = 'MAIN_REQUIREMENTS_FORM_ID';
-
-enum ETabs {
-    Competence='competence',
-    Location='location',
-    Price='price',
-    Other='other',
-}
 
 enum EModalSteps {
     NewRole,
@@ -57,10 +47,12 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
     const [editID, setEditID] = useState<number>();
     const editRequirements = requirements?.find(({ id }) => id === editID);
     const [step, setModalStep] = useState<EModalSteps>(EModalSteps.Close);
-
-    useModalClose(step !== EModalSteps.Close, () => {
+    const onClose = useCallback(() => {
         setModalStep(EModalSteps.Close);
-    });
+    }, []);
+
+    useModalClose(step !== EModalSteps.Close, onClose);
+
 
     const getExpirienceTrl = (experience: number | null | undefined) => (
         typeof experience === 'number' ? t(
@@ -217,9 +209,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     </Section>
                 );
             })}
-            {step === EModalSteps.Base && (
+            {step === EModalSteps.Base && editRequirements && (
                 <Modal
-                    onClose={() => setModalStep(EModalSteps.Close)}
+                    onClose={onClose}
                     header={
                         <Header level={1} tag="h2">
                             {activeTab === ETabs.Competence && t(
@@ -233,15 +225,17 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                         </Header>
                     }
                     footer={
-                        <ModalFooterSubmit withAction={true}>
-                            <span
-                                className={cn('add-role')}
-                                onClick={() => {
-                                    setModalStep(EModalSteps.NewRole);
-                                }}
-                            >
-                                {t('routes.project-request.requirements.edit-modal.addRole')}
-                            </span>
+                        <ModalFooterSubmit withAction={activeTab === ETabs.Competence}>
+                            {activeTab === ETabs.Competence && (
+                                <span
+                                    className={cn('add-role')}
+                                    onClick={() => {
+                                        setModalStep(EModalSteps.NewRole);
+                                    }}
+                                >
+                                    {t('routes.project-request.requirements.edit-modal.addRole')}
+                                </span>
+                            )}
                             <Button
                                 isSecondary={true} onClick={() => {
                                     setModalStep(EModalSteps.Close);
@@ -255,56 +249,15 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                         </ModalFooterSubmit>
                     }
                 >
-                    {step === EModalSteps.Base && (
-                        <React.Fragment>
-                            <Tabs>
-                                {Object.values(ETabs).map((tab) => (
-                                    <Tab
-                                        active={tab === activeTab}
-                                        key={tab}
-                                        onClick={() => {
-                                            setActiveTab(tab);
-                                        }}
-                                    >
-                                        {t('routes.project-request.requirements.edit-modal.tab', { context: tab })}
-                                    </Tab>
-                                ))}
-                            </Tabs>
-                            {activeTab === ETabs.Competence && editRequirements && (
-                                <React.Fragment>
-                                    <div className={cn('position')}>
-                                        <H3>
-                                            {t(
-                                                'routes.project-request.requirements.edit-modal.people',
-                                                {
-                                                    people  : editRequirements.count,
-                                                    position: editRequirements.position?.name
-                                                })}
-                                        </H3>
-
-                                        <button
-                                            type="button"
-                                            className={cn('position-edit')}
-                                            onClick={() => {
-                                                setModalStep(EModalSteps.EditRole);
-                                            }}
-                                        >
-                                            <IconDots
-                                                svg={{
-                                                    width    : 24,
-                                                    height   : 24,
-                                                    className: cn('icon-dots')
-                                                }}
-                                            />
-                                        </button>
-                                    </div>
-                                    {/* {editCompetencies?.map(({ competence }) => (
-                                <H3 key={competence?.id}>{competence?.name}</H3>
-                            ))} */}
-                                </React.Fragment>
-                            )}
-                        </React.Fragment>
-                    )}
+                    <EditRequirements
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                        editRequirements={editRequirements}
+                        onClose={onClose}
+                        onEditRole={() => {
+                            setModalStep(EModalSteps.EditRole);
+                        }}
+                    />
                 </Modal>
             )}
 
@@ -324,9 +277,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
             {step === EModalSteps.EditRole && editRequirements && (
                 <EditRoleModal
                     requirements={editRequirements}
-                    onClose={() => {
-                        setModalStep(EModalSteps.Close);
-                    }}
+                    onClose={onClose}
                     onBack={() => {
                         setModalStep(EModalSteps.Base);
                     }}

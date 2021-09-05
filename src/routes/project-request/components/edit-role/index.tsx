@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 
-import { dictionary } from 'adapter/api/dictionary';
 import { CompetenceTree } from 'adapter/types/dictionary/competence-tree/get/code-200';
+import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
+import { dictionary } from 'adapter/api/dictionary';
 import { mainRequest } from 'adapter/api/main';
 
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
-import CheckboxTree from 'react-checkbox-tree';
+import CheckboxTree, { Node } from 'react-checkbox-tree';
 import IconChevronDown from 'component/icons/chevron-down';
 import IconChevronRight from 'component/icons/chevron-right';
 import IconLoader from 'component/icons/loader';
@@ -16,20 +17,7 @@ import Input from 'component/form/input';
 import Button from 'component/button';
 import { useClassnames } from 'hook/use-classnames';
 
-import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
-
 import style from './index.module.pcss';
-
-interface INodeCheckboxTree {
-    label: React.ReactNode,
-    value: string,
-    children?: Array<INodeCheckboxTree>,
-    className?: string,
-    disabled?: boolean,
-    icon?: React.ReactNode,
-    showCheckbox?: boolean,
-    title?: string
-}
 
 const EDIT_ROLE_FORM_ID = 'EDIT_ROLE_FORM_ID';
 
@@ -43,17 +31,36 @@ interface ICompetenceMap {
     [key: number]: CompetenceTree
 }
 
+const CheckboxLabel = ({ children, showExpirience }: {children: string, showExpirience: boolean}) => {
+    const cn = useClassnames(style);
+
+    return (
+        <span className={cn('checkbox-label')}>
+            <span>{children}</span>
+            {showExpirience && (
+                <span className={cn('checkbox-set-expirience')}>Указать опыт</span>
+            )}
+        </span>
+    );
+};
+
 const convertDataToCheckboxTree = (array: Array<CompetenceTree>, mapCompetence?: ICompetenceMap) => (
-    array.map((item): INodeCheckboxTree => {
+    array.map((item): Node => {
         const { id, name, children } = item;
 
         if(mapCompetence && id) {
             mapCompetence[id] = item;
         }
 
+        const label = (
+            <CheckboxLabel showExpirience={children.length === 0}>
+                {name}
+            </CheckboxLabel>
+        );
+
         return {
             value       : String(id),
-            label       : name,
+            label       : label,
             showCheckbox: true,
             children    : children?.length ? convertDataToCheckboxTree(children, mapCompetence) : undefined
         };
