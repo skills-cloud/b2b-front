@@ -176,6 +176,13 @@ export const mainRequest = createApi({
                 method: 'GET'
             })
         }),
+        deleteMainRequestById: build.mutation<RequestRead, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/request/${id}`,
+                method: 'DELETE'
+            })
+        }),
         postMainRequest: build.mutation<IPostBaseResponse, RequestRead>({
             invalidatesTags: ['main'],
             query          : (body) => ({

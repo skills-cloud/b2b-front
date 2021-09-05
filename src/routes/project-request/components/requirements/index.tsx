@@ -53,7 +53,6 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
 
     useModalClose(step !== EModalSteps.Close, onClose);
 
-
     const getExpirienceTrl = (experience: number | null | undefined) => (
         typeof experience === 'number' ? t(
             'routes.project-request.blocks.competencies.experience-content',
