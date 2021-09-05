@@ -3,7 +3,7 @@ import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 import { Organization } from 'adapter/types/main/organization/get/code-200';
 import { ProjectRead } from 'adapter/types/main/project/get/code-200';
 import { RequestType } from 'adapter/types/main/request-type/get/code-200';
-import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
+import { RequestRequirementRead, RequestRequirementCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 
 interface IBaseGetById {
@@ -46,6 +46,17 @@ interface IPostMainRequestRequirement {
     data: {
         id: number
     }
+}
+
+interface IPostCompetenciesSet {
+    data: {
+        id: number
+    }
+}
+
+interface IParamsCompetenciesSet {
+    id: number,
+    competencies: Array<RequestRequirementCompetenceRead>
 }
 
 
@@ -110,12 +121,12 @@ export const mainRequest = createApi({
                 body
             })
         }),
-        postRequestRequirementCompetenciesSet: build.mutation<IPostMainRequestResponse, RequestRead>({
+        postRequestRequirementCompetenciesSet: build.mutation<IPostCompetenciesSet, IParamsCompetenciesSet>({
             invalidatesTags: ['main'],
-            query          : ({ id, ...body }) => ({
+            query          : ({ id, competencies }) => ({
                 url   : `/request-requirement/${id}/competencies-set/`,
                 method: 'POST',
-                body
+                body  : competencies
             })
         }),
         patchMainRequest: build.mutation<IPostMainRequestResponse, RequestRead>({

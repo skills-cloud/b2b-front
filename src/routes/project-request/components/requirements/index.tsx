@@ -306,6 +306,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
             {step === EModalSteps.EditRole && editRequirements && (
                 <EditRoleModal
                     requirements={editRequirements}
+                    onClose={() => {
+                        setModalStep(EModalSteps.Close);
+                    }}
                     onBack={() => {
                         setModalStep(EModalSteps.Base);
                     }}

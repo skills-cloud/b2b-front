@@ -4,6 +4,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 import { dictionary } from 'adapter/api/dictionary';
 import { CompetenceTree } from 'adapter/types/dictionary/competence-tree/get/code-200';
+import { mainRequest } from 'adapter/api/main';
 
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
@@ -34,6 +35,7 @@ const EDIT_ROLE_FORM_ID = 'EDIT_ROLE_FORM_ID';
 
 interface IEditRole {
     onBack: () => void,
+    onClose: () => void,
     requirements: RequestRequirementRead
 }
 
@@ -68,6 +70,7 @@ const walkTree = (items: Array<CompetenceTree>, callback: (model: CompetenceTree
     });
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const getRootNode: CompetenceTree = (
     model: CompetenceTree,
@@ -83,6 +86,7 @@ const getRootNode: CompetenceTree = (
             children: parentModel?.children?.filter(({ id }: {id: number}) => id === model.id)
         };
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return getRootNode(parentModel, nodeById, newNodeById);
     }
@@ -90,11 +94,12 @@ const getRootNode: CompetenceTree = (
     return model;
 };
 
-const EditRole = ({ onBack, requirements }: IEditRole) => {
+const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const form = useForm();
     const { data } = dictionary.useGetCompetenceTreeQuery(undefined);
+    const [post] = mainRequest.usePostRequestRequirementCompetenciesSetMutation();
     const nodeById = useRef({});
     const [expanded, setExpanded] = useState<Array<string>>([]);
     const [checked, setChecked] = useState<Array<string>>(
@@ -110,6 +115,7 @@ const EditRole = ({ onBack, requirements }: IEditRole) => {
             const name = model.name.toLowerCase();
 
             if(~name.search(searchString.trim().toLowerCase())) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 const rootNode = getRootNode(model, nodeById.current, newNodeById);
 
@@ -127,6 +133,23 @@ const EditRole = ({ onBack, requirements }: IEditRole) => {
             setExpanded([]);
         }
     }, [searchString]);
+
+    const handleSubmit = () => {
+        const requirementsId = requirements.id;
+
+        if(!requirementsId) {
+            return;
+        }
+
+        const competencies = checked.map((id) => ({
+            competence_id: parseInt(id, 10)
+        }));
+
+        post({ id: requirementsId, competencies })
+            .unwrap()
+            .then(onClose)
+            .catch(console.error);
+    };
 
     return (
         <Modal
@@ -148,9 +171,7 @@ const EditRole = ({ onBack, requirements }: IEditRole) => {
                     <form
                         method="POST"
                         id={EDIT_ROLE_FORM_ID}
-                        onSubmit={form.handleSubmit(() => {
-                            // TODO handle submit
-                        })}
+                        onSubmit={form.handleSubmit(handleSubmit)}
                         className={cn('form')}
                     >
                         <div className={cn('form-search')}>
