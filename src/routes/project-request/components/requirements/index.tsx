@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useClassnames } from 'hook/use-classnames';
+import { useForm, FormProvider } from 'react-hook-form';
 
 import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
@@ -22,10 +23,12 @@ import Tooltip from 'component/tooltip';
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import AddRole from 'route/project-request/components/add-role';
 import EditRoleModal from 'route/project-request/components/edit-role';
-import EditLocation, { EDIT_LOCATION_FORM_ID } from 'route/project-request/components/edit-location';
+import EditLocation from 'route/project-request/components/edit-location';
+import EditPrice from 'route/project-request/components/edit-price';
 
 import { mainRequest } from 'adapter/api/main';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
+import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 
 import style from './index.module.pcss';
 
@@ -37,15 +40,6 @@ enum ETabs {
     Price='price',
     Other='other',
 }
-
-const getFormId = (tab: ETabs) => {
-    switch (tab) {
-        case ETabs.Location:
-            return EDIT_LOCATION_FORM_ID;
-        default:
-            return MAIN_REQUIREMENTS_FORM_ID;
-    }
-};
 
 enum EModalSteps {
     NewRole,
@@ -59,6 +53,18 @@ interface IRequirements {
     requestId: number
 }
 
+interface IForm extends RequestRequirement{
+    type_of_employment: {
+        value: string,
+        label: string
+    },
+    location: string,
+    city: {
+        value: string,
+        label: string
+    }
+}
+
 const Requirements = ({ requirements, requestId }: IRequirements) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
@@ -67,6 +73,52 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
     const [editID, setEditID] = useState<number>();
     const editRequirements = requirements?.find(({ id }) => id === editID);
     const [step, setModalStep] = useState<EModalSteps>(EModalSteps.Close);
+
+    const [patch] = mainRequest.usePatchMainRequestRequirementMutation({});
+    const form = useForm();
+
+    useEffect(() => {
+        form.setValue('location', editRequirements?.work_location_address);
+        form.setValue('type_of_employment', editRequirements?.type_of_employment ? {
+            value: editRequirements?.type_of_employment?.id,
+            label: editRequirements?.type_of_employment?.name
+        } : undefined);
+        form.setValue('city', editRequirements?.work_location_city ? {
+            value: editRequirements?.work_location_city?.id,
+            label: editRequirements?.work_location_city?.name
+        } : undefined);
+        form.setValue('max_price', editRequirements?.max_price);
+    }, [editRequirements]);
+
+    const onSubmit = ({
+        type_of_employment,
+        location,
+        city,
+        max_price
+    }: IForm) => {
+        const cityId = city?.value;
+        const valueTypeOfEmployment = type_of_employment?.value;
+        const id = editRequirements?.id;
+        const request_id = editRequirements?.request_id;
+
+        if(id && request_id) {
+            const body: RequestRequirement = {
+                id                   : id,
+                request_id           : request_id,
+                work_location_address: location,
+                work_location_city_id: cityId ? parseInt(cityId, 10) : undefined,
+                type_of_employment_id: valueTypeOfEmployment ? parseInt(valueTypeOfEmployment, 10) : undefined,
+                max_price            : max_price
+            };
+
+            patch(body)
+                .unwrap()
+                .then(() => {
+                    setModalStep(EModalSteps.Close);
+                })
+                .catch(console.error);
+        }
+    };
 
     useModalClose(step !== EModalSteps.Close, () => {
         setModalStep(EModalSteps.Close);
@@ -261,65 +313,73 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                             >
                                 {t('routes.project-request.requirements.edit-modal.cancel')}
                             </Button>
-                            <Button type="submit" form={getFormId(activeTab)}>
+                            <Button type="submit" form={MAIN_REQUIREMENTS_FORM_ID}>
                                 {t('routes.project-request.requirements.edit-modal.save')}
                             </Button>
                         </ModalFooterSubmit>
                     }
                 >
                     {step === EModalSteps.Base && (
-                        <React.Fragment>
-                            <Tabs>
-                                {Object.values(ETabs).map((tab) => (
-                                    <Tab
-                                        active={tab === activeTab}
-                                        key={tab}
-                                        onClick={() => {
-                                            setActiveTab(tab);
-                                        }}
-                                    >
-                                        {t('routes.project-request.requirements.edit-modal.tab', { context: tab })}
-                                    </Tab>
-                                ))}
-                            </Tabs>
-                            {activeTab === ETabs.Competence && editRequirements && (
-                                <div className={cn('position')}>
-                                    <H3>
-                                        {t(
-                                            'routes.project-request.requirements.edit-modal.people',
-                                            {
-                                                people  : editRequirements.count,
-                                                position: editRequirements.position?.name
-                                            })}
-                                    </H3>
-
-                                    <button
-                                        type="button"
-                                        className={cn('position-edit')}
-                                        onClick={() => {
-                                            setModalStep(EModalSteps.EditRole);
-                                        }}
-                                    >
-                                        <IconDots
-                                            svg={{
-                                                width    : 24,
-                                                height   : 24,
-                                                className: cn('icon-dots')
+                        <FormProvider {...form}>
+                            <form
+                                method="PATCH"
+                                id={MAIN_REQUIREMENTS_FORM_ID}
+                                onSubmit={form.handleSubmit(onSubmit)}
+                                className={cn('form')}
+                            >
+                                <Tabs>
+                                    {Object.values(ETabs).map((tab) => (
+                                        <Tab
+                                            active={tab === activeTab}
+                                            key={tab}
+                                            onClick={() => {
+                                                setActiveTab(tab);
                                             }}
-                                        />
-                                    </button>
-                                </div>
-                            )}
+                                        >
+                                            {t('routes.project-request.requirements.edit-modal.tab', { context: tab })}
+                                        </Tab>
+                                    ))}
+                                </Tabs>
 
-                            {activeTab === ETabs.Location && editRequirements && (
-                                <EditLocation
-                                    requirements={editRequirements}
-                                    nextStep={() => {
-                                        setModalStep(EModalSteps.Close);
-                                    }}
-                                />
-                            )}
-                        </React.Fragment>
+                                <div className={cn('tab-content')}>
+                                    {activeTab === ETabs.Competence && editRequirements && (
+                                        <div className={cn('position')}>
+                                            <H3>
+                                                {t(
+                                                    'routes.project-request.requirements.edit-modal.people',
+                                                    {
+                                                        people  : editRequirements.count,
+                                                        position: editRequirements.position?.name
+                                                    })}
+                                            </H3>
+
+                                            <button
+                                                type="button"
+                                                className={cn('position-edit')}
+                                                onClick={() => {
+                                                    setModalStep(EModalSteps.EditRole);
+                                                }}
+                                            >
+                                                <IconDots
+                                                    svg={{
+                                                        width    : 24,
+                                                        height   : 24,
+                                                        className: cn('icon-dots')
+                                                    }}
+                                                />
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {activeTab === ETabs.Location && editRequirements && (
+                                        <EditLocation />
+                                    )}
+                                    {activeTab === ETabs.Price && editRequirements && (
+                                        <EditPrice />
+                                    )}
+                                </div>
+                            </form>
+                        </FormProvider>
                     )}
                 </Modal>
             )}
