@@ -20,7 +20,7 @@ const ADD_ROLE_FORM_ID = 'ADD_ROLE_FORM_ID';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const PEOPLE_SELECT = Array.from({ length: 10 }, (_, i) => i + 1);
 
-interface IRequirements {
+interface IAddRole {
     onBack: () => void,
     requestId: number,
     nextStep: (id: number) => void
@@ -37,7 +37,7 @@ interface IForm {
     }
 }
 
-const Requirements = ({ onBack, requestId, nextStep }: IRequirements) => {
+const AddRole = ({ onBack, requestId, nextStep }: IAddRole) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const dispatch = useDispatch();
@@ -104,26 +104,24 @@ const Requirements = ({ onBack, requestId, nextStep }: IRequirements) => {
             }
         >
 
-            <div className="position">
-                <FormProvider {...form}>
-                    <form method="POST" id={ADD_ROLE_FORM_ID} onSubmit={form.handleSubmit(onSubmit)} className={cn('form')}>
-                        <Select
-                            name="position_id"
-                            placeholder={t('routes.project-request.requirements.edit-modal.position')}
-                            loadOptions={onLoadPositionOptions}
-                        />
-                        <Select
-                            name="people"
-                            options={PEOPLE_SELECT.map((people) => ({
-                                label: t('routes.project-request.requirements.edit-modal.people-in-roles', { people }),
-                                value: people.toString()
-                            }))}
-                        />
-                    </form>
-                </FormProvider>
-            </div>
+            <FormProvider {...form}>
+                <form method="POST" id={ADD_ROLE_FORM_ID} onSubmit={form.handleSubmit(onSubmit)} className={cn('form')}>
+                    <Select
+                        name="position_id"
+                        placeholder={t('routes.project-request.requirements.edit-modal.position')}
+                        loadOptions={onLoadPositionOptions}
+                    />
+                    <Select
+                        name="people"
+                        options={PEOPLE_SELECT.map((people) => ({
+                            label: t('routes.project-request.requirements.edit-modal.people-in-roles', { people }),
+                            value: people.toString()
+                        }))}
+                    />
+                </form>
+            </FormProvider>
         </Modal>
     );
 };
 
-export default Requirements;
+export default AddRole;

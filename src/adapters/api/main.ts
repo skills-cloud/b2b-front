@@ -122,6 +122,14 @@ export const mainRequest = createApi({
                 body
             })
         }),
+        patchMainRequestRequirement: build.mutation<IPostBaseResponse, RequestRequirement>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...body }) => ({
+                url   : `/request-requirement/${id}/`,
+                method: 'PATCH',
+                body
+            })
+        }),
         deleteMainRequestRequirementById: build.mutation<IPostBaseResponse, IParamsBaseDeleteById>({
             invalidatesTags: ['main'],
             query          : ({ id }) => ({

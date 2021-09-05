@@ -574,7 +574,8 @@
                 "price": {
                     "title": "Ставка",
                     "per-hour": "В\u00A0час",
-                    "value": "{{value}}\u00A0руб."
+                    "value": "{{value}}\u00A0руб.",
+                    "field": "Часовая ставка (руб.)"
                 },
                 "other": {
                     "description": "Описание",
