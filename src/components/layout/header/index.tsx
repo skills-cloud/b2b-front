@@ -55,6 +55,12 @@ export const Header = (props: IProps) => {
                         children={t('components.header.nav.specialists')}
                     />
                     <NavLink
+                        to="/project-request"
+                        className={cn('header__nav-link')}
+                        activeClassName={cn('header__nav-link_active')}
+                        children={t('components.header.nav.requests')}
+                    />
+                    <NavLink
                         to="/teams"
                         className={cn('header__nav-link')}
                         activeClassName={cn('header__nav-link_active')}

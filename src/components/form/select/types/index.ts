@@ -22,7 +22,7 @@ export interface ICommon {
     required?: Message | ValidationRule<boolean>,
     direction?: 'row' | 'column',
     clearable?: boolean,
-    defaultValue?: IValue,
+    defaultValue?: Array<IValue | number | string>,
     label?: ReactNode,
     autoFocus?: boolean,
     isSearchable?: boolean,

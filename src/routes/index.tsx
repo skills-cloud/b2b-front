@@ -78,7 +78,7 @@ export const Routes = () => {
             htmlAttributes={{
                 lang: i18n.language
             }}
-            title={t('helmet.title')}
+            title={t('helmet.title.main')}
             link={[{
                 rel : 'canonical',
                 href: window.location.href
