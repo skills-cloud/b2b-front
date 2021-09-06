@@ -12,6 +12,31 @@
         height: 26px;
     }
 
+    &__main-header {
+        font-family: Montserrat, sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 30px;
+        color: var(--color-black);
+    }
+
+    &__main-button {
+        display: block;
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+        box-sizing: border-box;
+        background-color: var(--color-bg-button);
+        border-radius: 50%;
+    }
+
+    &__main-top {
+        display: grid;
+        grid-gap: 8px;
+        align-items: center;
+        grid-template-columns: 1fr 40px;
+    }
+
     &__search,
     &__main {
         background-color: var(--color-white);
