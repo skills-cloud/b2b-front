@@ -92,6 +92,12 @@ interface IResponseGetRequestList {
     results: Array<RequestRead>
 }
 
+export interface IParamsLinkCv {
+    data: Record<string, unknown>,
+    cv_id: string,
+    id: string
+}
+
 export const mainRequest = createApi({
     reducerPath: 'api/main/request',
     tagTypes   : ['main'],
@@ -197,6 +203,14 @@ export const mainRequest = createApi({
                 url   : `/request-requirement/${id}/competencies-set/`,
                 method: 'POST',
                 body  : competencies
+            })
+        }),
+        postRequestRequirementLinkCv: build.mutation<{ status: string }, IParamsLinkCv>({
+            invalidatesTags: ['main'],
+            query          : ({ id, cv_id, data }) => ({
+                url   : `/request-requirement/${id}/cv-link/${cv_id}/`,
+                method: 'POST',
+                body  : data
             })
         }),
         patchMainRequest: build.mutation<IPostBaseResponse, RequestRead>({

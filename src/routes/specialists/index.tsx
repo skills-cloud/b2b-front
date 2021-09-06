@@ -5,18 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { differenceInCalendarYears } from 'date-fns';
 import { parse, stringify } from 'query-string';
-import debounce from 'lodash.debounce';
 
 import useClassnames from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
-import { useDispatch } from 'component/core/store';
 import useModalClose from 'component/modal/use-modal-close';
 
 import IconPlus from 'component/icons/plus';
 import IconStar from 'component/icons/star';
 import IconClose from 'component/icons/close';
 import FormInput from 'component/form/input';
-import InputSelect from 'component/form/select';
 import InputSkills from 'component/form/input-skills';
 import InputCountry from 'component/form/input-country';
 import InputCity from 'component/form/input-city';
@@ -27,11 +24,12 @@ import { H2 } from 'component/header';
 import Button from 'component/button';
 
 import { cv } from 'adapter/api/cv';
-import { dictionary } from 'adapter/api/dictionary';
 import { CvList, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 import { IValue } from 'component/form/select/types';
 
 import style from './index.module.pcss';
+import InputPosition from 'component/form/input-position';
+import { mainRequest } from 'adapter/api/main';
 
 export interface IFormValues {
     search?: string,
@@ -44,14 +42,14 @@ export interface IFormValues {
 export const Specialists = () => {
     const cn = useClassnames(style);
     const history = useHistory();
-    const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
     const defaultValues = {
         country     : [],
         city        : [],
-        competencies: []
+        competencies: [],
+        position    : []
     };
 
     const context = useForm<IFormValues>({
@@ -60,6 +58,24 @@ export const Specialists = () => {
     });
 
     const { data, isLoading, refetch } = cv.useGetCvListQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
+    const [postLinkCv, { isLoading: isLoadingRequest }] = mainRequest.usePostRequestRequirementLinkCvMutation();
+
+    const [fromRequestId, setFromRequestId] = useState<string>('');
+
+    useEffect(() => {
+        if(Object.values(qs).length) {
+            const newDefaultValues = {
+                ...defaultValues,
+                ...qs
+            };
+
+            if(qs.from_request_id) {
+                setFromRequestId(qs.from_request_id as string);
+            }
+
+            context.reset(newDefaultValues);
+        }
+    }, []);
 
     useEffect(() => {
         refetch();
@@ -69,33 +85,25 @@ export const Specialists = () => {
 
     useModalClose(showModal, setShowModal);
 
-    const fromProject = true;
     const showLinkedParam = true;
-
-    const onLoadPositionOptions = debounce((search_string: string, callback) => {
-        dispatch(dictionary.endpoints.getPositionList.initiate({
-            search: search_string
-        }))
-            .then(({ data: loadData }) => {
-                if(loadData?.results?.length) {
-                    const res = loadData.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    }));
-
-                    callback(res);
-                } else {
-                    callback(null);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, 150);
 
     const onClickLinked = (cvId?: number) => () => {
         if(cvId) {
             setShowModal(true);
+        }
+    };
+
+    const onClickAddToRequest = (cvItemId?: number) => () => {
+        if(cvItemId) {
+            postLinkCv({
+                id   : fromRequestId,
+                cv_id: String(cvItemId),
+                data : {}
+            })
+                .then(() => {
+                    console.info('OK');
+                })
+                .catch(console.error);
         }
     };
 
@@ -142,6 +150,29 @@ export const Specialists = () => {
         );
     };
 
+    const elAddButton = (cvItemId?: number) => {
+        if(fromRequestId) {
+            if(isLoadingRequest) {
+                return (
+                    <div className={cn('specialists__user-info-exp-add')}>
+                        <Loader />
+                    </div>
+                );
+            }
+
+            return (
+                <div className={cn('specialists__user-info-exp-add')}>
+                    <IconPlus
+                        svg={{
+                            className: cn('specialists__user-info-exp-add-icon'),
+                            onClick  : onClickAddToRequest(cvItemId)
+                        }}
+                    />
+                </div>
+            );
+        }
+    };
+
     const elAdditionalBlock = (cvItem?: CvCareerRead, showLinkedItems?: boolean) => {
         if(cvItem) {
             const dateFrom = cvItem.date_from ? new Date(cvItem.date_from) : new Date();
@@ -160,11 +191,7 @@ export const Specialists = () => {
                             <IconStar svg={{ className: cn('specialists__user-info-exp-star-icon') }} />
                             {experience}
                         </div>
-                        {fromProject && (
-                            <div className={cn('specialists__user-info-exp-add')}>
-                                <IconPlus svg={{ className: cn('specialists__user-info-exp-add-icon') }} />
-                            </div>
-                        )}
+                        {elAddButton(cvItem.id)}
                     </div>
                     {showLinkedParam && showLinkedItems && (
                         <div className={cn('specialists__user-linked')} onClick={onClickLinked(cvItem.id)}>
@@ -287,17 +314,16 @@ export const Specialists = () => {
                                 label={t('routes.specialists.sidebar.filters.form.search.label')}
                                 placeholder={t('routes.specialists.sidebar.filters.form.search.placeholder')}
                             />
-                            <InputSelect
+                            <InputPosition
+                                defaultValue={Array.isArray(qs.position_id) ? qs.position_id : [qs.position_id as string]}
                                 name="position"
-                                loadOptions={onLoadPositionOptions}
                                 direction="column"
                                 placeholder={t('routes.specialists.sidebar.filters.form.position.placeholder')}
                                 label={t('routes.specialists.sidebar.filters.form.position.label')}
-                                isMulti={true}
                                 clearable={true}
                             />
                             <InputCountry
-                                defaultValue={qs.country_id as Array<string>}
+                                defaultValue={Array.isArray(qs.country_id) ? qs.country_id : [qs.country_id as string]}
                                 name="country"
                                 direction="column"
                                 placeholder={t('routes.specialists.sidebar.filters.form.country.placeholder')}
@@ -305,7 +331,7 @@ export const Specialists = () => {
                                 clearable={true}
                             />
                             <InputCity
-                                defaultValue={qs.city_id as Array<string>}
+                                defaultValue={Array.isArray(qs.city_id) ? qs.city_id : [qs.city_id as string]}
                                 name="city"
                                 direction="column"
                                 placeholder={t('routes.specialists.sidebar.filters.form.city.placeholder')}

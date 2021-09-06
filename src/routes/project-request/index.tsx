@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
 import SidebarLayout from 'component/layout/sidebar';
 import Section from 'component/section';
+import IconArrowLeftFull from 'component/icons/arrow-left-full';
 
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import MainInfo from 'route/project-request/components/main-info';
@@ -13,12 +14,13 @@ import { mainRequest } from 'adapter/api/main';
 
 import { useClassnames } from 'hook/use-classnames';
 
+import Specialists from './specialists';
 import style from './index.module.pcss';
-import Specialists from 'route/project-request/specialists';
 
 const ProjectRequest = () => {
     const cn = useClassnames(style);
     const { hash } = useLocation();
+    const history = useHistory();
     const { t } = useTranslation();
     const params = useParams<{ subpage?: string, id: string }>();
     const { data } = mainRequest.useGetMainRequestByIdQuery(
@@ -38,6 +40,10 @@ const ProjectRequest = () => {
                 </Link>
             </li>
         );
+    };
+
+    const onClickBack = () => {
+        history.push(`/project-request/${params.id}#main-info`);
     };
 
     if(!data) {
@@ -106,8 +112,14 @@ const ProjectRequest = () => {
 
         return (
             <Section withoutPaddings={true}>
-                <nav>
-                    <ul className={cn('nav')}>
+                <nav className={cn('nav')}>
+                    {params.subpage === 'specialists' && (
+                        <div className={cn('nav__header')}>
+                            <IconArrowLeftFull svg={{ className: cn('nav__icon-back'), onClick: onClickBack }} />
+                            {data?.project?.name}
+                        </div>
+                    )}
+                    <ul className={cn('nav__list')}>
                         {content}
                     </ul>
                 </nav>

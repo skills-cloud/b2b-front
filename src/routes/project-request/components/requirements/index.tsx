@@ -64,9 +64,10 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
 
             if(req) {
                 const params = {
-                    position_id : req.position_id,
-                    years       : req.id,
-                    competencies: req.competencies
+                    position_id         : req.position_id,
+                    years               : req.id,
+                    competencies_ids_any: req.competencies?.map((comp) => comp.competence_id),
+                    from_request_id     : req.id
                 };
 
                 history.push(`/specialists?${stringify(normalizeObject(params))}`);
