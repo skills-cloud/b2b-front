@@ -24,6 +24,7 @@ import DeleteAction from 'component/section/actions/delete';
 
 import style from './index.module.pcss';
 import { dictionary } from 'adapter/api/dictionary';
+import IconPlus from 'component/icons/plus';
 
 export interface IDefaultValues {
     industry_sector?: IValue | null,
@@ -245,7 +246,15 @@ const ProjectRequestList = () => {
     return (
         <main className={cn('request-list')}>
             <section className={cn('request-list__main')}>
-                <h2 className={cn('request-list__main-header')}>{t('routes.project-request-list.title')}</h2>
+                <div className={cn('request-list__main-top')}>
+                    <h2 className={cn('request-list__main-header')}>{t('routes.project-request-list.title')}</h2>
+                    <Link
+                        to="/project-request/create"
+                        className={cn('request-list__main-button')}
+                    >
+                        <IconPlus />
+                    </Link>
+                </div>
                 {elRequests}
             </section>
             <aside className={cn('request-list__search')}>

@@ -113,7 +113,6 @@ const InputSelect = (props: TProps & typeof defaultProps) => {
             control={control}
             rules={{ required: props.required }}
             render={({ field: { onChange, onBlur, value: renderValue } }) => {
-                console.log('RENDER VAL', renderValue, value, props.defaultValue)
                 const selectProps = {
                     onChange,
                     onFocus,
