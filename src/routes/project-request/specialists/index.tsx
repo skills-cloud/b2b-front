@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +21,22 @@ export const Specialists = () => {
     const { id } = useParams<{ id: string }>();
     const { t, i18n } = useTranslation();
 
-    const { data, isLoading } = mainRequest.useGetMainRequestRequirementByIdQuery({ id: parseInt(id, 10) });
+    const { data, isLoading } = mainRequest.useGetMainRequestByIdQuery({ id: parseInt(id, 10) });
+    const [cvList, setCvList] = useState<Array<CvInline>>([]);
+
+    useEffect(() => {
+        const reqsList = data?.requirements?.reduce((acc, current) => {
+            if(current.cv_list) {
+                acc.push(...current.cv_list);
+            }
+
+            return acc;
+        }, [] as Array<CvInline>);
+
+        if(reqsList) {
+            setCvList(reqsList);
+        }
+    }, [JSON.stringify(data)]);
 
     const elAdditionalBlock = (cvItem?: CvCareerRead) => {
         if(cvItem) {
@@ -108,20 +123,22 @@ export const Specialists = () => {
             return <Loader />;
         }
 
-        if(data?.cv_list?.length) {
+        if(data?.requirements?.length) {
             const hashValue = hash.slice(1);
 
-            const dataToRender = hashValue === 'all' ? data.cv_list : data.cv_list.filter((item) => String(item.id) === hashValue);
+            const dataToRender = hashValue === 'all' ? cvList : data?.requirements?.find((item) => String(item.id) === hashValue)?.cv_list;
 
-            return (
-                <div className={cn('specialists__users')}>
-                    {dataToRender.map((cvItem) => elUserItem(cvItem))}
-                </div>
-            );
+            if(dataToRender) {
+                return (
+                    <div className={cn('specialists__users')}>
+                        {dataToRender.map((cvItem) => elUserItem(cvItem))}
+                    </div>
+                );
+            }
         }
 
         return <span className={cn('specialists__users-empty')}>{t('routes.specialists.main.users.empty')}</span>;
-    }, [JSON.stringify(data?.cv_list), hash, i18n.language, isLoading]);
+    }, [JSON.stringify(data?.requirements), JSON.stringify(cvList), hash, i18n.language, isLoading]);
 
     return (
         <section className={cn('specialists')}>

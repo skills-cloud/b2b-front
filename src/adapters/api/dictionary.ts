@@ -10,6 +10,7 @@ import { EducationGraduate } from 'adapter/types/dictionary/education-graduate/g
 import { EducationPlace } from 'adapter/types/dictionary/education-place/get/code-200';
 import { EducationSpecialty } from 'adapter/types/dictionary/education-specialty/get/code-200';
 import { Position } from 'adapter/types/dictionary/position/get/code-200';
+import { Position as PositionById } from 'adapter/types/dictionary/position/id/get/code-200';
 import { Competence } from 'adapter/types/dictionary/competence/get/code-200';
 import { Competence as CompetenceById } from 'adapter/types/dictionary/competence/id/get/code-200';
 import { Citizenship } from 'adapter/types/dictionary/citizenship/get/code-200';
@@ -131,6 +132,13 @@ export const dictionary = createApi({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : `competence/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        getPositionById: build.query<PositionById, { id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : `position/${params.id}/`,
                 method: 'GET'
             })
         }),

@@ -31,11 +31,6 @@ module.exports = (env = {}) => {
             clientLogLevel    : 'error',
             index             : 'index.html',
             proxy             : [{
-                context     : ['/spec/**'],
-                target      : 'http://dev.b2bcloud.com:19000/',
-                secure      : false,
-                changeOrigin: true
-            }, {
                 context     : ['/api/**', '/acc/**', '/dictionary/**', '/main/**'],
                 target      : 'https://test.dev.b2bcloud.com/',
                 secure      : false,
