@@ -2,26 +2,26 @@ variables:
     PROJECT_PREFIX: front
 
 stages:
-  - lint
-  - test
-  - build
-  - deploy
-  - stop
+    - lint
+    - test
+    - build
+    - deploy
+    - stop
 
 before_script:
-  - export TAG=$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
-  - cd docker
+    - export TAG=$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+    - cd docker
 
 merge_test:
-  stage: test
-  environment:
-    name: merge/merge_${CI_MERGE_REQUEST_ID}
-  script:
-    - echo "ok"
-  only:
-    - merge_requests
-  tags:
-    - test
+    stage: test
+    environment:
+        name: merge/merge_${CI_MERGE_REQUEST_ID}
+    script:
+        - echo "ok"
+    only:
+        - merge_requests
+    tags:
+        - test
 
 # lint-style:
 #     stage: lint
@@ -67,30 +67,44 @@ build-img:
         - test
     only:
         - master
+        - demo
         - /^release.*$/
 
 deploy_test:
-  stage: deploy
-  script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker-compose -p api_test -f docker-compose-review.yml pull || exit 1
-    - docker-compose -p api_test -f docker-compose-review.yml up -d
-  only:
-    - master
-  tags:
-    - test
+    stage: deploy
+    script:
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - docker-compose -p api_test -f docker-compose-review.yml pull || exit 1
+        - docker-compose -p api_test -f docker-compose-review.yml up -d
+    only:
+        - master
+    tags:
+        - test
+
+
+deploy_demo:
+    stage: deploy
+    script:
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - docker-compose -p api_demo -f docker-compose-demo.yml pull || exit 1
+        - docker-compose -p api_demo -f docker-compose-demo.yml up -d
+    only:
+        - master
+        - demo
+    tags:
+        - test
 
 deploy_prod:
-  stage: deploy
-  script:
-    - docker-compose -p prod -f docker-compose-prod.yml pull || exit 1
-    - docker-compose -p prod -f docker-compose-prod.yml up -d
-    - ./create_release_mr.sh
-  only:
-    - /^release.*$/
-  when: manual
-  tags:
-    - prod
+    stage: deploy
+    script:
+        - docker-compose -p prod -f docker-compose-prod.yml pull || exit 1
+        - docker-compose -p prod -f docker-compose-prod.yml up -d
+        - ./create_release_mr.sh
+    only:
+        - /^release.*$/
+    when: manual
+    tags:
+        - prod
 
 
 
