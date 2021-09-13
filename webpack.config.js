@@ -88,7 +88,7 @@ module.exports = (env = {}) => {
                     }
                 }]
             }, {
-                test     : /\.(woff2?|svg|png|ico|jpg|jpeg|pdf|webm|mp3|mp4)$/,
+                test     : /\.(woff2?|svg|png|ico|jpg|jpeg|pdf|webm|mp3|mp4|ttf)$/,
                 type     : 'asset/resource',
                 generator: {
                     filename: `assets/${env.production ? '[contenthash]' : '[name]-[hash:6]'}[ext]`

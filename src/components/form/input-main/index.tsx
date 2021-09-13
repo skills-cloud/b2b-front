@@ -1,23 +1,79 @@
 import React, { useState, FC, ReactNode, MouseEvent, useEffect, useMemo } from 'react';
 import { MultiValueRemoveProps } from 'react-select/src/components/MultiValue';
-import { components, OptionTypeBase } from 'react-select';
+import ReactSelect, { components, OptionTypeBase } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import debounce from 'lodash.debounce';
 import { ErrorMessage } from '@hookform/error-message';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, Message, useFormContext } from 'react-hook-form';
+import { ValidationRule } from 'react-hook-form/dist/types/validator';
 
-import { useClassnames } from 'hook/use-classnames';
+import { useClassnames, IStyle } from 'hook/use-classnames';
 import { useDispatch } from 'component/core/store';
 
 import Error from 'component/error';
 import IconClose from 'component/icons/close';
 
-import { dictionary } from 'adapter/api/dictionary';
+import { mainRequest } from 'adapter/api/main';
 
-import { IProps, IValue } from './types';
 import getStyles from './style';
 import style from './index.module.pcss';
+
+export type TError = string | null;
+
+export interface IValue {
+    label: string,
+    value: string | number
+}
+
+export enum ERequestType {
+    Organization,
+    Customer,
+    Project,
+    RequestType
+}
+
+const methods = {
+    [ERequestType.Organization]: {
+        single: mainRequest.endpoints.getMainOrganizationById,
+        list  : mainRequest.endpoints.getMainOrganization
+    },
+    [ERequestType.Customer]: {
+        single: mainRequest.endpoints.getMainOrganizationCustomerById,
+        list  : mainRequest.endpoints.getMainOrganizationCustomer
+    },
+    [ERequestType.Project]: {
+        single: mainRequest.endpoints.getMainProjectById,
+        list  : mainRequest.endpoints.getMainProject
+    },
+    [ERequestType.RequestType]: {
+        single: mainRequest.endpoints.getMainRequestTypeById,
+        list  : mainRequest.endpoints.getMainRequestType
+    }
+};
+
+export interface IProps {
+    className?: string | IStyle,
+    name: string,
+    direction?: 'row' | 'column',
+    required?: Message | ValidationRule<boolean>,
+    label?: ReactNode,
+    createable?: boolean,
+    isLoadingOptions?: boolean,
+    autoFocus?: boolean,
+    clearable?: boolean,
+    placeholder?: string,
+    tabIndex?: string,
+    disabled?: boolean,
+    defaultValue?: Array<IValue | number | string>,
+    error?: TError,
+    requestLimit?: number,
+    requestOffset?: number,
+    elError?: boolean,
+    isMulti?: boolean,
+    requestType: ERequestType,
+    onChange?(value: IValue): void
+}
 
 const MultiValueRemove: FC<MultiValueRemoveProps<Record<string, unknown>>> = (props) => {
     const onClick = (e: MouseEvent): void => {
@@ -38,12 +94,19 @@ const MultiValueRemove: FC<MultiValueRemoveProps<Record<string, unknown>>> = (pr
     );
 };
 
-const InputCountry = (props: IProps) => {
+const defaultProps = {
+    direction       : 'row',
+    isLoadingOptions: false,
+    isMulti         : true
+};
+
+const InputMain = (props: IProps & typeof defaultProps) => {
     const cn = useClassnames(style, props.className, true);
     const { formState: { errors }, watch, trigger, control, setValue } = useFormContext();
     const dispatch = useDispatch();
 
     const [isFocus, setIsFocus] = useState(false);
+    const [options, setOptions] = useState<Array<IValue>>();
     const value = watch(props.name);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -73,6 +136,27 @@ const InputCountry = (props: IProps) => {
         }
     }, []);
 
+    useEffect(() => {
+        if(!props.isLoadingOptions) {
+            const method = methods[props.requestType].list.initiate(undefined);
+
+            dispatch(method)
+                .then(({ data: loadData }) => {
+                    if(loadData?.results?.length) {
+                        const res = loadData.results.map((item) => ({
+                            label: item.name,
+                            value: String(item.id)
+                        }));
+
+                        setOptions(res);
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
+    }, []);
+
     useEffect((): void => {
         const initValue = props.defaultValue;
 
@@ -97,21 +181,27 @@ const InputCountry = (props: IProps) => {
             }
 
             if(ids.length) {
-                Promise.all(ids.map((item) => {
-                    return dispatch(dictionary.endpoints.getCountryById.initiate({
-                        id: String(item)
+                const baseMethod = methods[props.requestType];
+
+                if(baseMethod.single) {
+                    Promise.all(ids.map((item) => {
+                        const method = baseMethod.single.initiate({
+                            id: String(item)
+                        });
+
+                        return dispatch(method)
+                            .then((resp) => ({
+                                label: resp.data?.name || '',
+                                value: String(resp.data?.id) || ''
+                            }));
                     }))
-                        .then((resp) => ({
-                            label: resp.data?.name || '',
-                            value: String(resp.data?.id) || ''
-                        }));
-                }))
-                    .then((resp: Array<IValue>) => {
-                        setValue(props.name, resp, { shouldDirty: true });
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                    });
+                        .then((resp: Array<IValue>) => {
+                            setValue(props.name, resp, { shouldDirty: true });
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
+                }
             } else if(values.length) {
                 setValue(props.name, values, { shouldDirty: values.some((item) => !!item) });
             }
@@ -125,9 +215,11 @@ const InputCountry = (props: IProps) => {
     };
 
     const onLoadOptions = debounce((search_string: string, callback) => {
-        dispatch(dictionary.endpoints.getCountryList.initiate({
+        const method = methods[props.requestType].list.initiate({
             search: search_string
-        }))
+        });
+
+        dispatch(method)
             .then(({ data: loadData }) => {
                 if(loadData?.results?.length) {
                     const res = loadData.results.map((item) => ({
@@ -170,28 +262,32 @@ const InputCountry = (props: IProps) => {
             onFocus,
             onBlur,
             onChange,
-            value       : renderValue,
-            defaultValue: renderValue,
-            placeholder : props.placeholder,
-            autoFocus   : props.autoFocus,
-            isMulti     : true,
-            isClearable : props.clearable,
-            tabIndex    : props.tabIndex,
-            cacheOption : true,
-            isDisabled  : props.disabled,
-            loadOptions : onLoadOptions,
-            components  : { MultiValueRemove, MultiValue, Option, Input: SelectInput },
-            className   : cn('input__field', {
+            value         : renderValue,
+            defaultValue  : renderValue,
+            placeholder   : props.placeholder,
+            autoFocus     : props.autoFocus,
+            isMulti       : props.isMulti,
+            isClearable   : props.clearable,
+            tabIndex      : props.tabIndex,
+            cacheOption   : true,
+            defaultOptions: true,
+            isDisabled    : props.disabled,
+            components    : { MultiValueRemove, MultiValue, Option, Input: SelectInput },
+            styles        : getStyles(props, isFocus),
+            className     : cn('input__field', {
                 'input__field_invalid': errors[props.name]
-            }),
-            styles: getStyles(props, isFocus)
+            })
         };
 
-        if(props.createable) {
-            return <AsyncCreatableSelect {...selectProps} />;
+        if(props.isLoadingOptions) {
+            if(props.createable) {
+                return <AsyncCreatableSelect {...selectProps} loadOptions={onLoadOptions} />;
+            }
+
+            return <AsyncSelect {...selectProps} loadOptions={onLoadOptions} />;
         }
 
-        return <AsyncSelect {...selectProps} />;
+        return <ReactSelect {...selectProps} options={options} />;
     };
 
     return (
@@ -214,8 +310,8 @@ const InputCountry = (props: IProps) => {
     );
 };
 
-InputCountry.defaultProps = {
-    direction: 'row'
-};
+InputMain.requestType = ERequestType;
 
-export default InputCountry;
+InputMain.defaultProps = defaultProps;
+
+export default InputMain;

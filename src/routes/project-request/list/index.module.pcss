@@ -7,11 +7,6 @@
     max-width: 992px;
     align-items: flex-start;
 
-    &__action {
-        width: 26px;
-        height: 26px;
-    }
-
     &__main-header {
         font-family: Montserrat, sans-serif;
         font-weight: 700;
@@ -121,8 +116,9 @@
         display: grid;
         grid-gap: 8px;
         grid-auto-columns: max-content;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, max-content);
         align-items: flex-start;
+        justify-content: flex-end;
         font-size: 12px;
         line-height: 14px;
     }
@@ -184,5 +180,12 @@
         grid-gap: 24px;
         grid-template-rows: repeat(2, 1fr);
         grid-template-columns: repeat(3, 1fr);
+    }
+
+    &__request-top-right-action {
+        display: grid;
+        grid-gap: 16px;
+        grid-template-columns: 40px 1fr;
+        align-items: center;
     }
 }

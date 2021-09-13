@@ -8,14 +8,12 @@ import { contact } from 'adapter/api/contact';
 import { useCancelTokens } from 'hook/cancel-token';
 import useClassnames from 'hook/use-classnames';
 import InputSelect from 'component/form/select';
+import InputDictionary from 'component/form/input-dictionary';
 import FormInput from 'component/form/input';
 import DateInput from 'component/form/date';
 import Button from 'component/button';
 import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
-import InputCountry from 'component/form/input-country';
-import InputCity from 'component/form/input-city';
-import InputCitizenship from 'component/form/input-citizenship';
 
 import { dictionary } from 'adapter/api/dictionary';
 import { CvCareerId } from 'adapter/types/cv/career/id/get/code-200';
@@ -251,20 +249,23 @@ export const SpecialistsCreate = () => {
                                 }}
                             />
                         </div>
-                        <InputCitizenship
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Citizenship}
                             name="citizenship"
                             label={t('routes.specialists-create.main.form.citizenship')}
                             placeholder={t('routes.specialists-create.main.form.citizenship')}
                             direction="column"
                         />
                         <div className={cn('specialists-create__last-block')}>
-                            <InputCountry
+                            <InputDictionary
+                                requestType={InputDictionary.requestType.Country}
                                 direction="column"
                                 name="country"
                                 label={t('routes.specialists-create.main.form.country')}
                                 placeholder={t('routes.specialists-create.main.form.country')}
                             />
-                            <InputCity
+                            <InputDictionary
+                                requestType={InputDictionary.requestType.City}
                                 name="city"
                                 label={t('routes.specialists-create.main.form.city')}
                                 placeholder={t('routes.specialists-create.main.form.city')}

@@ -1,14 +1,17 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 import { Organization } from 'adapter/types/main/organization/get/code-200';
+import { Organization as OrganizationById } from 'adapter/types/main/organization/id/get/code-200';
 import { ProjectRead } from 'adapter/types/main/project/get/code-200';
+import { ProjectRead as ProjectReadById } from 'adapter/types/main/project/id/get/code-200';
 import { RequestType } from 'adapter/types/main/request-type/get/code-200';
+import { RequestType as RequestTypeById } from 'adapter/types/main/request-type/id/get/code-200';
 import { RequestRequirementRead, RequestRequirementCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
 
 interface IBaseGetById {
-    id: number
+    id: string
 }
 
 interface IQueryParams {
@@ -143,7 +146,7 @@ export const mainRequest = createApi({
                 method: 'DELETE'
             })
         }),
-        getMainRequestType: build.query<IResponseGetMainRequestType, IQueryParams>({
+        getMainRequestType: build.query<IResponseGetMainRequestType, IQueryParams | undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/request-type/',
@@ -151,12 +154,26 @@ export const mainRequest = createApi({
                 params
             })
         }),
-        getMainProject: build.query<IResponseGetMainProject, IQueryParams>({
+        getMainRequestTypeById: build.query<RequestTypeById, IBaseGetById>({
+            providesTags: ['main'],
+            query       : ({ id }) => ({
+                url   : `/request-type/${id}/`,
+                method: 'GET'
+            })
+        }),
+        getMainProject: build.query<IResponseGetMainProject, IQueryParams | undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/project/',
                 method: 'GET',
                 params
+            })
+        }),
+        getMainProjectById: build.query<ProjectReadById, IBaseGetById>({
+            providesTags: ['main'],
+            query       : ({ id }) => ({
+                url   : `/project/${id}/`,
+                method: 'GET'
             })
         }),
         getMainOrganization: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
@@ -165,6 +182,39 @@ export const mainRequest = createApi({
                 url   : '/organization/',
                 method: 'GET',
                 params
+            })
+        }),
+        getMainOrganizationById: build.query<OrganizationById, { id: string }>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : `/organization/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        getMainOrganizationCustomer: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
+            providesTags     : ['main'],
+            transformResponse: (resp: IResponseGetOrganization) => ({
+                ...resp,
+                results: resp.results.filter((item) => item.is_customer)
+            }),
+            query: (params) => ({
+                url   : '/organization/',
+                method: 'GET',
+                params
+            })
+        }),
+        getMainOrganizationCustomerById: build.query<OrganizationById, { id: string }>({
+            providesTags     : ['main'],
+            transformResponse: (resp: OrganizationById) => {
+                if(resp?.is_customer) {
+                    return resp;
+                }
+
+                return Promise.reject(new Error('No response'));
+            },
+            query: (params) => ({
+                url   : `/organization/${params.id}/`,
+                method: 'GET'
             })
         }),
         getMainOrganizationProjectList: build.query<IResponseGetOrganizationProject, IGetOrganizationProjectListQueryParams | undefined>({

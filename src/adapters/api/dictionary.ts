@@ -1,19 +1,25 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ContactType } from 'adapter/types/dictionary/contact-type/get/code-200';
 import { IndustrySector } from 'adapter/types/dictionary/industry-sector/get/code-200';
+import { IndustrySector as IndustrySectorById } from 'adapter/types/dictionary/industry-sector/id/get/code-200';
 import { Country } from 'adapter/types/dictionary/country/get/code-200';
 import { Country as CountryById } from 'adapter/types/dictionary/country/id/get/code-200';
 import { City } from 'adapter/types/dictionary/city/get/code-200';
 import { City as CityById } from 'adapter/types/dictionary/city/id/get/code-200';
 import { TypeOfEmployment } from 'adapter/types/dictionary/type-of-employment/get/code-200';
+import { TypeOfEmployment as TypeOfEmploymentById } from 'adapter/types/dictionary/type-of-employment/id/get/code-200';
 import { EducationGraduate } from 'adapter/types/dictionary/education-graduate/get/code-200';
+import { EducationGraduate as EducationGraduateById } from 'adapter/types/dictionary/education-graduate/id/get/code-200';
 import { EducationPlace } from 'adapter/types/dictionary/education-place/get/code-200';
+import { EducationPlace as EducationPlaceById } from 'adapter/types/dictionary/education-place/id/get/code-200';
 import { EducationSpecialty } from 'adapter/types/dictionary/education-specialty/get/code-200';
+import { EducationSpecialty as EducationSpecialtyById } from 'adapter/types/dictionary/education-specialty/id/get/code-200';
 import { Position } from 'adapter/types/dictionary/position/get/code-200';
 import { Position as PositionById } from 'adapter/types/dictionary/position/id/get/code-200';
 import { Competence } from 'adapter/types/dictionary/competence/get/code-200';
 import { Competence as CompetenceById } from 'adapter/types/dictionary/competence/id/get/code-200';
 import { Citizenship } from 'adapter/types/dictionary/citizenship/get/code-200';
+import { Citizenship as CitizenshipById } from 'adapter/types/dictionary/citizenship/id/get/code-200';
 import { CompetenceTree } from 'adapter/types/dictionary/competence-tree/get/code-200';
 
 export interface IResponseGetCityList {
@@ -21,13 +27,6 @@ export interface IResponseGetCityList {
     next?: string,
     previous?: string,
     results: Array<City>
-}
-
-export interface ICompetence {
-    id: number,
-    name: string,
-    children?: Array<ICompetence>,
-    parent_id: number
 }
 
 export interface IResponseGetCitizenshipList {
@@ -52,12 +51,6 @@ export interface IResponseGetContactList {
 }
 
 export interface IResponseGetCompetenceList {
-    total: number,
-    max_page_size: number,
-    page_size: number,
-    page_number: number,
-    page_next: string,
-    page_previous: string,
     results: Array<Competence>
 }
 
@@ -83,12 +76,6 @@ interface IResponseIndustrySector {
 }
 
 export interface IResponseGetTypeOfEmployment {
-    total: number,
-    max_page_size: number,
-    page_size: number,
-    page_number: number,
-    page_next: number,
-    page_previous: number,
     results: Array<TypeOfEmployment>
 }
 
@@ -104,12 +91,19 @@ export const dictionary = createApi({
         baseUrl: '/api/dictionary'
     }),
     endpoints: (build) => ({
-        getIndustrySector: build.query<IResponseIndustrySector, { search: string }>({
+        getIndustrySector: build.query<IResponseIndustrySector, { search?: string } | undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'industry-sector/',
                 method: 'GET',
                 params
+            })
+        }),
+        getIndustrySectorById: build.query<IndustrySectorById, { id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : `competence/${params.id}/`,
+                method: 'GET'
             })
         }),
         getCompetenceTree: build.query<Array<CompetenceTree>, undefined>({
@@ -120,12 +114,15 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getCompetence: build.query<IResponseGetCompetenceList, IGetCompetenceListParams>({
+        getCompetence: build.query<IResponseGetCompetenceList, IGetCompetenceListParams | undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'competence/',
                 method: 'GET',
-                params
+                params: {
+                    page_size: 1000,
+                    ...params
+                }
             })
         }),
         getCompetenceById: build.query<CompetenceById, { id: string }>({
@@ -142,7 +139,7 @@ export const dictionary = createApi({
                 method: 'GET'
             })
         }),
-        getContactType: build.query<IResponseGetContactList, { search: string }>({
+        getContactType: build.query<IResponseGetContactList, { search?: string }>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'contact-type/',
@@ -150,7 +147,7 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getCountryList: build.query<IResponseGetCountryList, { search: string }>({
+        getCountryList: build.query<IResponseGetCountryList, { search?: string } | undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'country/',
@@ -165,7 +162,7 @@ export const dictionary = createApi({
                 method: 'GET'
             })
         }),
-        getCityList: build.query<IResponseGetCityList, { search: string, country_id?: string }>({
+        getCityList: build.query<IResponseGetCityList, { search?: string, country_id?: string } | undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'city/',
@@ -180,7 +177,7 @@ export const dictionary = createApi({
                 method: 'GET'
             })
         }),
-        getCitizenshipList: build.query<IResponseGetCitizenshipList, { search: string }>({
+        getCitizenshipList: build.query<IResponseGetCitizenshipList, { search?: string } | undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'citizenship/',
@@ -188,7 +185,14 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getPositionList: build.query<IResponseGetPositionList, { search: string }>({
+        getCitizenshipById: build.query<CitizenshipById, { id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : `citizenship/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        getPositionList: build.query<IResponseGetPositionList, { search?: string } | undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'position/',
@@ -196,7 +200,7 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getEducationGraduate: build.query<IEducationResponse, { search: string }>({
+        getEducationGraduate: build.query<IEducationResponse, { search?: string } | undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'education-graduate/',
@@ -204,7 +208,14 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getEducationPlace: build.query<IEducationResponse, { search: string }>({
+        getEducationGraduateById: build.query<EducationGraduateById, { id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : `education-graduate/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        getEducationPlace: build.query<IEducationResponse, { search?: string } | undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'education-place/',
@@ -212,7 +223,14 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getEducationSpeciality: build.query<IEducationResponse, { search: string }>({
+        getEducationPlaceById: build.query<EducationPlaceById, { id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : `education-place/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        getEducationSpeciality: build.query<IEducationResponse, { search?: string } | undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'education-specialty/',
@@ -220,12 +238,26 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getTypeOfEmployment: build.query<IResponseGetTypeOfEmployment, { search: string } | undefined>({
+        getEducationSpecialityById: build.query<EducationSpecialtyById, { id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : `education-specialty/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        getTypeOfEmployment: build.query<IResponseGetTypeOfEmployment, { search?: string } | undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'type-of-employment/',
                 method: 'GET',
                 params
+            })
+        }),
+        getTypeOfEmploymentById: build.query<TypeOfEmploymentById, { id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : `type-of-employment/${params.id}/`,
+                method: 'GET'
             })
         })
     })

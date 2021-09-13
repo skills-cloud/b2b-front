@@ -1,0 +1,35 @@
+.dropdown {
+    position: relative;
+
+    &__content {
+        position: absolute;
+        right: 0;
+        padding: 8px 0;
+        background: var(--color-white);
+        box-sizing: border-box;
+        box-shadow: var(--color-shadow-popup);
+        border-radius: 8px;
+        z-index: 10;
+    }
+
+    &__icon {
+        width: 24px;
+        min-width: 24px;
+        height: 24px;
+        fill: var(--color-gray-100);
+    }
+
+    &__item {
+        padding: 5px 32px 7px 12px;
+        color: var(--color-text-dark);
+        white-space: nowrap;
+        display: block;
+        text-decoration: none;
+
+        &:hover {
+            cursor: pointer;
+            background: var(--color-gray-20);
+            text-decoration: none;
+        }
+    }
+}

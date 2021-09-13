@@ -2,20 +2,16 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
-import debounce from 'lodash.debounce';
 
 import useClassnames from 'hook/use-classnames';
 import FormInput from 'component/form/input';
 import FormDate from 'component/form/date';
-import FormInputSkills from 'component/form/input-skills';
-import InputSelect from 'component/form/select';
 import Error from 'component/error';
 import InputFile from 'component/form/file';
+import InputDictionary from 'component/form/input-dictionary';
+import InputMain from 'component/form/input-main';
 
-import { useDispatch } from 'component/core/store';
-import { dictionary } from 'adapter/api/dictionary';
 import { career } from 'adapter/api/career';
-import { mainRequest } from 'adapter/api/main';
 import { CvCareerRead, CvCareerFileRead } from 'adapter/types/cv/career/get/code-200';
 
 import style from './index.module.pcss';
@@ -43,7 +39,6 @@ interface IProjectForm {
 }
 
 const CareerForm = (props: IProjectForm) => {
-    const dispatch = useDispatch();
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
@@ -52,7 +47,6 @@ const CareerForm = (props: IProjectForm) => {
     const [patchCareer, { isLoading: isPatchLoading }] = career.usePatchCareerByIdMutation();
     const [uploadFile] = career.useUploadCareerFileByIdMutation();
     const [deleteFile] = career.useDeleteCareerFileByIdMutation();
-    const { data: dataOrganizationList } = mainRequest.useGetMainOrganizationQuery(undefined);
 
     const [error, setError] = useState<Array<string> | string | null>(null);
 
@@ -116,27 +110,6 @@ const CareerForm = (props: IProjectForm) => {
             });
     });
 
-    const onLoadPositionOptions = debounce((search_string: string, callback) => {
-        dispatch(dictionary.endpoints.getPositionList.initiate({
-            search: search_string
-        }))
-            .then(({ data }) => {
-                if(data?.results?.length) {
-                    const res = data.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    }));
-
-                    callback(res);
-                } else {
-                    callback(null);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, 150);
-
     const elError = useMemo(() => {
         if(error) {
             if(Array.isArray(error)) {
@@ -162,9 +135,10 @@ const CareerForm = (props: IProjectForm) => {
                     <label className={cn('career-form__label')}>
                         {t('routes.person.career.fields.organization')}
                     </label>
-                    <InputSelect
+                    <InputMain
+                        isMulti={false}
+                        requestType={InputMain.requestType.Organization}
                         name="career.organization"
-                        options={dataOrganizationList?.results.map((result) => ({ label: result.name, value: String(result.id) })) || []}
                         placeholder={t('routes.person.career.fields.placeholder.organization')}
                         required={true}
                     />
@@ -173,9 +147,10 @@ const CareerForm = (props: IProjectForm) => {
                     <label className={cn('career-form__label')}>
                         {t('routes.person.career.fields.position')}
                     </label>
-                    <InputSelect
+                    <InputDictionary
+                        isMulti={false}
                         name="career.position"
-                        loadOptions={onLoadPositionOptions}
+                        requestType={InputDictionary.requestType.Position}
                         placeholder={t('routes.person.career.fields.placeholder.position')}
                         required={true}
                     />
@@ -192,7 +167,8 @@ const CareerForm = (props: IProjectForm) => {
                     <label className={cn('career-form__label')}>
                         {t('routes.person.career.fields.competencies')}
                     </label>
-                    <FormInputSkills
+                    <InputDictionary
+                        requestType={InputDictionary.requestType.Competence}
                         name="career.competencies_select"
                         placeholder={t('routes.person.career.fields.placeholder.competencies')}
                     />
@@ -207,9 +183,10 @@ const CareerForm = (props: IProjectForm) => {
                     <label className={cn('career-form__label')}>
                         {t('routes.person.career.fields.position')}
                     </label>
-                    <InputSelect
+                    <InputDictionary
+                        isMulti={false}
                         name="career.position"
-                        loadOptions={onLoadPositionOptions}
+                        requestType={InputDictionary.requestType.Position}
                         placeholder={t('routes.person.career.fields.placeholder.position')}
                         required={true}
                     />

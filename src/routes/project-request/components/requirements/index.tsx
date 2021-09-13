@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { stringify } from 'query-string';
+import { useHistory } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
@@ -29,7 +30,6 @@ import { mainRequest } from 'adapter/api/main';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 
 import style from './index.module.pcss';
-import { useHistory } from 'react-router';
 
 enum EModalSteps {
     NewRole,
@@ -75,7 +75,20 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
         }
     };
 
-    const getExpirienceTrl = (experience: number | null | undefined) => (
+    const onDeleteAction = (requirementId?: number) => () => {
+        if(requirementId) {
+            deleteMainRequestById({ id: requirementId })
+                .unwrap()
+                .catch(console.error);
+        }
+    };
+
+    const onEditAction = (requirementId?: number) => () => {
+        setEditID(requirementId);
+        setModalStep(EModalSteps.Base);
+    };
+
+    const getExperienceTrl = (experience: number | null | undefined) => (
         typeof experience === 'number' ? t(
             'routes.project-request.blocks.competencies.experience-content',
             {
@@ -117,25 +130,16 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                 return (
                     <Section key={requirementId}>
                         <div className={cn('gap-bottom')}>
-                            <SectionHeader actions={
-                                <div className={cn('actions')}>
-                                    <EditAction onClick={() => {
-                                        setEditID(requirementId);
-                                        setModalStep(EModalSteps.Base);
-                                    }}
-                                    />
-                                    <DeleteAction onClick={() => {
-                                        if(requirementId) {
-                                            deleteMainRequestById({ id: requirementId })
-                                                .unwrap()
-                                                .catch(console.error);
-                                        }
-                                    }}
-                                    />
-                                    <SearchAction onClick={onClickSearch(requirementId)} />
-                                </div>
-                            }
-                            >{name || t('routes.project-request.blocks.empty-title')}
+                            <SectionHeader
+                                actions={[{
+                                    elem: <EditAction onClick={onEditAction(requirementId)} />
+                                }, {
+                                    elem: <DeleteAction onClick={onDeleteAction(requirementId)} />
+                                }, {
+                                    elem: <SearchAction onClick={onClickSearch(requirementId)} />
+                                }]}
+                            >
+                                {name || t('routes.project-request.blocks.empty-title')}
                             </SectionHeader>
                         </div>
 
@@ -160,7 +164,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                         {competencies.map(({ competence, id:competenceId, experience_years: experienceYears }) => (
                                             <Tooltip
                                                 key={competenceId}
-                                                content={getExpirienceTrl(experienceYears)}
+                                                content={getExperienceTrl(experienceYears)}
                                                 theme="dark"
                                             >
                                                 <div className={cn('skills-tag')} key={competenceId}>
@@ -171,7 +175,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                     </SectionContentListItem>
                                 )}
                                 <SectionContentListItem title={t('routes.project-request.blocks.competencies.experience')}>
-                                    {getExpirienceTrl(experience_years)}
+                                    {getExperienceTrl(experience_years)}
                                 </SectionContentListItem>
                             </SectionContentList>
                         )}

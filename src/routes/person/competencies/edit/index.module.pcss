@@ -22,14 +22,6 @@
         align-items: center;
     }
 
-    &__list {
-        height: 400px;
-        overflow: scroll;
-        padding: 16px;
-        border: 1px solid var(--color-gray-30);
-        border-radius: 4px;
-    }
-
     &__error {
         margin-top: 24px;
     }
@@ -37,7 +29,7 @@
     &__header-back {
         width: 16px;
         height: 16px;
-        fill: var(--color-gray-3);
+        fill: var(--color-gray-100);
         margin-right: 12px;
 
         @media (hover: hover) and (pointer: fine) {
@@ -68,7 +60,7 @@
     &__expand {
         width: 24px;
         height: 24px;
-        fill: var(--color-gray-3);
+        fill: var(--color-gray-100);
         transform: rotate(-90deg);
 
         &_open {
@@ -93,7 +85,7 @@
         display: grid;
         grid-row-gap: 16px;
         padding-bottom: 16px;
-        border-bottom: solid 1px var(--color-gray-2);
+        border-bottom: solid 1px var(--color-gray-30);
 
         &:first-of-type {
             padding-top: 0;
@@ -147,7 +139,7 @@
         display: block;
         height: 24px;
         line-height: 24px;
-        background-color: var(--color-gray-4);
+        background-color: var(--color-gray-20);
         font-size: 12px;
         padding: 6px 10px;
         white-space: nowrap;
@@ -201,74 +193,5 @@
         font-size: 14px;
         line-height: 16px;
         color: var(--color-black);
-    }
-
-    :global {
-
-        ol {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            grid-auto-flow: row;
-            grid-row-gap: 12px;
-
-            /* stylelint-disable-next-line selector-max-compound-selectors */
-            li {
-                display: block;
-
-                /* stylelint-disable-next-line selector-max-compound-selectors, selector-max-combinators */
-                label {
-                    display: grid;
-                    grid-auto-flow: column;
-                }
-
-                /* stylelint-disable-next-line selector-max-compound-selectors, selector-max-combinators */
-                input[type="checkbox"] {
-                    display: block;
-                    margin: 0 8px 0 0;
-                    padding: 0;
-                    width: 22px;
-                    height: 22px;
-                }
-            }
-
-            /* stylelint-disable-next-line selector-max-compound-selectors */
-            ol {
-                margin: 12px 0 0 32px;
-            }
-        }
-    }
-
-    :global(.rct-text) {
-        display: grid;
-        grid-auto-flow: column;
-        justify-content: flex-start;
-        align-items: center;
-    }
-
-    :global(.rct-title) {
-        font-size: 14px;
-        line-height: 16px;
-        display: flex;
-        align-items: center;
-    }
-
-    :global(.rct-collapse) {
-        width: 24px;
-        height: 24px;
-        margin-right: 8px;
-    }
-
-    :global(.rct-collapse-btn) {
-        display: block;
-        width: 24px;
-        height: 24px;
-        margin-right: 8px;
-        padding: 0;
-    }
-
-    :global(.rct-checkbox) {
-        display: none;
     }
 }

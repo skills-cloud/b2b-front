@@ -24,6 +24,13 @@
         grid-template-rows: max-content;
     }
 
+    &__main-top {
+        display: grid;
+        grid-gap: 8px;
+        align-items: center;
+        grid-template-columns: 1fr 40px;
+    }
+
     &__main-header {
         font-family: Montserrat, sans-serif;
         font-weight: 700;
@@ -33,7 +40,6 @@
     }
 
     &__main-button {
-        position: absolute;
         display: block;
         width: 40px;
         height: 40px;
@@ -41,8 +47,6 @@
         box-sizing: border-box;
         background-color: var(--color-bg-button);
         border-radius: 50%;
-        top: 27px;
-        right: 32px;
     }
 
     &__users-modal {
@@ -206,7 +210,7 @@
         display: block;
         height: 24px;
         line-height: 24px;
-        background-color: var(--color-gray-4);
+        background-color: var(--color-gray-20);
         font-size: 12px;
         padding: 6px 10px;
         white-space: nowrap;

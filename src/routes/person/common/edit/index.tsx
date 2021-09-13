@@ -9,17 +9,15 @@ import Button from 'component/button';
 import Modal from 'component/modal';
 import InputSelect from 'component/form/select';
 import DateInput from 'component/form/date';
-import InputCity from 'component/form/input-city';
-import InputCountry from 'component/form/input-country';
-import InputCitizenship from 'component/form/input-citizenship';
+import InputDictionary from 'component/form/input-dictionary';
 
+import { dictionary } from 'adapter/api/dictionary';
 import { cv } from 'adapter/api/cv';
 import { contact } from 'adapter/api/contact';
 import { CvDetailRead, NoName57 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
 import { CvDetailWrite } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
-import { dictionary } from 'adapter/api/dictionary';
 
 export interface IProps {
     className?: string | IStyle,
@@ -237,19 +235,22 @@ export const CommonEdit = (props: IProps) => {
                     </div>
                     <div className={cn('common-edit__field')}>
                         <strong>{t('routes.person.common.fields.citizenship.title')}</strong>
-                        <InputCitizenship
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Citizenship}
                             name="common.citizenship"
                             placeholder={t('routes.specialists-create.main.form.citizenship')}
                         />
                     </div>
                     <div className={cn('common-edit__field', 'common-edit__field_ext')}>
                         <strong>{t('routes.person.common.fields.location.title')}</strong>
-                        <InputCountry
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Country}
                             direction="column"
                             name="common.country"
                             placeholder={t('routes.specialists-create.main.form.country')}
                         />
-                        <InputCity
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.City}
                             name="common.city"
                             placeholder={t('routes.specialists-create.main.form.city')}
                             direction="column"

@@ -1,20 +1,19 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
-import debounce from 'lodash.debounce';
 
-import { dictionary } from 'adapter/api/dictionary';
-import { mainRequest } from 'adapter/api/main';
+import { useClassnames } from 'hook/use-classnames';
 
 import Modal from 'component/modal';
-import { useDispatch } from 'component/core/store';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import Select from 'component/form/select';
+import InputDictionary from 'component/form/input-dictionary';
 import Button from 'component/button';
-import { useClassnames } from 'hook/use-classnames';
-import style from './index.module.pcss';
 
+import { mainRequest } from 'adapter/api/main';
 import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
+
+import style from './index.module.pcss';
 
 const ADD_ROLE_FORM_ID = 'ADD_ROLE_FORM_ID';
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -40,7 +39,6 @@ interface IForm {
 const AddRole = ({ onBack, requestId, nextStep }: IAddRole) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
-    const dispatch = useDispatch();
     const [post] = mainRequest.usePostMainRequestRequirementMutation({});
 
     const form = useForm({
@@ -51,27 +49,6 @@ const AddRole = ({ onBack, requestId, nextStep }: IAddRole) => {
             }
         }
     });
-
-    const onLoadPositionOptions = debounce((search_string: string, callback) => {
-        dispatch(dictionary.endpoints.getPositionList.initiate({
-            search: search_string
-        }))
-            .then(({ data }) => {
-                if(data?.results?.length) {
-                    const res = data.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    }));
-
-                    callback(res);
-                } else {
-                    callback(null);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, 150);
 
     const onSubmit = (values: IForm) => {
         const body: RequestRequirement = {
@@ -106,10 +83,11 @@ const AddRole = ({ onBack, requestId, nextStep }: IAddRole) => {
 
             <FormProvider {...form}>
                 <form method="POST" id={ADD_ROLE_FORM_ID} onSubmit={form.handleSubmit(onSubmit)} className={cn('form')}>
-                    <Select
+                    <InputDictionary
+                        requestType={InputDictionary.requestType.Position}
+                        isMulti={false}
                         name="position_id"
                         placeholder={t('routes.project-request.requirements.edit-modal.position')}
-                        loadOptions={onLoadPositionOptions}
                     />
                     <Select
                         name="people"

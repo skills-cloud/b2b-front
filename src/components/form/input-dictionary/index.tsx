@@ -7,7 +7,7 @@ import debounce from 'lodash.debounce';
 import { ErrorMessage } from '@hookform/error-message';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useClassnames } from 'hook/use-classnames';
+import { useClassnames, IStyle } from 'hook/use-classnames';
 import { useDispatch } from 'component/core/store';
 
 import Error from 'component/error';
@@ -15,9 +15,103 @@ import IconClose from 'component/icons/close';
 
 import { dictionary } from 'adapter/api/dictionary';
 
-import { IProps, IValue } from './types';
 import getStyles from './style';
 import style from './index.module.pcss';
+
+export type TError = string | null;
+
+export interface IValue {
+    label: string,
+    value: string | number
+}
+
+export enum ERequestType {
+    City,
+    Country,
+    Citizenship,
+    Position,
+    IndustrySector,
+    EducationGraduate,
+    EducationPlace,
+    EducationSpeciality,
+    TypeOfEmployment,
+    Competence
+}
+
+const methods = {
+    [ERequestType.City]: {
+        single: dictionary.endpoints.getCityById,
+        multi : undefined,
+        list  : dictionary.endpoints.getCityList
+    },
+    [ERequestType.Country]: {
+        single: dictionary.endpoints.getCountryById,
+        multi : undefined,
+        list  : dictionary.endpoints.getCountryList
+    },
+    [ERequestType.Citizenship]: {
+        single: dictionary.endpoints.getCitizenshipById,
+        multi : undefined,
+        list  : dictionary.endpoints.getCitizenshipList
+    },
+    [ERequestType.Position]: {
+        single: dictionary.endpoints.getPositionById,
+        multi : undefined,
+        list  : dictionary.endpoints.getPositionList
+    },
+    [ERequestType.IndustrySector]: {
+        single: dictionary.endpoints.getIndustrySectorById,
+        multi : undefined,
+        list  : dictionary.endpoints.getIndustrySector
+    },
+    [ERequestType.EducationGraduate]: {
+        single: dictionary.endpoints.getEducationGraduateById,
+        multi : undefined,
+        list  : dictionary.endpoints.getEducationGraduate
+    },
+    [ERequestType.EducationPlace]: {
+        single: dictionary.endpoints.getEducationPlaceById,
+        multi : undefined,
+        list  : dictionary.endpoints.getEducationPlace
+    },
+    [ERequestType.EducationSpeciality]: {
+        single: dictionary.endpoints.getEducationSpecialityById,
+        multi : undefined,
+        list  : dictionary.endpoints.getEducationSpeciality
+    },
+    [ERequestType.TypeOfEmployment]: {
+        single: dictionary.endpoints.getTypeOfEmploymentById,
+        multi : undefined,
+        list  : dictionary.endpoints.getTypeOfEmployment
+    },
+    [ERequestType.Competence]: {
+        single: undefined,
+        multi : dictionary.endpoints.getCompetence,
+        list  : dictionary.endpoints.getCompetence
+    }
+};
+
+export interface IProps {
+    className?: string | IStyle,
+    name: string,
+    direction?: 'row' | 'column',
+    required?: boolean,
+    label?: ReactNode,
+    createable?: boolean,
+    autoFocus?: boolean,
+    clearable?: boolean,
+    placeholder?: string,
+    tabIndex?: string,
+    disabled?: boolean,
+    defaultValue?: Array<IValue | number | string>,
+    error?: TError,
+    requestLimit?: number,
+    requestOffset?: number,
+    elError?: boolean,
+    requestType: ERequestType,
+    isMulti?: boolean,
+    onChange?(value: IValue): void
+}
 
 const MultiValueRemove: FC<MultiValueRemoveProps<Record<string, unknown>>> = (props) => {
     const onClick = (e: MouseEvent): void => {
@@ -38,7 +132,12 @@ const MultiValueRemove: FC<MultiValueRemoveProps<Record<string, unknown>>> = (pr
     );
 };
 
-const InputPosition = (props: IProps) => {
+const defaultProps = {
+    direction: 'row',
+    isMulti  : true
+};
+
+const InputDictionary = (props: IProps & typeof defaultProps) => {
     const cn = useClassnames(style, props.className, true);
     const { formState: { errors }, watch, trigger, control, setValue } = useFormContext();
     const dispatch = useDispatch();
@@ -97,21 +196,40 @@ const InputPosition = (props: IProps) => {
             }
 
             if(ids.length) {
-                Promise.all(ids.map((item) => {
-                    return dispatch(dictionary.endpoints.getPositionById.initiate({
-                        id: String(item)
+                const baseMethod = methods[props.requestType];
+
+                if(baseMethod.single) {
+                    Promise.all(ids.map((item) => {
+                        const method = baseMethod.single.initiate({
+                            id: String(item)
+                        });
+
+                        return dispatch(method)
+                            .then((resp) => ({
+                                label: resp.data?.name || '',
+                                value: String(resp.data?.id) || ''
+                            }));
                     }))
-                        .then((resp) => ({
-                            label: resp.data?.name || '',
-                            value: String(resp.data?.id) || ''
-                        }));
-                }))
-                    .then((resp: Array<IValue>) => {
-                        setValue(props.name, resp, { shouldDirty: true });
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                    });
+                        .then((resp: Array<IValue>) => {
+                            setValue(props.name, resp, { shouldDirty: true });
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
+                } else if(baseMethod.multi) {
+                    dispatch(baseMethod.multi.initiate({ id: ids as Array<number> }))
+                        .then(({ data }) => {
+                            const newValue = data?.results?.map((item) => ({
+                                value: item?.id,
+                                label: item?.name
+                            }));
+
+                            setValue(props.name, newValue, { shouldDirty: true });
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
+                }
             } else if(values.length) {
                 setValue(props.name, values, { shouldDirty: values.some((item) => !!item) });
             }
@@ -125,9 +243,15 @@ const InputPosition = (props: IProps) => {
     };
 
     const onLoadOptions = debounce((search_string: string, callback) => {
-        dispatch(dictionary.endpoints.getPositionList.initiate({
-            search: search_string
-        }))
+        const params: { search?: string } = {};
+
+        if(search_string) {
+            params.search = search_string;
+        }
+
+        const method = methods[props.requestType].list.initiate(params);
+
+        dispatch(method)
             .then(({ data: loadData }) => {
                 if(loadData?.results?.length) {
                     const res = loadData.results.map((item) => ({
@@ -170,28 +294,29 @@ const InputPosition = (props: IProps) => {
             onFocus,
             onBlur,
             onChange,
-            value       : renderValue,
-            defaultValue: renderValue,
-            placeholder : props.placeholder,
-            autoFocus   : props.autoFocus,
-            isMulti     : true,
-            isClearable : props.clearable,
-            tabIndex    : props.tabIndex,
-            cacheOption : true,
-            isDisabled  : props.disabled,
-            loadOptions : onLoadOptions,
-            components  : { MultiValueRemove, MultiValue, Option, Input: SelectInput },
-            className   : cn('input__field', {
+            value         : renderValue,
+            defaultValue  : renderValue,
+            placeholder   : props.placeholder,
+            autoFocus     : props.autoFocus,
+            isMulti       : props.isMulti,
+            isClearable   : props.clearable,
+            tabIndex      : props.tabIndex,
+            cacheOption   : true,
+            isDisabled    : props.disabled,
+            cacheOptions  : true,
+            defaultOptions: true,
+            components    : { MultiValueRemove, MultiValue, Option, Input: SelectInput },
+            styles        : getStyles(props, isFocus),
+            className     : cn('input__field', {
                 'input__field_invalid': errors[props.name]
-            }),
-            styles: getStyles(props, isFocus)
+            })
         };
 
         if(props.createable) {
-            return <AsyncCreatableSelect {...selectProps} />;
+            return <AsyncCreatableSelect {...selectProps} loadOptions={onLoadOptions} />;
         }
 
-        return <AsyncSelect {...selectProps} />;
+        return <AsyncSelect {...selectProps} loadOptions={onLoadOptions} />;
     };
 
     return (
@@ -214,8 +339,8 @@ const InputPosition = (props: IProps) => {
     );
 };
 
-InputPosition.defaultProps = {
-    direction: 'row'
-};
+InputDictionary.requestType = ERequestType;
 
-export default InputPosition;
+InputDictionary.defaultProps = defaultProps;
+
+export default InputDictionary;

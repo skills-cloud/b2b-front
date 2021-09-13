@@ -2,21 +2,17 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
-import debounce from 'lodash.debounce';
 
 import useClassnames from 'hook/use-classnames';
 import FormInput from 'component/form/input';
 import FormDate from 'component/form/date';
-import FormInputSkills from 'component/form/input-skills';
-import InputSelect from 'component/form/select';
+import InputDictionary from 'component/form/input-dictionary';
 
-import { useDispatch } from 'component/core/store';
 import { education } from 'adapter/api/education';
-import { dictionary } from 'adapter/api/dictionary';
 import { CvEducationRead } from 'adapter/types/cv/education/get/code-200';
+import { CvEducation } from 'adapter/types/cv/education/post/code-201';
 
 import style from './index.module.pcss';
-import { CvEducation } from 'adapter/types/cv/education/post/code-201';
 
 type TCustomFields =
     | 'education_place_select'
@@ -50,7 +46,6 @@ interface IEducationForm {
 }
 
 const EducationForm = (props: IEducationForm) => {
-    const dispatch = useDispatch();
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
@@ -87,63 +82,6 @@ const EducationForm = (props: IEducationForm) => {
             });
     });
 
-    const onLoadEducationSpeciality = debounce((search_string: string, callback) => {
-        dispatch(dictionary.endpoints.getEducationSpeciality.initiate({ search: search_string }))
-            .then(({ data }) => {
-                if(data?.results?.length) {
-                    const res = data.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    }));
-
-                    callback(res);
-                } else {
-                    callback(null);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, 150);
-
-    const onLoadEducationPlace = debounce((search_string: string, callback) => {
-        dispatch(dictionary.endpoints.getEducationPlace.initiate({ search: search_string }))
-            .then(({ data }) => {
-                if(data?.results?.length) {
-                    const res = data.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    }));
-
-                    callback(res);
-                } else {
-                    callback(null);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, 150);
-
-    const onLoadEducationGraduate = debounce((search_string: string, callback) => {
-        dispatch(dictionary.endpoints.getEducationGraduate.initiate({ search: search_string }))
-            .then(({ data }) => {
-                if(data?.results?.length) {
-                    const res = data.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    }));
-
-                    callback(res);
-                } else {
-                    callback(null);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, 150);
-
     return (
         <FormProvider {...methods}>
             <form id="education-form" onSubmit={onSubmit}>
@@ -152,7 +90,11 @@ const EducationForm = (props: IEducationForm) => {
                         <label className={cn('education-form__label')}>
                             {t('routes.person.education.label.education-place')}
                         </label>
-                        <InputSelect name="education.education_place_select" loadOptions={onLoadEducationPlace} />
+                        <InputDictionary
+                            isMulti={false}
+                            requestType={InputDictionary.requestType.EducationPlace}
+                            name="education.education_place_select"
+                        />
                     </div>
 
                     <div className={cn('education-form__item', 'education-form__item_dates')}>
@@ -168,9 +110,10 @@ const EducationForm = (props: IEducationForm) => {
                         <label className={cn('education-form__label')}>
                             {t('routes.person.education.label.specialty')}
                         </label>
-                        <InputSelect
+                        <InputDictionary
+                            isMulti={false}
+                            requestType={InputDictionary.requestType.EducationSpeciality}
                             name="education.education_speciality_select"
-                            loadOptions={onLoadEducationSpeciality}
                         />
                     </div>
 
@@ -178,9 +121,10 @@ const EducationForm = (props: IEducationForm) => {
                         <label className={cn('education-form__label')}>
                             {t('routes.person.education.label.power')}
                         </label>
-                        <InputSelect
+                        <InputDictionary
+                            isMulti={false}
+                            requestType={InputDictionary.requestType.EducationGraduate}
                             name="education.education_graduate_select"
-                            loadOptions={onLoadEducationGraduate}
                         />
                     </div>
 
@@ -195,7 +139,10 @@ const EducationForm = (props: IEducationForm) => {
                         <label className={cn('education-form__label')}>
                             {t('routes.person.education.label.competencies')}
                         </label>
-                        <FormInputSkills name="education.competencies_select" />
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Competence}
+                            name="education.competencies_select"
+                        />
                     </div>
 
                     <div className={cn('education-form__item')}>

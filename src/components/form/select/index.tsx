@@ -1,17 +1,55 @@
-import React, { useState, useMemo, FC, useEffect, useCallback, MouseEvent } from 'react';
-import ReactSelect, { components } from 'react-select';
+import React, { useState, useMemo, FC, useEffect, useCallback, MouseEvent, ReactNode } from 'react';
+import ReactSelect, { components, SelectComponentsConfig, OptionsType, OptionTypeBase } from 'react-select';
+import { MultiValueRemoveProps } from 'react-select/src/components/MultiValue';
 import ReactSelectAsync from 'react-select/async';
-import { useFormContext, Controller } from 'react-hook-form';
+import { useFormContext, Controller, Message } from 'react-hook-form';
+import { ValidationRule } from 'react-hook-form/dist/types/validator';
 import { ErrorMessage } from '@hookform/error-message';
 
-import { useClassnames } from 'hook/use-classnames';
+import { useClassnames, IStyle } from 'hook/use-classnames';
 import Error from 'component/error';
+import IconClose from 'component/icons/close';
 
 import getStyles from './style';
-import { TProps, IValue } from './types';
 import style from './index.module.pcss';
-import { MultiValueRemoveProps } from 'react-select/src/components/MultiValue';
-import IconClose from 'component/icons/close';
+
+export interface IValue {
+    label: string,
+    value: string,
+    payload?: unknown
+}
+
+export interface ICommon {
+    className?: string | IStyle,
+    name: string,
+    components?: Partial<SelectComponentsConfig<OptionTypeBase, false>>,
+    required?: Message | ValidationRule<boolean>,
+    direction?: 'row' | 'column',
+    clearable?: boolean,
+    defaultValue?: Array<IValue | number | string>,
+    label?: ReactNode,
+    autoFocus?: boolean,
+    isSearchable?: boolean,
+    placeholder?: string,
+    tabIndex?: string,
+    disabled?: boolean,
+    elError?: boolean,
+    isMulti?: boolean,
+    onChange?(value: IValue): void
+}
+
+export interface IAsyncSelect extends ICommon {
+    options?: Array<IValue>,
+    loadOptions(q: string, callback: (value: OptionsType<OptionTypeBase>) => void): void
+}
+
+export interface ISelect extends ICommon {
+    options: Array<IValue>,
+    loadOptions?(q: string, callback: (value: OptionsType<OptionTypeBase>) => void): void
+}
+
+export type TProps = IAsyncSelect | ISelect;
+
 
 const defaultProps = {
     direction          : 'row',
@@ -150,7 +188,16 @@ const InputSelect = (props: TProps & typeof defaultProps) => {
                             })}
                         >
                             {elLabel}
-                            {props.loadOptions ? <ReactSelectAsync loadOptions={props.loadOptions} {...selectProps} /> : <ReactSelect {...selectProps} />}
+                            {props.loadOptions ? (
+                                <ReactSelectAsync
+                                    loadOptions={props.loadOptions}
+                                    defaultOptions={true}
+                                    cacheOptions={true}
+                                    {...selectProps}
+                                />
+                            ) : (
+                                <ReactSelect {...selectProps} />
+                            )}
                         </div>
                         {elError}
                     </label>
