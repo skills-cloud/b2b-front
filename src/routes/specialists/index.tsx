@@ -226,7 +226,7 @@ export const Specialists = () => {
         const firstName = cvItem.first_name;
         const lastName = cvItem.last_name;
         let title = `${firstName || ''} ${lastName || ''}`.trim();
-        const subTitle = cvItem.career?.[0].position?.name || '\u2014';
+        const subTitle = cvItem.career?.[0]?.position?.name || '\u2014';
 
         if(!firstName && !lastName) {
             title = t('routes.specialists.main.first-name');
