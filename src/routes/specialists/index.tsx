@@ -250,7 +250,7 @@ export const Specialists = () => {
                     <p className={cn('specialists__block-title')}>
                         {t('routes.specialists.main.competencies')}
                     </p>
-                    {elCompetencies(cvItem.positions?.[0].competencies)}
+                    {elCompetencies(cvItem.positions?.[0]?.competencies)}
                 </div>
                 <div className={cn('specialists__user-rate')}>
                     <p className={cn('specialists__block-title')}>
