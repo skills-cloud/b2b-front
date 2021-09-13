@@ -3,13 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { parse, stringify } from 'query-string';
 import { useHistory } from 'react-router';
-import debounce from 'lodash.debounce';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 
 import { useClassnames } from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
-import { useDispatch } from 'component/core/store';
 
 import InputSelect, { IValue } from 'component/form/select';
 import Loader from 'component/loader';
@@ -17,6 +15,7 @@ import Button from 'component/button';
 import IconPlus from 'component/icons/plus';
 import InputDictionary from 'component/form/input-dictionary';
 import Dropdown from 'component/dropdown';
+import InputMain from 'component/form/input-main';
 
 import { mainRequest } from 'adapter/api/main';
 import { RequestRead } from 'adapter/types/main/request/get/code-200';
@@ -46,7 +45,6 @@ const defaultValues: IDefaultValues = {
 const ProjectRequestList = () => {
     const cn = useClassnames(style);
     const history = useHistory();
-    const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
 
     const [confirm, setConfirm] = useState<boolean>(false);
@@ -102,36 +100,6 @@ const ProjectRequestList = () => {
         });
         context.reset(defaultValues);
     };
-
-    const onLoadOrganization = debounce((search: string, callback) => {
-        dispatch(mainRequest.endpoints.getMainOrganization.initiate({ search, is_customer: 'true' }))
-            .then(({ data: organizationData }) => {
-                if(organizationData?.results?.length) {
-                    callback(organizationData.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    })));
-                } else {
-                    callback(null);
-                }
-            })
-            .catch(console.error);
-    }, 150);
-
-    const onLoadOrganizationProject = debounce((search: string, callback) => {
-        dispatch(mainRequest.endpoints.getMainProject.initiate({ search }))
-            .then(({ data: organizationData }) => {
-                if(organizationData?.results?.length) {
-                    callback(organizationData.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    })));
-                } else {
-                    callback(null);
-                }
-            })
-            .catch(console.error);
-    }, 150);
 
     const elRequestItem = (requestItem: RequestRead) => {
         return (
@@ -321,23 +289,25 @@ const ProjectRequestList = () => {
                                 label: t('routes.project-request-list.sidebar.filters.status.value.done')
                             }]}
                         />
-                        <InputSelect
+                        <InputMain
+                            isMulti={false}
+                            requestType={InputMain.requestType.Customer}
                             defaultValue={[qs.customer as string]}
                             name="customer"
                             direction="column"
                             clearable={true}
                             label={t('routes.project-request-list.sidebar.filters.customer.label')}
                             placeholder={t('routes.project-request-list.sidebar.filters.customer.placeholder')}
-                            loadOptions={onLoadOrganization}
                         />
-                        <InputSelect
+                        <InputMain
+                            isMulti={false}
+                            requestType={InputMain.requestType.Project}
                             defaultValue={[qs.project as string]}
                             name="project"
                             direction="column"
                             clearable={true}
                             label={t('routes.project-request-list.sidebar.filters.project.label')}
                             placeholder={t('routes.project-request-list.sidebar.filters.project.placeholder')}
-                            loadOptions={onLoadOrganizationProject}
                         />
                         <Button type="submit">
                             {t('routes.project-request-list.sidebar.filters.buttons.submit')}
