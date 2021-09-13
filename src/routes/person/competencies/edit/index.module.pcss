@@ -70,7 +70,7 @@
 
     &__field {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         grid-gap: 16px;
     }
 
@@ -151,17 +151,6 @@
         position: relative;
     }
 
-    &__icon-dots {
-        fill: var(--color-gray-100);
-
-        @media (hover: hover) and (pointer: fine) {
-
-            &:hover {
-                cursor: pointer;
-            }
-        }
-    }
-
     &__link-append,
     &__checkbox-control {
         font-style: normal;
@@ -193,5 +182,12 @@
         font-size: 14px;
         line-height: 16px;
         color: var(--color-black);
+    }
+
+    &__info-list-control {
+        display: grid;
+        grid-gap: 16px;
+        grid-template-columns: 40px 1fr;
+        align-items: center;
     }
 }

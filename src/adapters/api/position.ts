@@ -99,7 +99,7 @@ export const position = createApi({
         }),
         deletePosition: build.mutation<undefined, { id: number }>({
             query: (body) => ({
-                url   : `position/${body.id}`,
+                url   : `position/${body.id}/`,
                 method: 'DELETE'
             })
         })

@@ -1,4 +1,4 @@
-import React, { Fragment, MouseEvent, ReactNode, useMemo, useState } from 'react';
+import React, { Fragment, MouseEvent, ReactNode, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, useFieldArray, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
@@ -17,6 +17,9 @@ import { position } from 'adapter/api/position';
 import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
 
 import style from './index.module.pcss';
+import Dropdown from 'component/dropdown';
+import EditAction from 'component/section/actions/edit';
+import DeleteAction from 'component/section/actions/delete';
 
 export interface IField {
     role?: string
@@ -49,6 +52,8 @@ export interface IFormValues {
     } | null
 }
 
+const EDIT_COMPETENCIES_FORM_ID = 'EDIT_COMPETENCIES_FORM_ID';
+
 export const CompetenciesEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
@@ -67,6 +72,7 @@ export const CompetenciesEdit = (props: IProps) => {
     const { data: positionData, refetch } = position.useGetPositionListQuery({ cv_id: parseInt(id, 10) }, { refetchOnMountOrArgChange: true });
     const [patchPosition, { isLoading }] = position.usePatchPositionByIdMutation();
     const [postPosition, { isLoading: isLoadingPost }] = position.usePostPositionMutation();
+    const [deletePosition, { isLoading: isLoadingDelete }] = position.useDeletePositionMutation();
     const [postPositionCompetencies] = position.usePostPositionCompetenciesByIdMutation();
 
     const [activeWindow, setActiveWindow] = useState<'role' | 'competence' | 'checkbox' | null>('competence');
@@ -74,23 +80,14 @@ export const CompetenciesEdit = (props: IProps) => {
     const [positionItem, setPositionItem] = useState<CvPositionRead>();
     const [error, setError] = useState<Array<string> | string | null>(null);
 
-    const onClickDots = (positionItemParam: CvPositionRead) => () => {
-        const newChecked = positionItemParam.competencies?.map((item) => String(item.competence_id)) || [];
-
-        setPositionItem(positionItemParam);
-        setChecked(newChecked);
-        setActiveWindow('checkbox');
-    };
-
     const onCancel = () => {
         props.onCancel?.();
         setChecked([]);
         setPositionItem(undefined);
         setActiveWindow(null);
     };
-
-    const requestUpdateCompetencies = (competenciesArr: Array<string>, positionId: number) => {
-        const dataComp = competenciesArr.map((item) => ({
+    const requestUpdateCompetencies = useCallback((positionId: number) => {
+        const dataComp = checked.map((item) => ({
             competence_id: parseInt(item, 10)
         }));
 
@@ -103,10 +100,10 @@ export const CompetenciesEdit = (props: IProps) => {
                 onCancel();
             })
             .catch(console.error);
-    };
+    }, [checked]);
 
-    const onSubmit = methods.handleSubmit(
-        (formData) => {
+    const onSubmit = useCallback((formData: IFormValues) => {
+        if(activeWindow === 'checkbox') {
             if(positionItem) {
                 return patchPosition({
                     id         : positionItem.id,
@@ -115,7 +112,7 @@ export const CompetenciesEdit = (props: IProps) => {
                 })
                     .unwrap()
                     .then(() => {
-                        requestUpdateCompetencies(formData.competence_ids, positionItem.id as number);
+                        requestUpdateCompetencies(positionItem.id as number);
                     })
                     .catch((err) => {
                         console.error(err);
@@ -128,13 +125,13 @@ export const CompetenciesEdit = (props: IProps) => {
                     });
             }
 
-            return postPosition({
+            postPosition({
                 cv_id      : parseInt(id, 10),
                 position_id: parseInt(formData.position_id?.value as string, 10)
             })
                 .unwrap()
                 .then((resp) => {
-                    requestUpdateCompetencies(formData.competence_ids, resp.id as number);
+                    requestUpdateCompetencies(resp.id as number);
                 })
                 .catch((err) => {
                     console.error(err);
@@ -145,22 +142,17 @@ export const CompetenciesEdit = (props: IProps) => {
                         setError(err.data?.status);
                     }
                 });
-        },
-        (formError) => {
-            console.info('ERR', formError);
         }
-    );
+    }, [checked, activeWindow]);
 
     const onClickSetExperience = (competenceId: string) => {
         console.info('SET', competenceId);
     };
 
-    const onClickSubmit = () => {
-        if(activeWindow === 'role') {
-            setActiveWindow('checkbox');
-        } else {
-            return onSubmit();
-        }
+    const onClickSubmit = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        setActiveWindow('checkbox');
     };
 
     const onClickBack = () => {
@@ -171,23 +163,26 @@ export const CompetenciesEdit = (props: IProps) => {
         }
     };
 
-    // const getNodeIds = (nodes: Array<INodeCheckboxTree>) => {
-    //     let ids: Array<string> = [];
-    //
-    //     nodes.forEach(({ value, children }) => {
-    //         const childNodes = children ? getNodeIds(children) : [];
-    //
-    //         ids = [...ids, value, ...childNodes];
-    //     });
-    //
-    //     return ids;
-    // };
+    const onClickEdit = (positionItemParam: CvPositionRead) => () => {
+        const newChecked = positionItemParam.competencies?.map((item) => String(item.competence_id)) || [];
 
-    // const onClickExpand = (action: 'expand' | 'close') => () => {
-    //     const newExpanded = action === 'expand' ? getNodeIds(options) : [];
-    //
-    //     setExpanded(newExpanded);
-    // };
+        setPositionItem(positionItemParam);
+        setChecked(newChecked);
+        setActiveWindow('checkbox');
+    };
+
+    const onClickDelete = (positionItemParam: CvPositionRead) => () => {
+        if(positionItemParam?.id) {
+            deletePosition({
+                id: positionItemParam.id
+            })
+                .unwrap()
+                .then(() => {
+                    refetch();
+                })
+                .catch(console.error);
+        }
+    };
 
     const elAppend = useMemo(() => {
         if(activeWindow === 'competence') {
@@ -205,21 +200,35 @@ export const CompetenciesEdit = (props: IProps) => {
                 />
             );
         }
-        // if(activeWindow === 'checkbox') {
-        //     return (
-        //         <div className={cn('competencies-edit__checkbox-controls')}>
-        //             <span className={cn('competencies-edit__checkbox-control')} onClick={onClickExpand('expand')}>
-        //                 {t('routes.person.blocks.competencies.edit.buttons.expand')}
-        //             </span>
-        //             <span className={cn('competencies-edit__checkbox-control')} onClick={onClickExpand('close')}>
-        //                 {t('routes.person.blocks.competencies.edit.buttons.close')}
-        //             </span>
-        //         </div>
-        //     );
-        // }
     }, [activeWindow]);
 
-    const elFooter = useMemo(() => {
+    const elSubmitButton = () => {
+        if(activeWindow === 'checkbox') {
+            return (
+                <Button
+                    form={EDIT_COMPETENCIES_FORM_ID}
+                    type="submit"
+                    disabled={isLoadingPost || isLoading || isLoadingDelete}
+                    isLoading={isLoadingPost || isLoading || isLoadingDelete}
+                >
+                    {t('routes.person.blocks.competencies.edit.buttons.save')}
+                </Button>
+            );
+        }
+
+        return (
+            <Button
+                type="button"
+                onClick={onClickSubmit}
+                disabled={isLoadingPost || isLoading || isLoadingDelete}
+                isLoading={isLoadingPost || isLoading || isLoadingDelete}
+            >
+                {t('routes.person.blocks.competencies.edit.buttons.save')}
+            </Button>
+        );
+    };
+
+    const elFooter = () => {
         return (
             <div className={cn('competencies-edit__form-footer')}>
                 {elAppend}
@@ -227,20 +236,14 @@ export const CompetenciesEdit = (props: IProps) => {
                     isSecondary={true}
                     onClick={onCancel}
                     className={cn('competencies-edit__button-secondary')}
-                    disabled={isLoadingPost || isLoading}
+                    disabled={isLoadingPost || isLoading || isLoadingDelete}
                 >
                     {t('routes.person.blocks.competencies.edit.buttons.cancel')}
                 </Button>
-                <Button
-                    onClick={onClickSubmit}
-                    disabled={isLoadingPost || isLoading}
-                    isLoading={isLoadingPost || isLoading}
-                >
-                    {t('routes.person.blocks.competencies.edit.buttons.save')}
-                </Button>
+                {elSubmitButton()}
             </div>
         );
-    }, [activeWindow]);
+    };
 
     const elError = useMemo(() => {
         if(error) {
@@ -272,13 +275,22 @@ export const CompetenciesEdit = (props: IProps) => {
                             >
                                 <div className={cn('competencies-edit__info-list-top')}>
                                     <h5 className={cn('competencies-edit__info-list-role')}>{pos.position?.name || pos.title}</h5>
-                                    <IconDots
-                                        svg={{
-                                            width    : 24,
-                                            height   : 24,
-                                            className: cn('competencies-edit__icon-dots'),
-                                            onClick  : onClickDots(pos)
-                                        }}
+                                    <Dropdown
+                                        items={[{
+                                            elem: (
+                                                <div className={cn('competencies-edit__info-list-control')} onClick={onClickEdit(pos)}>
+                                                    <EditAction />
+                                                    {t('routes.person.blocks.competencies.controls.edit')}
+                                                </div>
+                                            )
+                                        }, {
+                                            elem: (
+                                                <div className={cn('competencies-edit__info-list-control')} onClick={onClickDelete(pos)}>
+                                                    <DeleteAction />
+                                                    {t('routes.person.blocks.competencies.controls.delete')}
+                                                </div>
+                                            )
+                                        }]}
                                     />
                                 </div>
                                 <div className={cn('competencies-edit__list-item')}>
@@ -313,6 +325,7 @@ export const CompetenciesEdit = (props: IProps) => {
         return (
             <div className={cn('competencies-edit__field')}>
                 <InputDictionary
+                    isMulti={false}
                     requestType={InputDictionary.requestType.Position}
                     name="position_id"
                     placeholder="Начните вводить, например, “PHP”"
@@ -327,6 +340,7 @@ export const CompetenciesEdit = (props: IProps) => {
                 return (
                     <Fragment>
                         <CheckboxTree
+                            onSetChecked={setChecked}
                             competencies={checked}
                             onClickExperience={onClickSetExperience}
                         />
@@ -349,7 +363,7 @@ export const CompetenciesEdit = (props: IProps) => {
         }
     };
 
-    const elHeader = useMemo(() => {
+    const elHeader = () => {
         let icon!: ReactNode;
 
         if(activeWindow === 'checkbox' || activeWindow === 'role') {
@@ -372,12 +386,12 @@ export const CompetenciesEdit = (props: IProps) => {
                 })}
             </div>
         );
-    }, [activeWindow]);
+    };
 
     return (
-        <Modal className={cn('competencies-edit')} footer={elFooter} header={elHeader}>
+        <Modal className={cn('competencies-edit')} footer={elFooter()} header={elHeader()}>
             <FormProvider {...methods}>
-                <form>
+                <form onSubmit={methods.handleSubmit(onSubmit)} id={EDIT_COMPETENCIES_FORM_ID}>
                     {elFormContent()}
                 </form>
             </FormProvider>
