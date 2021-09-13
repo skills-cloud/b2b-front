@@ -11,7 +11,7 @@ import { mainRequest } from 'adapter/api/main';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { callAddFont } from './font.js';
+import { callAddFont } from './font.ts';
 import style from './index.module.pcss';
 
 export interface IProps {
