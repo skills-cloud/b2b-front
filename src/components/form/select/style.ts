@@ -1,6 +1,6 @@
 import { OptionTypeBase, Styles } from 'react-select';
 
-import { TProps } from './types';
+import { TProps } from './index';
 
 export default (props: TProps, isFocus: boolean, hasError: boolean): Partial<Styles<OptionTypeBase, false>> => {
     let borderColor = '#d9d9d9';

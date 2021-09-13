@@ -5,13 +5,13 @@ import debounce from 'lodash.debounce';
 import { useParams } from 'react-router';
 
 import { IStyle, useClassnames } from 'hook/use-classnames';
+import { useDispatch } from 'component/core/store';
 
 import FormDate from 'component/form/date';
 import FormInput from 'component/form/input';
 import Button from 'component/button';
 import InputSelect from 'component/form/select';
-import { useDispatch } from 'component/core/store';
-import FormInputSkills from 'component/form/input-skills';
+import InputDictionary from 'component/form/input-dictionary';
 
 import { certificate } from 'adapter/api/certificate';
 import { dictionary } from 'adapter/api/dictionary';
@@ -214,7 +214,8 @@ const EditForm = (props: IProps) => {
                         </div>
                         <div className={cn('edit-form__field')}>
                             <strong>{t('routes.person.certificates.fields.competencies')}</strong>
-                            <FormInputSkills
+                            <InputDictionary
+                                requestType={InputDictionary.requestType.Competence}
                                 name="certificate.competencies"
                                 placeholder={t('routes.person.certificates.fields.competencies')}
                             />

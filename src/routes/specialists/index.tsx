@@ -14,22 +14,19 @@ import IconPlus from 'component/icons/plus';
 import IconStar from 'component/icons/star';
 import IconClose from 'component/icons/close';
 import FormInput from 'component/form/input';
-import InputSkills from 'component/form/input-skills';
-import InputCountry from 'component/form/input-country';
-import InputCity from 'component/form/input-city';
+import InputDictionary from 'component/form/input-dictionary';
 import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
 import Modal from 'component/modal';
 import { H2 } from 'component/header';
 import Button from 'component/button';
 
+import { mainRequest } from 'adapter/api/main';
 import { cv } from 'adapter/api/cv';
 import { CvList, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
-import { IValue } from 'component/form/select/types';
+import { IValue } from 'component/form/select';
 
 import style from './index.module.pcss';
-import InputPosition from 'component/form/input-position';
-import { mainRequest } from 'adapter/api/main';
 
 export interface IFormValues {
     search?: string,
@@ -294,14 +291,16 @@ export const Specialists = () => {
     return (
         <main className={cn('specialists')}>
             <section className={cn('specialists__main')}>
-                <h2 className={cn('specialists__main-header')}>{t('routes.specialists.main.title')}</h2>
+                <div className={cn('specialists__main-top')}>
+                    <h2 className={cn('specialists__main-header')}>{t('routes.specialists.main.title')}</h2>
+                    <Link
+                        to="/specialists/create"
+                        className={cn('specialists__main-button')}
+                    >
+                        <IconPlus />
+                    </Link>
+                </div>
                 {elUsers}
-                <Link
-                    to="/specialists/create"
-                    className={cn('specialists__main-button')}
-                >
-                    <IconPlus />
-                </Link>
             </section>
             <aside>
                 <div className={cn('specialists__search')}>
@@ -314,7 +313,8 @@ export const Specialists = () => {
                                 label={t('routes.specialists.sidebar.filters.form.search.label')}
                                 placeholder={t('routes.specialists.sidebar.filters.form.search.placeholder')}
                             />
-                            <InputPosition
+                            <InputDictionary
+                                requestType={InputDictionary.requestType.Position}
                                 defaultValue={Array.isArray(qs.position_id) ? qs.position_id : [qs.position_id as string]}
                                 name="position"
                                 direction="column"
@@ -322,7 +322,8 @@ export const Specialists = () => {
                                 label={t('routes.specialists.sidebar.filters.form.position.label')}
                                 clearable={true}
                             />
-                            <InputCountry
+                            <InputDictionary
+                                requestType={InputDictionary.requestType.Country}
                                 defaultValue={Array.isArray(qs.country_id) ? qs.country_id : [qs.country_id as string]}
                                 name="country"
                                 direction="column"
@@ -330,7 +331,8 @@ export const Specialists = () => {
                                 label={t('routes.specialists.sidebar.filters.form.country.label')}
                                 clearable={true}
                             />
-                            <InputCity
+                            <InputDictionary
+                                requestType={InputDictionary.requestType.City}
                                 defaultValue={Array.isArray(qs.city_id) ? qs.city_id : [qs.city_id as string]}
                                 name="city"
                                 direction="column"
@@ -338,7 +340,8 @@ export const Specialists = () => {
                                 label={t('routes.specialists.sidebar.filters.form.city.label')}
                                 clearable={true}
                             />
-                            <InputSkills
+                            <InputDictionary
+                                requestType={InputDictionary.requestType.Competence}
                                 defaultValue={qs.competencies_ids_any as Array<string>}
                                 clearable={true}
                                 name="competencies"

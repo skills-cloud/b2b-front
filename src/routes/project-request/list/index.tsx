@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { parse, stringify } from 'query-string';
@@ -11,10 +11,12 @@ import { useClassnames } from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
 import { useDispatch } from 'component/core/store';
 
-import InputSelect from 'component/form/select';
-import { IValue } from 'component/form/select/types';
+import InputSelect, { IValue } from 'component/form/select';
 import Loader from 'component/loader';
 import Button from 'component/button';
+import IconPlus from 'component/icons/plus';
+import InputDictionary from 'component/form/input-dictionary';
+import Dropdown from 'component/dropdown';
 
 import { mainRequest } from 'adapter/api/main';
 import { RequestRead } from 'adapter/types/main/request/get/code-200';
@@ -22,9 +24,8 @@ import { RequestRead } from 'adapter/types/main/request/get/code-200';
 import EditAction from 'component/section/actions/edit';
 import DeleteAction from 'component/section/actions/delete';
 
+import ConfirmModal from '../components/confirm-modal';
 import style from './index.module.pcss';
-import { dictionary } from 'adapter/api/dictionary';
-import IconPlus from 'component/icons/plus';
 
 export interface IDefaultValues {
     industry_sector?: IValue | null,
@@ -47,8 +48,12 @@ const ProjectRequestList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
+
+    const [confirm, setConfirm] = useState<boolean>(false);
+    const [requestId, setRequestId] = useState<string>();
+    const [projectName, setProjectName] = useState<string>();
+
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
-    const [deleteMainRequestById] = mainRequest.useDeleteMainRequestByIdMutation();
 
     const context = useForm({
         mode: 'all',
@@ -56,6 +61,17 @@ const ProjectRequestList = () => {
     });
 
     const { data, isLoading, refetch } = mainRequest.useGetRequestListQuery(normalizeObject(qs));
+
+    const onClickConfirmDelete = (newRequestId?: string, newProjectName?: string) => () => {
+        setConfirm(true);
+        setRequestId(newRequestId);
+        setProjectName(newProjectName);
+    };
+
+    const onClickCancel = () => {
+        setProjectName(undefined);
+        setRequestId(undefined);
+    };
 
     const onSubmit = context.handleSubmit(
         (formData) => {
@@ -117,21 +133,6 @@ const ProjectRequestList = () => {
             .catch(console.error);
     }, 150);
 
-    const onLoadIndustrySector = debounce((search: string, callback) => {
-        dispatch(dictionary.endpoints.getIndustrySector.initiate({ search }))
-            .then(({ data: organizationData }) => {
-                if(organizationData?.results?.length) {
-                    callback(organizationData.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    })));
-                } else {
-                    callback(null);
-                }
-            })
-            .catch(console.error);
-    }, 150);
-
     const elRequestItem = (requestItem: RequestRead) => {
         return (
             <div key={requestItem.id} className={cn('request-list__request')}>
@@ -156,20 +157,28 @@ const ProjectRequestList = () => {
                         >
                             {t(`routes.project-request-list.requests.request-item.priority.value.${requestItem.priority}`)}
                         </div>
-                        <EditAction
-                            className={cn('request-list__action')}
-                            onClick={() => {
-                                history.push(`/project-request/${requestItem.id}/edit`);
-                            }}
-                        />
-                        <DeleteAction
-                            className={cn('request-list__action')}
-                            onClick={() => {
-                                if(requestItem.id) {
-                                    deleteMainRequestById({ id: requestItem.id })
-                                        .catch(console.error);
-                                }
-                            }}
+                        <Dropdown
+                            items={[{
+                                elem: (
+                                    <div
+                                        className={cn('request-list__request-top-right-action')}
+                                        onClick={() => history.push(`/project-request/${requestItem.id}/edit`)}
+                                    >
+                                        <EditAction />
+                                        {t('routes.project-request-list.requests.actions.edit')}
+                                    </div>
+                                )
+                            }, {
+                                elem: (
+                                    <div
+                                        className={cn('request-list__request-top-right-action')}
+                                        onClick={onClickConfirmDelete(String(requestItem.id), requestItem.project?.name)}
+                                    >
+                                        <DeleteAction />
+                                        {t('routes.project-request-list.requests.actions.delete')}
+                                    </div>
+                                )
+                            }]}
                         />
                     </div>
                 </div>
@@ -264,14 +273,14 @@ const ProjectRequestList = () => {
                         onSubmit={onSubmit}
                         className={cn('request-list__form')}
                     >
-                        <InputSelect
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.IndustrySector}
                             defaultValue={[qs.industry_sector as string]}
                             name="industry_sector"
                             direction="column"
                             clearable={true}
                             label={t('routes.project-request-list.sidebar.filters.industry-sector.label')}
                             placeholder={t('routes.project-request-list.sidebar.filters.industry-sector.placeholder')}
-                            loadOptions={onLoadIndustrySector}
                         />
                         <InputSelect
                             defaultValue={[qs.priority as string]}
@@ -339,6 +348,14 @@ const ProjectRequestList = () => {
                     </form>
                 </FormProvider>
             </aside>
+            {confirm && requestId && (
+                <ConfirmModal
+                    setVisible={setConfirm}
+                    requestId={requestId}
+                    requestName={projectName}
+                    onClickCancel={onClickCancel}
+                />
+            )}
         </main>
     );
 };

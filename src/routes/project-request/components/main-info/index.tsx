@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { useParams } from 'react-router';
 
-
 import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
 import Tag from 'component/tag';
@@ -16,13 +15,15 @@ import Section from 'component/section';
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import EditModal from 'route/project-request/components/edit-modal';
-import useModalClose from 'component/modal/use-modal-close';
 
 import { useClassnames } from 'hook/use-classnames';
 import useFormatDistance from 'component/dates/format-distance';
+import useModalClose from 'component/modal/use-modal-close';
 
+import ConfirmModal from '../confirm-modal';
 import projectRequest from './data.mock';
 import style from './index.module.pcss';
+import DeleteAction from 'component/section/actions/delete';
 
 const MAIN_INFO_FIELDS = [
     'industry_sector',
@@ -40,14 +41,19 @@ const PROJECT_TERM_FIELDS = ['project-term', 'duration'];
 const FORMAT_DATE = 'dd.MM.yyyy';
 
 const MainInfo = (data: RequestRead) => {
-    const { project, priority, status, start_date, deadline_date, requirements } = data;
+    const { project, priority, status, start_date, deadline_date, requirements, id } = data;
     const params = useParams<{ subpage?: string, id: string }>();
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const formatDistance = useFormatDistance();
     const [visible, setVisible] = useState(params?.subpage === 'edit');
+    const [confirm, setConfirm] = useState<boolean>(false);
 
     useModalClose(visible, setVisible);
+
+    const onClickConfirmDelete = () => {
+        setConfirm(true);
+    };
 
     const renderProjectField = (field: typeof PROJECT_TERM_FIELDS[number]) => {
         let content;
@@ -113,20 +119,35 @@ const MainInfo = (data: RequestRead) => {
         return content;
     };
 
-    return (
-        <Section>
+    const elHeader = () => {
+        const actions = [{
+            elem: (
+                <div className={cn('main-info__header')} onClick={() => setVisible(true)}>
+                    <EditAction />
+                    {t('routes.project-request.blocks.header.controls.edit')}
+                </div>
+            )
+        }, {
+            elem: (
+                <div className={cn('main-info__header')} onClick={onClickConfirmDelete}>
+                    <DeleteAction className={cn('request-list__action')} />
+                    {t('routes.project-request.blocks.header.controls.delete')}
+                </div>
+            )
+        }];
+
+        return (
             <div className={cn('gap-bottom')} id={ESectionInvariants.MainInfo}>
-                <SectionHeader actions={
-                    <EditAction
-                        onClick={() => {
-                            setVisible(true);
-                        }}
-                    />
-                }
-                >{project?.name || t('routes.project-request.blocks.empty-title')}
+                <SectionHeader actions={actions}>
+                    {project?.name || t('routes.project-request.blocks.empty-title')}
                 </SectionHeader>
             </div>
+        );
+    };
 
+    return (
+        <Section>
+            {elHeader()}
             {priority && (
                 <Tag kind={Tag.kinds.Secondary}>
                     {t(`routes.project-request.blocks.priority.${priority}`)}
@@ -160,6 +181,13 @@ const MainInfo = (data: RequestRead) => {
                 ))}
             </SectionContentList>
             {visible && <EditModal setVisible={setVisible} fields={data} />}
+            {confirm && project && (
+                <ConfirmModal
+                    setVisible={setConfirm}
+                    requestId={String(id)}
+                    requestName={project.name}
+                />
+            )}
         </Section>
     );
 };

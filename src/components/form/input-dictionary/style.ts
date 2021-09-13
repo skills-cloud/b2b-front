@@ -1,6 +1,6 @@
-import { OptionTypeBase, Styles } from 'react-select';
-import { IProps } from 'component/form/input-skills/types';
 import { CSSProperties } from 'react';
+import { OptionTypeBase, Styles } from 'react-select';
+import { IProps } from './index';
 
 export default (props: IProps, isFocus: boolean): Partial<Styles<OptionTypeBase, false>> => {
     return {

@@ -21,7 +21,7 @@ export const Specialists = () => {
     const { id } = useParams<{ id: string }>();
     const { t, i18n } = useTranslation();
 
-    const { data, isLoading } = mainRequest.useGetMainRequestByIdQuery({ id: parseInt(id, 10) });
+    const { data, isLoading } = mainRequest.useGetMainRequestByIdQuery({ id });
     const [cvList, setCvList] = useState<Array<CvInline>>([]);
 
     useEffect(() => {

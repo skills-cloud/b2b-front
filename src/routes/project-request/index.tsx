@@ -10,6 +10,9 @@ import IconArrowLeftFull from 'component/icons/arrow-left-full';
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import MainInfo from 'route/project-request/components/main-info';
 import Requirements from 'route/project-request/components/requirements';
+import Customer from 'route/project-request/components/customer';
+import ProjectRequestPdf from 'route/project-request/components/pdf';
+
 import { mainRequest } from 'adapter/api/main';
 
 import { useClassnames } from 'hook/use-classnames';
@@ -24,7 +27,7 @@ const ProjectRequest = () => {
     const { t } = useTranslation();
     const params = useParams<{ subpage?: string, id: string }>();
     const { data } = mainRequest.useGetMainRequestByIdQuery(
-        { id: parseInt(params.id, 10) },
+        { id: params.id },
         { refetchOnMountOrArgChange: true }
     );
 
@@ -59,7 +62,20 @@ const ProjectRequest = () => {
             <Fragment>
                 <MainInfo {...data} />
                 {data.id && <Requirements requirements={data?.requirements} requestId={data.id} />}
+                {data.id && <Customer customer={data.customer} requestId={data.id} />}
             </Fragment>
+        );
+    };
+
+    const elDocuments = () => {
+        return (
+            <li
+                className={cn('nav__item', 'nav__item_no-padding', {
+                    'nav__item_selected': hash.slice(1) === 'applicant'
+                })}
+            >
+                <ProjectRequestPdf />
+            </li>
         );
     };
 
@@ -79,6 +95,7 @@ const ProjectRequest = () => {
                     </li>
                 ))}
                 {elSpecialists()}
+                {elDocuments()}
             </Fragment>
         );
 
@@ -132,7 +149,6 @@ const ProjectRequest = () => {
             <div className={cn('sections')} >
                 {elContent()}
             </div>
-
         </SidebarLayout>
     );
 };

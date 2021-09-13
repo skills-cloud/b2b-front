@@ -7,7 +7,6 @@ import { Request, NoName4, NoName2 } from 'adapter/types/main/request/id/patch/c
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 
 import { mainRequest } from 'src/adapters/api/main';
-import { dictionary } from 'src/adapters/api/dictionary';
 import { acc } from 'src/adapters/api/acc';
 
 import { useDispatch } from 'component/core/store';
@@ -18,6 +17,8 @@ import Tabs, { Tab } from 'component/tabs';
 
 import { useClassnames } from 'hook/use-classnames';
 import style from './index.module.pcss';
+import InputDictionary from 'component/form/input-dictionary';
+import InputMain from 'component/form/input-main';
 
 interface ISelect {
     value: string,
@@ -130,68 +131,8 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
         name   : 'period'
     });
 
-    const onLoadOrganization = debounce((search: string, callback) => {
-        dispatch(mainRequest.endpoints.getMainOrganization.initiate({ search }))
-            .then(({ data }) => {
-                if(data?.results?.length) {
-                    callback(data.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    })));
-                } else {
-                    callback(null);
-                }
-            })
-            .catch(console.error);
-    }, 150);
-
-    const onLoadIndustrySector = debounce((search: string, callback) => {
-        dispatch(dictionary.endpoints.getIndustrySector.initiate({ search }))
-            .then(({ data }) => {
-                if(data?.results?.length) {
-                    callback(data.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    })));
-                } else {
-                    callback(null);
-                }
-            })
-            .catch(console.error);
-    }, 150);
-
-    const onLoadProjects = debounce((search: string, callback) => {
-        dispatch(mainRequest.endpoints.getMainProject.initiate({ search }))
-            .then(({ data }) => {
-                if(data?.results?.length) {
-                    callback(data.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    })));
-                } else {
-                    callback(null);
-                }
-            })
-            .catch(console.error);
-    }, 150);
-
-    const onLoadRequestTypes = debounce((search: string, callback) => {
-        dispatch(mainRequest.endpoints.getMainRequestType.initiate({ search }))
-            .then(({ data }) => {
-                if(data?.results?.length) {
-                    callback(data.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    })));
-                } else {
-                    callback(null);
-                }
-            })
-            .catch(console.error);
-    }, 150);
-
     const onLoadAccUsers = debounce((search: string, callback) => {
-        dispatch(acc.endpoints.getAccUser.initiate({ search }))
+        dispatch(acc.endpoints.getAccUser.initiate({ search: search || undefined }))
             .then(({ data }) => {
                 if(data?.results?.length) {
                     callback(data.results.map((item) => ({
@@ -292,24 +233,27 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
             <FormProvider {...form}>
                 <form method="POST" id={formId} onSubmit={form.handleSubmit(onSubmit)}>
                     <div className={cn('form', { 'hide': activeTab === ETabs.ProjectTiming })}>
-                        <Select
+                        <InputDictionary
+                            isMulti={false}
+                            requestType={InputDictionary.requestType.IndustrySector}
                             name="industry_sector"
                             direction="column"
                             label={t('routes.project-request.create.industry_sector')}
-                            loadOptions={onLoadIndustrySector}
                         />
-                        <Select
+                        <InputMain
+                            isMulti={false}
+                            requestType={InputMain.requestType.Customer}
                             name="customer"
                             direction="column"
                             label={t('routes.project-request.create.customer')}
-                            loadOptions={onLoadOrganization}
                             required={errorMessage}
                         />
-                        <Select
+                        <InputMain
+                            isMulti={false}
+                            requestType={InputMain.requestType.Project}
                             name="project"
                             direction="column"
                             label={t('routes.project-request.create.project')}
-                            loadOptions={onLoadProjects}
                         />
                         <Select
                             name="recruiter"
@@ -324,11 +268,12 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                                 label={t('routes.project-request.create.resource_manager')}
                                 loadOptions={onLoadAccUsers}
                             />
-                            <Select
+                            <InputMain
+                                isMulti={false}
+                                requestType={InputMain.requestType.RequestType}
                                 name="type"
                                 direction="column"
                                 label={t('routes.project-request.create.type')}
-                                loadOptions={onLoadRequestTypes}
                             />
                         </div>
                         <div className={cn('field-group')}>

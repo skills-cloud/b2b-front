@@ -1,25 +1,20 @@
-import React, { MouseEvent, ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, MouseEvent, ReactNode, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, useFieldArray, FormProvider } from 'react-hook-form';
-import CheckboxTree from 'react-checkbox-tree';
 import { useParams } from 'react-router';
-import debounce from 'lodash.debounce';
 
-import { useDispatch } from 'component/core/store';
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import Button from 'component/button';
 import Modal from 'component/modal';
-import IconChevronDown from 'component/icons/chevron-down';
-import InputSelect from 'component/form/select';
 import Tooltip from 'component/tooltip';
 import IconDots from 'component/icons/dots';
 import IconArrowLeft from 'component/icons/arrow-left-full';
 import Error from 'component/error';
+import InputDictionary from 'component/form/input-dictionary';
+import CheckboxTree from 'component/checkbox-tree';
 
-import { dictionary } from 'adapter/api/dictionary';
 import { position } from 'adapter/api/position';
 import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
-import { CompetenceTree } from 'adapter/types/dictionary/competence-tree/get/code-200';
 
 import style from './index.module.pcss';
 
@@ -58,7 +53,6 @@ export const CompetenciesEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
-    const dispatch = useDispatch();
     const methods = useForm<IFormValues>({
         defaultValues: {
             competencies  : props.fields || [{}],
@@ -71,42 +65,14 @@ export const CompetenciesEdit = (props: IProps) => {
         name   : 'competencies'
     });
     const { data: positionData, refetch } = position.useGetPositionListQuery({ cv_id: parseInt(id, 10) }, { refetchOnMountOrArgChange: true });
-    const { data } = dictionary.useGetCompetenceTreeQuery(undefined);
     const [patchPosition, { isLoading }] = position.usePatchPositionByIdMutation();
     const [postPosition, { isLoading: isLoadingPost }] = position.usePostPositionMutation();
     const [postPositionCompetencies] = position.usePostPositionCompetenciesByIdMutation();
 
     const [activeWindow, setActiveWindow] = useState<'role' | 'competence' | 'checkbox' | null>('competence');
     const [checked, setChecked] = useState<Array<string>>([]);
-    const [expanded, setExpanded] = useState<Array<string>>([]);
-    const [options, setOptions] = useState<Array<INodeCheckboxTree>>([]);
     const [positionItem, setPositionItem] = useState<CvPositionRead>();
     const [error, setError] = useState<Array<string> | string | null>(null);
-
-    const reMap = (array: Array<CompetenceTree>) => {
-        return array.map((item) => {
-            const params = {
-                value: item.id,
-                label: item.name
-            };
-            const obj: INodeCheckboxTree = {
-                label: '',
-                value: ''
-            };
-
-            for(const param in params) {
-                if(params[param]) {
-                    obj[param] = params[param];
-                }
-            }
-
-            if(item.children?.length) {
-                obj.children = reMap(item.children);
-            }
-
-            return obj;
-        });
-    };
 
     const onClickDots = (positionItemParam: CvPositionRead) => () => {
         const newChecked = positionItemParam.competencies?.map((item) => String(item.competence_id)) || [];
@@ -120,7 +86,6 @@ export const CompetenciesEdit = (props: IProps) => {
         props.onCancel?.();
         setChecked([]);
         setPositionItem(undefined);
-        setExpanded([]);
         setActiveWindow(null);
     };
 
@@ -186,6 +151,10 @@ export const CompetenciesEdit = (props: IProps) => {
         }
     );
 
+    const onClickSetExperience = (competenceId: string) => {
+        console.info('SET', competenceId);
+    };
+
     const onClickSubmit = () => {
         if(activeWindow === 'role') {
             setActiveWindow('checkbox');
@@ -193,20 +162,6 @@ export const CompetenciesEdit = (props: IProps) => {
             return onSubmit();
         }
     };
-
-    useEffect(() => {
-        if(data) {
-            const newOptions = data.map((item) => {
-                return {
-                    label   : item.name,
-                    value   : String(item.id),
-                    children: item.children?.length ? reMap(item.children) : undefined
-                };
-            });
-
-            setOptions(newOptions);
-        }
-    }, [JSON.stringify(data)]);
 
     const onClickBack = () => {
         if(activeWindow === 'role') {
@@ -216,44 +171,23 @@ export const CompetenciesEdit = (props: IProps) => {
         }
     };
 
-    const onLoadOptions = debounce((search_string: string, callback) => {
-        dispatch(dictionary.endpoints.getPositionList.initiate({
-            search: search_string
-        }))
-            .then(({ data: loadData }) => {
-                if(loadData?.results?.length) {
-                    const res = loadData.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    }));
+    // const getNodeIds = (nodes: Array<INodeCheckboxTree>) => {
+    //     let ids: Array<string> = [];
+    //
+    //     nodes.forEach(({ value, children }) => {
+    //         const childNodes = children ? getNodeIds(children) : [];
+    //
+    //         ids = [...ids, value, ...childNodes];
+    //     });
+    //
+    //     return ids;
+    // };
 
-                    callback(res);
-                } else {
-                    callback(null);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, 150);
-
-    const getNodeIds = (nodes: Array<INodeCheckboxTree>) => {
-        let ids: Array<string> = [];
-
-        nodes.forEach(({ value, children }) => {
-            const childNodes = children ? getNodeIds(children) : [];
-
-            ids = [...ids, value, ...childNodes];
-        });
-
-        return ids;
-    };
-
-    const onClickExpand = (action: 'expand' | 'close') => () => {
-        const newExpanded = action === 'expand' ? getNodeIds(options) : [];
-
-        setExpanded(newExpanded);
-    };
+    // const onClickExpand = (action: 'expand' | 'close') => () => {
+    //     const newExpanded = action === 'expand' ? getNodeIds(options) : [];
+    //
+    //     setExpanded(newExpanded);
+    // };
 
     const elAppend = useMemo(() => {
         if(activeWindow === 'competence') {
@@ -271,19 +205,18 @@ export const CompetenciesEdit = (props: IProps) => {
                 />
             );
         }
-
-        if(activeWindow === 'checkbox') {
-            return (
-                <div className={cn('competencies-edit__checkbox-controls')}>
-                    <span className={cn('competencies-edit__checkbox-control')} onClick={onClickExpand('expand')}>
-                        {t('routes.person.blocks.competencies.edit.buttons.expand')}
-                    </span>
-                    <span className={cn('competencies-edit__checkbox-control')} onClick={onClickExpand('close')}>
-                        {t('routes.person.blocks.competencies.edit.buttons.close')}
-                    </span>
-                </div>
-            );
-        }
+        // if(activeWindow === 'checkbox') {
+        //     return (
+        //         <div className={cn('competencies-edit__checkbox-controls')}>
+        //             <span className={cn('competencies-edit__checkbox-control')} onClick={onClickExpand('expand')}>
+        //                 {t('routes.person.blocks.competencies.edit.buttons.expand')}
+        //             </span>
+        //             <span className={cn('competencies-edit__checkbox-control')} onClick={onClickExpand('close')}>
+        //                 {t('routes.person.blocks.competencies.edit.buttons.close')}
+        //             </span>
+        //         </div>
+        //     );
+        // }
     }, [activeWindow]);
 
     const elFooter = useMemo(() => {
@@ -326,38 +259,6 @@ export const CompetenciesEdit = (props: IProps) => {
             return <Error className={cn('competencies-edit__error')} elIcon={true}>{error}</Error>;
         }
     }, [error]);
-
-    const elCompetenciesCheckbox = () => {
-        return (
-            <div className={cn('competencies-edit__list')}>
-                <CheckboxTree
-                    checked={checked}
-                    expanded={expanded}
-                    onCheck={(checkedValues) => {
-                        setChecked(checkedValues);
-
-                        methods.setValue('competence_ids', checkedValues);
-                    }}
-                    onExpand={setExpanded}
-                    nodes={options}
-                    optimisticToggle={true}
-                    icons={{
-                        check      : null,
-                        uncheck    : null,
-                        halfCheck  : null,
-                        expandOpen : <IconChevronDown svg={{ className: cn('competencies-edit__expand', 'competencies-edit__expand_open') }} />,
-                        expandClose: <IconChevronDown svg={{ className: cn('competencies-edit__expand') }} />,
-                        expandAll  : 'Развернуть все',
-                        collapseAll: 'Свернуть все',
-                        parentClose: null,
-                        parentOpen : null,
-                        leaf       : null
-                    }}
-                />
-                {elError}
-            </div>
-        );
-    };
 
     const elCompetencies = () => {
         if(positionData?.results?.length) {
@@ -411,23 +312,9 @@ export const CompetenciesEdit = (props: IProps) => {
     const elAddRole = () => {
         return (
             <div className={cn('competencies-edit__field')}>
-                <InputSelect
-                    name="level"
-                    options={[{
-                        value: 'junior',
-                        label: 'Junior'
-                    }, {
-                        value: 'middle',
-                        label: 'Middle'
-                    }, {
-                        value: 'senior',
-                        label: 'Senior'
-                    }]}
-                    placeholder="Ваш уровень владения"
-                />
-                <InputSelect
+                <InputDictionary
+                    requestType={InputDictionary.requestType.Position}
                     name="position_id"
-                    loadOptions={onLoadOptions}
                     placeholder="Начните вводить, например, “PHP”"
                 />
             </div>
@@ -437,7 +324,15 @@ export const CompetenciesEdit = (props: IProps) => {
     const elFormContent = () => {
         switch (activeWindow) {
             case 'checkbox': {
-                return elCompetenciesCheckbox();
+                return (
+                    <Fragment>
+                        <CheckboxTree
+                            competencies={checked}
+                            onClickExperience={onClickSetExperience}
+                        />
+                        {elError}
+                    </Fragment>
+                );
             }
 
             case 'competence': {
@@ -481,11 +376,11 @@ export const CompetenciesEdit = (props: IProps) => {
 
     return (
         <Modal className={cn('competencies-edit')} footer={elFooter} header={elHeader}>
-            <form>
-                <FormProvider {...methods}>
+            <FormProvider {...methods}>
+                <form>
                     {elFormContent()}
-                </FormProvider>
-            </form>
+                </form>
+            </FormProvider>
         </Modal>
     );
 };

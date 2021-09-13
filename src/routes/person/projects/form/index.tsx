@@ -7,9 +7,9 @@ import debounce from 'lodash.debounce';
 import useClassnames from 'hook/use-classnames';
 import FormInput from 'component/form/input';
 import FormDate from 'component/form/date';
-import FormInputSkills from 'component/form/input-skills';
 import InputSelect from 'component/form/select';
 import Error from 'component/error';
+import InputDictionary from 'component/form/input-dictionary';
 
 import { useDispatch } from 'component/core/store';
 import { dictionary } from 'adapter/api/dictionary';
@@ -169,7 +169,8 @@ const CareerForm = (props: IProjectForm) => {
                         <label className={cn('projects-form__label')}>
                             {t('routes.person.projects.fields.competencies')}
                         </label>
-                        <FormInputSkills
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Competence}
                             name="project.competencies_select"
                             placeholder={t('routes.person.projects.fields.placeholder.competencies')}
                         />

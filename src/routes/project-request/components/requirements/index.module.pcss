@@ -1,4 +1,3 @@
-
 .actions {
     display: grid;
     grid-gap: 16px;
@@ -24,6 +23,13 @@
     color: var(--color-button-secondary-text);
     font-family: Roboto, sans-serif;
     font-size: 14px;
+
+    @media (hover: hover) and (pointer: fine) {
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }
 
 .skills-head {
@@ -34,7 +40,7 @@
     display: inline-block;
     height: 26px;
     line-height: 26px;
-    background-color: var(--color-gray-4);
+    background-color: var(--color-gray-20);
     font-size: 12px;
     padding: 0 10px;
     white-space: nowrap;
