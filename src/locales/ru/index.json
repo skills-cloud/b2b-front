@@ -45,7 +45,9 @@
                 "reqs": "Требования",
                 "competencies": "Навыки",
                 "exp": "Опыт",
-                "rate": "Ставка"
+                "rate": "Ставка",
+                "position_default": "{{position}} ({{count}} чел.)",
+                "position_empty": "Позиция не указана"
             }
         }
     },
