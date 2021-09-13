@@ -1,0 +1,18 @@
+version: '3.6'
+
+services:
+  front_nginx:
+    image: $CI_REGISTRY_IMAGE/front:$TAG
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      args:
+        - ENV_NAME=prod
+    restart: always
+    ports:
+        - 127.0.0.1:84:80
+    logging: &logging
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
