@@ -1,17 +1,18 @@
 import React, { ReactNode } from 'react';
 
-import { useClassnames } from 'hook/use-classnames';
+import { IStyle, useClassnames } from 'hook/use-classnames';
 import Header from './header';
 import style from './index.module.pcss';
 
 interface ISection {
     title?: string,
     children: ReactNode,
-    withoutPaddings?: boolean
+    withoutPaddings?: boolean,
+    className?: IStyle | string
 }
 
-const Section = ({ title, children, withoutPaddings = false }: ISection) => {
-    const cn = useClassnames(style);
+const Section = ({ title, children, withoutPaddings = false, className }: ISection) => {
+    const cn = useClassnames(style, className, true);
 
     return (
         <div
