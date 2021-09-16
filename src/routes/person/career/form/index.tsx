@@ -181,19 +181,7 @@ const CareerForm = (props: IProjectForm) => {
                 </div>
                 <div className={cn('career-form__item')}>
                     <label className={cn('career-form__label')}>
-                        {t('routes.person.career.fields.position')}
-                    </label>
-                    <InputDictionary
-                        isMulti={false}
-                        name="career.position"
-                        requestType={InputDictionary.requestType.Position}
-                        placeholder={t('routes.person.career.fields.placeholder.position')}
-                        required={true}
-                    />
-                </div>
-                <div className={cn('career-form__item')}>
-                    <label className={cn('career-form__label')}>
-                        {t('routes.person.career.fields.position')}
+                        {t('routes.person.career.fields.files')}
                     </label>
                     <InputFile
                         name="career.filesArray"
