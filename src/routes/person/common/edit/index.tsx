@@ -44,7 +44,8 @@ export interface IFormValues {
         citizenship: {
             value: string,
             label: string
-        }
+        },
+        photo?: string
     },
     contacts: Array<{
         value: string,
@@ -143,8 +144,10 @@ export const CommonEdit = (props: IProps) => {
     const onSubmit = methods.handleSubmit(
         (formData: IFormValues) => {
             if(activeTab === 'main') {
+                const { photo, ...rest } = formData.common;
+
                 patchCvById({
-                    ...formData.common,
+                    ...rest,
                     gender        : formData.common.gender.value,
                     city_id       : parseInt(formData.common.city?.value, 10),
                     citizenship_id: parseInt(formData.common.citizenship?.value, 10),

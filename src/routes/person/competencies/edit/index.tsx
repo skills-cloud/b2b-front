@@ -216,14 +216,29 @@ export const CompetenciesEdit = (props: IProps) => {
             );
         }
 
+        if(activeWindow === 'role') {
+            return (
+                <Button
+                    type="button"
+                    onClick={onClickSubmit}
+                    disabled={isLoadingPost || isLoading || isLoadingDelete}
+                    isLoading={isLoadingPost || isLoading || isLoadingDelete}
+                >
+                    {t('routes.person.blocks.competencies.edit.buttons.save')}
+                </Button>
+            );
+        }
+    };
+
+    const elCancelButton = () => {
         return (
             <Button
-                type="button"
-                onClick={onClickSubmit}
+                isSecondary={true}
+                onClick={onCancel}
+                className={cn('competencies-edit__button-secondary')}
                 disabled={isLoadingPost || isLoading || isLoadingDelete}
-                isLoading={isLoadingPost || isLoading || isLoadingDelete}
             >
-                {t('routes.person.blocks.competencies.edit.buttons.save')}
+                {t('routes.person.blocks.competencies.edit.buttons.cancel')}
             </Button>
         );
     };
@@ -232,14 +247,7 @@ export const CompetenciesEdit = (props: IProps) => {
         return (
             <div className={cn('competencies-edit__form-footer')}>
                 {elAppend}
-                <Button
-                    isSecondary={true}
-                    onClick={onCancel}
-                    className={cn('competencies-edit__button-secondary')}
-                    disabled={isLoadingPost || isLoading || isLoadingDelete}
-                >
-                    {t('routes.person.blocks.competencies.edit.buttons.cancel')}
-                </Button>
+                {elCancelButton()}
                 {elSubmitButton()}
             </div>
         );
