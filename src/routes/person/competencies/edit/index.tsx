@@ -231,6 +231,14 @@ export const CompetenciesEdit = (props: IProps) => {
     };
 
     const elCancelButton = () => {
+        if(activeWindow === 'competence') {
+            return (
+                <Button onClick={onCancel}>
+                    {t('routes.person.blocks.competencies.edit.buttons.done')}
+                </Button>
+            );
+        }
+
         return (
             <Button
                 isSecondary={true}
