@@ -21,7 +21,8 @@ import {
     endOfMonth,
     endOfWeek,
     isSameDay,
-    Locale
+    Locale,
+    isAfter
 } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
@@ -64,11 +65,13 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
 
     const isBusy = useCallback((value: Date) => {
         if(value && props.busyPeriods?.length) {
-            const periods = props.busyPeriods.map((item) => ({
-                start : parse(item.dates[0], 'yyyy-MM-dd', new Date()),
-                end   : parse(item.dates[1], 'yyyy-MM-dd', new Date()),
-                emp_id: item.emp_id
-            }));
+            const periods = props.busyPeriods
+                .filter((item) => isAfter(new Date(item.dates[1]), new Date(item.dates[0])))
+                .map((item) => ({
+                    start : parse(item.dates[0], 'yyyy-MM-dd', new Date()),
+                    end   : parse(item.dates[1], 'yyyy-MM-dd', new Date()),
+                    emp_id: item.emp_id
+                }));
 
             for(const period of periods) {
                 if(isWithinInterval(value, period)) {

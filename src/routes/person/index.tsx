@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 
 import useClassnames from 'hook/use-classnames';
 
 import IconApply from 'component/icons/apply';
 import TooltipError from 'component/tooltip';
 import IconWarning from 'component/icons/warning';
+import Section from 'component/section';
+import Button from 'component/button';
+import Request from 'component/request';
 
 import Common from './common';
 import Photo from './photo';
@@ -19,9 +23,21 @@ import Competencies from './competencies';
 
 import style from './common/index.module.pcss';
 
+
 export const Person = () => {
     const cn = useClassnames(style);
+    const { id } = useParams<{ id: string }>();
     const { t } = useTranslation();
+
+    const [showModal, setShowModal] = useState<boolean>(false);
+
+    const onClickShowModal = () => {
+        setShowModal(true);
+    };
+
+    const onCloseModal = () => {
+        setShowModal(false);
+    };
 
     return (
         <div className={cn('person')}>
@@ -80,6 +96,11 @@ export const Person = () => {
                         <a href="#person-block-files" className={cn('person__link')} data-count="4">{t('routes.person.links.files.title')}</a>
                     </div>
                 </div>
+                <Section className={cn('person__project')}>
+                    <Button type="button" onClick={onClickShowModal}>
+                        {t('routes.person.add-specialist')}
+                    </Button>
+                </Section>
             </div>
             <div className={cn('person__content')}>
                 <Common id="person-block-common" />
@@ -91,6 +112,7 @@ export const Person = () => {
                 <Certificates id="person-block-certificates" />
                 <Files id="person-block-files" />
             </div>
+            <Request specialistId={parseInt(id, 10)} showModal={showModal} onClickClose={onCloseModal} />
         </div>
     );
 };

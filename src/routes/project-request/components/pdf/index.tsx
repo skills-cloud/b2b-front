@@ -25,84 +25,136 @@ const ProjectRequestPdf = (props: IProps) => {
     const { t } = useTranslation();
 
     const params = useParams<{ subpage?: string, id: string }>();
-    const { data } = mainRequest.useGetMainRequestByIdQuery(
+    const { data, refetch } = mainRequest.useGetMainRequestByIdQuery(
         { id: params.id },
         { refetchOnMountOrArgChange: true }
     );
 
     const generatePdf = useCallback((): jsPDF | undefined => {
         if(data) {
-            const doc = new jsPDF();
+            const doc = new jsPDF('p', 'pt', 'a4');
+            let startY = 30;
+            const startX = 12;
+            const startXColumn = 160;
 
             doc.addFont('Roboto-Medium-normal.ttf', 'Roboto-Medium', 'normal');
             doc.setFont('Roboto-Medium', 'normal');
 
             doc.setFontSize(20);
-            doc.text(data.project?.name || t('components.pdf.project.name'), 12, 15, { align: 'left' });
+            doc.text(data.project?.name || t('components.pdf.project.name'), startX, startY, { align: 'left' });
+
+            startY += 30;
 
             doc.setFontSize(16);
-            doc.text(t('components.pdf.project.main-info'), 12, 30, { align: 'left' });
+            doc.text(t('components.pdf.project.main-info'), startX, startY, { align: 'left' });
+
+            startY += 20;
 
             doc.setFontSize(10);
-            doc.text(t('components.pdf.project.sector'), 12, 40, { align: 'left' });
-            doc.text(data.industry_sector?.name || t('components.pdf.project.empty'), 64, 40, { align: 'left' });
+            doc.text(t('components.pdf.project.sector'), startX, startY, { align: 'left' });
+            doc.text(data.industry_sector?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
-            doc.text(t('components.pdf.project.project'), 12, 46, { align: 'left' });
-            doc.text(data.project?.name || t('components.pdf.project.empty'), 64, 46, { align: 'left' });
+            startY += 16;
+
+            doc.text(t('components.pdf.project.project'), startX, startY, { align: 'left' });
+            doc.text(data.project?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             const manager = `${data.resource_manager?.last_name || ''} ${(data.resource_manager?.first_name || '').slice(0, 1)}`;
 
-            doc.text(t('components.pdf.project.manager'), 12, 52, { align: 'left' });
-            doc.text(manager.trim() || t('components.pdf.project.empty'), 64, 52, { align: 'left' });
+            startY += 16;
+
+            doc.text(t('components.pdf.project.manager'), startX, startY, { align: 'left' });
+            doc.text(manager.trim() || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             const recruiter = `${data.recruiter?.last_name || ''} ${(data.recruiter?.first_name || '').slice(0, 1)}`;
 
-            doc.text(t('components.pdf.project.recruiter'), 12, 58, { align: 'left' });
-            doc.text(recruiter.trim() || t('components.pdf.project.empty'), 64, 58, { align: 'left' });
+            startY += 16;
 
-            doc.text(t('components.pdf.project.type'), 12, 64, { align: 'left' });
-            doc.text(data.type?.name || t('components.pdf.project.empty'), 64, 64, { align: 'left' });
+            doc.text(t('components.pdf.project.recruiter'), startX, startY, { align: 'left' });
+            doc.text(recruiter.trim() || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
-            doc.text(t('components.pdf.project.customer'), 12, 70, { align: 'left' });
-            doc.text(data.customer?.name || t('components.pdf.project.empty'), 64, 70, { align: 'left' });
+            startY += 16;
+
+            doc.text(t('components.pdf.project.type'), startX, startY, { align: 'left' });
+            doc.text(data.type?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+
+            startY += 16;
+
+            doc.text(t('components.pdf.project.customer'), startX, startY, { align: 'left' });
+            doc.text(data.customer?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+
+            startY += 30;
 
             doc.setFontSize(16);
-            doc.text(t('components.pdf.project.time'), 12, 86, { align: 'left' });
+            doc.text(t('components.pdf.project.time'), startX, startY, { align: 'left' });
+
+            startY += 20;
 
             doc.setFontSize(10);
-            doc.text(t('components.pdf.project.time'), 12, 96, { align: 'left' });
-            doc.text(t('components.pdf.project.empty'), 64, 96, { align: 'left' });
+            doc.text(t('components.pdf.project.time'), startX, startY, { align: 'left' });
+            doc.text(t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
-            doc.text(t('components.pdf.project.long'), 12, 102, { align: 'left' });
-            doc.text(t('components.pdf.project.empty'), 64, 102, { align: 'left' });
+            startY += 16;
+
+            doc.text(t('components.pdf.project.long'), startX, startY, { align: 'left' });
+            doc.text(t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+
+            startY += 30;
 
             doc.setFontSize(16);
-            doc.text(t('components.pdf.project.reqs'), 12, 118, { align: 'left' });
+            doc.text(t('components.pdf.project.reqs'), startX, startY, { align: 'left' });
 
-            let startY = 128;
-
-            data.requirements?.forEach((req, index) => {
-                startY = startY + (index * 10);
+            data.requirements?.forEach((req) => {
+                startY += 30;
 
                 doc.setFontSize(14);
-                doc.text(req.name || t('components.pdf.project.req-empty'), 12, startY, { align: 'left' });
+                doc.text(req.name || t('components.pdf.project.req-empty'), startX, startY, { align: 'left' });
 
-                startY = startY + 10 + (index * 10);
+                startY += 20;
+
+                doc.setFontSize(12);
+                doc.text(t('components.pdf.project.position', {
+                    position: req.position?.name,
+                    count   : req.count,
+                    context : req.position?.name ? 'default' : 'empty'
+                }), startX, startY, { align: 'left' });
+
+                startY += 20;
+
+                const textCompetencies = doc.splitTextToSize(req.competencies?.map((comp) => comp.competence?.name).join(', ') || '', 500);
+                const splatTextLength = textCompetencies.length;
 
                 doc.setFontSize(10);
-                doc.text(t('components.pdf.project.competencies'), 12, startY, { align: 'left' });
-                doc.text(t('components.pdf.project.empty'), 64, startY, { align: 'left' });
+                doc.text(t('components.pdf.project.competencies'), startX, startY, { align: 'left' });
+                doc.text(textCompetencies || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
-                startY += 6;
+                const coefficient = splatTextLength > 1 ? (16 * (0.85 - splatTextLength / 100)) * splatTextLength : 16;
 
-                doc.text(t('components.pdf.project.exp'), 12, startY, { align: 'left' });
-                doc.text(t('components.pdf.project.empty'), 64, startY, { align: 'left' });
+                startY = startY + coefficient;
 
-                startY += 6;
+                const exp = req.experience_years ? String(req.experience_years) : t('components.pdf.project.empty');
 
-                doc.text(t('components.pdf.project.rate'), 12, startY, { align: 'left' });
-                doc.text(String(req.max_price) || t('components.pdf.project.empty'), 64, startY, { align: 'left' });
+                doc.text(t('components.pdf.project.exp'), startX, startY, { align: 'left' });
+                doc.text(exp, startXColumn, startY, { align: 'left' });
+
+                startY += 16;
+
+                const rate = req.max_price ? String(req.max_price) : t('components.pdf.project.empty');
+
+                doc.text(t('components.pdf.project.rate'), startX, startY, { align: 'left' });
+                doc.text(rate, startXColumn, startY, { align: 'left' });
             });
+
+            startY += 30;
+
+            doc.setFontSize(16);
+            doc.text(t('components.pdf.project.customer'), startX, startY, { align: 'left' });
+
+            startY += 16;
+
+            doc.setFontSize(10);
+            doc.text(t('components.pdf.project.customer'), startX, startY, { align: 'left' });
+            doc.text(data.customer?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             return doc;
         }
@@ -110,6 +162,7 @@ const ProjectRequestPdf = (props: IProps) => {
 
     const onPrint = useCallback((e: MouseEvent): void => {
         e.preventDefault();
+        refetch();
 
         const doc = generatePdf();
 

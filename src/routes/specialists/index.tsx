@@ -20,6 +20,7 @@ import Loader from 'component/loader';
 import Modal from 'component/modal';
 import { H2 } from 'component/header';
 import Button from 'component/button';
+import Request from 'component/request';
 
 import { mainRequest } from 'adapter/api/main';
 import { cv } from 'adapter/api/cv';
@@ -27,7 +28,6 @@ import { CvList, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv
 import { IValue } from 'component/form/select';
 
 import style from './index.module.pcss';
-import Request from 'route/specialists/request';
 
 export interface IFormValues {
     search?: string,
@@ -144,7 +144,7 @@ export const Specialists = () => {
         return (
             <Fragment>
                 <H2 className={cn('specialists__modal-header-text')}>
-                    {addToRequest ? t('routes.specialists.main.projects.add') : t('routes.specialists.main.linked.title')}
+                    {t('routes.specialists.main.linked.title')}
                 </H2>
                 <div className={cn('specialists__modal-header-close')} onClick={onClickClose}>
                     <IconClose svg={{ className: cn('specialists__modal-header-close-icon') }} />
@@ -262,29 +262,21 @@ export const Specialists = () => {
         );
     };
 
-    const elModalContent = () => {
+    const elModal = useMemo(() => {
         if(showModal) {
             return (
-                <div className={cn('specialists__users-modal')}>
-                    <div className={cn('specialists__users')}>
-                        {data?.results.map((cvItem) => elUserItem(cvItem, false))}
+                <Modal header={elModalHeader()}>
+                    <div className={cn('specialists__users-modal')}>
+                        <div className={cn('specialists__users')}>
+                            {data?.results.map((cvItem) => elUserItem(cvItem, false))}
+                        </div>
                     </div>
-                </div>
+                </Modal>
             );
         }
 
         if(addToRequest) {
-            return <Request specialistId={addToRequest} />;
-        }
-    };
-
-    const elModal = useMemo(() => {
-        if(showModal || addToRequest) {
-            return (
-                <Modal header={elModalHeader()}>
-                    {elModalContent()}
-                </Modal>
-            );
+            return <Request showModal={Boolean(addToRequest)} specialistId={addToRequest} onClickClose={onClickClose} />;
         }
     }, [showModal, addToRequest]);
 
