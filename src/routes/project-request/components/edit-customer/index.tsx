@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useClassnames } from 'hook/use-classnames';
 import { useForm, FormProvider } from 'react-hook-form';
 
-import Input from 'component/form/input';
 import InputMain from 'component/form/input-main';
 
 import { Organization } from 'adapter/types/main/request/id/get/code-200';

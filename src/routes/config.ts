@@ -12,6 +12,7 @@ import ProjectCreate from './project-request/create';
 import ProjectRequest from './project-request';
 import NotFound from 'route/not-found';
 import ProjectRequestList from 'route/project-request/list';
+import Organization from 'route/organization';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -20,6 +21,12 @@ export interface IProps extends RouteProps {
 
 // Базовые роуты
 export const baseRoutes: Array<IProps> = [{
+    isPublic : true,
+    exact    : true,
+    layout   : Layout,
+    path     : ['/organization/:id'],
+    component: Organization
+}, {
     isPublic : true,
     exact    : true,
     layout   : Layout,

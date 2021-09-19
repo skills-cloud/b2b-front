@@ -67,6 +67,21 @@
         "main": {
             "hello": "SkillCloud"
         },
+        "organization": {
+            "blocks": {
+                "sections": {
+                    "main-info":"Основная информация",
+                    "projects": "Проекты",
+                    "cards": "Карточки прав и доступа"
+                },
+                "project": {
+                    "period": "Период",
+                    "industry": "Отрасль",
+                    "description": "Описание",
+                    "request": "Запросы"
+                }
+            }
+        },
         "person": {
             "add-specialist": "Добавить в проект",
             "links": {

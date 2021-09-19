@@ -122,7 +122,7 @@ const CheckboxTree = (props: IProps) => {
                 mapCompetence[id] = item;
             }
 
-            const label = elCheckboxLabel(name, String(id),children.length === 0);
+            const label = elCheckboxLabel(name, String(id), children.length === 0);
 
             return {
                 value       : String(id),
