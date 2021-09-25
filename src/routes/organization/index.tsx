@@ -4,15 +4,12 @@ import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router';
 
 import Section from 'component/section';
-import SectionHeader from 'component/section/header';
-import SectionContentList from 'component/section/content-list';
-import SectionContentListItem from 'component/section/content-list-item';
-import { H3 } from 'component/header';
 import SidebarLayout from 'component/layout/sidebar';
 import SidebarNav, { NavItem } from 'component/nav';
+import SectionHeader from 'component/section/header';
 
 import { mainRequest } from 'adapter/api/main';
-import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
+import ProjectList from 'route/organization/components/projects';
 import { useClassnames } from 'hook/use-classnames';
 
 import style from './index.module.pcss';
@@ -23,13 +20,6 @@ enum ESectionInvariants {
     Cards = 'cards'
 }
 
-enum EProjectInvariants {
-    Period = 'period',
-    Industry = 'industry',
-    Description = 'description',
-    Request = 'request'
-}
-
 const ProjectRequest = () => {
     const cn = useClassnames(style);
     const { hash } = useLocation();
@@ -38,23 +28,8 @@ const ProjectRequest = () => {
     const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.id });
     const { data: projectList } = mainRequest.useGetMainOrganizationProjectListQuery({ organization_id: params.id });
 
-    const renderField = (field: EProjectInvariants, project: OrganizationProjectRead) => {
-        let content = null;
-
-        switch (field) {
-            case EProjectInvariants.Description:
-                content = project.description;
-                break;
-            default:
-                content = null;
-        }
-
-        return (
-            <SectionContentListItem title={t(`routes.organization.blocks.project.${field}`)} key={field}>
-                {content}
-            </SectionContentListItem>
-        );
-    };
+    console.log(projectList);
+    console.log(data);
 
     if(!data) {
         return null;
@@ -74,19 +49,12 @@ const ProjectRequest = () => {
         }
         >
             <div className={cn('sections')} >
-                {data && (
-                    <Section>
-                        <SectionHeader>{data.name}</SectionHeader>
-                    </Section>
-                )}
                 <Section>
-                    <SectionHeader>{t('routes.organization.blocks.sections.projects')}</SectionHeader>
-                    {projectList?.results.map((item) => (
-                        <SectionContentList key={item.id}>
-                            <H3>{item?.name}</H3>
-                            {Object.values(EProjectInvariants).map((field) => renderField(field, item))}
-                        </SectionContentList>
-                    ))}
+                    <SectionHeader>{data?.name}</SectionHeader>
+                </Section>
+                {projectList?.results && <ProjectList list={projectList.results} />}
+                <Section>
+                    <SectionHeader>{t('routes.organization.blocks.sections.cards')}</SectionHeader>
                 </Section>
             </div>
         </SidebarLayout>

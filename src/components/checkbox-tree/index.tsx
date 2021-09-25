@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useRef, useState } from 'react';
+import React, { Fragment, MouseEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
@@ -8,6 +8,7 @@ import ReactCheckboxTree, { Node } from 'react-checkbox-tree';
 import IconChevronDown from 'component/icons/chevron-down';
 import IconChevronRight from 'component/icons/chevron-right';
 import Input from 'component/form/input';
+import Dropdown from 'component/dropdown/base';
 
 import { CompetenceTree } from 'adapter/types/dictionary/competence-tree/get/code-200';
 import { dictionary } from 'adapter/api/dictionary';
@@ -56,6 +57,34 @@ const getRootNode = (
     return model;
 };
 
+enum EExperienceYears {
+    LessThanOne=1,
+    LessThanThree=3,
+    LessThanFive=5,
+    MoreThanFive=100,
+}
+
+const ExperienceSelector = ({ id }: {id: string}) => {
+    const [visible, setVisible] = useState(false);
+    const { t } = useTranslation();
+    const cn = useClassnames(style);
+
+    if(visible) {
+        return <Dropdown items={[]} />;
+    }
+
+    return (
+        <Dropdown activatorElement={
+            <span className={cn('checkbox-tree__set-experience')}>
+                {t('components.checkbox-tree.experience')}
+            </span>
+        }
+        >
+            <div>{Object.values(EExperienceYears).map((item) => (<div key="item">{item}</div>))}</div>
+        </Dropdown>
+    );
+};
+
 const CheckboxTree = (props: IProps) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
@@ -94,22 +123,18 @@ const CheckboxTree = (props: IProps) => {
         }
     }, [searchString]);
 
-    const onClickExperience = (id: string) => (e: MouseEvent<HTMLSpanElement>) => {
-        e.stopPropagation();
-        e.preventDefault();
+    // const onClickExperience = (id: string) => (e: MouseEvent<HTMLSpanElement>) => {
+    //     e.stopPropagation();
+    //     e.preventDefault();
 
-        props.onClickExperience?.(id);
-    };
+    //     props.onClickExperience?.(id);
+    // };
 
     const elCheckboxLabel = (children: string, id: string, showExperience: boolean) => {
         return (
             <span className={cn('checkbox-tree__label')}>
                 <span>{children}</span>
-                {showExperience && (
-                    <span className={cn('checkbox-tree__set-experience')} onClick={onClickExperience(id)}>
-                        {t('components.checkbox-tree.experience')}
-                    </span>
-                )}
+                {showExperience && <ExperienceSelector id={id} />}
             </span>
         );
     };
