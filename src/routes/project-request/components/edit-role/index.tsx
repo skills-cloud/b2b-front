@@ -30,6 +30,13 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
     const [checked, setChecked] = useState<Array<string>>(
         requirements.competencies?.map(({ competence }) => String(competence?.id)) || []
     );
+    const [competenceExpirienceMap, setCompetenceExpirienceMap] = useState(requirements.competencies?.reduce((acc, item) => {
+        if(item.experience_years) {
+            acc[item.competence_id] = item.experience_years;
+        }
+
+        return acc;
+    }, {}) || {});
 
     useEffect(() => {
         setChecked(requirements.competencies?.map(({ competence }) => String(competence?.id)) || []);
@@ -43,17 +50,21 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
         }
 
         const competencies = checked.map((id) => ({
-            competence_id: parseInt(id, 10)
+            competence_id   : parseInt(id, 10),
+            experience_years: competenceExpirienceMap[id]
         }));
 
         post({ id: requirementsId, competencies })
             .unwrap()
             .then(onClose)
             .catch(console.error);
-    }, [checked]);
+    }, [checked, competenceExpirienceMap]);
 
-    const onSetRequirementExperience = (id: string) => {
-        console.info('SET REQ FOR ID: ', id);
+    const onSetRequirementExperience = (competenceId: string, experienceId: number) => {
+        setCompetenceExpirienceMap({
+            ...competenceExpirienceMap,
+            [competenceId]: experienceId
+        });
     };
 
     return (
@@ -82,7 +93,8 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
                         <CheckboxTree
                             onSetChecked={setChecked}
                             competencies={checked}
-                            onClickExperience={onSetRequirementExperience}
+                            onChangeExperience={onSetRequirementExperience}
+                            competenceExpirienceMap={competenceExpirienceMap}
                         />
                     </form>
                 </FormProvider>

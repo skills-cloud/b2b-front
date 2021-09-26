@@ -34,10 +34,12 @@ const ProjectList = ({ list }: { list: Array<OrganizationProjectRead>}) => {
 
         switch (field) {
             case EProjectInvariants.Period:
-                const startDate = format(new Date(project.date_from), FORMAT_DATE);
-                const endDate = format(new Date(project.date_to), FORMAT_DATE);
+                if(project.date_from !== undefined && project.date_to !== undefined) {
+                    const startDate = format(new Date(project.date_from), FORMAT_DATE);
+                    const endDate = format(new Date(project.date_to), FORMAT_DATE);
 
-                content = <React.Fragment>{startDate}&nbsp;&mdash; {endDate}</React.Fragment>;
+                    content = <React.Fragment>{startDate}&nbsp;&mdash; {endDate}</React.Fragment>;
+                }
                 break;
             case EProjectInvariants.Description:
                 content = project?.description;

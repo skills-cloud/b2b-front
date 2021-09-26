@@ -1,4 +1,4 @@
-import React, { ReactNode, useState, useRef } from 'react';
+import React, { ReactNode, useState, useRef, useEffect } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
@@ -13,44 +13,56 @@ export interface IItem {
 
 export interface IProps {
     className?: string | IStyle,
-    align?: 'top' | 'bottom' | 'right' | 'left',
+    align?: 'bottom',
+    render: ({ onClose }: {onClose: () => void}) => ReactNode,
     children: ReactNode,
-    activatorElement: ReactNode,
     onOutsideClick?: () => void
 }
 
-const Dropdown = ({ children, className, align = 'bottom', activatorElement, onOutsideClick }: IProps) => {
+const Dropdown = ({ render, className, align = 'bottom', children, onOutsideClick }: IProps) => {
     const cn = useClassnames(style, className, true);
-    const [open, setOpen] = useState<boolean>();
-    const styles: {top?: string, bottom?: string} = {};
+    const activatorRef = useRef<HTMLDivElement>(null);
+    const [visible, setVisible] = useState<boolean>();
+    const [styles, setStyles] = useState<{top?: number}>({});
 
-    switch (align) {
-        case 'top':
-            styles.bottom = '0';
-            break;
-        case 'bottom':
-            styles.top = '0';
-            break;
-    }
+    useEffect(() => {
+        if(visible && activatorRef.current) {
+            switch (align) {
+                case 'bottom':
+                    setStyles({
+                        top: activatorRef.current.clientHeight
+                    });
+                    break;
+            }
+        }
+    }, [visible, align]);
 
 
     return (
         <OutsideClickHandler onOutsideClick={() => {
-            setOpen(false);
+            setVisible(false);
             onOutsideClick?.();
         }}
         >
             <div className={cn('dropdown')}>
                 <div
-                    className={cn('dropdown__activator')} onClick={() => {
-                        setOpen(!open);
+                    ref={activatorRef}
+                    className={cn('dropdown__activator')} onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        setVisible(!visible);
                     }}
                 >
-                    {activatorElement}
+                    {children}
                 </div>
-                {open && (
-                    <div className={cn('dropdown__content')} style={styles}>
-                        {children}
+                {visible && (
+                    <div
+                        className={cn('dropdown__content')} style={styles} onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }}
+                    >
+                        {render({ onClose: () => setVisible(false) })}
                     </div>
                 )}
             </div>

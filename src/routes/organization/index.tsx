@@ -28,9 +28,6 @@ const ProjectRequest = () => {
     const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.id });
     const { data: projectList } = mainRequest.useGetMainOrganizationProjectListQuery({ organization_id: params.id });
 
-    console.log(projectList);
-    console.log(data);
-
     if(!data) {
         return null;
     }

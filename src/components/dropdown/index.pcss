@@ -33,3 +33,33 @@
         }
     }
 }
+
+.dropdown-menu {
+    padding: 0 4px;
+}
+
+.dropdown-menu-item {
+    padding: 7px 12px;
+    display: inline-block;
+    width: 100%;
+    border-radius: 2px;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.14;
+    color: var(--color-text-dark);
+    cursor: pointer;
+    box-sizing: border-box;
+    white-space: nowrap;
+
+    @media (hover: hover) and (pointer: fine) {
+
+        &:hover {
+            background: var(--color-gray-20);
+            cursor: pointer;
+        }
+    }
+}
+
+.dropdown-menu-item_selected {
+    background: var(--color-gray-20);
+}

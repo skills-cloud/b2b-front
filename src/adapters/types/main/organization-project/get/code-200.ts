@@ -25,6 +25,12 @@ export interface OrganizationProjectRead {
     organization: Organization;
     organization_id: OrganizationId;
     updated_at?: NoName6;
+    date_from?: string;
+    date_to?: string;
+    industry_sector?: {
+        name: string
+    };
+    requests_count: number;
 }
 export interface Organization {
     description?: NoName3;

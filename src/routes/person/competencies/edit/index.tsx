@@ -357,7 +357,7 @@ export const CompetenciesEdit = (props: IProps) => {
                         <CheckboxTree
                             onSetChecked={setChecked}
                             competencies={checked}
-                            onClickExperience={onClickSetExperience}
+                            onChangeExperience={onClickSetExperience}
                         />
                         {elError}
                     </Fragment>
