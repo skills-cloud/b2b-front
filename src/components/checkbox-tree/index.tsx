@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
@@ -8,6 +8,9 @@ import ReactCheckboxTree, { Node } from 'react-checkbox-tree';
 import IconChevronDown from 'component/icons/chevron-down';
 import IconChevronRight from 'component/icons/chevron-right';
 import Input from 'component/form/input';
+import Dropdown from 'component/dropdown/base';
+import DropdownMenuItem from 'component/dropdown/menu-item';
+import DropdownMenu from 'component/dropdown/menu';
 
 import { CompetenceTree } from 'adapter/types/dictionary/competence-tree/get/code-200';
 import { dictionary } from 'adapter/api/dictionary';
@@ -19,11 +22,16 @@ interface ICompetenceMap {
     [key: number]: CompetenceTree
 }
 
+type TOnChangeExperience = (id: string, expirienceId: number) => void;
+type TCompetenceExpirienceMap = Record<string, number>;
+
+
 export interface IProps {
     className?: string | IStyle,
     competencies: Array<string>,
-    onClickExperience?(id: string): void,
-    onSetChecked?(checked: Array<string>): void
+    onChangeExperience?: TOnChangeExperience,
+    onSetChecked?(checked: Array<string>): void,
+    competenceExpirienceMap?: TCompetenceExpirienceMap
 }
 
 const walkTree = (items: Array<CompetenceTree>, callback: (model: CompetenceTree) => void) => {
@@ -54,6 +62,47 @@ const getRootNode = (
     }
 
     return model;
+};
+
+const experienceYears = [1, 3, 5, 100];
+
+interface IExperienceSelector {
+    id: string,
+    onChangeExperience: TOnChangeExperience,
+    competenceExpirienceMap: TCompetenceExpirienceMap
+}
+
+const ExperienceSelector = ({ id, onChangeExperience, competenceExpirienceMap }: IExperienceSelector) => {
+    const { t } = useTranslation();
+    const cn = useClassnames(style);
+
+    return (
+        <Dropdown
+            render={({ onClose }) => (
+                <DropdownMenu>
+                    {experienceYears.map((item) => (
+                        <DropdownMenuItem
+                            key={item}
+                            selected={competenceExpirienceMap[id] === item}
+                            onClick={() => {
+                                onChangeExperience(id, item);
+                                onClose();
+                            }}
+                        >
+                            {t('components.checkbox-tree.experience.invariant', { context: item })}
+                        </DropdownMenuItem>
+                    ))}
+                </DropdownMenu>
+            )}
+        >
+            <span className={cn('checkbox-tree__set-experience')}>
+                {id in competenceExpirienceMap ? t(
+                    'components.checkbox-tree.experience.invariant',
+                    { context: competenceExpirienceMap[id] }
+                ) : t('components.checkbox-tree.experience.title')}
+            </span>
+        </Dropdown>
+    );
 };
 
 const CheckboxTree = (props: IProps) => {
@@ -94,21 +143,20 @@ const CheckboxTree = (props: IProps) => {
         }
     }, [searchString]);
 
-    const onClickExperience = (id: string) => (e: MouseEvent<HTMLSpanElement>) => {
-        e.stopPropagation();
-        e.preventDefault();
-
-        props.onClickExperience?.(id);
-    };
-
     const elCheckboxLabel = (children: string, id: string, showExperience: boolean) => {
+        if(!props?.onChangeExperience) {
+            return null;
+        }
+
         return (
             <span className={cn('checkbox-tree__label')}>
                 <span>{children}</span>
                 {showExperience && (
-                    <span className={cn('checkbox-tree__set-experience')} onClick={onClickExperience(id)}>
-                        {t('components.checkbox-tree.experience')}
-                    </span>
+                    <ExperienceSelector
+                        id={id}
+                        onChangeExperience={props?.onChangeExperience}
+                        competenceExpirienceMap={props.competenceExpirienceMap || {}}
+                    />
                 )}
             </span>
         );
@@ -122,7 +170,7 @@ const CheckboxTree = (props: IProps) => {
                 mapCompetence[id] = item;
             }
 
-            const label = elCheckboxLabel(name, String(id),children.length === 0);
+            const label = elCheckboxLabel(name, String(id), children.length === 0);
 
             return {
                 value       : String(id),
