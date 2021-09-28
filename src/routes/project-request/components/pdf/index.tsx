@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { IStyle, useClassnames } from 'hook/use-classnames';
 
-import Button from 'component/button';
-
 import { mainRequest } from 'adapter/api/main';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -175,10 +173,8 @@ const ProjectRequestPdf = (props: IProps) => {
     }, []);
 
     return (
-        <div className={cn('pdf')}>
-            <Button className={cn('pdf__button')} onClick={onPrint}>
-                Скачать pdf
-            </Button>
+        <div className={cn('pdf')} onClick={onPrint}>
+            {t('components.pdf.download')}
         </div>
     );
 };

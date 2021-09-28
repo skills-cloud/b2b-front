@@ -3,22 +3,22 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { useHistory, useParams } from 'react-router';
 
+import { useClassnames } from 'hook/use-classnames';
+
 import SidebarLayout from 'component/layout/sidebar';
 import Section from 'component/section';
 import IconArrowLeftFull from 'component/icons/arrow-left-full';
-
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import MainInfo from 'route/project-request/components/main-info';
 import Requirements from 'route/project-request/components/requirements';
 import Customer from 'route/project-request/components/customer';
 import ProjectRequestPdf from 'route/project-request/components/pdf';
+import ProjectRequestDocx from 'route/project-request/components/docx';
 
 import { mainRequest } from 'adapter/api/main';
-
-import { useClassnames } from 'hook/use-classnames';
-
 import Specialists from './specialists';
 import style from './index.module.pcss';
+import Header, { H4 } from 'component/header';
 
 const ProjectRequest = () => {
     const cn = useClassnames(style);
@@ -34,11 +34,11 @@ const ProjectRequest = () => {
     const elSpecialists = () => {
         return (
             <li
-                className={cn('nav__item', {
-                    'nav__item_selected': hash.slice(1) === 'applicant'
+                className={cn('project-request__item', {
+                    'project-request__item_selected': hash.slice(1) === 'applicant'
                 })}
             >
-                <Link to={`/project-request/${params.id}/specialists/#all`} className={cn('nav__item-link')}>
+                <Link to={`/project-request/${params.id}/specialists/#all`} className={cn('project-request__item-link')}>
                     {t('routes.project-request.blocks.sections.applicant')}
                 </Link>
             </li>
@@ -69,13 +69,13 @@ const ProjectRequest = () => {
 
     const elDocuments = () => {
         return (
-            <li
-                className={cn('nav__item', 'nav__item_no-padding', {
-                    'nav__item_selected': hash.slice(1) === 'applicant'
-                })}
+            <div
+                className={cn('project-request__documents')}
             >
+                <H4>{t('routes.project-request.sidebar.documents')}</H4>
                 <ProjectRequestPdf />
-            </li>
+                <ProjectRequestDocx />
+            </div>
         );
     };
 
@@ -84,18 +84,17 @@ const ProjectRequest = () => {
             <Fragment>
                 {Object.values(ESectionInvariants).map((nav) => (
                     <li
-                        className={cn('nav__item', {
-                            'nav__item_selected': nav === hash.slice(1)
+                        className={cn('project-request__item', {
+                            'project-request__item_selected': nav === hash.slice(1)
                         })}
                         key={nav}
                     >
-                        <a href={`#${nav}`} className={cn('nav__item-link')}>
+                        <a href={`#${nav}`} className={cn('project-request__item-link')}>
                             {t(`routes.project-request.blocks.sections.${nav}`)}
                         </a>
                     </li>
                 ))}
                 {elSpecialists()}
-                {elDocuments()}
             </Fragment>
         );
 
@@ -103,22 +102,22 @@ const ProjectRequest = () => {
             content = (
                 <Fragment>
                     <li
-                        className={cn('nav__item', {
-                            'nav__item_selected': hash.slice(1) === 'all'
+                        className={cn('project-request__item', {
+                            'project-request__item_selected': hash.slice(1) === 'all'
                         })}
                     >
-                        <a href="#all" className={cn('nav__item-link')}>
+                        <a href="#all" className={cn('project-request__item-link')}>
                             {t('routes.project-request.blocks.specialists-sections.all')}
                         </a>
                     </li>
                     {data?.requirements?.map((req) => (
                         <li
-                            className={cn('nav__item', {
-                                'nav__item_selected': String(req.id) === hash.slice(1)
+                            className={cn('project-request__item', {
+                                'project-request__item_selected': String(req.id) === hash.slice(1)
                             })}
                             key={req.id}
                         >
-                            <a href={`#${req.id}`} className={cn('nav__item-link')}>
+                            <a href={`#${req.id}`} className={cn('project-request__item-link')}>
                                 {req.name}
                             </a>
                         </li>
@@ -128,25 +127,30 @@ const ProjectRequest = () => {
         }
 
         return (
-            <Section withoutPaddings={true}>
-                <nav className={cn('nav')}>
-                    {params.subpage === 'specialists' && (
-                        <div className={cn('nav__header')}>
-                            <IconArrowLeftFull svg={{ className: cn('nav__icon-back'), onClick: onClickBack }} />
-                            {data?.project?.name}
-                        </div>
-                    )}
-                    <ul className={cn('nav__list')}>
-                        {content}
-                    </ul>
-                </nav>
-            </Section>
+            <div className={cn('project-request__sidebar')}>
+                <Section withoutPaddings={true}>
+                    <nav className={cn('project-request__nav')}>
+                        {params.subpage === 'specialists' && (
+                            <div className={cn('project-request__header')}>
+                                <IconArrowLeftFull svg={{ className: cn('project-request__icon-back'), onClick: onClickBack }} />
+                                {data?.project?.name}
+                            </div>
+                        )}
+                        <ul className={cn('project-request__list')}>
+                            {content}
+                        </ul>
+                    </nav>
+                </Section>
+                <Section>
+                    {elDocuments()}
+                </Section>
+            </div>
         );
     };
 
     return (
         <SidebarLayout sidebar={elSidebarContent()}>
-            <div className={cn('sections')} >
+            <div className={cn('project-request__content')}>
                 {elContent()}
             </div>
         </SidebarLayout>

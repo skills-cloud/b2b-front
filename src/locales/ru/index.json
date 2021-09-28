@@ -48,7 +48,11 @@
                 "rate": "Ставка",
                 "position_default": "{{position}} ({{count}} чел.)",
                 "position_empty": "Позиция не указана"
-            }
+            },
+            "download": "Скачать pdf"
+        },
+        "docx": {
+            "download": "Скачать docx"
         }
     },
     "routes": {
@@ -706,6 +710,9 @@
                     "date_from": "Начало проекта",
                     "date_to": "Окончание проекта"
                 }
+            },
+            "sidebar": {
+                "documents": "Документы"
             }
         }
     },

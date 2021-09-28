@@ -18,6 +18,7 @@
     },
     "devDependencies": {
         "@hookform/devtools": "3.x.x",
+        "@types/file-saver": "2.x.x",
         "@types/js-cookie": "2.x.x",
         "@types/lodash.debounce": "4.x.x",
         "@types/node": "14.x.x",
@@ -61,6 +62,8 @@
         "@reduxjs/toolkit": "1.x.x",
         "axios": "0.x.x",
         "classnames": "2.x.x",
+        "docx": "6.x.x",
+        "file-saver": "2.x.x",
         "history": "4.x.x",
         "i18next": "20.x.x",
         "i18next-xhr-backend": "3.x.x",
