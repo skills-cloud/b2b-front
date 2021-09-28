@@ -31,6 +31,10 @@ export interface OrganizationProjectRead {
         name: string
     };
     requests_count: number;
+    manager?: {
+        last_name: string,
+        first_name: string
+    }
 }
 export interface Organization {
     description?: NoName3;

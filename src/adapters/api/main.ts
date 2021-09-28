@@ -14,6 +14,10 @@ interface IBaseGetById {
     id: string
 }
 
+interface IRequestParams {
+    organization_project_id: string
+}
+
 interface IQueryParams {
     ordering?: Array<string>,
     search?: string,
@@ -44,6 +48,13 @@ interface IResponseGetOrganization {
     next: string,
     previous: string,
     results: Array<Organization>
+}
+
+interface IResponseRequestList {
+    count: number,
+    next: string,
+    previous: string,
+    results: Array<RequestRead>
 }
 
 interface IResponseGetMainProject {
@@ -221,6 +232,21 @@ export const mainRequest = createApi({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization-project/',
+                method: 'GET',
+                params
+            })
+        }),
+        getMainOrganizationProjectById: build.query<OrganizationProjectRead, IBaseGetById>({
+            providesTags: ['main'],
+            query       : ({ id }) => ({
+                url   : `/organization-project/${id}`,
+                method: 'GET'
+            })
+        }),
+        getMainRequest: build.query<IResponseRequestList, IRequestParams>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/request/',
                 method: 'GET',
                 params
             })

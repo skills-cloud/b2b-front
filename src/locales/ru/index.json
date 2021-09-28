@@ -89,6 +89,18 @@
                 }
             }
         },
+        "organization-projects": {
+            "blocks": {
+                "sections": {
+                    "requests": "Проектные запросы",
+                    "main-info":"Основная информация",
+                    "timesheet": "Таймшиты"
+                },
+                "customer": "Заказчик",
+                "manager": "РП",
+                "timeframe": "Таймфрейм"
+            }
+        },
         "person": {
             "add-specialist": "Добавить в проект",
             "links": {

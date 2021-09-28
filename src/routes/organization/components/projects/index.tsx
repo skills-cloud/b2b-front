@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
+import { useParams } from 'react-router';
 
 import Section from 'component/section';
 import IconChevronRight from 'component/icons/chevron-right';
@@ -10,6 +10,7 @@ import SectionContentList from 'component/section/content-list';
 import SectionContentListItem from 'component/section/content-list-item';
 import { H3 } from 'component/header';
 import Separator from 'component/separator';
+import Timeframe from 'component/timeframe';
 
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
 import { useClassnames } from 'hook/use-classnames';
@@ -23,23 +24,17 @@ enum EProjectInvariants {
     Request = 'request'
 }
 
-const FORMAT_DATE = 'dd.MM.yyyy';
-
 const ProjectList = ({ list }: { list: Array<OrganizationProjectRead>}) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
+    const { id } = useParams<{ id: string }>();
 
     const renderField = (field: EProjectInvariants, project: OrganizationProjectRead) => {
         let content = null;
 
         switch (field) {
             case EProjectInvariants.Period:
-                if(project.date_from !== undefined && project.date_to !== undefined) {
-                    const startDate = format(new Date(project.date_from), FORMAT_DATE);
-                    const endDate = format(new Date(project.date_to), FORMAT_DATE);
-
-                    content = <React.Fragment>{startDate}&nbsp;&mdash; {endDate}</React.Fragment>;
-                }
+                content = <Timeframe startDate={project.date_from} endDate={project.date_to} />;
                 break;
             case EProjectInvariants.Description:
                 content = project?.description;
@@ -70,7 +65,7 @@ const ProjectList = ({ list }: { list: Array<OrganizationProjectRead>}) => {
                     <SectionContentList>
                         <div className={cn('project-header')}>
                             <H3>{item?.name}</H3>
-                            <Link to={`/organization/project/${item.id}`}>
+                            <Link to={`/organization/${id}/project/${item.id}`}>
                                 <IconChevronRight />
                             </Link>
                         </div>

@@ -13,6 +13,7 @@ import ProjectRequest from './project-request';
 import NotFound from 'route/not-found';
 import ProjectRequestList from 'route/project-request/list';
 import Organization from 'route/organization';
+import OrganizationProjects from 'route/organization-projects';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -24,8 +25,14 @@ export const baseRoutes: Array<IProps> = [{
     isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : ['/organization/:id'],
+    path     : '/organization/:id',
     component: Organization
+}, {
+    isPublic : true,
+    exact    : true,
+    layout   : Layout,
+    path     : '/organization/:organizationId/project/:projectId',
+    component: OrganizationProjects
 }, {
     isPublic : true,
     exact    : true,
