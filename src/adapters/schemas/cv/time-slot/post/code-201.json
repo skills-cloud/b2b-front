@@ -10,16 +10,22 @@
                 "city_id": {
                     "nullable": true,
                     "title": "City id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/city/$id/",
+                    "x-url-object-list": "/api/dictionary/city/"
                 },
                 "country_id": {
                     "nullable": true,
                     "title": "Country id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/country/$id/",
+                    "x-url-object-list": "/api/dictionary/country/"
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "date_from": {
                     "format": "date",
@@ -54,7 +60,9 @@
                 },
                 "type_of_employment_id": {
                     "title": "Type of employment id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/type-of-employment/$id/",
+                    "x-url-object-list": "/api/dictionary/type-of-employment/"
                 }
             },
             "required": [

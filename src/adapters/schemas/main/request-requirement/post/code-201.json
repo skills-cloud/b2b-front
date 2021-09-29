@@ -44,11 +44,15 @@
                 "position_id": {
                     "nullable": true,
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
                 },
                 "request_id": {
                     "title": "Request id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request/$id/",
+                    "x-url-object-list": "/api/main/request/"
                 },
                 "sorting": {
                     "maximum": 2147483647,
@@ -59,7 +63,9 @@
                 "type_of_employment_id": {
                     "nullable": true,
                     "title": "Type of employment id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/type-of-employment/$id/",
+                    "x-url-object-list": "/api/dictionary/type-of-employment/"
                 },
                 "work_location_address": {
                     "maxLength": 1000,
@@ -70,7 +76,9 @@
                 "work_location_city_id": {
                     "nullable": true,
                     "title": "Work location city id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/city/$id/",
+                    "x-url-object-list": "/api/dictionary/city/"
                 }
             },
             "required": [

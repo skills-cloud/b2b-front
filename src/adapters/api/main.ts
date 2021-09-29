@@ -9,6 +9,7 @@ import { RequestType as RequestTypeById } from 'adapter/types/main/request-type/
 import { RequestRequirementRead, RequestRequirementCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
+import { OrganizationProjectCardItemReadTree } from 'adapter/types/main/organization-project-card-item/get/code-200';
 
 interface IBaseGetById {
     id: string
@@ -232,6 +233,14 @@ export const mainRequest = createApi({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization-project/',
+                method: 'GET',
+                params
+            })
+        }),
+        getOrganizationProjectCardItem: build.query<OrganizationProjectCardItemReadTree, undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/organization-project-card-item​/',
                 method: 'GET',
                 params
             })

@@ -7,11 +7,6 @@
     "definitions": {
         "Request": {
             "properties": {
-                "customer_id": {
-                    "description": "организации отмеченные как заказчики<br>`/api/main/organization/?is_customer=true`",
-                    "title": "Customer id",
-                    "type": "integer"
-                },
                 "deadline_date": {
                     "format": "date",
                     "nullable": true,
@@ -30,8 +25,23 @@
                 },
                 "industry_sector_id": {
                     "nullable": true,
-                    "title": "Industry sector id",
-                    "type": "integer"
+                    "title": "отрасль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "organization_project_id": {
+                    "title": "проект заказчика",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-project/$id/",
+                    "x-url-object-list": "/api/main/organization-project/"
                 },
                 "priority": {
                     "enum": [
@@ -43,19 +53,26 @@
                     "type": "integer"
                 },
                 "project_id": {
+                    "description": "На текущий момент не используется.<br>Надо задавать связку с проектом заказчика",
                     "nullable": true,
-                    "title": "Project id",
-                    "type": "integer"
+                    "title": "внутренний проект",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/project/$id/",
+                    "x-url-object-list": "/api/main/project/"
                 },
                 "recruiter_id": {
                     "nullable": true,
-                    "title": "Recruiter id",
-                    "type": "integer"
+                    "title": "отв. рекрутер",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
                 },
                 "resource_manager_id": {
                     "nullable": true,
-                    "title": "Resource manager id",
-                    "type": "integer"
+                    "title": "рес. менеджер",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
                 },
                 "start_date": {
                     "format": "date",
@@ -75,12 +92,14 @@
                 },
                 "type_id": {
                     "nullable": true,
-                    "title": "Type id",
-                    "type": "integer"
+                    "title": "тип запроса",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request-type/$id/",
+                    "x-url-object-list": "/api/main/request-type/"
                 }
             },
             "required": [
-                "customer_id"
+                "organization_project_id"
             ],
             "type": "object"
         }
