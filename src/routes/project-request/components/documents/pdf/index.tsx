@@ -3,23 +3,16 @@ import { useParams } from 'react-router';
 import { jsPDF } from 'jspdf';
 import { useTranslation } from 'react-i18next';
 
-import { IStyle, useClassnames } from 'hook/use-classnames';
-
 import { mainRequest } from 'adapter/api/main';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { callAddFont } from './font.ts';
-import style from './index.module.pcss';
-
-export interface IProps {
-    className?: IStyle | string
-}
+import Base from '../index';
 
 jsPDF.API.events.push(['addFonts', callAddFont]);
 
-const ProjectRequestPdf = (props: IProps) => {
-    const cn = useClassnames(style, props.className, true);
+const ProjectRequestPdf = () => {
     const { t } = useTranslation();
 
     const params = useParams<{ subpage?: string, id: string }>();
@@ -173,9 +166,9 @@ const ProjectRequestPdf = (props: IProps) => {
     }, []);
 
     return (
-        <div className={cn('pdf')} onClick={onPrint}>
+        <Base onClick={onPrint}>
             {t('components.pdf.download')}
-        </div>
+        </Base>
     );
 };
 

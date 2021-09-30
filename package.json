@@ -68,7 +68,7 @@
         "i18next": "20.x.x",
         "i18next-xhr-backend": "3.x.x",
         "js-cookie": "2.x.x",
-        "jspdf": "^2.3.1",
+        "jspdf": "2.x.x",
         "lodash.debounce": "4.x.x",
         "moment": "2.x.x",
         "query-string": "7.x.x",
@@ -87,6 +87,7 @@
         "react-select": "4.x.x",
         "redux": "4.x.x",
         "redux-logger": "3.x.x",
-        "uuid": "8.x.x"
+        "uuid": "8.x.x",
+        "xlsx": "0.x.x"
     }
 }

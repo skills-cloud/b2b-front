@@ -4,20 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { Packer } from 'docx';
 import { saveAs } from 'file-saver';
 
-import { IStyle, useClassnames } from 'hook/use-classnames';
 
 import { mainRequest } from 'adapter/api/main';
 
+import Base from '../index';
 import DocumentCreator from './docx';
-import style from './index.module.pcss';
 
-
-export interface IProps {
-    className?: IStyle | string
-}
-
-const ProjectRequestDocx = (props: IProps) => {
-    const cn = useClassnames(style, props.className, true);
+const ProjectRequestDocx = () => {
     const { t } = useTranslation();
 
     const params = useParams<{ subpage?: string, id: string }>();
@@ -42,9 +35,9 @@ const ProjectRequestDocx = (props: IProps) => {
     }, []);
 
     return (
-        <div className={cn('docx')} onClick={onPrint}>
+        <Base onClick={onPrint}>
             {t('components.docx.download')}
-        </div>
+        </Base>
     );
 };
 

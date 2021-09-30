@@ -53,6 +53,9 @@
         },
         "docx": {
             "download": "Скачать docx"
+        },
+        "xlsx": {
+            "download": "Скачать xlsx"
         }
     },
     "routes": {
