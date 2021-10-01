@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useHistory, useParams } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
@@ -8,6 +8,8 @@ import { useClassnames } from 'hook/use-classnames';
 import SidebarLayout from 'component/layout/sidebar';
 import Section from 'component/section';
 import IconArrowLeftFull from 'component/icons/arrow-left-full';
+import SidebarNav, { NavItem } from 'component/nav';
+
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import MainInfo from 'route/project-request/components/main-info';
 import Requirements from 'route/project-request/components/requirements';
@@ -31,20 +33,6 @@ const ProjectRequest = () => {
         { id: params.id },
         { refetchOnMountOrArgChange: true }
     );
-
-    const elSpecialists = () => {
-        return (
-            <li
-                className={cn('project-request__item', {
-                    'project-request__item_selected': hash.slice(1) === 'applicant'
-                })}
-            >
-                <Link to={`/project-request/${params.id}/specialists/#all`} className={cn('project-request__item-link')}>
-                    {t('routes.project-request.blocks.sections.applicant')}
-                </Link>
-            </li>
-        );
-    };
 
     const onClickBack = () => {
         history.push(`/project-request/${params.id}#main-info`);
@@ -85,63 +73,67 @@ const ProjectRequest = () => {
         let content = (
             <Fragment>
                 {Object.values(ESectionInvariants).map((nav) => (
-                    <li
-                        className={cn('project-request__item', {
-                            'project-request__item_selected': nav === hash.slice(1)
-                        })}
+                    <NavItem
+                        to={`#${nav}`}
+                        selected={nav === hash.slice(1)}
                         key={nav}
                     >
-                        <a href={`#${nav}`} className={cn('project-request__item-link')}>
-                            {t(`routes.project-request.blocks.sections.${nav}`)}
-                        </a>
-                    </li>
+                        {t(`routes.project-request.blocks.sections.${nav}`)}
+                    </NavItem>
                 ))}
-                {elSpecialists()}
+                <NavItem
+                    to={`/project-request/${params.id}/specialists/#all`}
+                    selected={hash.slice(1) === 'applicant'}
+                >
+                    {t('routes.project-request.blocks.sections.applicant')}
+                </NavItem>
+                <NavItem
+                    to={`/project-request/${params.id}/specialists/#all`}
+                    selected={hash.slice(1) === 'applicant'}
+                >
+                    {t('routes.project-request.blocks.sections.applicant')}
+                </NavItem>
+                {elDocuments()}
             </Fragment>
         );
 
         if(params.subpage === 'specialists') {
             content = (
                 <Fragment>
-                    <li
-                        className={cn('project-request__item', {
-                            'project-request__item_selected': hash.slice(1) === 'all'
-                        })}
+                    <NavItem
+                        to="#all" selected={hash.slice(1) === 'all'}
                     >
-                        <a href="#all" className={cn('project-request__item-link')}>
-                            {t('routes.project-request.blocks.specialists-sections.all')}
-                        </a>
-                    </li>
+                        {t('routes.project-request.blocks.specialists-sections.all')}
+                    </NavItem>
                     {data?.requirements?.map((req) => (
-                        <li
-                            className={cn('project-request__item', {
-                                'project-request__item_selected': String(req.id) === hash.slice(1)
-                            })}
+                        <NavItem
+                            to={`#${req.id}`}
+                            selected={String(req.id) === hash.slice(1)}
                             key={req.id}
                         >
-                            <a href={`#${req.id}`} className={cn('project-request__item-link')}>
-                                {req.name}
-                            </a>
-                        </li>
+                            {req.name}
+                        </NavItem>
                     ))}
                 </Fragment>
             );
         }
 
+        const header = params.subpage === 'specialists' && (
+            <div className={cn('nav__header')}>
+                <IconArrowLeftFull svg={{ className: cn('nav__icon-back'), onClick: onClickBack }} />
+                {data?.project?.name}
+            </div>
+        );
+
         return (
             <div className={cn('project-request__sidebar')}>
                 <Section withoutPaddings={true}>
-                    <nav className={cn('project-request__nav')}>
-                        {params.subpage === 'specialists' && (
-                            <div className={cn('project-request__header')}>
-                                <IconArrowLeftFull svg={{ className: cn('project-request__icon-back'), onClick: onClickBack }} />
-                                {data?.project?.name}
-                            </div>
-                        )}
-                        <ul className={cn('project-request__list')}>
-                            {content}
-                        </ul>
-                    </nav>
+                    <SidebarNav
+                        header={header}
+                        footer={<ProjectRequestPdf />}
+                    >
+                        {content}
+                    </SidebarNav>
                 </Section>
                 <Section>
                     {elDocuments()}

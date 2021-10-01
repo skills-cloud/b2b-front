@@ -25,7 +25,14 @@
         },
         "checkbox-tree": {
             "search": "Поиск",
-            "experience": "Указать опыт"
+            "experience": {
+                "title": "Указать опыт",
+                "invariant": "Опыт не\u00A0указан",
+                "invariant_1": "Менее года",
+                "invariant_3": "1-3 года",
+                "invariant_5": "3-5 лет",
+                "invariant_100": "Более 5 лет"
+            }
         },
         "pdf": {
             "project": {
@@ -73,6 +80,33 @@
         },
         "main": {
             "hello": "SkillCloud"
+        },
+        "organization": {
+            "blocks": {
+                "sections": {
+                    "main-info":"Основная информация",
+                    "projects": "Проекты",
+                    "cards": "Карточки прав и доступа"
+                },
+                "project": {
+                    "period": "Период",
+                    "industry": "Отрасль",
+                    "description": "Описание",
+                    "request": "Запросы"
+                }
+            }
+        },
+        "organization-projects": {
+            "blocks": {
+                "sections": {
+                    "requests": "Проектные запросы",
+                    "main-info":"Основная информация",
+                    "timesheet": "Таймшиты"
+                },
+                "customer": "Заказчик",
+                "manager": "РП",
+                "timeframe": "Таймфрейм"
+            }
         },
         "person": {
             "add-specialist": "Добавить в проект",

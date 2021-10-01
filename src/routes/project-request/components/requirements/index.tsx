@@ -164,7 +164,10 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                         {competencies.map(({ competence, id:competenceId, experience_years: experienceYears }) => (
                                             <Tooltip
                                                 key={competenceId}
-                                                content={getExperienceTrl(experienceYears)}
+                                                content={t(
+                                                    'components.checkbox-tree.experience.invariant',
+                                                    { context: experienceYears }
+                                                )}
                                                 theme="dark"
                                             >
                                                 <div className={cn('skills-tag')} key={competenceId}>

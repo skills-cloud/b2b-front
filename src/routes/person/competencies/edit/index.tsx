@@ -7,7 +7,6 @@ import useClassnames, { IStyle } from 'hook/use-classnames';
 import Button from 'component/button';
 import Modal from 'component/modal';
 import Tooltip from 'component/tooltip';
-import IconDots from 'component/icons/dots';
 import IconArrowLeft from 'component/icons/arrow-left-full';
 import Error from 'component/error';
 import InputDictionary from 'component/form/input-dictionary';
@@ -358,7 +357,7 @@ export const CompetenciesEdit = (props: IProps) => {
                         <CheckboxTree
                             onSetChecked={setChecked}
                             competencies={checked}
-                            onClickExperience={onClickSetExperience}
+                            onChangeExperience={onClickSetExperience}
                         />
                         {elError}
                     </Fragment>

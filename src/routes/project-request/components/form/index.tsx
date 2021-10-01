@@ -160,7 +160,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
     }) => {
         const postData = {
             ...data,
-            ...period
+            ...period[0]
         };
 
         if(industry_sector) {
