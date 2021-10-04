@@ -6,33 +6,35 @@
  */
 
 export type Code201 = Request;
-/**
- * организации отмеченные как заказчики<br>`/api/main/organization/?is_customer=true`
- */
-export type CustomerId = number;
 export type NoName = string;
 export type NoName1 = string;
 export type ID = number;
-export type IndustrySectorId = number;
-export type NoName2 = 10 | 20 | 30;
-export type ProjectId = number;
-export type RecruiterId = number;
-export type ResourceManagerId = number;
-export type NoName3 = string;
-export type NoName4 = 'closed' | 'done' | 'draft' | 'in_progress';
-export type TypeId = number;
+export type NoName2 = number;
+export type NoName3 = number;
+export type NoName4 = number;
+export type NoName5 = 10 | 20 | 30;
+/**
+ * На текущий момент не используется.<br>Надо задавать связку с проектом заказчика
+ */
+export type NoName6 = number;
+export type NoName7 = number;
+export type NoName8 = number;
+export type NoName9 = string;
+export type NoName10 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName11 = number;
 
 export interface Request {
-    customer_id: CustomerId;
     deadline_date?: NoName;
     description?: NoName1;
     id?: ID;
-    industry_sector_id?: IndustrySectorId;
-    priority?: NoName2;
-    project_id?: ProjectId;
-    recruiter_id?: RecruiterId;
-    resource_manager_id?: ResourceManagerId;
-    start_date?: NoName3;
-    status?: NoName4;
-    type_id?: TypeId;
+    industry_sector_id?: NoName2;
+    manager_id?: NoName3;
+    organization_project_id: NoName4;
+    priority?: NoName5;
+    project_id?: NoName6;
+    recruiter_id?: NoName7;
+    resource_manager_id?: NoName8;
+    start_date?: NoName9;
+    status?: NoName10;
+    type_id?: NoName11;
 }

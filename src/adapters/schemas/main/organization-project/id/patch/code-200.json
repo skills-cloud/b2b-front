@@ -13,6 +13,18 @@
                     "title": "Создано",
                     "type": "string"
                 },
+                "date_from": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата с",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата по",
+                    "type": "string"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -23,6 +35,20 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "industry_sector_id": {
+                    "nullable": true,
+                    "title": "отрасль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
@@ -30,8 +56,32 @@
                     "type": "string"
                 },
                 "organization_id": {
-                    "title": "Organization id",
-                    "type": "integer"
+                    "title": "организация",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
+                },
+                "recruiters_ids": {
+                    "items": {
+                        "nullable": true,
+                        "title": "рекрутеры",
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "resource_managers_ids": {
+                    "items": {
+                        "nullable": true,
+                        "title": "ресурсные менеджеры",
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
                 },
                 "updated_at": {
                     "format": "date-time",

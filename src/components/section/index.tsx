@@ -15,14 +15,14 @@ const Section = ({ title, children, withoutPaddings = false, className }: ISecti
     const cn = useClassnames(style, className, true);
 
     return (
-        <div
+        <section
             className={cn('section', {
                 'section_without-paddings': withoutPaddings
             })}
         >
             {title && <Header>{title}</Header>}
             {children}
-        </div>
+        </section>
     );
 };
 

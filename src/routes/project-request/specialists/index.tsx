@@ -27,7 +27,11 @@ export const Specialists = () => {
     useEffect(() => {
         const reqsList = data?.requirements?.reduce((acc, current) => {
             if(current.cv_list) {
-                acc.push(...current.cv_list);
+                current.cv_list.forEach((cv) => {
+                    if(!acc.find((item) => item.id === cv.id)) {
+                        acc.push(cv);
+                    }
+                });
             }
 
             return acc;

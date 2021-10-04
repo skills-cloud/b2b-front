@@ -35,10 +35,16 @@ export type NoName14 = string;
 export type PositionId = number;
 export type NoName15 = string;
 export type NoName16 = string;
-export type ID5 = number;
 export type NoName17 = string;
-export type OrganizationId1 = number;
 export type NoName18 = string;
+export type ID5 = number;
+export type NoName19 = number;
+export type NoName20 = number;
+export type NoName21 = string;
+export type NoName22 = number;
+export type NoName23 = number;
+export type NoName24 = number;
+export type NoName25 = string;
 
 export interface CvCareerRead {
     competencies?: CompetenceInline[];
@@ -86,9 +92,15 @@ export interface Position {
 }
 export interface OrganizationProject {
     created_at?: NoName15;
-    description?: NoName16;
+    date_from?: NoName16;
+    date_to?: NoName17;
+    description?: NoName18;
     id?: ID5;
-    name: NoName17;
-    organization_id: OrganizationId1;
-    updated_at?: NoName18;
+    industry_sector_id?: NoName19;
+    manager_id?: NoName20;
+    name: NoName21;
+    organization_id: NoName22;
+    recruiters_ids?: NoName23[];
+    resource_managers_ids?: NoName24[];
+    updated_at?: NoName25;
 }

@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useHistory, useParams } from 'react-router';
 
+import { useClassnames } from 'hook/use-classnames';
+
 import SidebarLayout from 'component/layout/sidebar';
 import Section from 'component/section';
 import IconArrowLeftFull from 'component/icons/arrow-left-full';
@@ -12,11 +14,13 @@ import ESectionInvariants from 'route/project-request/components/section-invaria
 import MainInfo from 'route/project-request/components/main-info';
 import Requirements from 'route/project-request/components/requirements';
 import Customer from 'route/project-request/components/customer';
-import ProjectRequestPdf from 'route/project-request/components/pdf';
+import ProjectRequestPdf from 'route/project-request/components/documents/pdf';
+import ProjectRequestDocx from 'route/project-request/components/documents/docx';
+import ProjectRequestCsv from 'route/project-request/components/documents/xlsx';
+import { H4 } from 'component/header';
+import Wrapper from 'component/section/wrapper';
 
 import { mainRequest } from 'adapter/api/main';
-
-import { useClassnames } from 'hook/use-classnames';
 
 import Specialists from './specialists';
 import style from './index.module.pcss';
@@ -49,9 +53,24 @@ const ProjectRequest = () => {
             <Fragment>
                 <MainInfo {...data} />
                 {data.id && <Requirements requirements={data?.requirements} requestId={data.id} />}
-                {data.id && <Customer customer={data.customer} requestId={data.id} />}
+                {data.id && <Customer customer={data.organization_project?.organization} requestId={data.id} />}
             </Fragment>
         );
+    };
+
+    const elDocuments = () => {
+        if(!params.subpage) {
+            return (
+                <Section>
+                    <Wrapper>
+                        <H4>{t('routes.project-request.sidebar.documents')}</H4>
+                        <ProjectRequestPdf />
+                        <ProjectRequestDocx />
+                        <ProjectRequestCsv />
+                    </Wrapper>
+                </Section>
+            );
+        }
     };
 
     const elSidebarContent = () => {
@@ -89,7 +108,7 @@ const ProjectRequest = () => {
                             selected={String(req.id) === hash.slice(1)}
                             key={req.id}
                         >
-                            {req.name}
+                            {req.name || t('routes.project-request.blocks.specialists-sections.empty')}
                         </NavItem>
                     ))}
                 </Fragment>
@@ -97,29 +116,29 @@ const ProjectRequest = () => {
         }
 
         const header = params.subpage === 'specialists' && (
-            <div className={cn('nav__header')}>
-                <IconArrowLeftFull svg={{ className: cn('nav__icon-back'), onClick: onClickBack }} />
+            <div className={cn('project-request__header')}>
+                <IconArrowLeftFull svg={{ className: cn('project-request__icon-back'), onClick: onClickBack }} />
                 {data?.project?.name}
             </div>
         );
 
         return (
-            <Section withoutPaddings={true}>
-                <SidebarNav
-                    header={header}
-                    footer={<ProjectRequestPdf />}
-                >
-                    {content}
-                </SidebarNav>
-            </Section>
+            <Wrapper>
+                <Section withoutPaddings={true}>
+                    <SidebarNav header={header}>
+                        {content}
+                    </SidebarNav>
+                </Section>
+                {elDocuments()}
+            </Wrapper>
         );
     };
 
     return (
         <SidebarLayout sidebar={elSidebarContent()}>
-            <div className={cn('sections')} >
+            <Wrapper>
                 {elContent()}
-            </div>
+            </Wrapper>
         </SidebarLayout>
     );
 };
