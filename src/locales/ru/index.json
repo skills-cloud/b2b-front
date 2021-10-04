@@ -668,7 +668,8 @@
                     "applicant": "Кандидаты"
                 },
                 "specialists-sections": {
-                    "all": "Все кандидаты"
+                    "all": "Все кандидаты",
+                    "empty": "Название проектного запроса не указано"
                 },
                 "project-term": "Сроки проекта",
                 "competencies": {

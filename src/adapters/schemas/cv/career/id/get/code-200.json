@@ -87,14 +87,18 @@
                 "competencies_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/dictionary/competence/$id/",
+                        "x-url-object-list": "/api/dictionary/competence/"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "date_from": {
                     "format": "date",
@@ -134,7 +138,9 @@
                 },
                 "organization_id": {
                     "title": "Organization id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
                 },
                 "position": {
                     "$ref": "#/definitions/Position"
@@ -142,7 +148,9 @@
                 "position_id": {
                     "nullable": true,
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
                 },
                 "projects": {
                     "items": {
@@ -154,7 +162,9 @@
                 "projects_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/main/organization-project/$id/",
+                        "x-url-object-list": "/api/main/organization-project/"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -202,6 +212,18 @@
                     "title": "Создано",
                     "type": "string"
                 },
+                "date_from": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата с",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата по",
+                    "type": "string"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -212,6 +234,20 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "industry_sector_id": {
+                    "nullable": true,
+                    "title": "отрасль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
@@ -219,8 +255,32 @@
                     "type": "string"
                 },
                 "organization_id": {
-                    "title": "Organization id",
-                    "type": "integer"
+                    "title": "организация",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
+                },
+                "recruiters_ids": {
+                    "items": {
+                        "nullable": true,
+                        "title": "рекрутеры",
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "resource_managers_ids": {
+                    "items": {
+                        "nullable": true,
+                        "title": "ресурсные менеджеры",
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
                 },
                 "updated_at": {
                     "format": "date-time",

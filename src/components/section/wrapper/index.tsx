@@ -1,29 +1,21 @@
 import React, { ReactNode } from 'react';
 
 import { IStyle, useClassnames } from 'hook/use-classnames';
-import Header from './header';
 import style from './index.module.pcss';
 
-interface ISection {
-    title?: string,
+interface IProps {
     children: ReactNode,
-    withoutPaddings?: boolean,
     className?: IStyle | string
 }
 
-const Section = ({ title, children, withoutPaddings = false, className }: ISection) => {
+const Wrapper = ({ children, className }: IProps) => {
     const cn = useClassnames(style, className, true);
 
     return (
-        <div
-            className={cn('section', {
-                'section_without-paddings': withoutPaddings
-            })}
-        >
-            {title && <Header>{title}</Header>}
+        <div className={cn('wrapper')}>
             {children}
         </div>
     );
 };
 
-export default Section;
+export default Wrapper;

@@ -230,14 +230,18 @@
                 "competencies_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/dictionary/competence/$id/",
+                        "x-url-object-list": "/api/dictionary/competence/"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "date_from": {
                     "format": "date",
@@ -277,7 +281,9 @@
                 },
                 "organization_id": {
                     "title": "Organization id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
                 },
                 "position": {
                     "$ref": "#/definitions/Position"
@@ -285,7 +291,9 @@
                 "position_id": {
                     "nullable": true,
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
                 },
                 "projects": {
                     "items": {
@@ -297,7 +305,9 @@
                 "projects_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/main/organization-project/$id/",
+                        "x-url-object-list": "/api/main/organization-project/"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -321,14 +331,18 @@
                 "competencies_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/dictionary/competence/$id/",
+                        "x-url-object-list": "/api/dictionary/competence/"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "date": {
                     "format": "date",
@@ -346,21 +360,27 @@
                 },
                 "education_graduate_id": {
                     "title": "Education graduate id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/education-graduate/$id/",
+                    "x-url-object-list": "/api/dictionary/education-graduate/"
                 },
                 "education_place": {
                     "$ref": "#/definitions/EducationPlace"
                 },
                 "education_place_id": {
                     "title": "Education place id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/education-place/$id/",
+                    "x-url-object-list": "/api/dictionary/education-place/"
                 },
                 "education_speciality": {
                     "$ref": "#/definitions/EducationSpecialty"
                 },
                 "education_speciality_id": {
                     "title": "Education speciality id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/education-specialty/$id/",
+                    "x-url-object-list": "/api/dictionary/education-specialty/"
                 },
                 "id": {
                     "readOnly": true,
@@ -405,11 +425,15 @@
                 },
                 "contact_type_id": {
                     "title": "Contact type id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/contact-type/$id/",
+                    "x-url-object-list": "/api/dictionary/contact-type/"
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "id": {
                     "readOnly": true,
@@ -446,14 +470,18 @@
                 "competencies_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/dictionary/competence/$id/",
+                        "x-url-object-list": "/api/dictionary/competence/"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "date_from": {
                     "format": "date",
@@ -472,26 +500,38 @@
                     "title": "Описание",
                     "type": "string"
                 },
+                "diploma_number": {
+                    "maxLength": 100,
+                    "nullable": true,
+                    "title": "Номер диплома",
+                    "type": "string"
+                },
                 "education_graduate": {
                     "$ref": "#/definitions/EducationGraduate"
                 },
                 "education_graduate_id": {
                     "title": "Education graduate id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/education-graduate/$id/",
+                    "x-url-object-list": "/api/dictionary/education-graduate/"
                 },
                 "education_place": {
                     "$ref": "#/definitions/EducationPlace"
                 },
                 "education_place_id": {
                     "title": "Education place id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/education-place/$id/",
+                    "x-url-object-list": "/api/dictionary/education-place/"
                 },
                 "education_speciality": {
                     "$ref": "#/definitions/EducationSpecialty"
                 },
                 "education_speciality_id": {
                     "title": "Education speciality id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/education-specialty/$id/",
+                    "x-url-object-list": "/api/dictionary/education-specialty/"
                 },
                 "id": {
                     "readOnly": true,
@@ -576,7 +616,9 @@
                 "citizenship_id": {
                     "nullable": true,
                     "title": "Citizenship id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/citizenship/$id/",
+                    "x-url-object-list": "/api/dictionary/citizenship/"
                 },
                 "city": {
                     "$ref": "#/definitions/City"
@@ -584,7 +626,9 @@
                 "city_id": {
                     "nullable": true,
                     "title": "City id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/city/$id/",
+                    "x-url-object-list": "/api/dictionary/city/"
                 },
                 "contacts": {
                     "items": {
@@ -599,7 +643,9 @@
                 "country_id": {
                     "nullable": true,
                     "title": "Country id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/country/$id/",
+                    "x-url-object-list": "/api/dictionary/country/"
                 },
                 "days_to_contact": {
                     "oneOf": [
@@ -670,7 +716,9 @@
                 "linked_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/cv/cv/$id/",
+                        "x-url-object-list": "/api/cv/cv/"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -698,7 +746,9 @@
                 "physical_limitations_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/dictionary/physical-limitation/$id/",
+                        "x-url-object-list": "/api/dictionary/physical-limitation/"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -718,6 +768,13 @@
                 "projects": {
                     "items": {
                         "$ref": "#/definitions/CvProjectRead"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "requests_requirements": {
+                    "items": {
+                        "$ref": "#/definitions/CvRequestRequirementInlineSerializer"
                     },
                     "readOnly": true,
                     "type": "array"
@@ -749,7 +806,9 @@
                 "types_of_employment_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/dictionary/physical-limitation/$id/",
+                        "x-url-object-list": "/api/dictionary/physical-limitation/"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -760,7 +819,9 @@
                 "user_id": {
                     "nullable": true,
                     "title": "User id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
                 }
             },
             "type": "object"
@@ -772,7 +833,9 @@
                 },
                 "competence_id": {
                     "title": "Competence id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/competence/$id/",
+                    "x-url-object-list": "/api/dictionary/competence/"
                 },
                 "cv_position_id": {
                     "readOnly": true,
@@ -846,7 +909,9 @@
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "files": {
                     "items": {
@@ -866,7 +931,9 @@
                 "position_id": {
                     "nullable": true,
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
                 },
                 "title": {
                     "maxLength": 2000,
@@ -902,14 +969,18 @@
                 "competencies_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/dictionary/competence/$id/",
+                        "x-url-object-list": "/api/dictionary/competence/"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "date_from": {
                     "format": "date",
@@ -939,7 +1010,9 @@
                 "industry_sector_id": {
                     "nullable": true,
                     "title": "Industry sector id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
                 },
                 "is_verified": {
                     "title": "Подтверждено",
@@ -956,14 +1029,18 @@
                 },
                 "organization_id": {
                     "title": "Organization id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
                 },
                 "position": {
                     "$ref": "#/definitions/Position"
                 },
                 "position_id": {
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
                 }
             },
             "required": [
@@ -971,6 +1048,222 @@
                 "name",
                 "organization_id",
                 "position_id"
+            ],
+            "type": "object"
+        },
+        "CvRequestInlineSerializer": {
+            "properties": {
+                "deadline_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Срок",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "industry_sector": {
+                    "$ref": "#/definitions/IndustrySector"
+                },
+                "industry_sector_id": {
+                    "nullable": true,
+                    "title": "отрасль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "organization_project": {
+                    "$ref": "#/definitions/OrganizationProjectInline"
+                },
+                "organization_project_id": {
+                    "title": "проект заказчика",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-project/$id/",
+                    "x-url-object-list": "/api/main/organization-project/"
+                },
+                "priority": {
+                    "enum": [
+                        10,
+                        20,
+                        30
+                    ],
+                    "title": "Приоритет",
+                    "type": "integer"
+                },
+                "project": {
+                    "$ref": "#/definitions/ProjectInline"
+                },
+                "project_id": {
+                    "description": "На текущий момент не используется.<br>Надо задавать связку с проектом заказчика",
+                    "nullable": true,
+                    "title": "внутренний проект",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/project/$id/",
+                    "x-url-object-list": "/api/main/project/"
+                },
+                "recruiter": {
+                    "$ref": "#/definitions/UserInline"
+                },
+                "recruiter_id": {
+                    "nullable": true,
+                    "title": "отв. рекрутер",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "resource_manager": {
+                    "$ref": "#/definitions/UserInline"
+                },
+                "resource_manager_id": {
+                    "nullable": true,
+                    "title": "рес. менеджер",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "start_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата начала",
+                    "type": "string"
+                },
+                "status": {
+                    "enum": [
+                        "closed",
+                        "done",
+                        "draft",
+                        "in_progress"
+                    ],
+                    "title": "Статус",
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/RequestType"
+                },
+                "type_id": {
+                    "nullable": true,
+                    "title": "тип запроса",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request-type/$id/",
+                    "x-url-object-list": "/api/main/request-type/"
+                }
+            },
+            "required": [
+                "organization_project_id"
+            ],
+            "type": "object"
+        },
+        "CvRequestRequirementInlineSerializer": {
+            "properties": {
+                "competencies": {
+                    "items": {
+                        "$ref": "#/definitions/RequestRequirementCompetenceRead"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "count": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "nullable": true,
+                    "title": "Количество",
+                    "type": "integer"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "experience_years": {
+                    "description": "float",
+                    "nullable": true,
+                    "title": "Опыт лет",
+                    "type": "number"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "max_price": {
+                    "nullable": true,
+                    "title": "Макс. цена",
+                    "type": "number"
+                },
+                "name": {
+                    "maxLength": 1000,
+                    "nullable": true,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/Position"
+                },
+                "position_id": {
+                    "nullable": true,
+                    "title": "Position id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
+                },
+                "request": {
+                    "$ref": "#/definitions/CvRequestInlineSerializer"
+                },
+                "request_id": {
+                    "title": "Request id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request/$id/",
+                    "x-url-object-list": "/api/main/request/"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                },
+                "type_of_employment": {
+                    "$ref": "#/definitions/TypeOfEmployment"
+                },
+                "type_of_employment_id": {
+                    "nullable": true,
+                    "title": "Type of employment id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/type-of-employment/$id/",
+                    "x-url-object-list": "/api/dictionary/type-of-employment/"
+                },
+                "work_location_address": {
+                    "maxLength": 1000,
+                    "nullable": true,
+                    "title": "Адрес",
+                    "type": "string"
+                },
+                "work_location_city": {
+                    "$ref": "#/definitions/City"
+                },
+                "work_location_city_id": {
+                    "nullable": true,
+                    "title": "Work location city id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/city/$id/",
+                    "x-url-object-list": "/api/dictionary/city/"
+                }
+            },
+            "required": [
+                "request_id"
             ],
             "type": "object"
         },
@@ -982,7 +1275,9 @@
                 "city_id": {
                     "nullable": true,
                     "title": "City id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/city/$id/",
+                    "x-url-object-list": "/api/dictionary/city/"
                 },
                 "country": {
                     "$ref": "#/definitions/Country"
@@ -990,11 +1285,15 @@
                 "country_id": {
                     "nullable": true,
                     "title": "Country id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/country/$id/",
+                    "x-url-object-list": "/api/dictionary/country/"
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "date_from": {
                     "format": "date",
@@ -1032,7 +1331,9 @@
                 },
                 "type_of_employment_id": {
                     "title": "Type of employment id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/type-of-employment/$id/",
+                    "x-url-object-list": "/api/dictionary/type-of-employment/"
                 }
             },
             "required": [
@@ -1192,6 +1493,18 @@
                     "title": "Создано",
                     "type": "string"
                 },
+                "date_from": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата с",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата по",
+                    "type": "string"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -1202,6 +1515,20 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "industry_sector_id": {
+                    "nullable": true,
+                    "title": "отрасль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
@@ -1209,8 +1536,151 @@
                     "type": "string"
                 },
                 "organization_id": {
-                    "title": "Organization id",
+                    "title": "организация",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
+                },
+                "recruiters_ids": {
+                    "items": {
+                        "nullable": true,
+                        "title": "рекрутеры",
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "resource_managers_ids": {
+                    "items": {
+                        "nullable": true,
+                        "title": "ресурсные менеджеры",
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "organization_id"
+            ],
+            "type": "object"
+        },
+        "OrganizationProjectInline": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "date_from": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата с",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата по",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
                     "type": "integer"
+                },
+                "industry_sector": {
+                    "$ref": "#/definitions/IndustrySector"
+                },
+                "industry_sector_id": {
+                    "nullable": true,
+                    "title": "отрасль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
+                },
+                "manager": {
+                    "$ref": "#/definitions/UserInline"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "organization": {
+                    "$ref": "#/definitions/Organization"
+                },
+                "organization_id": {
+                    "title": "организация",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
+                },
+                "recruiters": {
+                    "items": {
+                        "$ref": "#/definitions/UserInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "recruiters_ids": {
+                    "items": {
+                        "nullable": true,
+                        "title": "рекрутеры",
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "requests_count": {
+                    "readOnly": true,
+                    "title": "Requests count",
+                    "type": "integer"
+                },
+                "resource_managers": {
+                    "items": {
+                        "$ref": "#/definitions/UserInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "resource_managers_ids": {
+                    "items": {
+                        "nullable": true,
+                        "title": "ресурсные менеджеры",
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
                 },
                 "updated_at": {
                     "format": "date-time",
@@ -1281,7 +1751,8 @@
             ],
             "type": "object"
         },
-        "Project": {
+        "ProjectInline": {
+            "nullable": true,
             "properties": {
                 "created_at": {
                     "format": "date-time",
@@ -1305,18 +1776,36 @@
                     "title": "Название",
                     "type": "string"
                 },
+                "recruiters": {
+                    "items": {
+                        "$ref": "#/definitions/UserInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
                 "recruiters_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
+                "resource_managers": {
+                    "items": {
+                        "$ref": "#/definitions/UserInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
                 "resource_managers_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -1335,14 +1824,6 @@
         },
         "RequestRead": {
             "properties": {
-                "customer": {
-                    "$ref": "#/definitions/Organization"
-                },
-                "customer_id": {
-                    "description": "организации отмеченные как заказчики<br>`/api/main/organization/?is_customer=true`",
-                    "title": "Customer id",
-                    "type": "integer"
-                },
                 "deadline_date": {
                     "format": "date",
                     "nullable": true,
@@ -1364,8 +1845,26 @@
                 },
                 "industry_sector_id": {
                     "nullable": true,
-                    "title": "Industry sector id",
-                    "type": "integer"
+                    "title": "отрасль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "organization_project": {
+                    "$ref": "#/definitions/OrganizationProjectInline"
+                },
+                "organization_project_id": {
+                    "title": "проект заказчика",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-project/$id/",
+                    "x-url-object-list": "/api/main/organization-project/"
                 },
                 "priority": {
                     "enum": [
@@ -1377,20 +1876,25 @@
                     "type": "integer"
                 },
                 "project": {
-                    "$ref": "#/definitions/Project"
+                    "$ref": "#/definitions/ProjectInline"
                 },
                 "project_id": {
+                    "description": "На текущий момент не используется.<br>Надо задавать связку с проектом заказчика",
                     "nullable": true,
-                    "title": "Project id",
-                    "type": "integer"
+                    "title": "внутренний проект",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/project/$id/",
+                    "x-url-object-list": "/api/main/project/"
                 },
                 "recruiter": {
                     "$ref": "#/definitions/UserInline"
                 },
                 "recruiter_id": {
                     "nullable": true,
-                    "title": "Recruiter id",
-                    "type": "integer"
+                    "title": "отв. рекрутер",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
                 },
                 "requirements": {
                     "items": {
@@ -1409,8 +1913,10 @@
                 },
                 "resource_manager_id": {
                     "nullable": true,
-                    "title": "Resource manager id",
-                    "type": "integer"
+                    "title": "рес. менеджер",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
                 },
                 "start_date": {
                     "format": "date",
@@ -1433,12 +1939,14 @@
                 },
                 "type_id": {
                     "nullable": true,
-                    "title": "Type id",
-                    "type": "integer"
+                    "title": "тип запроса",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request-type/$id/",
+                    "x-url-object-list": "/api/main/request-type/"
                 }
             },
             "required": [
-                "customer_id"
+                "organization_project_id"
             ],
             "type": "object"
         },
@@ -1449,9 +1957,12 @@
                 },
                 "competence_id": {
                     "title": "Competence id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/competence/$id/",
+                    "x-url-object-list": "/api/dictionary/competence/"
                 },
                 "experience_years": {
+                    "description": "`1` : *Менее года*\n`3` : *1 – 3 года*\n`5` : *3 - 5 лет*\n`100` : *Более 5 лет*",
                     "enum": [
                         1,
                         100,
@@ -1548,11 +2059,15 @@
                 "position_id": {
                     "nullable": true,
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
                 },
                 "request_id": {
                     "title": "Request id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request/$id/",
+                    "x-url-object-list": "/api/main/request/"
                 },
                 "sorting": {
                     "maximum": 2147483647,
@@ -1566,7 +2081,9 @@
                 "type_of_employment_id": {
                     "nullable": true,
                     "title": "Type of employment id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/type-of-employment/$id/",
+                    "x-url-object-list": "/api/dictionary/type-of-employment/"
                 },
                 "work_location_address": {
                     "maxLength": 1000,
@@ -1580,7 +2097,9 @@
                 "work_location_city_id": {
                     "nullable": true,
                     "title": "Work location city id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/city/$id/",
+                    "x-url-object-list": "/api/dictionary/city/"
                 }
             },
             "required": [
@@ -1589,6 +2108,7 @@
             "type": "object"
         },
         "RequestType": {
+            "nullable": true,
             "properties": {
                 "id": {
                     "readOnly": true,

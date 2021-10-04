@@ -10,14 +10,18 @@
                 "competencies_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/dictionary/competence/$id/",
+                        "x-url-object-list": "/api/dictionary/competence/"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "date_from": {
                     "format": "date",
@@ -44,7 +48,9 @@
                 "industry_sector_id": {
                     "nullable": true,
                     "title": "Industry sector id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
                 },
                 "is_verified": {
                     "title": "Подтверждено",
@@ -58,11 +64,15 @@
                 },
                 "organization_id": {
                     "title": "Organization id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
                 },
                 "position_id": {
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
                 }
             },
             "required": [

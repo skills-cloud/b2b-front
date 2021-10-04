@@ -6,6 +6,7 @@
     ],
     "definitions": {
         "RequestType": {
+            "nullable": true,
             "properties": {
                 "id": {
                     "readOnly": true,
