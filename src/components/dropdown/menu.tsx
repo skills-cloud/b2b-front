@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import useClassnames from 'hook/use-classnames';
 
-import style from './index.pcss';
+import style from './index.module.pcss';
 
 interface IDropdownMenu {
     children: ReactNode

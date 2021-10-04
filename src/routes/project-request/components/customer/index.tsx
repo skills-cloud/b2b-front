@@ -49,7 +49,7 @@ const Customer = ({ customer, requestId }: ICustomer) => {
             <Section>
                 <div className={cn('customer__section-header')}>
                     <SectionHeader
-                        actions={[{
+                        dropdownActions={[{
                             elem: (
                                 <div className={cn('customer__header-action')} onClick={onEditAction} >
                                     <EditAction />

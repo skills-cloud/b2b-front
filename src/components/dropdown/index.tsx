@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 
-import style from './index.pcss';
+import style from './index.module.pcss';
 import IconDots from 'component/icons/dots';
 
 export interface IItem {

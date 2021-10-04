@@ -1,0 +1,52 @@
+.organization {
+
+    &__card-label {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        height: 24px;
+
+        &_edit {
+            z-index: 1;
+
+            &::before {
+                display: inline-block;
+                content: "";
+                position: absolute;
+                background: var(--color-gray-10);
+                border-radius: 4px;
+                top: -10px;
+                left: -10px;
+                bottom: -10px;
+                right: -10px;
+                z-index: -1;
+            }
+        }
+    }
+
+    &__card-label-actions {
+        display: flex;
+        grid-gap: 5px;
+        margin-left: 35px;
+    }
+
+    &__card-label-action {
+        fill: var(--color-gray-90);
+        cursor: pointer;
+    }
+
+    &__card_form-add,
+    &__card_form-edit {
+        width: 350px;
+        padding: 24px 0;
+        display: grid;
+        grid-gap: 16px;
+        grid-template-columns: 1fr min-content;
+        margin-left: 23px;
+        top: 24px;
+    }
+
+    &__card_form-edit {
+        margin-left: -13px;
+    }
+}

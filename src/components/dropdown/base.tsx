@@ -3,7 +3,7 @@ import OutsideClickHandler from 'react-outside-click-handler';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 
-import style from './index.pcss';
+import style from './index.module.pcss';
 
 export interface IItem {
     elem: ReactNode,

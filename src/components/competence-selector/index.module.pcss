@@ -1,0 +1,25 @@
+.competence-selector {
+
+    &__label_bold {
+        font-weight: 500;
+    }
+
+    &__experience {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        padding-right: 40px;
+    }
+
+    &__experience-activator {
+        color: var(--color-text-light);
+        text-decoration: underline dotted;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+                text-decoration: none;
+            }
+        }
+    }
+}

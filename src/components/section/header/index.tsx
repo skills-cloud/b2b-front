@@ -7,24 +7,25 @@ import Dropdown, { IItem } from 'component/dropdown';
 import style from './index.module.pcss';
 
 export interface IProps {
-    actions?: Array<IItem>,
+    dropdownActions?: Array<IItem>,
+    actions?: ReactNode,
     children: ReactNode
 }
 
-const SectionHeader = ({ children, actions }: IProps) => {
+const SectionHeader = ({ children, dropdownActions, actions }: IProps) => {
     const cn = useClassnames(style);
 
     const elActions = () => {
-        if(actions) {
+        if(dropdownActions) {
             return (
                 <Dropdown
                     className={cn('section__header-actions')}
-                    items={actions}
+                    items={dropdownActions}
                 />
             );
         }
 
-        return null;
+        return <div className={cn('section__header-actions')}>{actions}</div>;
     };
 
     return (

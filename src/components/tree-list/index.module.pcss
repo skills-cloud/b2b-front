@@ -1,12 +1,6 @@
 .checkbox-tree {
     --color-border-default: #e6e8eb;
 
-    &__label {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        padding-right: 40px;
-    }
-
     &__expand {
         width: 24px;
         height: 24px;
@@ -31,19 +25,6 @@
         overflow: auto;
     }
 
-    &__set-experience {
-        color: var(--color-text-light);
-        text-decoration: underline dotted;
-
-        @media (hover: hover) and (pointer: fine) {
-
-            &:hover {
-                cursor: pointer;
-                text-decoration: none;
-            }
-        }
-    }
-
     :global {
         /* Override react checkbox tree styles */
         /* stylelint-disable-next-line selector-max-compound-selectors */
@@ -54,7 +35,7 @@
 
         .rct-text {
             display: grid;
-            align-items: center;
+            align-items: flex-start;
             color: var(--color-text-dark);
             font-family: Roboto, sans-serif;
             font-size: 14px;
@@ -70,7 +51,6 @@
 
         .rct-node {
             list-style: none;
-            font-weight: 500;
             line-height: 1.14;
             padding-left: 36px;
         }

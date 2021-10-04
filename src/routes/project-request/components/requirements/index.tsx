@@ -131,7 +131,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     <Section key={requirementId}>
                         <div className={cn('gap-bottom')}>
                             <SectionHeader
-                                actions={[{
+                                dropdownActions={[{
                                     elem: <EditAction onClick={onEditAction(requirementId)} />
                                 }, {
                                     elem: <DeleteAction onClick={onDeleteAction(requirementId)} />
