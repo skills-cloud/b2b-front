@@ -5,40 +5,51 @@ import { useTranslation } from 'react-i18next';
 import { differenceInCalendarYears } from 'date-fns';
 
 import useClassnames from 'hook/use-classnames';
+import { useDispatch } from 'component/core/store';
 
 import IconStar from 'component/icons/star';
 import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
 
+import { cv } from 'adapter/api/cv';
 import { mainRequest } from 'adapter/api/main';
-import { CvInline, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
+import { CvListReadFull, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 
 import style from './index.module.pcss';
 
 export const Specialists = () => {
     const cn = useClassnames(style);
+    const dispatch = useDispatch();
     const { hash } = useLocation();
-    const { id } = useParams<{ id: string }>();
+    const { requestId } = useParams<{ requestId: string }>();
     const { t, i18n } = useTranslation();
 
-    const { data, isLoading } = mainRequest.useGetMainRequestByIdQuery({ id });
-    const [cvList, setCvList] = useState<Array<CvInline>>([]);
+    const { data, isLoading } = mainRequest.useGetMainRequestByIdQuery({ id: requestId });
+    const [cvList, setCvList] = useState<Array<CvListReadFull>>([]);
 
     useEffect(() => {
         const reqsList = data?.requirements?.reduce((acc, current) => {
-            if(current.cv_list) {
-                current.cv_list.forEach((cv) => {
-                    if(!acc.find((item) => item.id === cv.id)) {
-                        acc.push(cv);
+            if(current.cv_list_ids) {
+                current.cv_list_ids.forEach((cvId) => {
+                    if(!acc.includes(cvId)) {
+                        acc.push(cvId);
                     }
                 });
             }
 
             return acc;
-        }, [] as Array<CvInline>);
+        }, [] as Array<number>);
 
         if(reqsList) {
-            setCvList(reqsList);
+            dispatch(cv.endpoints.getCvList.initiate({
+                id: reqsList
+            }))
+                .then(({ data: respData }) => {
+                    if(respData) {
+                        setCvList(respData.results);
+                    }
+                })
+                .catch(console.error);
         }
     }, [JSON.stringify(data)]);
 
@@ -82,7 +93,7 @@ export const Specialists = () => {
         return '\u2014';
     };
 
-    const elUserItem = (cvItem: CvInline) => {
+    const elUserItem = (cvItem: CvListReadFull) => {
         const firstName = cvItem.first_name;
         const lastName = cvItem.last_name;
         let title = `${firstName || ''} ${lastName || ''}`.trim();

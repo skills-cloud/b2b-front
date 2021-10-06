@@ -30,7 +30,7 @@ const EditForm = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
 
     const [postCertificate] = certificate.usePostCertificateMutation();
     const [patchCertificateById] = certificate.usePatchCertificateByIdMutation();
@@ -129,7 +129,7 @@ const EditForm = (props: IProps) => {
             if(props.field && Object.keys(props.field).length) {
                 patchCertificateById({
                     ...formData.certificate,
-                    cv_id                  : parseInt(id, 10),
+                    cv_id                  : parseInt(specialistId, 10),
                     id                     : formData.certificate.id,
                     education_graduate_id  : formData.certificate.education_graduate.value as number,
                     education_speciality_id: formData.certificate.education_speciality.value as number,
@@ -146,7 +146,7 @@ const EditForm = (props: IProps) => {
             } else {
                 postCertificate({
                     ...formData.certificate,
-                    cv_id                  : parseInt(id, 10),
+                    cv_id                  : parseInt(specialistId, 10),
                     education_graduate_id  : formData.certificate.education_graduate.value as number,
                     education_speciality_id: formData.certificate.education_speciality.value as number,
                     education_place_id     : formData.certificate.education_place.value as number,

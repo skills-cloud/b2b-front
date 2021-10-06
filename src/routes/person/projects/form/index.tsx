@@ -44,7 +44,7 @@ const CareerForm = (props: IProjectForm) => {
     const dispatch = useDispatch();
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const methods = useForm(props.defaultValues);
     const [postProject, { isLoading: isPostLoading }] = project.usePostProjectMutation();
     const [patchProject, { isLoading: isPatchLoading }] = project.usePatchProjectByIdMutation();
@@ -63,7 +63,7 @@ const CareerForm = (props: IProjectForm) => {
     const onSubmit = methods.handleSubmit((formData) => {
         const data = {
             ...formData.project,
-            cv_id           : parseInt(id, 10),
+            cv_id           : parseInt(specialistId, 10),
             competencies_ids: formData.project?.competencies_select?.map(({ value }) => value) || [],
             organization_id : formData.project?.organization?.value,
             position_id     : formData.project?.position?.value

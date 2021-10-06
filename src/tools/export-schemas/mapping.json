@@ -74,6 +74,8 @@
         "/main/request-type/",
         "/main/request-type/{id}/",
         "/main/request/",
-        "/main/request/{id}/"
+        "/main/request/{id}/",
+        "/main/time-sheet-row/",
+        "/main/time-sheet-row/{id}/"
     ]
 }

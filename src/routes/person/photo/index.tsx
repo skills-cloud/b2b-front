@@ -17,9 +17,9 @@ export interface IProps {
 
 export const Photo = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
 
-    const { data, isLoading, isSuccess } = cv.useGetCvByIdQuery({ id });
+    const { data, isLoading, isSuccess } = cv.useGetCvByIdQuery({ id: specialistId });
     const [postPhoto, { isLoading: isPostLoading }] = cv.useSetCvPhotoByIdMutation();
 
     const [src, setSrc] = useState<string | undefined>(data?.photo);
@@ -33,7 +33,7 @@ export const Photo = (props: IProps) => {
             formData.set('photo', file);
 
             postPhoto({
-                id,
+                id  : specialistId,
                 data: formData
             })
                 .unwrap()

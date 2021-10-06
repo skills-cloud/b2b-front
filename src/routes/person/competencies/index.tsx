@@ -19,11 +19,11 @@ export interface IProps {
 
 const Competencies = (props: IProps) => {
     const cn = useClassnames(style);
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const { t } = useTranslation();
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
-    const { data, isLoading } = position.useGetPositionListQuery({ cv_id: parseInt(id, 10) });
+    const { data, isLoading } = position.useGetPositionListQuery({ cv_id: parseInt(specialistId, 10) });
 
     const onClose = () => {
         setIsEdit(false);

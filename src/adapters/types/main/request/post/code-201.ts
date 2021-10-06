@@ -21,7 +21,8 @@ export type NoName7 = number;
 export type NoName8 = number;
 export type NoName9 = string;
 export type NoName10 = 'closed' | 'done' | 'draft' | 'in_progress';
-export type NoName11 = number;
+export type NoName11 = string;
+export type NoName12 = number;
 
 export interface Request {
     deadline_date?: NoName;
@@ -36,5 +37,6 @@ export interface Request {
     resource_manager_id?: NoName8;
     start_date?: NoName9;
     status?: NoName10;
-    type_id?: NoName11;
+    title?: NoName11;
+    type_id?: NoName12;
 }

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Packer } from 'docx';
 import { saveAs } from 'file-saver';
 
-
 import { mainRequest } from 'adapter/api/main';
 
 import Base from '../index';
@@ -13,9 +12,9 @@ import DocumentCreator from './docx';
 const ProjectRequestDocx = () => {
     const { t } = useTranslation();
 
-    const params = useParams<{ subpage?: string, id: string }>();
+    const params = useParams<{ subpage?: string, requestId: string }>();
     const { data, refetch } = mainRequest.useGetMainRequestByIdQuery(
-        { id: params.id },
+        { id: params.requestId },
         { refetchOnMountOrArgChange: true }
     );
 

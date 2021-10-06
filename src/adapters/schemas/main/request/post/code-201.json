@@ -90,6 +90,11 @@
                     "title": "Статус",
                     "type": "string"
                 },
+                "title": {
+                    "nullable": true,
+                    "title": "Заголовок (название или номер)",
+                    "type": "string"
+                },
                 "type_id": {
                     "nullable": true,
                     "title": "тип запроса",

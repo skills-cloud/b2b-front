@@ -22,12 +22,12 @@ export interface IProps {
 
 export const Career = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const { t } = useTranslation();
     const { data } = career.useGetCareerQuery({
-        cv_id: parseInt(id, 10)
+        cv_id: parseInt(specialistId, 10)
     }, {
         refetchOnMountOrArgChange: true
     });

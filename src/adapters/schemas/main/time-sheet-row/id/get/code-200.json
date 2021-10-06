@@ -1,0 +1,283 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/TimeSheetRowRead"
+        }
+    ],
+    "definitions": {
+        "CvInlineShort": {
+            "properties": {
+                "birth_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата рождения",
+                    "type": "string"
+                },
+                "citizenship_id": {
+                    "nullable": true,
+                    "title": "Citizenship id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/citizenship/$id/",
+                    "x-url-object-list": "/api/dictionary/citizenship/"
+                },
+                "city_id": {
+                    "nullable": true,
+                    "title": "City id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/city/$id/",
+                    "x-url-object-list": "/api/dictionary/city/"
+                },
+                "country_id": {
+                    "nullable": true,
+                    "title": "Country id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/country/$id/",
+                    "x-url-object-list": "/api/dictionary/country/"
+                },
+                "days_to_contact": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "all",
+                                "weekends",
+                                "workdays"
+                            ],
+                            "title": "Дни для связи",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "first_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Имя",
+                    "type": "string"
+                },
+                "gender": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "F",
+                                "M"
+                            ],
+                            "title": "Пол",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_resource_owner": {
+                    "title": "Владелец ресурса",
+                    "type": "boolean"
+                },
+                "last_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Фамилия",
+                    "type": "string"
+                },
+                "middle_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Отчество",
+                    "type": "string"
+                },
+                "photo": {
+                    "format": "uri",
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Photo",
+                    "type": "string"
+                },
+                "price": {
+                    "nullable": true,
+                    "title": "Ставка",
+                    "type": "number"
+                },
+                "time_to_contact_from": {
+                    "nullable": true,
+                    "title": "Время для связи / с",
+                    "type": "string"
+                },
+                "time_to_contact_to": {
+                    "nullable": true,
+                    "title": "Время для связи / по",
+                    "type": "string"
+                },
+                "user_id": {
+                    "nullable": true,
+                    "title": "User id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                }
+            },
+            "type": "object"
+        },
+        "RequestRequirementInline": {
+            "properties": {
+                "count": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "nullable": true,
+                    "title": "Количество",
+                    "type": "integer"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "experience_years": {
+                    "description": "float",
+                    "nullable": true,
+                    "title": "Опыт лет",
+                    "type": "number"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "max_price": {
+                    "nullable": true,
+                    "title": "Макс. цена",
+                    "type": "number"
+                },
+                "name": {
+                    "maxLength": 1000,
+                    "nullable": true,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "position_id": {
+                    "nullable": true,
+                    "title": "Position id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
+                },
+                "request_id": {
+                    "title": "Request id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request/$id/",
+                    "x-url-object-list": "/api/main/request/"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                },
+                "type_of_employment_id": {
+                    "nullable": true,
+                    "title": "Type of employment id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/type-of-employment/$id/",
+                    "x-url-object-list": "/api/dictionary/type-of-employment/"
+                },
+                "work_location_address": {
+                    "maxLength": 1000,
+                    "nullable": true,
+                    "title": "Адрес",
+                    "type": "string"
+                },
+                "work_location_city_id": {
+                    "nullable": true,
+                    "title": "Work location city id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/city/$id/",
+                    "x-url-object-list": "/api/dictionary/city/"
+                }
+            },
+            "required": [
+                "request_id"
+            ],
+            "type": "object"
+        },
+        "TimeSheetRowRead": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "cv": {
+                    "$ref": "#/definitions/CvInlineShort"
+                },
+                "cv_id": {
+                    "title": "анкета исполнителя",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
+                },
+                "date_from": {
+                    "format": "date",
+                    "title": "Дата начала работ",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата окончания работ",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "request_requirement": {
+                    "$ref": "#/definitions/RequestRequirementInline"
+                },
+                "request_requirement_id": {
+                    "title": "требование проектного запроса",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request-requirement/$id/",
+                    "x-url-object-list": "/api/main/request-requirement/"
+                },
+                "task_description": {
+                    "nullable": true,
+                    "title": "Описание задачи",
+                    "type": "string"
+                },
+                "task_name": {
+                    "maxLength": 1000,
+                    "minLength": 1,
+                    "title": "Название задачи",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                },
+                "work_time": {
+                    "title": "Затраченное время",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "cv",
+                "cv_id",
+                "request_requirement",
+                "request_requirement_id",
+                "task_name",
+                "work_time"
+            ],
+            "type": "object"
+        }
+    }
+}

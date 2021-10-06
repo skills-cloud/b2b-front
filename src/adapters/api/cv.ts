@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { CvList } from 'adapter/types/cv/cv/get/code-200';
-import { CvDetailRead } from 'adapter/types/cv/cv/id/get/code-200';
+import { CvListReadFull } from 'adapter/types/cv/cv/get/code-200';
+import { CvDetailReadFull } from 'adapter/types/cv/cv/id/get/code-200';
 import { CvDetailWrite as IPostCvResponse } from 'adapter/types/cv/cv/post/code-201';
 import { CvDetailWrite as IPatchCvResponse } from 'adapter/types/cv/cv/id/patch/code-200';
 
@@ -9,7 +9,7 @@ export interface ICvRequest {
     count: number,
     next?: string,
     previous?: string,
-    results: Array<CvList>
+    results: Array<CvListReadFull>
 }
 
 export type TQueryParamsPostTimeSlot = Omit<IPostCvResponse, 'id'>;
@@ -65,14 +65,14 @@ export const cv = createApi({
                 params
             })
         }),
-        getCvById: build.query<CvDetailRead, { id: string }>({
+        getCvById: build.query<CvDetailReadFull, { id: string }>({
             providesTags: ['cv'],
             query       : (params) => ({
                 url   : `cv/${params.id}/`,
                 method: 'GET'
             })
         }),
-        setCvPhotoById: build.mutation<CvDetailRead, { id: string, data: FormData }>({
+        setCvPhotoById: build.mutation<CvDetailReadFull, { id: string, data: FormData }>({
             invalidatesTags: ['cv'],
             query          : (body) => {
                 const { id, data } = body;
@@ -84,7 +84,7 @@ export const cv = createApi({
                 };
             }
         }),
-        uploadCvFileById: build.mutation<CvDetailRead, { id: string, data: FormData }>({
+        uploadCvFileById: build.mutation<CvDetailReadFull, { id: string, data: FormData }>({
             invalidatesTags: ['cv'],
             query          : (body) => {
                 const { id, data } = body;

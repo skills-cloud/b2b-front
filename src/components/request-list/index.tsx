@@ -45,7 +45,7 @@ const RequestList = ({ requestList }: IRequestList) => {
                     <div key={requestItem.id} className={cn('request-list__item')}>
                         <div className={cn('request-list__item-top')}>
                             <div className={cn('request-list__item-top-left')}>
-                                <Link to={`/project-request/${requestItem.id}#main-info`} className={cn('request-list__item-top-left-title')}>
+                                <Link to={`/requests/${requestItem.id}#main-info`} className={cn('request-list__item-top-left-title')}>
                                     {requestItem.project?.name || t('routes.project-request-list.requests.request-item.title')}
                                 </Link>
                                 <span className={cn('request-list__item-top-left-subtitle')}>
@@ -69,7 +69,7 @@ const RequestList = ({ requestList }: IRequestList) => {
                                         elem: (
                                             <div
                                                 className={cn('request-list__item-top-right-action')}
-                                                onClick={() => history.push(`/project-request/${requestItem.id}/edit`)}
+                                                onClick={() => history.push(`/requests/${requestItem.id}/edit`)}
                                             >
                                                 <EditAction />
                                                 {t('routes.project-request-list.requests.actions.edit')}

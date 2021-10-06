@@ -7,12 +7,10 @@ import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
 import SidebarNav, { NavItem } from 'component/nav';
 import SectionHeader from 'component/section/header';
+import Wrapper from 'component/section/wrapper';
+import ProjectList from 'route/organization/components/projects';
 
 import { mainRequest } from 'adapter/api/main';
-import ProjectList from 'route/organization/components/projects';
-import { useClassnames } from 'hook/use-classnames';
-
-import style from './index.module.pcss';
 
 enum ESectionInvariants {
     MainInfo = 'main-info',
@@ -20,13 +18,12 @@ enum ESectionInvariants {
     Cards = 'cards'
 }
 
-const ProjectRequest = () => {
-    const cn = useClassnames(style);
-    const { hash } = useLocation();
+const Organization = () => {
+    const { pathname } = useLocation();
     const { t } = useTranslation();
-    const params = useParams<{ id: string }>();
-    const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.id });
-    const { data: projectList } = mainRequest.useGetMainOrganizationProjectListQuery({ organization_id: params.id });
+    const params = useParams<{ organizationId: string }>();
+    const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.organizationId });
+    const { data: projectList } = mainRequest.useGetMainOrganizationProjectListQuery({ organization_id: params.organizationId });
 
     if(!data) {
         return null;
@@ -36,16 +33,18 @@ const ProjectRequest = () => {
         <SidebarLayout sidebar={
             <Section withoutPaddings={true}>
                 <SidebarNav>
-                    {Object.values(ESectionInvariants).map((nav) => (
-                        <NavItem key={nav} to={`#${nav}`} selected={nav === hash.slice(1)}>
-                            {t(`routes.organization.blocks.sections.${nav}`)}
-                        </NavItem>
-                    ))}
+                    {Object.values(ESectionInvariants).map((nav) => {
+                        return (
+                            <NavItem key={nav} to={`${pathname}/${nav}`}>
+                                {t(`routes.organization.blocks.sections.${nav}`)}
+                            </NavItem>
+                        );
+                    })}
                 </SidebarNav>
             </Section>
         }
         >
-            <div className={cn('sections')} >
+            <Wrapper>
                 <Section>
                     <SectionHeader>{data?.name}</SectionHeader>
                 </Section>
@@ -53,9 +52,9 @@ const ProjectRequest = () => {
                 <Section>
                     <SectionHeader>{t('routes.organization.blocks.sections.cards')}</SectionHeader>
                 </Section>
-            </div>
+            </Wrapper>
         </SidebarLayout>
     );
 };
 
-export default ProjectRequest;
+export default Organization;

@@ -5,7 +5,7 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type Code200 = CvDetailRead;
+export type Code200 = CvDetailReadFull;
 export type NoName = string;
 export type NoName1 = string;
 export type ID = number;
@@ -212,33 +212,34 @@ export type NoName116 = number;
 export type NoName117 = number;
 export type NoName118 = string;
 export type NoName119 = 'closed' | 'done' | 'draft' | 'in_progress';
-export type ID30 = number;
 export type NoName120 = string;
-export type NoName121 = number;
-export type RequestId = number;
+export type ID30 = number;
+export type NoName121 = string;
 export type NoName122 = number;
-export type NoName123 = string;
+export type RequestId = number;
+export type NoName123 = number;
+export type NoName124 = string;
 export type ID31 = number;
-export type NoName124 = boolean;
-export type NoName125 = string;
-export type TypeOfEmploymentId = number;
+export type NoName125 = boolean;
 export type NoName126 = string;
+export type TypeOfEmploymentId = number;
+export type NoName127 = string;
 export type WorkLocationCityId = number;
 export type CityId1 = number;
 export type CountryId1 = number;
 export type CvId7 = number;
-export type NoName127 = string;
 export type NoName128 = string;
 export type NoName129 = string;
+export type NoName130 = string;
 export type ID32 = number;
-export type NoName130 = boolean;
-export type NoName131 = number;
+export type NoName131 = boolean;
+export type NoName132 = number;
 export type TypeOfEmploymentId1 = number;
-export type NoName132 = string;
 export type NoName133 = string;
+export type NoName134 = string;
 export type UserId = number;
 
-export interface CvDetailRead {
+export interface CvDetailReadFull {
     birth_date?: NoName;
     career?: CvCareerRead[];
     certificates?: CvCertificateRead[];
@@ -267,8 +268,8 @@ export interface CvDetailRead {
     projects?: CvProjectRead[];
     requests_requirements?: CvRequestRequirementInlineSerializer[];
     time_slots?: CvTimeSlotRead[];
-    time_to_contact_from?: NoName132;
-    time_to_contact_to?: NoName133;
+    time_to_contact_from?: NoName133;
+    time_to_contact_to?: NoName134;
     types_of_employment?: TypeOfEmployment[];
     types_of_employment_ids?: number[];
     user?: UserInline;
@@ -498,10 +499,10 @@ export interface CvRequestRequirementInlineSerializer {
     position_id?: PositionId3;
     request?: CvRequestInlineSerializer;
     request_id: RequestId;
-    sorting?: NoName122;
+    sorting?: NoName123;
     type_of_employment?: TypeOfEmployment;
     type_of_employment_id?: TypeOfEmploymentId;
-    work_location_address?: NoName126;
+    work_location_address?: NoName127;
     work_location_city?: City;
     work_location_city_id?: WorkLocationCityId;
 }
@@ -531,8 +532,9 @@ export interface CvRequestInlineSerializer {
     resource_manager_id?: NoName117;
     start_date?: NoName118;
     status?: NoName119;
+    title?: NoName120;
     type?: RequestType;
-    type_id?: NoName121;
+    type_id?: NoName122;
 }
 export interface OrganizationProjectInline {
     created_at?: NoName96;
@@ -573,13 +575,13 @@ export interface ProjectInline {
 }
 export interface RequestType {
     id?: ID30;
-    name: NoName120;
+    name: NoName121;
 }
 export interface TypeOfEmployment {
-    description?: NoName123;
+    description?: NoName124;
     id?: ID31;
-    is_verified?: NoName124;
-    name: NoName125;
+    is_verified?: NoName125;
+    name: NoName126;
 }
 export interface CvTimeSlotRead {
     city?: City;
@@ -587,12 +589,12 @@ export interface CvTimeSlotRead {
     country?: Country;
     country_id?: CountryId1;
     cv_id: CvId7;
-    date_from?: NoName127;
-    date_to?: NoName128;
-    description?: NoName129;
+    date_from?: NoName128;
+    date_to?: NoName129;
+    description?: NoName130;
     id?: ID32;
-    is_work_permit_required?: NoName130;
-    price?: NoName131;
+    is_work_permit_required?: NoName131;
+    price?: NoName132;
     type_of_employment?: TypeOfEmployment;
     type_of_employment_id: TypeOfEmploymentId1;
 }

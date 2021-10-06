@@ -48,7 +48,7 @@ interface IEducationForm {
 const EducationForm = (props: IEducationForm) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const methods = useForm(props.defaultValues);
     const [postEducation] = education.usePostEducationMutation();
     const [patchEducation] = education.usePatchEducationMutation();
@@ -64,7 +64,7 @@ const EducationForm = (props: IEducationForm) => {
         } = educationForm;
         const data: CvEducation = {
             ...inputs,
-            cv_id                  : parseInt(id, 10),
+            cv_id                  : parseInt(specialistId, 10),
             education_place_id     : education_place_select.value as number,
             education_speciality_id: education_speciality_select.value as number,
             education_graduate_id  : education_graduate_select.value as number,
@@ -132,7 +132,7 @@ const EducationForm = (props: IEducationForm) => {
                         <label className={cn('education-form__label')}>
                             {t('routes.person.education.label.diploma')}
                         </label>
-                        <FormInput name="education.diploma" type="text" />
+                        <FormInput name="education.diploma_number" type="text" />
                     </div>
 
                     <div className={cn('education-form__item')}>

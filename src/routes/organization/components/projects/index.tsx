@@ -27,7 +27,7 @@ enum EProjectInvariants {
 const ProjectList = ({ list }: { list: Array<OrganizationProjectRead>}) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
+    const { organizationId } = useParams<{ organizationId: string }>();
 
     const renderField = (field: EProjectInvariants, project: OrganizationProjectRead) => {
         let content = null;
@@ -65,7 +65,7 @@ const ProjectList = ({ list }: { list: Array<OrganizationProjectRead>}) => {
                     <SectionContentList>
                         <div className={cn('project-header')}>
                             <H3>{item?.name}</H3>
-                            <Link to={`/organization/${id}/project/${item.id}`}>
+                            <Link to={`/organizations/${organizationId}/projects/${item.id}`}>
                                 <IconChevronRight />
                             </Link>
                         </div>

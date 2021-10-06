@@ -28,8 +28,8 @@ export interface IProps {
 const Access = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
-    const { data: timeSlotData } = timeslot.useGetTimeSlotQuery({ cv_id: parseInt(id, 10) });
+    const { specialistId } = useParams<{ specialistId: string }>();
+    const { data: timeSlotData } = timeslot.useGetTimeSlotQuery({ cv_id: parseInt(specialistId, 10) });
     const { data: typeOfEmployment } = dictionary.useGetTypeOfEmploymentQuery(undefined);
     const [setTimeSlot, { isLoading }] = timeslot.useSetTimeSlotMutation();
     const [patchTimeSlot, { isLoading: isPatchLoading }] = timeslot.usePatchTimeSlotByIdMutation();
@@ -113,7 +113,7 @@ const Access = (props: IProps) => {
             if(activeTimeSlotId) {
                 return patchTimeSlot({
                     id                   : activeTimeSlotId,
-                    cv_id                : parseInt(id, 10),
+                    cv_id                : parseInt(specialistId, 10),
                     date_from            : formData.date_from,
                     date_to              : formData.date_to,
                     type_of_employment_id: formData.type_of_employment.value,
@@ -131,7 +131,7 @@ const Access = (props: IProps) => {
             }
 
             return setTimeSlot({
-                cv_id                : parseInt(id, 10),
+                cv_id                : parseInt(specialistId, 10),
                 date_from            : formData.date_from,
                 date_to              : formData.date_to,
                 type_of_employment_id: formData.type_of_employment.value,

@@ -55,7 +55,7 @@ class DocumentCreator {
                             heading: HeadingLevel.HEADING_2,
                             spacing: { before: 200, after: 200 }
                         }),
-                        this.createCustomer(props.customer)
+                        this.createCustomer(props.organization_project?.organization)
                     ]
                 }
             ]
@@ -92,7 +92,7 @@ class DocumentCreator {
                 this.createRow(i18n.t('components.pdf.project.manager'), manager),
                 this.createRow(i18n.t('components.pdf.project.recruiter'), recruiter),
                 this.createRow(i18n.t('components.pdf.project.customer'), data.type?.name),
-                this.createRow(i18n.t('components.pdf.project.sector'), data.customer?.name)
+                this.createRow(i18n.t('components.pdf.project.sector'), data.organization_project?.organization?.name)
             ]
         });
     }
