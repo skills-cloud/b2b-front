@@ -41,7 +41,7 @@ interface IProjectForm {
 const CareerForm = (props: IProjectForm) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const methods = useForm(props.defaultValues);
     const [postCareer, { isLoading: isPostLoading }] = career.usePostCareerMutation();
     const [patchCareer, { isLoading: isPatchLoading }] = career.usePatchCareerByIdMutation();
@@ -61,7 +61,7 @@ const CareerForm = (props: IProjectForm) => {
     const onDeleteFile = (file: CvCareerFileRead) => {
         if(file) {
             void deleteFile({
-                id     : parseInt(id, 10),
+                id     : parseInt(specialistId, 10),
                 file_id: String(file.id)
             });
         }
@@ -70,7 +70,7 @@ const CareerForm = (props: IProjectForm) => {
     const onSubmit = methods.handleSubmit((formData) => {
         const data = {
             ...formData.career,
-            cv_id           : parseInt(id, 10),
+            cv_id           : parseInt(specialistId, 10),
             competencies_ids: formData.career?.competencies_select?.map(({ value }) => value) as Array<number>,
             organization_id : formData.career?.organization?.value as number,
             position_id     : formData.career?.position?.value

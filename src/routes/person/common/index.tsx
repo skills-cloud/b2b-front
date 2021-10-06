@@ -29,7 +29,7 @@ export interface IProps {
 export const Common = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const context = useForm({
         mode: 'all'
     });
@@ -37,7 +37,7 @@ export const Common = (props: IProps) => {
     const [more, setMore] = useState<boolean>(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [showVerify, setShowVerify] = useState<boolean>(false);
-    const { data, refetch } = cv.useGetCvByIdQuery({ id }, { refetchOnMountOrArgChange: true });
+    const { data, refetch } = cv.useGetCvByIdQuery({ id: specialistId }, { refetchOnMountOrArgChange: true });
 
     const { email, first_name, last_name } = useSelector((store) => ({
         email     : store[keyUser].email,
@@ -152,7 +152,7 @@ export const Common = (props: IProps) => {
 
     const isEditWindow = useMemo(() => {
         if(isEdit && data) {
-            return <CommonEdit onCancel={onClickCancel} fields={data} id={id} onSubmit={onSubmitCallback} />;
+            return <CommonEdit onCancel={onClickCancel} fields={data} id={specialistId} onSubmit={onSubmitCallback} />;
         }
     }, [isEdit, JSON.stringify(data)]);
 
@@ -221,7 +221,7 @@ export const Common = (props: IProps) => {
     const elUserName = useMemo(() => {
         let userName = `${last_name || ''} ${first_name || ''}`;
 
-        if(id) {
+        if(specialistId) {
             userName = `${data?.last_name || ''} ${data?.first_name || ''} ${data?.middle_name || ''}`;
         }
 
@@ -231,7 +231,7 @@ export const Common = (props: IProps) => {
     }, [last_name, first_name, data?.first_name, data?.last_name, data?.middle_name]);
 
     return (
-        <div id={props.id} key={id} className={cn('person__block', 'person__info')}>
+        <div id={props.id} key={specialistId} className={cn('person__block', 'person__info')}>
             <div className={cn('person__info-header')}>
                 {elUserName}
                 <div

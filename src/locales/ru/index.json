@@ -63,6 +63,12 @@
         },
         "xlsx": {
             "download": "Скачать xlsx"
+        },
+        "breadcrumbs": {
+            "specialists": "Специалисты",
+            "organizations": "Организации",
+            "requests": "Проектные запросы",
+            "projects": "Проекты"
         }
     },
     "routes": {

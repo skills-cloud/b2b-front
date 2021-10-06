@@ -56,7 +56,7 @@ const EDIT_COMPETENCIES_FORM_ID = 'EDIT_COMPETENCIES_FORM_ID';
 export const CompetenciesEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const methods = useForm<IFormValues>({
         defaultValues: {
             competencies  : props.fields || [{}],
@@ -68,7 +68,7 @@ export const CompetenciesEdit = (props: IProps) => {
         control: methods.control,
         name   : 'competencies'
     });
-    const { data: positionData, refetch } = position.useGetPositionListQuery({ cv_id: parseInt(id, 10) }, { refetchOnMountOrArgChange: true });
+    const { data: positionData, refetch } = position.useGetPositionListQuery({ cv_id: parseInt(specialistId, 10) }, { refetchOnMountOrArgChange: true });
     const [patchPosition, { isLoading }] = position.usePatchPositionByIdMutation();
     const [postPosition, { isLoading: isLoadingPost }] = position.usePostPositionMutation();
     const [deletePosition, { isLoading: isLoadingDelete }] = position.useDeletePositionMutation();
@@ -106,7 +106,7 @@ export const CompetenciesEdit = (props: IProps) => {
             if(positionItem) {
                 return patchPosition({
                     id         : positionItem.id,
-                    cv_id      : parseInt(id, 10),
+                    cv_id      : parseInt(specialistId, 10),
                     position_id: positionItem.position_id
                 })
                     .unwrap()
@@ -125,7 +125,7 @@ export const CompetenciesEdit = (props: IProps) => {
             }
 
             postPosition({
-                cv_id      : parseInt(id, 10),
+                cv_id      : parseInt(specialistId, 10),
                 position_id: parseInt(formData.position_id?.value as string, 10)
             })
                 .unwrap()

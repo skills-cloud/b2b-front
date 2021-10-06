@@ -102,9 +102,9 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                 value: defaultValues?.industry_sector?.id,
                 label: defaultValues?.industry_sector?.name
             } : '',
-            customer: defaultValues?.customer ? {
-                value: defaultValues?.customer?.id,
-                label: defaultValues?.customer?.name
+            customer: defaultValues?.organization_project ? {
+                value: defaultValues?.organization_project.organization_id,
+                label: defaultValues?.organization_project.organization?.name
             } : '',
             project: defaultValues?.project ? {
                 value: defaultValues?.project?.id,
@@ -193,7 +193,13 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
 
         const formData = Object.fromEntries(Object.entries(postData).filter(([, value]) => (!!value)));
         const method = defaultValues ? patch : post;
-        const request = method({ customer_id: parseInt(customer.value, 10), ...formData });
+        const { id: requestId, ...rest } = formData;
+
+        const request = method({
+            ...rest,
+            id                     : requestId as number,
+            organization_project_id: parseInt(customer.value, 10)
+        });
 
         request
             .unwrap()

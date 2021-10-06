@@ -30,14 +30,14 @@ const ProjectRequest = () => {
     const { hash } = useLocation();
     const history = useHistory();
     const { t } = useTranslation();
-    const params = useParams<{ subpage?: string, id: string }>();
+    const params = useParams<{ subpage?: string, requestId: string }>();
     const { data } = mainRequest.useGetMainRequestByIdQuery(
-        { id: params.id },
+        { id: params.requestId },
         { refetchOnMountOrArgChange: true }
     );
 
     const onClickBack = () => {
-        history.push(`/project-request/${params.id}#main-info`);
+        history.push(`/requests/${params.requestId}#main-info`);
     };
 
     if(!data) {
@@ -86,7 +86,7 @@ const ProjectRequest = () => {
                     </NavItem>
                 ))}
                 <NavItem
-                    to={`/project-request/${params.id}/specialists/#all`}
+                    to={`/request/${params.requestId}/specialists/#all`}
                     selected={hash.slice(1) === 'applicant'}
                 >
                     {t('routes.project-request.blocks.sections.applicant')}

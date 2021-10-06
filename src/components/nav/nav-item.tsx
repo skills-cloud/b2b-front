@@ -6,7 +6,7 @@ import style from './index.module.pcss';
 
 interface INavItem {
     children: ReactNode,
-    selected: boolean,
+    selected?: boolean,
     to: string
 }
 

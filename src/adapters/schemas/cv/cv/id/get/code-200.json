@@ -1,7 +1,7 @@
 {
     "allOf": [
         {
-            "$ref": "#/definitions/CvDetailRead"
+            "$ref": "#/definitions/CvDetailReadFull"
         }
     ],
     "definitions": {
@@ -458,7 +458,7 @@
             ],
             "type": "object"
         },
-        "CvDetailRead": {
+        "CvDetailReadFull": {
             "properties": {
                 "birth_date": {
                     "format": "date",
@@ -1149,6 +1149,11 @@
                         "in_progress"
                     ],
                     "title": "Статус",
+                    "type": "string"
+                },
+                "title": {
+                    "nullable": true,
+                    "title": "Заголовок (название или номер)",
                     "type": "string"
                 },
                 "type": {
