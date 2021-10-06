@@ -86,7 +86,7 @@ const ProjectRequest = () => {
                     </NavItem>
                 ))}
                 <NavItem
-                    to={`/request/${params.requestId}/specialists/#all`}
+                    to={`/requests/${params.requestId}/specialists/#all`}
                     selected={hash.slice(1) === 'applicant'}
                 >
                     {t('routes.project-request.blocks.sections.applicant')}

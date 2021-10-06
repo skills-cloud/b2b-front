@@ -47,7 +47,7 @@ const Customer = ({ customer, requestId }: ICustomer) => {
     return (
         <React.Fragment>
             <Section>
-                <div className={cn('customer__section-header')}>
+                <div className={cn('customer__section-header')} id="employer">
                     <SectionHeader
                         dropdownActions={[{
                             elem: (

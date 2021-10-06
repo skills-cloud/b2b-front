@@ -1,5 +1,5 @@
-import React, { ReactNode, FC } from 'react';
-import { Link } from 'react-router-dom';
+import React, { ReactNode, FC, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import { useClassnames } from 'hook/use-classnames';
 import style from './index.module.pcss';
@@ -14,9 +14,11 @@ const NavItem: FC<INavItem> = ({ children, to, selected }) => {
     const cn = useClassnames(style);
     const isAncor = to.startsWith('#');
 
+    const [active, setActive] = useState<boolean>();
+
     return (
         <li className={cn('nav__item', {
-            'nav__item_selected': selected
+            'nav__item_selected': selected || active
         })}
         >
             {isAncor && (
@@ -25,9 +27,18 @@ const NavItem: FC<INavItem> = ({ children, to, selected }) => {
                 </a>
             )}
             {!isAncor && (
-                <Link to={to} className={cn('nav__item-link')}>
+                <NavLink
+                    to={to}
+                    isActive={(match) => {
+                        setActive(match?.isExact);
+
+                        return match?.isExact || !!selected;
+                    }}
+                    className={cn('nav__item-link')}
+                    activeClassName={cn('nav__item-link_active')}
+                >
                     {children}
-                </Link>
+                </NavLink>
             )}
         </li>
     );

@@ -63,7 +63,7 @@ const Organization = () => {
                 <SidebarNav>
                     {Object.values(ESectionInvariants).map((nav) => {
                         return (
-                            <NavItem key={nav} to={`${pathname}/${nav}`}>
+                            <NavItem key={nav} to={`/organizations/${params.organizationId}/${nav}`}>
                                 {t(`routes.organization.blocks.sections.${nav}`)}
                             </NavItem>
                         );
