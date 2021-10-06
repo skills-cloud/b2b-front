@@ -6,7 +6,7 @@ import { useClassnames } from 'hook/use-classnames';
 
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
-import CheckboxTree from 'component/checkbox-tree';
+import CompetenceSelector from 'component/competence-selector';
 import Button from 'component/button';
 
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
@@ -60,13 +60,6 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
             .catch(console.error);
     }, [checked, competenceExpirienceMap]);
 
-    const onSetRequirementExperience = (competenceId: string, experienceId: number) => {
-        setCompetenceExpirienceMap({
-            ...competenceExpirienceMap,
-            [competenceId]: experienceId
-        });
-    };
-
     return (
         <Modal
             onBack={onBack}
@@ -82,23 +75,21 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
                 </ModalFooterSubmit>
             }
         >
-            <div className="position">
-                <FormProvider {...form}>
-                    <form
-                        method="POST"
-                        id={EDIT_ROLE_FORM_ID}
-                        onSubmit={form.handleSubmit(handleSubmit)}
-                        className={cn('form')}
-                    >
-                        <CheckboxTree
-                            onSetChecked={setChecked}
-                            competencies={checked}
-                            onChangeExperience={onSetRequirementExperience}
-                            competenceExpirienceMap={competenceExpirienceMap}
-                        />
-                    </form>
-                </FormProvider>
-            </div>
+            <FormProvider {...form}>
+                <form
+                    method="POST"
+                    id={EDIT_ROLE_FORM_ID}
+                    onSubmit={form.handleSubmit(handleSubmit)}
+                    className={cn('form')}
+                >
+                    <CompetenceSelector
+                        setChecked={setChecked}
+                        checked={checked}
+                        competenceExpirienceMap={competenceExpirienceMap}
+                        setCompetenceExpirienceMap={setCompetenceExpirienceMap}
+                    />
+                </form>
+            </FormProvider>
         </Modal>
     );
 };

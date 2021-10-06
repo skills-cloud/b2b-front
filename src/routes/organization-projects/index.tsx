@@ -32,7 +32,6 @@ const ProjectRequest = () => {
     const { data } = mainRequest.useGetMainOrganizationProjectByIdQuery({
         id: projectId
     });
-
     const { data: requests } = mainRequest.useGetMainRequestQuery({ organization_project_id: projectId });
 
     if(!data) {

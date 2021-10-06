@@ -138,7 +138,7 @@ const MainInfo = (data: RequestRead) => {
 
         return (
             <div className={cn('gap-bottom')} id={ESectionInvariants.MainInfo}>
-                <SectionHeader actions={actions}>
+                <SectionHeader dropdownActions={actions}>
                     {project?.name || t('routes.project-request.blocks.empty-title')}
                 </SectionHeader>
             </div>

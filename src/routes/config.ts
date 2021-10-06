@@ -24,7 +24,7 @@ export interface IProps extends RouteProps {
 export const baseRoutes: Array<IProps> = [{
     exact    : true,
     layout   : Layout,
-    path     : ['/organizations/:organizationId', '/organizations/:organizationId/projects'],
+    path     : ['/organizations/:organizationId', '/organizations/:organizationId/:subpage(projects|main-info|cards)?'],
     component: Organization
 }, {
     exact    : true,

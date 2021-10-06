@@ -10,7 +10,7 @@ import Tooltip from 'component/tooltip';
 import IconArrowLeft from 'component/icons/arrow-left-full';
 import Error from 'component/error';
 import InputDictionary from 'component/form/input-dictionary';
-import CheckboxTree from 'component/checkbox-tree';
+import CompetenceSelector from 'component/competence-selector';
 
 import { position } from 'adapter/api/position';
 import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
@@ -78,6 +78,7 @@ export const CompetenciesEdit = (props: IProps) => {
     const [checked, setChecked] = useState<Array<string>>([]);
     const [positionItem, setPositionItem] = useState<CvPositionRead>();
     const [error, setError] = useState<Array<string> | string | null>(null);
+    const [competenceExpirienceMap, setCompetenceExpirienceMap] = useState({});
 
     const onCancel = () => {
         props.onCancel?.();
@@ -143,10 +144,6 @@ export const CompetenciesEdit = (props: IProps) => {
                 });
         }
     }, [checked, activeWindow]);
-
-    const onClickSetExperience = (competenceId: string) => {
-        console.info('SET', competenceId);
-    };
 
     const onClickSubmit = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -354,10 +351,11 @@ export const CompetenciesEdit = (props: IProps) => {
             case 'checkbox': {
                 return (
                     <Fragment>
-                        <CheckboxTree
-                            onSetChecked={setChecked}
-                            competencies={checked}
-                            onChangeExperience={onClickSetExperience}
+                        <CompetenceSelector
+                            setChecked={setChecked}
+                            checked={checked}
+                            competenceExpirienceMap={competenceExpirienceMap}
+                            setCompetenceExpirienceMap={setCompetenceExpirienceMap}
                         />
                         {elError}
                     </Fragment>

@@ -9,6 +9,8 @@ import { RequestType as RequestTypeById } from 'adapter/types/main/request-type/
 import { RequestRequirementRead, RequestRequirementCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
+import { OrganizationProjectCardItemReadTree } from 'adapter/types/main/organization-project-card-item/get/code-200';
+import { OrganizationProjectCardItemTree } from 'adapter/types/main/organization-project-card-item/post/code-201';
 
 interface IBaseGetById {
     id: string
@@ -247,6 +249,15 @@ export const mainRequest = createApi({
                 params
             })
         }),
+        getOrganizationProjectCardItem: build.query<Array<OrganizationProjectCardItemReadTree>,
+        { organization_id?: Array<string>, organization_project_id?: Array<string>}>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/organization-project-card-item/',
+                method: 'GET',
+                params
+            })
+        }),
         getMainOrganizationProjectById: build.query<OrganizationProjectRead, IBaseGetById>({
             providesTags: ['main'],
             query       : ({ id }) => ({
@@ -276,11 +287,34 @@ export const mainRequest = createApi({
                 method: 'DELETE'
             })
         }),
+        deleteMainOrganozationProjectCardById: build.mutation<OrganizationProjectCardItemTree, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/organization-project-card-item/${id}`,
+                method: 'DELETE'
+            })
+        }),
         postMainRequest: build.mutation<IPostBaseResponse, IPostRequestData>({
             invalidatesTags: ['main'],
             query          : (body) => ({
                 url   : '/request/',
                 method: 'POST',
+                body
+            })
+        }),
+        postMainOrganozationProjectCard: build.mutation<OrganizationProjectCardItemTree, OrganizationProjectCardItemTree>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/organization-project-card-item/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainOrganozationProjectCard: build.mutation<OrganizationProjectCardItemTree, OrganizationProjectCardItemTree>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...body }) => ({
+                url   : `/organization-project-card-item/${id}/`,
+                method: 'PATCH',
                 body
             })
         }),

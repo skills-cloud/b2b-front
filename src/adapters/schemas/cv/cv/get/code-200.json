@@ -1510,6 +1510,18 @@
                     "title": "Дата по",
                     "type": "string"
                 },
+                "date_from": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата с",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата по",
+                    "type": "string"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
