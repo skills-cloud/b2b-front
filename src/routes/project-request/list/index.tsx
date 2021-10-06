@@ -48,7 +48,7 @@ const ProjectRequestList = () => {
         defaultValues
     });
 
-    const { data, isLoading, refetch } = mainRequest.useGetRequestListQuery(normalizeObject(qs));
+    const { data, isLoading, refetch } = mainRequest.useGetMainRequestQuery(normalizeObject(qs));
 
     const onSubmit = context.handleSubmit(
         (formData) => {
@@ -98,7 +98,7 @@ const ProjectRequestList = () => {
                 <div className={cn('request-list__main-top')}>
                     <h2 className={cn('request-list__main-header')}>{t('routes.project-request-list.title')}</h2>
                     <Link
-                        to="/project-request/create"
+                        to="/requests/create"
                         className={cn('request-list__main-button')}
                     >
                         <IconPlus />

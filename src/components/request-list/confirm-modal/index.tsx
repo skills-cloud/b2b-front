@@ -26,7 +26,7 @@ const ConfirmModal = ({ setVisible, requestId, requestName, onClickCancel }: IEd
             deleteMainRequestById({ id: requestId })
                 .unwrap()
                 .then(() => {
-                    history.push('/project-request');
+                    history.push('/requests');
                     setVisible(false);
                 })
                 .catch(console.error);

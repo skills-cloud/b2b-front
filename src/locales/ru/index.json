@@ -55,7 +55,20 @@
                 "rate": "Ставка",
                 "position_default": "{{position}} ({{count}} чел.)",
                 "position_empty": "Позиция не указана"
-            }
+            },
+            "download": "Скачать pdf"
+        },
+        "docx": {
+            "download": "Скачать docx"
+        },
+        "xlsx": {
+            "download": "Скачать xlsx"
+        },
+        "breadcrumbs": {
+            "specialists": "Специалисты",
+            "organizations": "Организации",
+            "requests": "Проектные запросы",
+            "projects": "Проекты"
         }
     },
     "routes": {
@@ -676,7 +689,8 @@
                     "applicant": "Кандидаты"
                 },
                 "specialists-sections": {
-                    "all": "Все кандидаты"
+                    "all": "Все кандидаты",
+                    "empty": "Название проектного запроса не указано"
                 },
                 "project-term": "Сроки проекта",
                 "competencies": {
@@ -755,6 +769,9 @@
                     "date_from": "Начало проекта",
                     "date_to": "Окончание проекта"
                 }
+            },
+            "sidebar": {
+                "documents": "Документы"
             }
         }
     },

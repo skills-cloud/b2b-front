@@ -17,14 +17,14 @@ export interface IProps {
 }
 
 export const Certificates = (props: IProps) => {
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
     const { data, refetch } = certificate.useGetCertificateListQuery({
-        cv_id: id
+        cv_id: specialistId
     }, {
         refetchOnMountOrArgChange: true
     });

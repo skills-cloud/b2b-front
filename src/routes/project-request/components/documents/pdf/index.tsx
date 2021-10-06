@@ -3,30 +3,21 @@ import { useParams } from 'react-router';
 import { jsPDF } from 'jspdf';
 import { useTranslation } from 'react-i18next';
 
-import { IStyle, useClassnames } from 'hook/use-classnames';
-
-import Button from 'component/button';
-
 import { mainRequest } from 'adapter/api/main';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { callAddFont } from './font.ts';
-import style from './index.module.pcss';
-
-export interface IProps {
-    className?: IStyle | string
-}
+import Base from '../index';
 
 jsPDF.API.events.push(['addFonts', callAddFont]);
 
-const ProjectRequestPdf = (props: IProps) => {
-    const cn = useClassnames(style, props.className, true);
+const ProjectRequestPdf = () => {
     const { t } = useTranslation();
 
-    const params = useParams<{ subpage?: string, id: string }>();
+    const params = useParams<{ subpage?: string, requestId: string }>();
     const { data, refetch } = mainRequest.useGetMainRequestByIdQuery(
-        { id: params.id },
+        { id: params.requestId },
         { refetchOnMountOrArgChange: true }
     );
 
@@ -81,7 +72,7 @@ const ProjectRequestPdf = (props: IProps) => {
             startY += 16;
 
             doc.text(t('components.pdf.project.customer'), startX, startY, { align: 'left' });
-            doc.text(data.customer?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+            doc.text(data.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             startY += 30;
 
@@ -154,7 +145,7 @@ const ProjectRequestPdf = (props: IProps) => {
 
             doc.setFontSize(10);
             doc.text(t('components.pdf.project.customer'), startX, startY, { align: 'left' });
-            doc.text(data.customer?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+            doc.text(data.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             return doc;
         }
@@ -175,11 +166,9 @@ const ProjectRequestPdf = (props: IProps) => {
     }, []);
 
     return (
-        <div className={cn('pdf')}>
-            <Button className={cn('pdf__button')} onClick={onPrint}>
-                Скачать pdf
-            </Button>
-        </div>
+        <Base onClick={onPrint}>
+            {t('components.pdf.download')}
+        </Base>
     );
 };
 

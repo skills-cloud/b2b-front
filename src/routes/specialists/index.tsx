@@ -24,7 +24,7 @@ import Request from 'component/request';
 
 import { mainRequest } from 'adapter/api/main';
 import { cv } from 'adapter/api/cv';
-import { CvList, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
+import { CvListReadFull, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 import { IValue } from 'component/form/select';
 
 import style from './index.module.pcss';
@@ -222,7 +222,7 @@ export const Specialists = () => {
         return '\u2014';
     };
 
-    const elUserItem = (cvItem: CvList, showLinkedItems = true) => {
+    const elUserItem = (cvItem: CvListReadFull, showLinkedItems = true) => {
         const firstName = cvItem.first_name;
         const lastName = cvItem.last_name;
         let title = `${firstName || ''} ${lastName || ''}`.trim();

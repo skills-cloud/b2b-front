@@ -8,37 +8,65 @@
 export type Code200 = OrganizationProjectRead;
 export type NoName = string;
 export type NoName1 = string;
-export type ID = number;
 export type NoName2 = string;
 export type NoName3 = string;
+export type ID = number;
+export type NoName4 = string;
 export type ID1 = number;
-export type NoName4 = boolean;
-export type NoName5 = string;
-export type OrganizationId = number;
+export type NoName5 = boolean;
 export type NoName6 = string;
+export type NoName7 = number;
+export type NoName8 = string;
+export type ID2 = number;
+export type NoName9 = string;
+export type Photo = string;
+export type NoName10 = number;
+export type NoName11 = string;
+export type NoName12 = string;
+export type ID3 = number;
+export type NoName13 = boolean;
+export type NoName14 = string;
+export type NoName15 = number;
+export type NoName16 = number;
+export type RequestsCount = number;
+export type NoName17 = number;
+export type NoName18 = string;
 
 export interface OrganizationProjectRead {
     created_at?: NoName;
-    description?: NoName1;
+    date_from?: NoName1;
+    date_to?: NoName2;
+    description?: NoName3;
     id?: ID;
-    name: NoName2;
-    organization: Organization;
-    organization_id: OrganizationId;
-    updated_at?: NoName6;
-    date_from?: string;
-    date_to?: string;
-    industry_sector?: {
-        name: string
-    };
-    requests_count: number;
-    manager?: {
-        last_name: string,
-        first_name: string
-    }
+    industry_sector?: IndustrySector;
+    industry_sector_id?: NoName7;
+    manager?: UserInline;
+    manager_id?: NoName10;
+    name: NoName11;
+    organization?: Organization;
+    organization_id: NoName15;
+    recruiters?: UserInline[];
+    recruiters_ids?: NoName16[];
+    requests_count?: RequestsCount;
+    resource_managers?: UserInline[];
+    resource_managers_ids?: NoName17[];
+    updated_at?: NoName18;
+}
+export interface IndustrySector {
+    description?: NoName4;
+    id?: ID1;
+    is_verified?: NoName5;
+    name: NoName6;
+}
+export interface UserInline {
+    first_name: NoName8;
+    id?: ID2;
+    last_name: NoName9;
+    photo?: Photo;
 }
 export interface Organization {
-    description?: NoName3;
-    id?: ID1;
-    is_customer?: NoName4;
-    name: NoName5;
+    description?: NoName12;
+    id?: ID3;
+    is_customer?: NoName13;
+    name: NoName14;
 }

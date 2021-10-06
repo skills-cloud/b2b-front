@@ -18,12 +18,12 @@ export interface IProps {
 }
 
 export const Projects = (props: IProps) => {
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const cn = useClassnames(style, props.className, true);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const { t } = useTranslation();
 
-    const { data } = project.useGetProjectsListQuery({ cv_id: id }, { refetchOnMountOrArgChange: true });
+    const { data } = project.useGetProjectsListQuery({ cv_id: specialistId }, { refetchOnMountOrArgChange: true });
 
     const elEdit = useMemo(() => {
         if(isEdit) {

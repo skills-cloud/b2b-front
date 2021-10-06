@@ -11,13 +11,13 @@ import ModalFooterSubmit from 'component/modal/footer-submit';
 import Header from 'component/header';
 import Section from 'component/section';
 import Button from 'component/button';
-
-import EditCustomerForm, { MAIN_CUSTOMER_FORM_ID } from 'route/project-request/components/edit-customer';
-
-import style from './index.module.pcss';
-import { Organization } from 'adapter/types/main/organization/id/get/code-200';
 import SectionContentList from 'component/section/content-list';
 import SectionContentListItem from 'component/section/content-list-item';
+
+import { Organization } from 'adapter/types/main/organization/id/get/code-200';
+
+import EditCustomerForm, { MAIN_CUSTOMER_FORM_ID } from '../edit-customer';
+import style from './index.module.pcss';
 
 enum EModalSteps {
     EditCustomer,

@@ -23,10 +23,9 @@ import Competencies from './competencies';
 
 import style from './common/index.module.pcss';
 
-
 export const Person = () => {
     const cn = useClassnames(style);
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const { t } = useTranslation();
 
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -112,7 +111,7 @@ export const Person = () => {
                 <Certificates id="person-block-certificates" />
                 <Files id="person-block-files" />
             </div>
-            <Request specialistId={parseInt(id, 10)} showModal={showModal} onClickClose={onCloseModal} />
+            <Request specialistId={parseInt(specialistId, 10)} showModal={showModal} onClickClose={onCloseModal} />
         </div>
     );
 };

@@ -1,7 +1,7 @@
 {
     "allOf": [
         {
-            "$ref": "#/definitions/CvList"
+            "$ref": "#/definitions/CvListReadFull"
         }
     ],
     "definitions": {
@@ -588,7 +588,7 @@
             },
             "type": "object"
         },
-        "CvList": {
+        "CvListReadFull": {
             "properties": {
                 "birth_date": {
                     "format": "date",
@@ -1151,6 +1151,11 @@
                     "title": "Статус",
                     "type": "string"
                 },
+                "title": {
+                    "nullable": true,
+                    "title": "Заголовок (название или номер)",
+                    "type": "string"
+                },
                 "type": {
                     "$ref": "#/definitions/RequestType"
                 },
@@ -1491,6 +1496,18 @@
                     "format": "date-time",
                     "readOnly": true,
                     "title": "Создано",
+                    "type": "string"
+                },
+                "date_from": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата с",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата по",
                     "type": "string"
                 },
                 "date_from": {

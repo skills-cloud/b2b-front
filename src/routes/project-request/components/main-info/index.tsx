@@ -42,7 +42,7 @@ const FORMAT_DATE = 'dd.MM.yyyy';
 
 const MainInfo = (data: RequestRead) => {
     const { project, priority, status, start_date, deadline_date, requirements, id } = data;
-    const params = useParams<{ subpage?: string, id: string }>();
+    const params = useParams<{ subpage?: string, requestId: string }>();
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const formatDistance = useFormatDistance();

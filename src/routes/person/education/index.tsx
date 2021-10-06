@@ -20,9 +20,9 @@ export interface IProps {
 export const Education = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
-    const { data } = education.useGetEducationQuery({ cv_id: parseInt(id, 10) }, { refetchOnMountOrArgChange: true });
+    const { data } = education.useGetEducationQuery({ cv_id: parseInt(specialistId, 10) }, { refetchOnMountOrArgChange: true });
 
     return (
         <div id={props.id} className={cn('education')}>
@@ -50,7 +50,8 @@ export const Education = (props: IProps) => {
                             education_graduate,
                             is_verified,
                             education_place,
-                            competencies
+                            competencies,
+                            diploma_number
                         } = result;
 
                         return (
@@ -77,7 +78,7 @@ export const Education = (props: IProps) => {
                                     <li className={cn('education__list-item')}>
                                         <strong>{t('routes.person.education.label.diploma')}</strong>
                                         {/* TODO нет поля в ответе от бека, хак для демо*/}
-                                        <span>{`№123456789-${id}`}</span>
+                                        <span>{diploma_number}</span>
                                     </li>
                                     {competencies && competencies.length > 0 && (
                                         <li className={cn('education__list-item')}>

@@ -27,7 +27,7 @@ const Request = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
 
-    const { data, isLoading } = mainRequest.useGetRequestListQuery(undefined);
+    const { data, isLoading } = mainRequest.useGetMainRequestQuery(undefined);
 
     const [addSpecialist, { isLoading: isLoadingAdd, isSuccess }] = mainRequest.usePostRequestRequirementLinkCvMutation();
 

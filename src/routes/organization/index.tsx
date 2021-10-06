@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router';
 
+import { useClassnames } from 'hook/use-classnames';
+
 import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
 import SidebarNav, { NavItem } from 'component/nav';
@@ -11,15 +13,14 @@ import IconChecked from 'component/icons/checked';
 import IconExpand from 'component/icons/expand';
 import IconCollapse from 'component/icons/collapse';
 import SectionHeader from 'component/section/header';
+import Wrapper from 'component/section/wrapper';
+import ProjectList from 'route/organization/components/projects';
 import AddAction from 'component/section/actions/add';
 import useModalClose from 'component/modal/use-modal-close';
-
-import { mainRequest } from 'adapter/api/main';
-import ProjectList from 'route/organization/components/projects';
-import { useClassnames } from 'hook/use-classnames';
-
 import Modal from 'component/modal';
 import TreeList from 'component/tree-list';
+
+import { mainRequest } from 'adapter/api/main';
 
 import CardItem from './components/card-item';
 
@@ -31,18 +32,18 @@ enum ESectionInvariants {
     Cards = 'cards'
 }
 
-const ProjectRequest = () => {
+const Organization = () => {
     const cn = useClassnames(style);
     const [visibleModalId, setVisibleModalId] = useState<number | null>(null);
     const [showAllTree, setShowAllTree] = useState(false);
     const [checked, setChecked] = useState<Array<string>>([]);
-    const { hash } = useLocation();
+    const { pathname } = useLocation();
     const { t } = useTranslation();
-    const params = useParams<{ id: string }>();
-    const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.id });
-    const { data: projectList } = mainRequest.useGetMainOrganizationProjectListQuery({ organization_id: params.id });
+    const params = useParams<{ organizationId: string }>();
+    const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.organizationId });
+    const { data: projectList } = mainRequest.useGetMainOrganizationProjectListQuery({ organization_id: params.organizationId });
     const { data: cards, isLoading } = mainRequest.useGetOrganizationProjectCardItemQuery({
-        organization_id: [params.id]
+        organization_id: [params.organizationId]
     });
 
     useModalClose(!!visibleModalId || showAllTree, (state) => {
@@ -60,16 +61,18 @@ const ProjectRequest = () => {
         <SidebarLayout sidebar={
             <Section withoutPaddings={true}>
                 <SidebarNav>
-                    {Object.values(ESectionInvariants).map((nav) => (
-                        <NavItem key={nav} to={`#${nav}`} selected={nav === hash.slice(1)}>
-                            {t(`routes.organization.blocks.sections.${nav}`)}
-                        </NavItem>
-                    ))}
+                    {Object.values(ESectionInvariants).map((nav) => {
+                        return (
+                            <NavItem key={nav} to={`${pathname}/${nav}`}>
+                                {t(`routes.organization.blocks.sections.${nav}`)}
+                            </NavItem>
+                        );
+                    })}
                 </SidebarNav>
             </Section>
         }
         >
-            <div className={cn('organization__sections')} >
+            <Wrapper>
                 <Section>
                     <SectionHeader>{data?.name}</SectionHeader>
                 </Section>
@@ -139,9 +142,9 @@ const ProjectRequest = () => {
                         />
                     </Modal>
                 )}
-            </div>
+            </Wrapper>
         </SidebarLayout>
     );
 };
 
-export default ProjectRequest;
+export default Organization;

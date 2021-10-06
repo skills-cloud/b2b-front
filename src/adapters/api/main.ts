@@ -16,10 +16,6 @@ interface IBaseGetById {
     id: string
 }
 
-interface IRequestParams {
-    organization_project_id: string
-}
-
 interface IQueryParams {
     ordering?: Array<string>,
     search?: string,
@@ -87,6 +83,7 @@ interface IParamsCompetenciesSet {
 }
 
 export interface IGetRequestListParams {
+    organization_project_id?: string,
     type_id?: string,
     customer_id?: string,
     status?: string,
@@ -101,17 +98,39 @@ export interface IGetRequestListParams {
     page_size?: number
 }
 
-interface IResponseGetRequestList {
-    count: number,
-    next: string,
-    previous: string,
-    results: Array<RequestRead>
-}
-
 export interface IParamsLinkCv {
     data: Record<string, unknown>,
     cv_id: string,
     id: string
+}
+
+export enum ERequestStatus {
+    Draft = 'draft',
+    InProgress = 'in_progress',
+    Done = 'done',
+    Closed = 'closed'
+}
+
+export type TPriority = 10 | 20 | 30;
+
+export interface IPostRequestData {
+    organization_project_id: number,
+    type_id?: number,
+    industry_sector_id?: number,
+    project_id?: number,
+    manager_id?: number,
+    resource_manager_id?: number,
+    recruiter_id?: number,
+    title?: string,
+    description?: string,
+    status?: ERequestStatus,
+    priority?: TPriority,
+    start_date?: string,
+    deadline_date?: string
+}
+
+export interface IParamsPatchRequest extends IPostRequestData {
+    id?: number
 }
 
 export const mainRequest = createApi({
@@ -121,14 +140,6 @@ export const mainRequest = createApi({
         baseUrl: '/api/main'
     }),
     endpoints: (build) => ({
-        getRequestList: build.query<IResponseGetRequestList, IGetRequestListParams | undefined>({
-            providesTags: ['main'],
-            query       : (params) => ({
-                url   : 'request/',
-                method: 'GET',
-                params
-            })
-        }),
         getMainRequestRequirementById: build.query<RequestRequirementRead, IBaseGetById>({
             providesTags: ['main'],
             query       : ({ id }) => ({
@@ -250,11 +261,11 @@ export const mainRequest = createApi({
         getMainOrganizationProjectById: build.query<OrganizationProjectRead, IBaseGetById>({
             providesTags: ['main'],
             query       : ({ id }) => ({
-                url   : `/organization-project/${id}`,
+                url   : `/organization-project/${id}/`,
                 method: 'GET'
             })
         }),
-        getMainRequest: build.query<IResponseRequestList, IRequestParams>({
+        getMainRequest: build.query<IResponseRequestList, IGetRequestListParams | undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/request/',
@@ -272,7 +283,7 @@ export const mainRequest = createApi({
         deleteMainRequestById: build.mutation<RequestRead, IBaseGetById>({
             invalidatesTags: ['main'],
             query          : ({ id }) => ({
-                url   : `/request/${id}`,
+                url   : `/request/${id}/`,
                 method: 'DELETE'
             })
         }),
@@ -283,7 +294,7 @@ export const mainRequest = createApi({
                 method: 'DELETE'
             })
         }),
-        postMainRequest: build.mutation<IPostBaseResponse, RequestRead>({
+        postMainRequest: build.mutation<IPostBaseResponse, IPostRequestData>({
             invalidatesTags: ['main'],
             query          : (body) => ({
                 url   : '/request/',
@@ -323,12 +334,12 @@ export const mainRequest = createApi({
                 body  : data
             })
         }),
-        patchMainRequest: build.mutation<IPostBaseResponse, RequestRead>({
+        patchMainRequest: build.mutation<IPostBaseResponse, IParamsPatchRequest>({
             invalidatesTags: ['main'],
-            query          : ({ id, ...body }) => ({
+            query          : ({ id, ...rest }) => ({
                 url   : `/request/${id}/`,
                 method: 'PATCH',
-                body
+                body  : rest
             })
         })
     })

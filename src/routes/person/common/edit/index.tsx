@@ -14,14 +14,14 @@ import InputDictionary from 'component/form/input-dictionary';
 import { dictionary } from 'adapter/api/dictionary';
 import { cv } from 'adapter/api/cv';
 import { contact } from 'adapter/api/contact';
-import { CvDetailRead, NoName57 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
+import { CvDetailReadFull, NoName65 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
 import { CvDetailWrite } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
 
 export interface IProps {
     className?: string | IStyle,
-    fields: CvDetailRead,
+    fields: CvDetailReadFull,
     id: string,
     onSubmit?(payload?: CvDetailWrite): void,
     onCancel?(): void

@@ -22,16 +22,14 @@ export interface IProps extends RouteProps {
 
 // Базовые роуты
 export const baseRoutes: Array<IProps> = [{
-    isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : '/organization/:id',
+    path     : ['/organizations/:organizationId', '/organizations/:organizationId/projects'],
     component: Organization
 }, {
-    isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : '/organization/:organizationId/project/:projectId',
+    path     : '/organizations/:organizationId/projects/:projectId',
     component: OrganizationProjects
 }, {
     isPublic : true,
@@ -57,27 +55,24 @@ export const baseRoutes: Array<IProps> = [{
 }, {
     exact    : true,
     layout   : Layout,
-    path     : ['/specialists/:id', '/profile'],
+    path     : ['/specialists/:specialistId', '/profile'],
     component: Person
 }, {
     exact    : true,
     layout   : Layout,
-    path     : '/project-request/create',
+    path     : '/requests/create',
     component: ProjectCreate
 }, {
-    isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : '/project-request',
+    path     : '/requests',
     component: ProjectRequestList
 }, {
-    isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : ['/project-request/:id', '/project-request/:id/:subpage(edit|specialists)'],
+    path     : ['/requests/:requestId', '/requests/:requestId/:subpage(edit|specialists)'],
     component: ProjectRequest
 }, {
-    isPublic : true,
     exact    : true,
     layout   : Layout,
     path     : '/404',
