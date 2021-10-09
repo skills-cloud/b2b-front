@@ -28,9 +28,16 @@ interface ICardForm {
     card: string
 }
 
-const CardLabel = ({ name, children, id }: IItem) => {
+interface ICardLabel extends IItem {
+    forceShowActions?: boolean
+}
+
+const MAX_LEVEL_TO_VISIBLE_ADD_ACTIONS = 2;
+
+const CardLabel = ({ name, children, id, forceShowActions = false, level }: ICardLabel) => {
     const cn = useClassnames(style);
     const [isOver, hoverProps] = useHover();
+    const showActions = forceShowActions || isOver;
     const { t } = useTranslation();
     const [action, setAction] = useState(ECardActions.Empty);
     const form = useForm<ICardForm>();
@@ -71,7 +78,7 @@ const CardLabel = ({ name, children, id }: IItem) => {
         <div>
             <span
                 className={cn('organization__card-label', {
-                    'organization__card-label_edit': isOver && action === ECardActions.Empty
+                    'organization__card-label_edit': forceShowActions || showActions && action === ECardActions.Empty
                 })}
                 {...hoverProps}
             >
@@ -102,18 +109,20 @@ const CardLabel = ({ name, children, id }: IItem) => {
                         </FormProvider>
                     </OutsideClickHandler>
                 )}
-                {isOver && action === ECardActions.Empty && (
+                {showActions && action === ECardActions.Empty && (
                     <div className={cn('organization__card-label-actions')}>
-                        <Tooltip content={t('routes.organization.blocks.modal.subdirectory')} theme="dark">
-                            <IconSubdirectory
-                                svg={{
-                                    className: cn('organization__card-label-action'),
-                                    onClick  : () => {
-                                        setAction(ECardActions.Add);
-                                    }
-                                }}
-                            />
-                        </Tooltip>
+                        {level !== undefined && level < MAX_LEVEL_TO_VISIBLE_ADD_ACTIONS && (
+                            <Tooltip content={t('routes.organization.blocks.modal.subdirectory')} theme="dark">
+                                <IconSubdirectory
+                                    svg={{
+                                        className: cn('organization__card-label-action'),
+                                        onClick  : () => {
+                                            setAction(ECardActions.Add);
+                                        }
+                                    }}
+                                />
+                            </Tooltip>
+                        )}
                         <Tooltip content={t('routes.organization.blocks.modal.edit')} theme="dark">
                             <IconPencil
                                 svg={{

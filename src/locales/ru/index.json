@@ -107,14 +107,18 @@
                 "cards-count_4": "{{count}} пунктов",
                 "cards-count_5": "{{count}} пунктов",
                 "modal" : {
-                    "edit-title": "Редактирование карточек доступа",
+                    "title_edit": "Редактирование карточки прав и доступа",
+                    "title_add": "Новая карточка прав и доступа",
                     "cards-count_empty": "",
                     "cards-count_full": "\u00A0({{value }})",
                     "subdirectory": "Добавить подпункт",
                     "edit": "Редактировать",
                     "delete": "Удалить",
-                    "save": "Сохранить"
-                }
+                    "save": "Сохранить",
+                    "cancel":"Отмена"
+                },
+                "cards-edit": "Редактировать",
+                "cards-delete": "Удалить"
             }
         },
         "organization-projects": {
@@ -122,7 +126,8 @@
                 "sections": {
                     "requests": "Проектные запросы",
                     "main-info":"Основная информация",
-                    "timesheet": "Таймшиты"
+                    "timesheet": "Таймшиты",
+                    "cards":"Карточки прав и доступа"
                 },
                 "customer": "Заказчик",
                 "manager": "РП",
@@ -453,6 +458,8 @@
                 "experience_3": "{{count}} лет",
                 "experience_4": "{{count}} лет",
                 "experience_5": "{{count}} лет",
+                "cards": "Карточки прав и доступа",
+                "cards-add": "Добавить",
                 "linked": {
                     "title": "Связанные кандидаты",
                     "why": "Почему связаны?"
@@ -463,6 +470,13 @@
                     "requirement-empty": "Нет доступных требований",
                     "requirement-no-name": "Название требования не указано"
                 }
+            },
+            "modal-card": {
+                "add-title": "Добавить карточки доступа",
+                "title_current": "Карточка «{{name}}»",
+                "title_add": "Добавить карточки доступа",
+                "cancel": "Отмена",
+                "submit": "Сохранить"
             },
             "sidebar": {
                 "filters": {

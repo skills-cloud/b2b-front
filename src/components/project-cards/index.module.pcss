@@ -44,4 +44,33 @@
     &__expand-icon {
         fill: var(--color-gray-90);
     }
+
+    &__add-card {
+        margin-left: 10 px;
+        color: var(--color-text-dark);
+        font-family: Roboto, sans-serif;
+        font-size: 14px;
+    }
+
+    &__cards-add-subdirectory {
+        margin-top: 16px;
+        display: inline-block;
+        font-family: Roboto, sans-serif;
+        font-size: 14px;
+        color: var(--color-text-ultra-light);
+        text-decoration: underline dotted;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+                text-decoration: none;
+            }
+        }
+    }
+
+    &__cards-add-input {
+        display: block;
+        margin-top: 16px;
+    }
 }
