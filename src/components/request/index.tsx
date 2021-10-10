@@ -5,7 +5,7 @@ import { IStyle, useClassnames } from 'hook/use-classnames';
 import useModalClose from 'component/modal/use-modal-close';
 
 import Loader from 'component/loader';
-import { H2, H3 } from 'component/header';
+import { H2, H4 } from 'component/header';
 import IconPlus from 'component/icons/plus';
 import IconApply from 'component/icons/apply';
 import Modal from 'component/modal';
@@ -134,7 +134,7 @@ const Request = (props: IProps) => {
         if(data?.results.length) {
             return data?.results?.map((request) => (
                 <div key={request.id} className={cn('request__item')}>
-                    <H3>{request.project?.name || t('routes.specialists.main.projects.empty-name')}</H3>
+                    <H4>{request.project?.name || t('routes.specialists.main.projects.empty-name')}</H4>
                     <ul className={cn('request__item-requirements')}>
                         {elRequestRequirements(request.requirements)}
                     </ul>

@@ -14,6 +14,7 @@ import Button from 'component/button';
 import IconPlus from 'component/icons/plus';
 import InputDictionary from 'component/form/input-dictionary';
 import InputMain from 'component/form/input-main';
+import { H3 } from 'component/header';
 
 import { mainRequest } from 'adapter/api/main';
 
@@ -107,7 +108,7 @@ const ProjectRequestList = () => {
                 {elRequests}
             </section>
             <aside className={cn('request-list__search')}>
-                <h3 className={cn('request-list__search-header')}>{t('routes.project-request-list.sidebar.filters.title')}</h3>
+                <H3>{t('routes.project-request-list.sidebar.filters.title')}</H3>
                 <FormProvider {...context}>
                     <form
                         onSubmit={onSubmit}

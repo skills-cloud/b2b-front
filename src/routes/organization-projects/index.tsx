@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router';
 
 import Section from 'component/section';
@@ -13,28 +12,24 @@ import SectionContentListItem from 'component/section/content-list-item';
 import Timeframe from 'component/timeframe';
 import ShortName from 'component/short-name';
 import ProjectCards from 'component/project-cards';
+import Wrapper from 'component/section/wrapper';
 
 import { mainRequest } from 'adapter/api/main';
-import { useClassnames } from 'hook/use-classnames';
-
-import style from './index.module.pcss';
 
 enum ESectionInvariants {
     MainInfo = 'main-info',
     Requests = 'requests',
-    Timesheet = 'timesheet',
+    Timesheets = 'timesheets',
     Cards = 'cards'
 }
 
 const ProjectRequest = () => {
-    const cn = useClassnames(style);
-    const { hash } = useLocation();
     const { t } = useTranslation();
     const { projectId, organizationId } = useParams<{ organizationId: string, projectId: string }>();
     const { data } = mainRequest.useGetMainOrganizationProjectByIdQuery({
         id: projectId
     });
-    const { data: requests } = mainRequest.useGetMainRequestQuery({ organization_project_id: projectId });
+    const { data: requests } = mainRequest.useGetMainRequestQuery({ organization_project_id: organizationId });
 
     if(!data) {
         return null;
@@ -45,7 +40,10 @@ const ProjectRequest = () => {
             <Section withoutPaddings={true}>
                 <SidebarNav>
                     {Object.values(ESectionInvariants).map((nav) => (
-                        <NavItem key={nav} to={`#${nav}`} selected={nav === hash.slice(1)}>
+                        <NavItem
+                            key={nav}
+                            to={`/organizations/${organizationId}/projects/${projectId}/${nav}`}
+                        >
                             {t(`routes.organization-projects.blocks.sections.${nav}`)}
                         </NavItem>
                     ))}
@@ -53,7 +51,7 @@ const ProjectRequest = () => {
             </Section>
         }
         >
-            <div className={cn('sections')} >
+            <Wrapper>
                 <Section>
                     <span id={ESectionInvariants.MainInfo} />
                     <SectionHeader>{data?.name}</SectionHeader>
@@ -79,7 +77,7 @@ const ProjectRequest = () => {
                     </Section>
                 )}
                 <ProjectCards projectId={projectId} organizationId={organizationId} />
-            </div>
+            </Wrapper>
         </SidebarLayout>
     );
 };

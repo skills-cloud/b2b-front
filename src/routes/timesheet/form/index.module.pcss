@@ -1,0 +1,49 @@
+.form {
+    display: grid;
+    grid-gap: 24px;
+}
+
+.field-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 24px;
+}
+
+.separator {
+    display: block;
+    margin: 8px -32px 0;
+    height: 1px;
+    background-color: var(--color-separator-default);
+}
+
+.submit-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.hide {
+    display: none;
+}
+
+.field-group-date {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-gap: 4px;
+    align-items: flex-start;
+}
+
+.field-group-date__separator {
+    --color: #d6d9de;
+    width: 16px;
+    height: 1px;
+    background: var(--color);
+    margin-top: 43px;
+}
+
+.append {
+    display: inline-block;
+    font-size: 12px;
+    line-height: 1.16;
+    color: var(--color-blue-primary);
+    margin-top: 12px;
+}

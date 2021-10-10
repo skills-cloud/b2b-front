@@ -7,23 +7,23 @@ import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
 import Tag from 'component/tag';
 import SectionContentList from 'component/section/content-list';
-import { H3 } from 'component/header';
+import { H4 } from 'component/header';
 import SectionContentListItem from 'component/section/content-list-item';
 import Separator from 'component/separator';
 import Section from 'component/section';
+import DeleteAction from 'component/section/actions/delete';
 
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 import ESectionInvariants from 'route/project-request/components/section-invariants';
-import EditModal from 'route/project-request/components/edit-modal';
 
 import { useClassnames } from 'hook/use-classnames';
 import useFormatDistance from 'component/dates/format-distance';
 import useModalClose from 'component/modal/use-modal-close';
 
+import EditModal from '../edit-modal';
 import ConfirmModal from '../confirm-modal';
 import projectRequest from './data.mock';
 import style from './index.module.pcss';
-import DeleteAction from 'component/section/actions/delete';
 
 const MAIN_INFO_FIELDS = [
     'industry_sector',
@@ -162,7 +162,7 @@ const MainInfo = (data: RequestRead) => {
             )}
 
             <SectionContentList>
-                <H3>{t(`routes.project-request.blocks.sections.${ESectionInvariants.MainInfo}`)}</H3>
+                <H4>{t(`routes.project-request.blocks.sections.${ESectionInvariants.MainInfo}`)}</H4>
                 {MAIN_INFO_FIELDS.map((field) => (
                     <SectionContentListItem title={t(`routes.project-request.blocks.main-info.${field}`)} key={field}>
                         {renderField(field)}
@@ -173,7 +173,7 @@ const MainInfo = (data: RequestRead) => {
             <Separator />
 
             <SectionContentList>
-                <H3>{t('routes.project-request.blocks.project-term')}</H3>
+                <H4>{t('routes.project-request.blocks.project-term')}</H4>
                 {PROJECT_TERM_FIELDS.map((field) => (
                     <SectionContentListItem title={t(`routes.project-request.blocks.${field}`)} key={field}>
                         {renderProjectField(field)}

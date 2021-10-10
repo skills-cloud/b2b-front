@@ -17,7 +17,7 @@ import Customer from 'route/project-request/components/customer';
 import ProjectRequestPdf from 'route/project-request/components/documents/pdf';
 import ProjectRequestDocx from 'route/project-request/components/documents/docx';
 import ProjectRequestCsv from 'route/project-request/components/documents/xlsx';
-import { H4 } from 'component/header';
+import { H5 } from 'component/header';
 import Wrapper from 'component/section/wrapper';
 
 import { mainRequest } from 'adapter/api/main';
@@ -63,7 +63,7 @@ const ProjectRequest = () => {
             return (
                 <Section>
                     <Wrapper>
-                        <H4>{t('routes.project-request.sidebar.documents')}</H4>
+                        <H5>{t('routes.project-request.sidebar.documents')}</H5>
                         <ProjectRequestPdf />
                         <ProjectRequestDocx />
                         <ProjectRequestCsv />

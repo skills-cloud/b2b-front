@@ -23,7 +23,7 @@ export interface TimeSheetRow {
     date_from?: NoName2;
     date_to?: NoName3;
     id?: ID;
-    request_requirement_id: NoName4;
+    request_id: NoName4;
     task_description?: NoName5;
     task_name: NoName6;
     updated_at?: NoName7;

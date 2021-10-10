@@ -21,6 +21,9 @@
             "submit": "Submit",
             "input-file": {
                 "add": "Добавить файл"
+            },
+            "input-request": {
+                "empty": "Не указано"
             }
         },
         "checkbox-tree": {
@@ -68,7 +71,11 @@
             "specialists": "Специалисты",
             "organizations": "Организации",
             "requests": "Проектные запросы",
-            "projects": "Проекты"
+            "projects": "Проекты",
+            "organization-projects": "Проекты",
+            "timesheets": "Таймшиты",
+            "main-info": "Основная информация",
+            "cards": "Карточки прав и доступа"
         }
     },
     "routes": {
@@ -86,6 +93,66 @@
         },
         "main": {
             "hello": "SkillCloud"
+        },
+        "timesheet": {
+            "sidebar": {
+                "title": "Фильтры",
+                "form": {
+                    "request": {
+                        "title": "Проектный запрос",
+                        "placeholder": "Выбрать проектный запрос"
+                    },
+                    "specialist": {
+                        "title": "Специалист",
+                        "placeholder": "Выбрать специалиста"
+                    },
+                    "task": {
+                        "title": "Задача",
+                        "placeholder": "Номер задачи"
+                    }
+                }
+            },
+            "content": {
+                "title": "Таймшиты",
+                "empty": "Результатов нет",
+                "empty-name": "Не указано",
+                "time": "{{time}} ч.",
+                "actions": {
+                    "edit": "Редактировать",
+                    "delete": "Удалить"
+                }
+            },
+            "confirm-modal": {
+                "header": "Точно удалить?",
+                "text": "Будет удалён таймшит проекта: {{name}}",
+                "empty-name": "Имя проекта не указано",
+                "cancel": "Отмена",
+                "delete": "Удалить"
+            },
+            "edit-modal": {
+                "header":"Основные данные",
+                "form": {
+                    "request": {
+                        "label": "Проектный запрос",
+                        "placeholder": "Введите проектный запрос"
+                    },
+                    "cv": {
+                        "label": "Специалист",
+                        "placeholder": "Введите имя специалиста"
+                    },
+                    "date": {
+                        "start": "Дата начала",
+                        "end": "Дата окончания"
+                    },
+                    "task": {
+                        "name": "Задача",
+                        "desc": "Описание задачи"
+                    },
+                    "time": "Количество часов"
+                },
+                "cancel": "Отмена",
+                "save": "Сохранить"
+            }
         },
         "organization": {
             "blocks": {
@@ -126,7 +193,7 @@
                 "sections": {
                     "requests": "Проектные запросы",
                     "main-info":"Основная информация",
-                    "timesheet": "Таймшиты",
+                    "timesheets": "Таймшиты",
                     "cards":"Карточки прав и доступа"
                 },
                 "customer": "Заказчик",

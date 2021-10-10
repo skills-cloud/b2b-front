@@ -6,7 +6,7 @@ import { education } from 'adapter/api/education';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconPencil from 'component/icons/pencil';
-import Header, { H3 } from 'component/header';
+import Header, { H4 } from 'component/header';
 import VerifyIcon from 'component/verify-icon';
 
 import ModalEdit from './edit';
@@ -57,7 +57,7 @@ export const Education = (props: IProps) => {
                         return (
                             <Fragment key={result.id}>
                                 <div className={cn('education__education-title')}>
-                                    <H3 contrast={true}>{education_place?.name}</H3>
+                                    <H4 contrast={true}>{education_place?.name}</H4>
                                     <VerifyIcon isVerify={is_verified} />
                                 </div>
                                 <ul className={cn('education__list')}>

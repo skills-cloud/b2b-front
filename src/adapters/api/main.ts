@@ -11,6 +11,8 @@ import { RequestRequirement } from 'adapter/types/main/request-requirement/post/
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
 import { OrganizationProjectCardItemReadTree } from 'adapter/types/main/organization-project-card-item/get/code-200';
 import { OrganizationProjectCardItemTree } from 'adapter/types/main/organization-project-card-item/post/code-201';
+import { TimeSheetRowRead } from 'adapter/types/main/time-sheet-row/get/code-200';
+import { TimeSheetRowRead as ITimeSheetRowReadById } from 'adapter/types/main/time-sheet-row/id/get/code-200';
 
 interface IBaseGetById {
     id: string
@@ -41,31 +43,25 @@ export interface IGetOrganizationProjectListQueryParams extends IQueryParams {
     organization_id?: string
 }
 
-interface IResponseGetOrganization {
+export interface IResponseBase {
     count: number,
-    next: string,
-    previous: string,
+    next?: string,
+    previous?: string
+}
+
+interface IResponseGetOrganization extends IResponseBase {
     results: Array<Organization>
 }
 
-interface IResponseRequestList {
-    count: number,
-    next: string,
-    previous: string,
+interface IResponseRequestList extends IResponseBase {
     results: Array<RequestRead>
 }
 
-interface IResponseGetMainProject {
-    count: number,
-    next: string,
-    previous: string,
+interface IResponseGetMainProject extends IResponseBase {
     results: Array<ProjectRead>
 }
 
-interface IResponseGetMainRequestType {
-    count: number,
-    next: string,
-    previous: string,
+interface IResponseGetMainRequestType extends IResponseBase {
     results: Array<RequestType>
 }
 
@@ -131,6 +127,40 @@ export interface IPostRequestData {
 
 export interface IParamsPatchRequest extends IPostRequestData {
     id?: number
+}
+
+export interface IResponseTimeSheetList extends IResponseBase {
+    results: Array<TimeSheetRowRead>
+}
+
+export interface IGetTimeSheetListParams {
+    cv_id?: Array<number>,
+    request_requirement_id?: Array<number>,
+    request_id?: Array<number>,
+    organization_project_id?: Array<number>,
+    organization_id?: Array<number>,
+    task_name?: string,
+    ordering?: Array<string>,
+    search?: string,
+    page?: number,
+    page_size?: number
+}
+
+export interface IDataPostTimeSheet {
+    id?: number,
+    request_id: number,
+    cv_id: number,
+    date_from?: string,
+    date_to?: string,
+    task_name: string,
+    task_description?: string,
+    work_time: number
+}
+
+export interface IResponsePostTimeSheet extends IDataPostTimeSheet {
+    id?: number,
+    created_at?: string,
+    updated_at?: string
 }
 
 export const mainRequest = createApi({
@@ -208,7 +238,7 @@ export const mainRequest = createApi({
                 params
             })
         }),
-        getMainOrganizationById: build.query<OrganizationById, { id: string }>({
+        getMainOrganizationById: build.query<OrganizationById, IBaseGetById>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : `/organization/${params.id}/`,
@@ -227,7 +257,7 @@ export const mainRequest = createApi({
                 params
             })
         }),
-        getMainOrganizationCustomerById: build.query<OrganizationById, { id: string }>({
+        getMainOrganizationCustomerById: build.query<OrganizationById, IBaseGetById>({
             providesTags     : ['main'],
             transformResponse: (resp: OrganizationById) => {
                 if(resp?.is_customer) {
@@ -265,44 +295,14 @@ export const mainRequest = createApi({
                 method: 'GET'
             })
         }),
-        getMainRequest: build.query<IResponseRequestList, IGetRequestListParams | undefined>({
-            providesTags: ['main'],
-            query       : (params) => ({
-                url   : '/request/',
-                method: 'GET',
-                params
-            })
-        }),
-        getMainRequestById: build.query<RequestRead, IBaseGetById>({
-            providesTags: ['main'],
-            query       : ({ id }) => ({
-                url   : `/request/${id}/`,
-                method: 'GET'
-            })
-        }),
-        deleteMainRequestById: build.mutation<RequestRead, IBaseGetById>({
-            invalidatesTags: ['main'],
-            query          : ({ id }) => ({
-                url   : `/request/${id}/`,
-                method: 'DELETE'
-            })
-        }),
-        deleteMainOrganozationProjectCardById: build.mutation<OrganizationProjectCardItemTree, IBaseGetById>({
+        deleteMainOrganizationProjectCardById: build.mutation<OrganizationProjectCardItemTree, IBaseGetById>({
             invalidatesTags: ['main'],
             query          : ({ id }) => ({
                 url   : `/organization-project-card-item/${id}`,
                 method: 'DELETE'
             })
         }),
-        postMainRequest: build.mutation<IPostBaseResponse, IPostRequestData>({
-            invalidatesTags: ['main'],
-            query          : (body) => ({
-                url   : '/request/',
-                method: 'POST',
-                body
-            })
-        }),
-        postMainOrganozationProjectCard: build.mutation<OrganizationProjectCardItemTree, OrganizationProjectCardItemTree>({
+        postMainOrganizationProjectCard: build.mutation<OrganizationProjectCardItemTree, OrganizationProjectCardItemTree>({
             invalidatesTags: ['main'],
             query          : (body) => ({
                 url   : '/organization-project-card-item/',
@@ -310,7 +310,7 @@ export const mainRequest = createApi({
                 body
             })
         }),
-        patchMainOrganozationProjectCard: build.mutation<OrganizationProjectCardItemTree, OrganizationProjectCardItemTree>({
+        patchMainOrganizationProjectCard: build.mutation<OrganizationProjectCardItemTree, OrganizationProjectCardItemTree>({
             invalidatesTags: ['main'],
             query          : ({ id, ...body }) => ({
                 url   : `/organization-project-card-item/${id}/`,
@@ -334,6 +334,29 @@ export const mainRequest = createApi({
                 body  : data
             })
         }),
+        getMainRequest: build.query<IResponseRequestList, IGetRequestListParams | undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/request/',
+                method: 'GET',
+                params
+            })
+        }),
+        postMainRequest: build.mutation<IPostBaseResponse, IPostRequestData>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/request/',
+                method: 'POST',
+                body
+            })
+        }),
+        getMainRequestById: build.query<RequestRead, IBaseGetById>({
+            providesTags: ['main'],
+            query       : ({ id }) => ({
+                url   : `/request/${id}/`,
+                method: 'GET'
+            })
+        }),
         patchMainRequest: build.mutation<IPostBaseResponse, IParamsPatchRequest>({
             invalidatesTags: ['main'],
             query          : ({ id, ...rest }) => ({
@@ -348,6 +371,51 @@ export const mainRequest = createApi({
                 url   : `/request-requirement/${id}/cv-set-details/${cv_id}/`,
                 method: 'POST',
                 body  : data
+            })
+        }),
+        deleteMainRequestById: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/request/${id}/`,
+                method: 'DELETE'
+            })
+        }),
+        getMainTimeSheetRow: build.query<IResponseTimeSheetList, IGetTimeSheetListParams | undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/time-sheet-row/',
+                method: 'GET',
+                params
+            })
+        }),
+        postMainTimeSheetRow: build.mutation<IResponsePostTimeSheet, IDataPostTimeSheet>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/time-sheet-row/',
+                method: 'POST',
+                body
+            })
+        }),
+        getMainTimeSheetRowById: build.query<ITimeSheetRowReadById, IBaseGetById>({
+            providesTags: ['main'],
+            query       : ({ id }) => ({
+                url   : `/time-sheet-row/${id}/`,
+                method: 'GET'
+            })
+        }),
+        patchMainTimeSheetRow: build.mutation<IResponsePostTimeSheet, IDataPostTimeSheet>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...rest }) => ({
+                url   : `/time-sheet-row/${id}/`,
+                method: 'PATCH',
+                body  : rest
+            })
+        }),
+        deleteMainTimeSheetRowById: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/time-sheet-row/${id}/`,
+                method: 'DELETE'
             })
         })
     })

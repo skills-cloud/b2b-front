@@ -35,11 +35,11 @@
                     "title": "ID",
                     "type": "integer"
                 },
-                "request_requirement_id": {
-                    "title": "требование проектного запроса",
+                "request_id": {
+                    "title": "проектный запрос",
                     "type": "integer",
-                    "x-url-object-detail": "/api/main/request-requirement/$id/",
-                    "x-url-object-list": "/api/main/request-requirement/"
+                    "x-url-object-detail": "/api/main/request/$id/",
+                    "x-url-object-list": "/api/main/request/"
                 },
                 "task_description": {
                     "nullable": true,
@@ -65,7 +65,7 @@
             },
             "required": [
                 "cv_id",
-                "request_requirement_id",
+                "request_id",
                 "task_name",
                 "work_time"
             ],
