@@ -48,9 +48,9 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
     const methods = useForm();
     const cardGetParams = projectId ? { organization_project_id: [projectId] } : { organization_id: [organizationId] };
     const { data: cards, isLoading } = mainRequest.useGetOrganizationProjectCardItemQuery(cardGetParams);
-    const [patch] = mainRequest.usePatchMainOrganozationProjectCardMutation();
-    const [post] = mainRequest.usePostMainOrganozationProjectCardMutation();
-    const [remove] = mainRequest.useDeleteMainOrganozationProjectCardByIdMutation();
+    const [patch] = mainRequest.usePatchMainOrganizationProjectCardMutation();
+    const [post] = mainRequest.usePostMainOrganizationProjectCardMutation();
+    const [remove] = mainRequest.useDeleteMainOrganizationProjectCardByIdMutation();
 
     const closeModal = useCallback(() => {
         setVisibleModalId(null);
