@@ -39,9 +39,9 @@ const CardLabel = ({ name, children, id }: IItem) => {
             card: name
         }
     });
-    const [post] = mainRequest.usePostMainOrganozationProjectCardMutation();
-    const [patch] = mainRequest.usePatchMainOrganozationProjectCardMutation();
-    const [remove] = mainRequest.useDeleteMainOrganozationProjectCardByIdMutation();
+    const [post] = mainRequest.usePostMainOrganizationProjectCardMutation();
+    const [patch] = mainRequest.usePatchMainOrganizationProjectCardMutation();
+    const [remove] = mainRequest.useDeleteMainOrganizationProjectCardByIdMutation();
 
     const addCard = (values: ICardForm) => {
         post({

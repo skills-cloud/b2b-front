@@ -1,7 +1,7 @@
 import React from 'react';
 
 import useClassnames from 'hook/use-classnames';
-import { H3 } from 'component/header';
+import { H4 } from 'component/header';
 import Separator from 'component/separator';
 import IconPencil from 'component/icons/pencil';
 import IconDelete from 'component/icons/delete';
@@ -34,7 +34,7 @@ const EducationList = ({ fields, setEducationId, nextStep }: IEducationList) => 
                     <div key={id} className={cn('education')}>
                         <div className={cn('education__row')}>
                             <div>
-                                <H3>{education_place?.name}</H3>
+                                <H4>{education_place?.name}</H4>
                                 <p className={cn('education__date')}>
                                     {date_from}&nbsp;&mdash; {date_to}
                                     {' '}

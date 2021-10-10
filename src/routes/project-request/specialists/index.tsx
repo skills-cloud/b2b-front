@@ -31,8 +31,8 @@ export const Specialists = () => {
         const reqsList = data?.requirements?.reduce((acc, current) => {
             if(current.cv_list_ids) {
                 current.cv_list_ids.forEach((cvId) => {
-                    if(!acc.includes(cvId)) {
-                        acc.push(cvId);
+                    if(!acc.includes(parseInt(cvId, 10))) {
+                        acc.push(parseInt(cvId, 10));
                     }
                 });
             }
@@ -140,16 +140,18 @@ export const Specialists = () => {
 
         if(data?.requirements?.length) {
             const hashValue = hash.slice(1);
+            const cvListFiltered = cvList.filter((item) => item.requests_requirements?.find((req) => String(req.id) === hashValue));
+            const dataToRender = hashValue === 'all' ? cvList : cvListFiltered;
 
-            const dataToRender = hashValue === 'all' ? cvList : data?.requirements?.find((item) => String(item.id) === hashValue)?.cv_list;
-
-            if(dataToRender) {
+            if(dataToRender.length) {
                 return (
                     <div className={cn('specialists__users')}>
                         {dataToRender.map((cvItem) => elUserItem(cvItem))}
                     </div>
                 );
             }
+
+            return <span className={cn('specialists__users-empty')}>{t('routes.specialists.main.users.empty')}</span>;
         }
 
         return <span className={cn('specialists__users-empty')}>{t('routes.specialists.main.users.empty')}</span>;

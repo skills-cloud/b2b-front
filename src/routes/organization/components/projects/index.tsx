@@ -8,7 +8,7 @@ import IconChevronRight from 'component/icons/chevron-right';
 import SectionHeader from 'component/section/header';
 import SectionContentList from 'component/section/content-list';
 import SectionContentListItem from 'component/section/content-list-item';
-import { H3 } from 'component/header';
+import { H4 } from 'component/header';
 import Separator from 'component/separator';
 import Timeframe from 'component/timeframe';
 
@@ -64,7 +64,7 @@ const ProjectList = ({ list }: { list: Array<OrganizationProjectRead>}) => {
                     {index > 0 && <Separator />}
                     <SectionContentList>
                         <div className={cn('project-header')}>
-                            <H3>{item?.name}</H3>
+                            <H4>{item?.name}</H4>
                             <Link to={`/organizations/${organizationId}/projects/${item.id}`}>
                                 <IconChevronRight />
                             </Link>

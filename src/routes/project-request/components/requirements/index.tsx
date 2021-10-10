@@ -14,7 +14,7 @@ import Modal from 'component/modal';
 import useModalClose from 'component/modal/use-modal-close';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import SectionContentList from 'component/section/content-list';
-import Header, { H3 } from 'component/header';
+import Header, { H4 } from 'component/header';
 import SectionContentListItem from 'component/section/content-list-item';
 import Separator from 'component/separator';
 import Section from 'component/section';
@@ -145,9 +145,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
 
                         {position?.name && (
                             <div className={cn('gap-bottom')}>
-                                <H3 {...ancor}>
+                                <H4 {...ancor}>
                                     {position?.name} ({count} {t('routes.project-request.blocks.people', { count })})
-                                </H3>
+                                </H4>
                             </div>
                         )}
 
@@ -186,9 +186,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                         {location && (
                             <React.Fragment>
                                 <Separator />
-                                <H3>
+                                <H4>
                                     {t('routes.project-request.blocks.location.title')}
-                                </H3>
+                                </H4>
                                 <SectionContentList>
                                     <SectionContentListItem title={t('routes.project-request.blocks.location.point')}>
                                         {t(
@@ -212,9 +212,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                         {max_price && (
                             <React.Fragment>
                                 <Separator />
-                                <H3>
+                                <H4>
                                     {t('routes.project-request.blocks.price.title')}
-                                </H3>
+                                </H4>
                                 <SectionContentList>
                                     <SectionContentListItem title={t('routes.project-request.blocks.price.per-hour')}>
                                         {t('routes.project-request.blocks.price.value', { value: max_price })}
@@ -226,9 +226,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                         {description && (
                             <React.Fragment>
                                 <Separator />
-                                <H3>
+                                <H4>
                                     {t('routes.project-request.blocks.other.title')}
-                                </H3>
+                                </H4>
                                 <SectionContentList>
                                     <SectionContentListItem title={t('routes.project-request.blocks.other.description')}>
                                         {description}

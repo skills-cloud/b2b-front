@@ -588,6 +588,125 @@
             },
             "type": "object"
         },
+        "CvInlineShort": {
+            "properties": {
+                "birth_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата рождения",
+                    "type": "string"
+                },
+                "citizenship_id": {
+                    "nullable": true,
+                    "title": "Citizenship id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/citizenship/$id/",
+                    "x-url-object-list": "/api/dictionary/citizenship/"
+                },
+                "city_id": {
+                    "nullable": true,
+                    "title": "City id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/city/$id/",
+                    "x-url-object-list": "/api/dictionary/city/"
+                },
+                "country_id": {
+                    "nullable": true,
+                    "title": "Country id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/country/$id/",
+                    "x-url-object-list": "/api/dictionary/country/"
+                },
+                "days_to_contact": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "all",
+                                "weekends",
+                                "workdays"
+                            ],
+                            "title": "Дни для связи",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "first_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Имя",
+                    "type": "string"
+                },
+                "gender": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "F",
+                                "M"
+                            ],
+                            "title": "Пол",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_resource_owner": {
+                    "title": "Владелец ресурса",
+                    "type": "boolean"
+                },
+                "last_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Фамилия",
+                    "type": "string"
+                },
+                "middle_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Отчество",
+                    "type": "string"
+                },
+                "photo": {
+                    "format": "uri",
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Photo",
+                    "type": "string"
+                },
+                "price": {
+                    "nullable": true,
+                    "title": "Ставка",
+                    "type": "number"
+                },
+                "time_to_contact_from": {
+                    "nullable": true,
+                    "title": "Время для связи / с",
+                    "type": "string"
+                },
+                "time_to_contact_to": {
+                    "nullable": true,
+                    "title": "Время для связи / по",
+                    "type": "string"
+                },
+                "user_id": {
+                    "nullable": true,
+                    "title": "User id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                }
+            },
+            "type": "object"
+        },
         "CvListReadFull": {
             "properties": {
                 "birth_date": {
@@ -1188,6 +1307,21 @@
                     "title": "Количество",
                     "type": "integer"
                 },
+                "cv_list": {
+                    "items": {
+                        "$ref": "#/definitions/RequestRequirementCvRead"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "cv_list_ids": {
+                    "items": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -1496,18 +1630,6 @@
                     "format": "date-time",
                     "readOnly": true,
                     "title": "Создано",
-                    "type": "string"
-                },
-                "date_from": {
-                    "format": "date",
-                    "nullable": true,
-                    "title": "Дата с",
-                    "type": "string"
-                },
-                "date_to": {
-                    "format": "date",
-                    "nullable": true,
-                    "title": "Дата по",
                     "type": "string"
                 },
                 "date_from": {
@@ -1882,6 +2004,71 @@
             "required": [
                 "competence_id"
             ],
+            "type": "object"
+        },
+        "RequestRequirementCvRead": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "cv": {
+                    "$ref": "#/definitions/CvInlineShort"
+                },
+                "cv_id": {
+                    "readOnly": true,
+                    "title": "Cv id",
+                    "type": "string"
+                },
+                "date_from": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Участие в проекте с",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Участие в проекте по",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "organization_project_card_items_ids": {
+                    "items": {
+                        "type": "integer",
+                        "x-url-object-detail": "/api/main/organization-project-card-item/$id/",
+                        "x-url-object-list": "/api/main/organization-project-card-item/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "request_requirement_id": {
+                    "readOnly": true,
+                    "title": "Request requirement id",
+                    "type": "string"
+                },
+                "status": {
+                    "enum": [
+                        "canceled",
+                        "candidate",
+                        "worker"
+                    ],
+                    "title": "Статус",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
             "type": "object"
         },
         "RequestType": {

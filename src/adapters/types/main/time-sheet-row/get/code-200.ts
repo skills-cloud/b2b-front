@@ -27,26 +27,53 @@ export type NoName11 = number;
 export type NoName12 = string;
 export type NoName13 = string;
 export type ID1 = number;
-export type NoName14 = number;
+export type NoName14 = string;
 export type NoName15 = string;
-/**
- * float
- */
-export type NoName16 = number;
 export type ID2 = number;
+export type NoName16 = number;
 export type NoName17 = number;
 export type NoName18 = string;
-export type PositionId = number;
-export type RequestId = number;
-export type NoName19 = number;
-export type TypeOfEmploymentId = number;
+export type NoName19 = string;
 export type NoName20 = string;
-export type WorkLocationCityId = number;
-export type NoName21 = number;
+export type NoName21 = string;
+export type ID3 = number;
 export type NoName22 = string;
-export type NoName23 = string;
+export type ID4 = number;
+export type NoName23 = boolean;
 export type NoName24 = string;
 export type NoName25 = number;
+export type NoName26 = string;
+export type ID5 = number;
+export type NoName27 = string;
+export type Photo1 = string;
+export type NoName28 = number;
+export type NoName29 = string;
+export type NoName30 = string;
+export type ID6 = number;
+export type NoName31 = boolean;
+export type NoName32 = string;
+export type NoName33 = number;
+export type NoName34 = number;
+export type RequestsCount = number;
+export type NoName35 = number;
+export type NoName36 = string;
+export type NoName37 = number;
+export type NoName38 = 10 | 20 | 30;
+/**
+ * На текущий момент не используется.<br>Надо задавать связку с проектом заказчика
+ */
+export type NoName39 = number;
+export type NoName40 = number;
+export type NoName41 = number;
+export type NoName42 = string;
+export type NoName43 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName44 = string;
+export type NoName45 = number;
+export type NoName46 = number;
+export type NoName47 = string;
+export type NoName48 = string;
+export type NoName49 = string;
+export type NoName50 = number;
 
 export interface TimeSheetRowRead {
     created_at?: NoName;
@@ -55,12 +82,12 @@ export interface TimeSheetRowRead {
     date_from?: NoName12;
     date_to?: NoName13;
     id?: ID1;
-    request_requirement: RequestRequirementInline;
-    request_requirement_id: NoName21;
-    task_description?: NoName22;
-    task_name: NoName23;
-    updated_at?: NoName24;
-    work_time: NoName25;
+    request: RequestInline;
+    request_id: NoName46;
+    task_description?: NoName47;
+    task_name: NoName48;
+    updated_at?: NoName49;
+    work_time: NoName50;
 }
 export interface CvInlineShort {
     birth_date?: NoName1;
@@ -80,17 +107,58 @@ export interface CvInlineShort {
     time_to_contact_to?: NoName10;
     user_id?: UserId;
 }
-export interface RequestRequirementInline {
-    count?: NoName14;
+export interface RequestInline {
+    deadline_date?: NoName14;
     description?: NoName15;
-    experience_years?: NoName16;
     id?: ID2;
-    max_price?: NoName17;
-    name?: NoName18;
-    position_id?: PositionId;
-    request_id: RequestId;
-    sorting?: NoName19;
-    type_of_employment_id?: TypeOfEmploymentId;
-    work_location_address?: NoName20;
-    work_location_city_id?: WorkLocationCityId;
+    industry_sector_id?: NoName16;
+    manager_id?: NoName17;
+    organization_project?: OrganizationProjectInline;
+    organization_project_id: NoName37;
+    priority?: NoName38;
+    project_id?: NoName39;
+    recruiter_id?: NoName40;
+    resource_manager_id?: NoName41;
+    start_date?: NoName42;
+    status?: NoName43;
+    title?: NoName44;
+    type_id?: NoName45;
+}
+export interface OrganizationProjectInline {
+    created_at?: NoName18;
+    date_from?: NoName19;
+    date_to?: NoName20;
+    description?: NoName21;
+    id?: ID3;
+    industry_sector?: IndustrySector;
+    industry_sector_id?: NoName25;
+    manager?: UserInline;
+    manager_id?: NoName28;
+    name: NoName29;
+    organization?: Organization;
+    organization_id: NoName33;
+    recruiters?: UserInline[];
+    recruiters_ids?: NoName34[];
+    requests_count?: RequestsCount;
+    resource_managers?: UserInline[];
+    resource_managers_ids?: NoName35[];
+    updated_at?: NoName36;
+}
+export interface IndustrySector {
+    description?: NoName22;
+    id?: ID4;
+    is_verified?: NoName23;
+    name: NoName24;
+}
+export interface UserInline {
+    first_name: NoName26;
+    id?: ID5;
+    last_name: NoName27;
+    photo?: Photo1;
+}
+export interface Organization {
+    description?: NoName30;
+    id?: ID6;
+    is_customer?: NoName31;
+    name: NoName32;
 }

@@ -27,6 +27,7 @@ export enum EItems {
     Requests = 'requests',
     Projects = 'projects',
     Specialists = 'specialists',
+    Timesheets = 'timesheets',
     Organizations = 'organizations'
 }
 
@@ -36,9 +37,18 @@ interface IPath {
     skipTranslate?: boolean
 }
 
+interface IParams {
+    requestId: string,
+    projectId: string,
+    specialistId: string,
+    organizationId: string,
+    timesheetId: string
+}
+
 const config = {
-    [EItems.Projects]     : mainRequest.endpoints.getMainProjectById,
+    [EItems.Projects]     : mainRequest.endpoints.getMainOrganizationProjectById,
     [EItems.Requests]     : mainRequest.endpoints.getMainRequestById,
+    [EItems.Timesheets]   : mainRequest.endpoints.getMainTimeSheetRowById,
     [EItems.Specialists]  : cv.endpoints.getCvById,
     [EItems.Organizations]: mainRequest.endpoints.getMainOrganizationById
 };
@@ -47,15 +57,15 @@ const Breadcrumbs = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const params = useParams<{ requestId: string, projectId: string, specialistId: string, organizationId: string }>();
+    const params = useParams<IParams>();
     const location = useLocation();
     const [path, setPath] = useState<Array<IPath>>([]);
 
     useEffect(() => {
         const newPath = location.pathname.split('/').filter((value) => !!value).reduce((acc, curr, index, array) => {
-            if(!parseInt(curr, 10) && parseInt(array[index + 1], 10)) {
+            if(!parseInt(curr, 10)) {
                 acc[curr] = {
-                    id: array[index + 1]
+                    id: array[index + 1] ? parseInt(array[index + 1], 10) : undefined
                 };
             }
 
@@ -92,6 +102,13 @@ const Breadcrumbs = (props: IProps) => {
             });
         }
 
+        if(params.timesheetId) {
+            requestList.push({
+                dispatch: dispatch(config[EItems.Timesheets].initiate({ id: params.timesheetId })),
+                id      : EItems.Timesheets
+            });
+        }
+
         Promise.all(requestList.map((item) => {
             return item.dispatch.then(({ data: loadData }) => {
                 if(loadData) {
@@ -100,9 +117,9 @@ const Breadcrumbs = (props: IProps) => {
                     const typeName = 'type' in loadData ? loadData.type?.name : '';
 
                     return {
-                        value      : item.id,
-                        name       : name || lastName || typeName,
-                        isTranslate: false
+                        value        : item.id,
+                        name         : name || lastName || typeName,
+                        skipTranslate: true
                     };
                 }
             });
@@ -142,7 +159,8 @@ const Breadcrumbs = (props: IProps) => {
                     .map((item, index) => ({
                         ...item,
                         link: locationArr[index]
-                    }));
+                    }))
+                    .filter((item) => item.text);
 
                 setPath(flatPath);
             })

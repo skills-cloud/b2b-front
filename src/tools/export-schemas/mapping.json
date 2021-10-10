@@ -70,6 +70,7 @@
         "/main/request-requirement/{id}/",
         "/main/request-requirement/{id}/competencies-set/",
         "/main/request-requirement/{id}/cv-link/{cv_id}/",
+        "/main/request-requirement/{id}/cv-set-details/{cv_id}/",
         "/main/request-requirement/{id}/cv-unlink/{cv_id}/",
         "/main/request-type/",
         "/main/request-type/{id}/",

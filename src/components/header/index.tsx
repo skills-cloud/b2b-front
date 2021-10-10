@@ -6,8 +6,8 @@ import style from './index.module.pcss';
 
 interface IHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'className'> {
     children: ReactNode,
-    level?: 1 | 2 | 3 | 4,
-    tag?: 'span' | 'div' | 'h1' | 'h2' | 'h3' | 'h4',
+    level?: 1 | 2 | 3 | 4 | 5,
+    tag?: 'span' | 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5',
     contrast?: boolean,
     className?: string | IStyle
 }
@@ -28,5 +28,6 @@ export const H1 = (props: IHeaderProps) => <Header {...props} level={1} />;
 export const H2 = (props: IHeaderProps) => <Header {...props} level={2} />;
 export const H3 = (props: IHeaderProps) => <Header {...props} level={3} />;
 export const H4 = (props: IHeaderProps) => <Header {...props} level={4} />;
+export const H5 = (props: IHeaderProps) => <Header {...props} level={5} />;
 
 export default Header;

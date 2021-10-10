@@ -14,6 +14,7 @@ import NotFound from 'route/not-found';
 import ProjectRequestList from 'route/project-request/list';
 import Organization from 'route/organization';
 import OrganizationProjects from 'route/organization-projects';
+import Timesheets from 'route/timesheet';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -24,12 +25,17 @@ export interface IProps extends RouteProps {
 export const baseRoutes: Array<IProps> = [{
     exact    : true,
     layout   : Layout,
-    path     : ['/organizations/:organizationId', '/organizations/:organizationId/:subpage(projects|main-info|cards)?'],
+    path     : '/organizations/:organizationId/:subpage(projects|main-info|cards)?',
     component: Organization
 }, {
     exact    : true,
     layout   : Layout,
-    path     : '/organizations/:organizationId/projects/:projectId',
+    path     : '/organizations/:organizationId/projects/:projectId/timesheets',
+    component: Timesheets
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/organizations/:organizationId/projects/:projectId/:subpage(main-info|requests)?',
     component: OrganizationProjects
 }, {
     isPublic : true,

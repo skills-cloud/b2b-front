@@ -662,6 +662,71 @@
             ],
             "type": "object"
         },
+        "RequestRequirementCvRead": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "cv": {
+                    "$ref": "#/definitions/CvInlineShort"
+                },
+                "cv_id": {
+                    "readOnly": true,
+                    "title": "Cv id",
+                    "type": "string"
+                },
+                "date_from": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Участие в проекте с",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Участие в проекте по",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "organization_project_card_items_ids": {
+                    "items": {
+                        "type": "integer",
+                        "x-url-object-detail": "/api/main/organization-project-card-item/$id/",
+                        "x-url-object-list": "/api/main/organization-project-card-item/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "request_requirement_id": {
+                    "readOnly": true,
+                    "title": "Request requirement id",
+                    "type": "string"
+                },
+                "status": {
+                    "enum": [
+                        "canceled",
+                        "candidate",
+                        "worker"
+                    ],
+                    "title": "Статус",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
         "RequestRequirementRead": {
             "properties": {
                 "competencies": {
@@ -680,18 +745,18 @@
                 },
                 "cv_list": {
                     "items": {
-                        "$ref": "#/definitions/CvInlineShort"
+                        "$ref": "#/definitions/RequestRequirementCvRead"
                     },
                     "readOnly": true,
                     "type": "array"
                 },
                 "cv_list_ids": {
                     "items": {
-                        "type": "integer"
+                        "nullable": true,
+                        "type": "string"
                     },
                     "readOnly": true,
-                    "type": "array",
-                    "uniqueItems": true
+                    "type": "array"
                 },
                 "description": {
                     "nullable": true,

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
@@ -37,7 +36,6 @@ const Organization = () => {
     const [visibleModalId, setVisibleModalId] = useState<number | null>(null);
     const [showAllTree, setShowAllTree] = useState(false);
     const [checked, setChecked] = useState<Array<string>>([]);
-    const { pathname } = useLocation();
     const { t } = useTranslation();
     const params = useParams<{ organizationId: string }>();
     const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.organizationId });
