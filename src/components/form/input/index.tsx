@@ -11,7 +11,7 @@ import style from './index.module.pcss';
 
 export interface IProps {
     name: string,
-    type: 'text' | 'search' | 'password' | 'number',
+    type: 'text' | 'search' | 'password' | 'number' | 'hidden',
     placeholder?: string,
     className?: string | IStyle,
     label?: string,

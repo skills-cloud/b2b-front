@@ -27,7 +27,6 @@ const useModalClose = (visible: boolean, setVisible: (visible: boolean) => void)
             });
         }
 
-
         return () => {
             document.removeEventListener('click', onClick);
             document.removeEventListener('keydown', onKeyDown);

@@ -11,6 +11,7 @@ import SectionContentList from 'component/section/content-list';
 import SectionContentListItem from 'component/section/content-list-item';
 import Timeframe from 'component/timeframe';
 import ShortName from 'component/short-name';
+import ProjectCards from 'component/project-cards';
 import Wrapper from 'component/section/wrapper';
 
 import { mainRequest } from 'adapter/api/main';
@@ -18,14 +19,15 @@ import { mainRequest } from 'adapter/api/main';
 enum ESectionInvariants {
     MainInfo = 'main-info',
     Requests = 'requests',
-    Timesheets = 'timesheets'
+    Timesheets = 'timesheets',
+    Cards = 'cards'
 }
 
 const ProjectRequest = () => {
     const { t } = useTranslation();
-    const params = useParams<{ organizationId: string, projectId: string }>();
+    const { projectId, organizationId } = useParams<{ organizationId: string, projectId: string }>();
     const { data } = mainRequest.useGetMainOrganizationProjectByIdQuery({
-        id: params.projectId
+        id: projectId
     });
     const { data: requests } = mainRequest.useGetMainRequestQuery({ organization_project_id: params.organizationId });
 
@@ -40,7 +42,7 @@ const ProjectRequest = () => {
                     {Object.values(ESectionInvariants).map((nav) => (
                         <NavItem
                             key={nav}
-                            to={`/organizations/${params.organizationId}/projects/${params.projectId}/${nav}`}
+                            to={`/organizations/${organizationId}/projects/${params.projectId}/${nav}`}
                         >
                             {t(`routes.organization-projects.blocks.sections.${nav}`)}
                         </NavItem>
@@ -74,6 +76,7 @@ const ProjectRequest = () => {
                         <RequestList requestList={requests.results} />
                     </Section>
                 )}
+                <ProjectCards projectId={projectId} organizationId={organizationId} />
             </Wrapper>
         </SidebarLayout>
     );
