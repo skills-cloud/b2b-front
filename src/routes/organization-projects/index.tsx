@@ -29,7 +29,7 @@ const ProjectRequest = () => {
     const { data } = mainRequest.useGetMainOrganizationProjectByIdQuery({
         id: projectId
     });
-    const { data: requests } = mainRequest.useGetMainRequestQuery({ organization_project_id: params.organizationId });
+    const { data: requests } = mainRequest.useGetMainRequestQuery({ organization_project_id: organizationId });
 
     if(!data) {
         return null;
@@ -42,7 +42,7 @@ const ProjectRequest = () => {
                     {Object.values(ESectionInvariants).map((nav) => (
                         <NavItem
                             key={nav}
-                            to={`/organizations/${organizationId}/projects/${params.projectId}/${nav}`}
+                            to={`/organizations/${organizationId}/projects/${projectId}/${nav}`}
                         >
                             {t(`routes.organization-projects.blocks.sections.${nav}`)}
                         </NavItem>
