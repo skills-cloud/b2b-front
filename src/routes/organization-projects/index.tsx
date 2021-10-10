@@ -12,6 +12,7 @@ import SectionContentList from 'component/section/content-list';
 import SectionContentListItem from 'component/section/content-list-item';
 import Timeframe from 'component/timeframe';
 import ShortName from 'component/short-name';
+import ProjectCards from 'component/project-cards';
 
 import { mainRequest } from 'adapter/api/main';
 import { useClassnames } from 'hook/use-classnames';
@@ -21,14 +22,15 @@ import style from './index.module.pcss';
 enum ESectionInvariants {
     MainInfo = 'main-info',
     Requests = 'requests',
-    Timesheet = 'timesheet'
+    Timesheet = 'timesheet',
+    Cards = 'cards'
 }
 
 const ProjectRequest = () => {
     const cn = useClassnames(style);
     const { hash } = useLocation();
     const { t } = useTranslation();
-    const { projectId } = useParams<{ organizationId: string, projectId: string }>();
+    const { projectId, organizationId } = useParams<{ organizationId: string, projectId: string }>();
     const { data } = mainRequest.useGetMainOrganizationProjectByIdQuery({
         id: projectId
     });
@@ -76,6 +78,7 @@ const ProjectRequest = () => {
                         <RequestList requestList={requests.results} />
                     </Section>
                 )}
+                <ProjectCards projectId={projectId} organizationId={organizationId} />
             </div>
         </SidebarLayout>
     );

@@ -258,6 +258,8 @@ export interface CvListReadFull {
     id?: ID17;
     is_resource_owner?: NoName66;
     last_name?: NoName67;
+    organization_project_card_items_ids?: string[],
+    cv_id?: number,
     linked_ids?: number[];
     middle_name?: NoName68;
     photo?: Photo;

@@ -341,6 +341,14 @@ export const mainRequest = createApi({
                 method: 'PATCH',
                 body  : rest
             })
+        }),
+        postRequestRequirementCvSetDetails: build.mutation<{ status: string }, IParamsLinkCv>({
+            invalidatesTags: ['main'],
+            query          : ({ id, cv_id, data }) => ({
+                url   : `/request-requirement/${id}/cv-set-details/${cv_id}/`,
+                method: 'POST',
+                body  : data
+            })
         })
     })
 });

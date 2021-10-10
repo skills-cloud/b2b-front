@@ -19,7 +19,8 @@ export interface IItem {
     id?: number,
     parent_id?: number | string,
     name: string,
-    children: Array<IItem>
+    children: Array<IItem>,
+    level?: number
 }
 
 type TLable = (item: IItem) => ReactNode;
@@ -32,7 +33,8 @@ interface IProps {
     label: TLable,
     expandOpen?: ReactNode,
     expandClose?: ReactNode,
-    showCheckbox?: boolean
+    showCheckbox?: boolean,
+    needRenderSearch?: boolean
 }
 
 const walkTree = (items: Array<IItem>, callback: (model: IItem) => void) => {
@@ -56,7 +58,7 @@ const getRootNode = (
     if(parentModel?.id !== undefined) {
         newNodeById[parentModel.id] = {
             ...parentModel,
-            children: parentModel.children.filter(({ id }: {id: number | string}) => String(id) === String(model.id))
+            children: parentModel.children.filter(({ id }: { id: number | string }) => String(id) === String(model.id))
         };
 
         return getRootNode(parentModel, nodeById, newNodeById);
@@ -65,7 +67,7 @@ const getRootNode = (
     return model;
 };
 
-const convertDataToTreeList = (array: Array<IItem>, show: boolean, itemsMap?: IItemMap, label?: TLable) => (
+const convertDataToTreeList = (array: Array<IItem>, show: boolean, itemsMap?: IItemMap, label?: TLable, level = 1) => (
     array.map((item): Node => {
         const { id, children } = item;
 
@@ -75,9 +77,9 @@ const convertDataToTreeList = (array: Array<IItem>, show: boolean, itemsMap?: II
 
         return {
             value       : String(id),
-            label       : label?.(item) || item.name,
+            label       : label?.({ ...item, level: level }) || item.name,
             showCheckbox: show,
-            children    : children?.length ? convertDataToTreeList(children, show, itemsMap, label) : undefined
+            children    : children?.length ? convertDataToTreeList(children, show, itemsMap, label, level + 1) : undefined
         };
     })
 );
@@ -90,7 +92,8 @@ const TreeList = ({
     label,
     expandOpen,
     expandClose,
-    showCheckbox = false
+    showCheckbox = false,
+    needRenderSearch = true
 }: IProps) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
@@ -105,7 +108,7 @@ const TreeList = ({
     const newNodeById: IItemMap = {};
     const setNodes = new Set<number>();
 
-    if(searchString && items) {
+    if(needRenderSearch && searchString && items) {
         walkTree(items, (model: IItem) => {
             const name = model.name.toLowerCase();
 
@@ -131,19 +134,21 @@ const TreeList = ({
 
     return (
         <div className={cn('checkbox-tree')}>
-            <div className={cn('checkbox-tree__search')}>
-                <InputRaw
-                    placeholder={t('components.checkbox-tree.search')}
-                    name="search"
-                    type="text"
-                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                        setSearch(event?.target?.value);
-                    }}
-                />
-            </div>
+            {needRenderSearch && (
+                <div className={cn('checkbox-tree__search')}>
+                    <InputRaw
+                        placeholder={t('components.checkbox-tree.search')}
+                        name="search"
+                        type="text"
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                            setSearch(event?.target?.value);
+                        }}
+                    />
+                </div>
+            )}
             <div className={cn('checkbox-tree__tree')}>
                 {isLoading && <Loader />}
-                {items?.length && nextItems && (
+                {!!items && items.length > 0 && nextItems && (
                     <ReactTreeList
                         checked={checked}
                         expanded={expanded}
