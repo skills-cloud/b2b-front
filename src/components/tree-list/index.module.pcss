@@ -1,12 +1,6 @@
 .checkbox-tree {
     --color-border-default: #e6e8eb;
 
-    &__label {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        padding-right: 40px;
-    }
-
     &__expand {
         width: 24px;
         height: 24px;
@@ -28,20 +22,8 @@
         border-radius: 4px;
         padding: 10px 5px;
         height: 386px;
+        width: 656px;
         overflow: auto;
-    }
-
-    &__set-experience {
-        color: var(--color-text-light);
-        text-decoration: underline dotted;
-
-        @media (hover: hover) and (pointer: fine) {
-
-            &:hover {
-                cursor: pointer;
-                text-decoration: none;
-            }
-        }
     }
 
     :global {
@@ -54,7 +36,7 @@
 
         .rct-text {
             display: grid;
-            align-items: center;
+            align-items: flex-start;
             color: var(--color-text-dark);
             font-family: Roboto, sans-serif;
             font-size: 14px;
@@ -70,7 +52,6 @@
 
         .rct-node {
             list-style: none;
-            font-weight: 500;
             line-height: 1.14;
             padding-left: 36px;
         }

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import useClassnames from 'hook/use-classnames';
-import { H3 } from 'component/header';
+import { H4 } from 'component/header';
 import Separator from 'component/separator';
 import IconPencil from 'component/icons/pencil';
 import IconDelete from 'component/icons/delete';
@@ -40,7 +40,7 @@ const CareerList = ({ fields, setCareerId, nextStep }: ICareerList) => {
                     <div key={career.id} className={cn('career-list__item')}>
                         <div className={cn('career-list__row')}>
                             <div>
-                                <H3>{career.organization?.name}</H3>
+                                <H4>{career.organization?.name}</H4>
                                 <p className={cn('career-list__date')}>
                                     {career.date_from}&nbsp;&mdash; {career.date_to}
                                     {' '}

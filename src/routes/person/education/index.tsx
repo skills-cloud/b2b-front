@@ -6,7 +6,7 @@ import { education } from 'adapter/api/education';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconPencil from 'component/icons/pencil';
-import Header, { H3 } from 'component/header';
+import Header, { H4 } from 'component/header';
 import VerifyIcon from 'component/verify-icon';
 
 import ModalEdit from './edit';
@@ -20,9 +20,9 @@ export interface IProps {
 export const Education = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
-    const { data } = education.useGetEducationQuery({ cv_id: parseInt(id, 10) }, { refetchOnMountOrArgChange: true });
+    const { data } = education.useGetEducationQuery({ cv_id: parseInt(specialistId, 10) }, { refetchOnMountOrArgChange: true });
 
     return (
         <div id={props.id} className={cn('education')}>
@@ -50,13 +50,14 @@ export const Education = (props: IProps) => {
                             education_graduate,
                             is_verified,
                             education_place,
-                            competencies
+                            competencies,
+                            diploma_number
                         } = result;
 
                         return (
                             <Fragment key={result.id}>
                                 <div className={cn('education__education-title')}>
-                                    <H3 contrast={true}>{education_place?.name}</H3>
+                                    <H4 contrast={true}>{education_place?.name}</H4>
                                     <VerifyIcon isVerify={is_verified} />
                                 </div>
                                 <ul className={cn('education__list')}>
@@ -77,7 +78,7 @@ export const Education = (props: IProps) => {
                                     <li className={cn('education__list-item')}>
                                         <strong>{t('routes.person.education.label.diploma')}</strong>
                                         {/* TODO нет поля в ответе от бека, хак для демо*/}
-                                        <span>{`№123456789-${id}`}</span>
+                                        <span>{diploma_number}</span>
                                     </li>
                                     {competencies && competencies.length > 0 && (
                                         <li className={cn('education__list-item')}>

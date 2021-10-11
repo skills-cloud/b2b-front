@@ -1,0 +1,76 @@
+.organization {
+
+    &__sections {
+        display: grid;
+        grid-gap: 16px;
+    }
+
+    &__cards {
+        margin-top: 21px;
+    }
+
+    &__card {
+        display: grid;
+        grid-template-columns: 1fr 1fr min-content;
+        align-items: center;
+        font-family: Roboto, sans-serif;
+        font-size: 14px;
+        line-height: 1.14;
+        padding: 19px 0;
+        border-bottom: 1px solid var(--color-gray-30);
+        margin-left: 36px;
+        position: relative;
+
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+    }
+
+    &__card-icon {
+        fill: var(--color-gray-90);
+    }
+
+    &__card-icon-wrapper {
+        position: absolute;
+        left: -36px;
+        top: 19px;
+    }
+
+    &__card-edit {
+        cursor: pointer;
+    }
+
+    &__expand-icon {
+        fill: var(--color-gray-90);
+    }
+
+    &__add-card {
+        margin-left: 10 px;
+        color: var(--color-text-dark);
+        font-family: Roboto, sans-serif;
+        font-size: 14px;
+    }
+
+    &__cards-add-subdirectory {
+        margin-top: 16px;
+        display: inline-block;
+        font-family: Roboto, sans-serif;
+        font-size: 14px;
+        color: var(--color-text-ultra-light);
+        text-decoration: underline dotted;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+                text-decoration: none;
+            }
+        }
+    }
+
+    &__cards-add-input {
+        display: block;
+        margin-top: 16px;
+    }
+}

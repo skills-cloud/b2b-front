@@ -6,7 +6,7 @@ import { useClassnames } from 'hook/use-classnames';
 
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
-import CheckboxTree from 'component/checkbox-tree';
+import CompetenceSelector from 'component/competence-selector';
 import Button from 'component/button';
 
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
@@ -30,6 +30,13 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
     const [checked, setChecked] = useState<Array<string>>(
         requirements.competencies?.map(({ competence }) => String(competence?.id)) || []
     );
+    const [competenceExpirienceMap, setCompetenceExpirienceMap] = useState(requirements.competencies?.reduce((acc, item) => {
+        if(item.experience_years) {
+            acc[item.competence_id] = item.experience_years;
+        }
+
+        return acc;
+    }, {}) || {});
 
     useEffect(() => {
         setChecked(requirements.competencies?.map(({ competence }) => String(competence?.id)) || []);
@@ -43,18 +50,15 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
         }
 
         const competencies = checked.map((id) => ({
-            competence_id: parseInt(id, 10)
+            competence_id   : parseInt(id, 10),
+            experience_years: competenceExpirienceMap[id]
         }));
 
         post({ id: requirementsId, competencies })
             .unwrap()
             .then(onClose)
             .catch(console.error);
-    }, [checked]);
-
-    const onSetRequirementExperience = (id: string) => {
-        console.info('SET REQ FOR ID: ', id);
-    };
+    }, [checked, competenceExpirienceMap]);
 
     return (
         <Modal
@@ -71,22 +75,21 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
                 </ModalFooterSubmit>
             }
         >
-            <div className="position">
-                <FormProvider {...form}>
-                    <form
-                        method="POST"
-                        id={EDIT_ROLE_FORM_ID}
-                        onSubmit={form.handleSubmit(handleSubmit)}
-                        className={cn('form')}
-                    >
-                        <CheckboxTree
-                            onSetChecked={setChecked}
-                            competencies={checked}
-                            onClickExperience={onSetRequirementExperience}
-                        />
-                    </form>
-                </FormProvider>
-            </div>
+            <FormProvider {...form}>
+                <form
+                    method="POST"
+                    id={EDIT_ROLE_FORM_ID}
+                    onSubmit={form.handleSubmit(handleSubmit)}
+                    className={cn('form')}
+                >
+                    <CompetenceSelector
+                        setChecked={setChecked}
+                        checked={checked}
+                        competenceExpirienceMap={competenceExpirienceMap}
+                        setCompetenceExpirienceMap={setCompetenceExpirienceMap}
+                    />
+                </form>
+            </FormProvider>
         </Modal>
     );
 };

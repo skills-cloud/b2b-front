@@ -24,12 +24,12 @@ export interface IProps {
 export const CertificatesEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
 
     const [itemToRemove, setItemToRemove] = useState<CvCertificateRead | null>(null);
     const [itemToEdit, setItemToEdit] = useState<CvCertificateRead | Record<string, unknown> | null>(null);
 
-    const { data, refetch } = certificate.useGetCertificateListQuery({ cv_id: id });
+    const { data, refetch } = certificate.useGetCertificateListQuery({ cv_id: specialistId });
     const [deleteCertificate] = certificate.useDeleteCertificateByIdMutation();
 
     const onClickDelete = (result: CvCertificateRead) => () => {

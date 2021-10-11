@@ -58,6 +58,8 @@
         "/dictionary/position/{id}/",
         "/dictionary/type-of-employment/",
         "/dictionary/type-of-employment/{id}/",
+        "/main/organization-project-card-item/",
+        "/main/organization-project-card-item/{id}/",
         "/main/organization-project/",
         "/main/organization-project/{id}/",
         "/main/organization/",
@@ -66,11 +68,15 @@
         "/main/project/{id}/",
         "/main/request-requirement/",
         "/main/request-requirement/{id}/",
+        "/main/request-requirement/{id}/competencies-set/",
         "/main/request-requirement/{id}/cv-link/{cv_id}/",
+        "/main/request-requirement/{id}/cv-set-details/{cv_id}/",
         "/main/request-requirement/{id}/cv-unlink/{cv_id}/",
         "/main/request-type/",
         "/main/request-type/{id}/",
         "/main/request/",
-        "/main/request/{id}/"
+        "/main/request/{id}/",
+        "/main/time-sheet-row/",
+        "/main/time-sheet-row/{id}/"
     ]
 }

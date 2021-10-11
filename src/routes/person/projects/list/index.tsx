@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import useClassnames from 'hook/use-classnames';
-import { H3 } from 'component/header';
+import { H4 } from 'component/header';
 import Separator from 'component/separator';
 import IconPencil from 'component/icons/pencil';
 import IconDelete from 'component/icons/delete';
@@ -38,7 +38,7 @@ const ProjectsList = ({ fields, setProjectId, nextStep }: IProjectsList) => {
                     <div key={project.id} className={cn('projects-list')}>
                         <div className={cn('projects-list__row')}>
                             <div>
-                                <H3>{project.name}</H3>
+                                <H4>{project.name}</H4>
                                 <p className={cn('projects-list__date')}>
                                     {project.date_from}&nbsp;&mdash; {project.date_to}
                                     {' '}

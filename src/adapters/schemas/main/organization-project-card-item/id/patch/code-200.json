@@ -1,0 +1,48 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/OrganizationProjectCardItemTree"
+        }
+    ],
+    "definitions": {
+        "OrganizationProjectCardItemTree": {
+            "properties": {
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "organization_project_id": {
+                    "description": "необходимо задавать только для корневой карточки",
+                    "nullable": true,
+                    "title": "проект организации",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-project/$id/",
+                    "x-url-object-list": "/api/main/organization-project/"
+                },
+                "parent_id": {
+                    "nullable": true,
+                    "title": "родительская карточка",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-project-card-item/$id/",
+                    "x-url-object-list": "/api/main/organization-project-card-item/"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        }
+    }
+}

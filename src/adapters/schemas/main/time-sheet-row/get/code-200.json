@@ -1,0 +1,517 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/TimeSheetRowRead"
+        }
+    ],
+    "definitions": {
+        "CvInlineShort": {
+            "properties": {
+                "birth_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата рождения",
+                    "type": "string"
+                },
+                "citizenship_id": {
+                    "nullable": true,
+                    "title": "Citizenship id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/citizenship/$id/",
+                    "x-url-object-list": "/api/dictionary/citizenship/"
+                },
+                "city_id": {
+                    "nullable": true,
+                    "title": "City id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/city/$id/",
+                    "x-url-object-list": "/api/dictionary/city/"
+                },
+                "country_id": {
+                    "nullable": true,
+                    "title": "Country id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/country/$id/",
+                    "x-url-object-list": "/api/dictionary/country/"
+                },
+                "days_to_contact": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "all",
+                                "weekends",
+                                "workdays"
+                            ],
+                            "title": "Дни для связи",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "first_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Имя",
+                    "type": "string"
+                },
+                "gender": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "F",
+                                "M"
+                            ],
+                            "title": "Пол",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_resource_owner": {
+                    "title": "Владелец ресурса",
+                    "type": "boolean"
+                },
+                "last_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Фамилия",
+                    "type": "string"
+                },
+                "middle_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Отчество",
+                    "type": "string"
+                },
+                "photo": {
+                    "format": "uri",
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Photo",
+                    "type": "string"
+                },
+                "price": {
+                    "nullable": true,
+                    "title": "Ставка",
+                    "type": "number"
+                },
+                "time_to_contact_from": {
+                    "nullable": true,
+                    "title": "Время для связи / с",
+                    "type": "string"
+                },
+                "time_to_contact_to": {
+                    "nullable": true,
+                    "title": "Время для связи / по",
+                    "type": "string"
+                },
+                "user_id": {
+                    "nullable": true,
+                    "title": "User id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                }
+            },
+            "type": "object"
+        },
+        "IndustrySector": {
+            "properties": {
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "Organization": {
+            "properties": {
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_customer": {
+                    "title": "Заказчик?",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "OrganizationProjectInline": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "date_from": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата с",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата по",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "industry_sector": {
+                    "$ref": "#/definitions/IndustrySector"
+                },
+                "industry_sector_id": {
+                    "nullable": true,
+                    "title": "отрасль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
+                },
+                "manager": {
+                    "$ref": "#/definitions/UserInline"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "organization": {
+                    "$ref": "#/definitions/Organization"
+                },
+                "organization_id": {
+                    "title": "организация",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
+                },
+                "recruiters": {
+                    "items": {
+                        "$ref": "#/definitions/UserInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "recruiters_ids": {
+                    "items": {
+                        "nullable": true,
+                        "title": "рекрутеры",
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "requests_count": {
+                    "readOnly": true,
+                    "title": "Requests count",
+                    "type": "integer"
+                },
+                "resource_managers": {
+                    "items": {
+                        "$ref": "#/definitions/UserInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "resource_managers_ids": {
+                    "items": {
+                        "nullable": true,
+                        "title": "ресурсные менеджеры",
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "organization_id"
+            ],
+            "type": "object"
+        },
+        "RequestInline": {
+            "properties": {
+                "deadline_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Срок",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "industry_sector_id": {
+                    "nullable": true,
+                    "title": "отрасль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "organization_project": {
+                    "$ref": "#/definitions/OrganizationProjectInline"
+                },
+                "organization_project_id": {
+                    "title": "проект заказчика",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-project/$id/",
+                    "x-url-object-list": "/api/main/organization-project/"
+                },
+                "priority": {
+                    "enum": [
+                        10,
+                        20,
+                        30
+                    ],
+                    "title": "Приоритет",
+                    "type": "integer"
+                },
+                "project_id": {
+                    "description": "На текущий момент не используется.<br>Надо задавать связку с проектом заказчика",
+                    "nullable": true,
+                    "title": "внутренний проект",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/project/$id/",
+                    "x-url-object-list": "/api/main/project/"
+                },
+                "recruiter_id": {
+                    "nullable": true,
+                    "title": "отв. рекрутер",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "resource_manager_id": {
+                    "nullable": true,
+                    "title": "рес. менеджер",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "start_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата начала",
+                    "type": "string"
+                },
+                "status": {
+                    "enum": [
+                        "closed",
+                        "done",
+                        "draft",
+                        "in_progress"
+                    ],
+                    "title": "Статус",
+                    "type": "string"
+                },
+                "title": {
+                    "nullable": true,
+                    "title": "Заголовок (название или номер)",
+                    "type": "string"
+                },
+                "type_id": {
+                    "nullable": true,
+                    "title": "тип запроса",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request-type/$id/",
+                    "x-url-object-list": "/api/main/request-type/"
+                }
+            },
+            "required": [
+                "organization_project_id"
+            ],
+            "type": "object"
+        },
+        "TimeSheetRowRead": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "cv": {
+                    "$ref": "#/definitions/CvInlineShort"
+                },
+                "cv_id": {
+                    "title": "анкета исполнителя",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
+                },
+                "date_from": {
+                    "format": "date",
+                    "title": "Дата начала работ",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата окончания работ",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "request": {
+                    "$ref": "#/definitions/RequestInline"
+                },
+                "request_id": {
+                    "title": "проектный запрос",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request/$id/",
+                    "x-url-object-list": "/api/main/request/"
+                },
+                "task_description": {
+                    "nullable": true,
+                    "title": "Описание задачи",
+                    "type": "string"
+                },
+                "task_name": {
+                    "maxLength": 1000,
+                    "minLength": 1,
+                    "title": "Название задачи",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                },
+                "work_time": {
+                    "title": "Затраченное время",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "cv",
+                "cv_id",
+                "request",
+                "request_id",
+                "task_name",
+                "work_time"
+            ],
+            "type": "object"
+        },
+        "UserInline": {
+            "nullable": true,
+            "properties": {
+                "first_name": {
+                    "maxLength": 150,
+                    "minLength": 1,
+                    "title": "Имя",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "last_name": {
+                    "maxLength": 150,
+                    "minLength": 1,
+                    "title": "Фамилия",
+                    "type": "string"
+                },
+                "photo": {
+                    "format": "uri",
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Photo",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "first_name",
+                "last_name"
+            ],
+            "type": "object"
+        }
+    }
+}

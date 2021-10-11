@@ -1,21 +1,26 @@
 import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useHistory, useParams } from 'react-router';
+
+import { useClassnames } from 'hook/use-classnames';
 
 import SidebarLayout from 'component/layout/sidebar';
 import Section from 'component/section';
 import IconArrowLeftFull from 'component/icons/arrow-left-full';
+import SidebarNav, { NavItem } from 'component/nav';
 
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import MainInfo from 'route/project-request/components/main-info';
 import Requirements from 'route/project-request/components/requirements';
 import Customer from 'route/project-request/components/customer';
-import ProjectRequestPdf from 'route/project-request/components/pdf';
+import ProjectRequestPdf from 'route/project-request/components/documents/pdf';
+import ProjectRequestDocx from 'route/project-request/components/documents/docx';
+import ProjectRequestCsv from 'route/project-request/components/documents/xlsx';
+import { H5 } from 'component/header';
+import Wrapper from 'component/section/wrapper';
 
 import { mainRequest } from 'adapter/api/main';
-
-import { useClassnames } from 'hook/use-classnames';
 
 import Specialists from './specialists';
 import style from './index.module.pcss';
@@ -25,28 +30,14 @@ const ProjectRequest = () => {
     const { hash } = useLocation();
     const history = useHistory();
     const { t } = useTranslation();
-    const params = useParams<{ subpage?: string, id: string }>();
+    const params = useParams<{ subpage?: string, requestId: string }>();
     const { data } = mainRequest.useGetMainRequestByIdQuery(
-        { id: params.id },
+        { id: params.requestId },
         { refetchOnMountOrArgChange: true }
     );
 
-    const elSpecialists = () => {
-        return (
-            <li
-                className={cn('nav__item', {
-                    'nav__item_selected': hash.slice(1) === 'applicant'
-                })}
-            >
-                <Link to={`/project-request/${params.id}/specialists/#all`} className={cn('nav__item-link')}>
-                    {t('routes.project-request.blocks.sections.applicant')}
-                </Link>
-            </li>
-        );
-    };
-
     const onClickBack = () => {
-        history.push(`/project-request/${params.id}#main-info`);
+        history.push(`/requests/${params.requestId}#main-info`);
     };
 
     if(!data) {
@@ -62,93 +53,92 @@ const ProjectRequest = () => {
             <Fragment>
                 <MainInfo {...data} />
                 {data.id && <Requirements requirements={data?.requirements} requestId={data.id} />}
-                {data.id && <Customer customer={data.customer} requestId={data.id} />}
+                {data.id && <Customer customer={data.organization_project?.organization} requestId={data.id} />}
             </Fragment>
         );
     };
 
     const elDocuments = () => {
-        return (
-            <li
-                className={cn('nav__item', 'nav__item_no-padding', {
-                    'nav__item_selected': hash.slice(1) === 'applicant'
-                })}
-            >
-                <ProjectRequestPdf />
-            </li>
-        );
+        if(!params.subpage) {
+            return (
+                <Section>
+                    <Wrapper>
+                        <H5>{t('routes.project-request.sidebar.documents')}</H5>
+                        <ProjectRequestPdf />
+                        <ProjectRequestDocx />
+                        <ProjectRequestCsv />
+                    </Wrapper>
+                </Section>
+            );
+        }
     };
 
     const elSidebarContent = () => {
         let content = (
             <Fragment>
                 {Object.values(ESectionInvariants).map((nav) => (
-                    <li
-                        className={cn('nav__item', {
-                            'nav__item_selected': nav === hash.slice(1)
-                        })}
+                    <NavItem
+                        to={`#${nav}`}
+                        selected={nav === hash.slice(1)}
                         key={nav}
                     >
-                        <a href={`#${nav}`} className={cn('nav__item-link')}>
-                            {t(`routes.project-request.blocks.sections.${nav}`)}
-                        </a>
-                    </li>
+                        {t(`routes.project-request.blocks.sections.${nav}`)}
+                    </NavItem>
                 ))}
-                {elSpecialists()}
-                {elDocuments()}
+                <NavItem
+                    to={`/requests/${params.requestId}/specialists/#all`}
+                    selected={hash.slice(1) === 'applicant'}
+                >
+                    {t('routes.project-request.blocks.sections.applicant')}
+                </NavItem>
             </Fragment>
         );
 
         if(params.subpage === 'specialists') {
             content = (
                 <Fragment>
-                    <li
-                        className={cn('nav__item', {
-                            'nav__item_selected': hash.slice(1) === 'all'
-                        })}
+                    <NavItem
+                        to="#all" selected={hash.slice(1) === 'all'}
                     >
-                        <a href="#all" className={cn('nav__item-link')}>
-                            {t('routes.project-request.blocks.specialists-sections.all')}
-                        </a>
-                    </li>
+                        {t('routes.project-request.blocks.specialists-sections.all')}
+                    </NavItem>
                     {data?.requirements?.map((req) => (
-                        <li
-                            className={cn('nav__item', {
-                                'nav__item_selected': String(req.id) === hash.slice(1)
-                            })}
+                        <NavItem
+                            to={`#${req.id}`}
+                            selected={String(req.id) === hash.slice(1)}
                             key={req.id}
                         >
-                            <a href={`#${req.id}`} className={cn('nav__item-link')}>
-                                {req.name}
-                            </a>
-                        </li>
+                            {req.name || t('routes.project-request.blocks.specialists-sections.empty')}
+                        </NavItem>
                     ))}
                 </Fragment>
             );
         }
 
+        const header = params.subpage === 'specialists' && (
+            <div className={cn('project-request__header')}>
+                <IconArrowLeftFull svg={{ className: cn('project-request__icon-back'), onClick: onClickBack }} />
+                {data?.project?.name}
+            </div>
+        );
+
         return (
-            <Section withoutPaddings={true}>
-                <nav className={cn('nav')}>
-                    {params.subpage === 'specialists' && (
-                        <div className={cn('nav__header')}>
-                            <IconArrowLeftFull svg={{ className: cn('nav__icon-back'), onClick: onClickBack }} />
-                            {data?.project?.name}
-                        </div>
-                    )}
-                    <ul className={cn('nav__list')}>
+            <Wrapper>
+                <Section withoutPaddings={true}>
+                    <SidebarNav header={header}>
                         {content}
-                    </ul>
-                </nav>
-            </Section>
+                    </SidebarNav>
+                </Section>
+                {elDocuments()}
+            </Wrapper>
         );
     };
 
     return (
         <SidebarLayout sidebar={elSidebarContent()}>
-            <div className={cn('sections')} >
+            <Wrapper>
                 {elContent()}
-            </div>
+            </Wrapper>
         </SidebarLayout>
     );
 };

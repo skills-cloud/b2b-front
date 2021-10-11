@@ -23,11 +23,11 @@ export interface IProps {
 }
 
 export const Files = (props: IProps) => {
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
 
-    const { data } = cv.useGetCvByIdQuery({ id });
+    const { data } = cv.useGetCvByIdQuery({ id: specialistId });
     const [uploadFile, { isLoading }] = cv.useUploadCvFileByIdMutation();
     const [deleteFile, { isLoading: isLoadingDelete }] = cv.useDeleteCvFileByIdMutation();
 
@@ -42,7 +42,7 @@ export const Files = (props: IProps) => {
                 formData.set('file', e.target.files[i]);
 
                 void uploadFile({
-                    id,
+                    id  : specialistId,
                     data: formData
                 })
                     .unwrap();
@@ -96,7 +96,7 @@ export const Files = (props: IProps) => {
     const onClickDelete = (fileId?: number) => () => {
         if(fileId) {
             deleteFile({
-                id,
+                id     : specialistId,
                 file_id: String(fileId)
             })
                 .unwrap()

@@ -36,7 +36,9 @@
                 },
                 "competence_id": {
                     "title": "Competence id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/competence/$id/",
+                    "x-url-object-list": "/api/dictionary/competence/"
                 },
                 "cv_position_id": {
                     "readOnly": true,
@@ -110,7 +112,9 @@
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "files": {
                     "items": {
@@ -130,7 +134,9 @@
                 "position_id": {
                     "nullable": true,
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
                 },
                 "title": {
                     "maxLength": 2000,

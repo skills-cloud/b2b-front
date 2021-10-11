@@ -10,14 +10,18 @@
                 "competencies_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/dictionary/competence/$id/",
+                        "x-url-object-list": "/api/dictionary/competence/"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "date_from": {
                     "format": "date",
@@ -47,17 +51,23 @@
                 },
                 "organization_id": {
                     "title": "Organization id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
                 },
                 "position_id": {
                     "nullable": true,
                     "title": "Position id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
                 },
                 "projects_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/main/organization-project/$id/",
+                        "x-url-object-list": "/api/main/organization-project/"
                     },
                     "type": "array",
                     "uniqueItems": true

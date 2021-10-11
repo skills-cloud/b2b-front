@@ -23,7 +23,7 @@ const ProjectsCreateForm = () => {
                 <div className={cn('form')}>
                     <ProjectRequestForm
                         formId={FORM_ID} onSuccess={(id) => {
-                            history.push(`/project-request/${id}#main-info`);
+                            history.push(`/requests/${id}#main-info`);
                         }}
                     />
                     <div className={cn('separator')} />

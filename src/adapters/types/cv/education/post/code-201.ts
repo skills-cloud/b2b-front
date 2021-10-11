@@ -10,11 +10,12 @@ export type CvId = number;
 export type NoName = string;
 export type NoName1 = string;
 export type NoName2 = string;
+export type NoName3 = string;
 export type EducationGraduateId = number;
 export type EducationPlaceId = number;
 export type EducationSpecialityId = number;
 export type ID = number;
-export type NoName3 = boolean;
+export type NoName4 = boolean;
 
 export interface CvEducation {
     competencies_ids?: number[];
@@ -22,9 +23,10 @@ export interface CvEducation {
     date_from?: NoName;
     date_to?: NoName1;
     description?: NoName2;
+    diploma_number?: NoName3;
     education_graduate_id: EducationGraduateId;
     education_place_id: EducationPlaceId;
     education_speciality_id: EducationSpecialityId;
     id?: ID;
-    is_verified?: NoName3;
+    is_verified?: NoName4;
 }

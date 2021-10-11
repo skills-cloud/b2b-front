@@ -1,0 +1,51 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/RequestRequirementCompetence"
+        }
+    ],
+    "definitions": {
+        "RequestRequirementCompetence": {
+            "properties": {
+                "competence_id": {
+                    "title": "Competence id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/competence/$id/",
+                    "x-url-object-list": "/api/dictionary/competence/"
+                },
+                "experience_years": {
+                    "description": "`1` : *Менее года*\n`3` : *1 – 3 года*\n`5` : *3 - 5 лет*\n`100` : *Более 5 лет*",
+                    "enum": [
+                        1,
+                        100,
+                        3,
+                        5
+                    ],
+                    "nullable": true,
+                    "title": "Опыт лет",
+                    "type": "integer"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "request_requirement_id": {
+                    "readOnly": true,
+                    "title": "Request requirement id",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "competence_id"
+            ],
+            "type": "object"
+        }
+    }
+}

@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useClassnames } from 'hook/use-classnames';
 import { useForm, FormProvider } from 'react-hook-form';
 
-import { H3 } from 'component/header';
-
+import { H4 } from 'component/header';
 import Tabs, { Tab } from 'component/tabs';
 import Input from 'component/form/input';
 import IconDots from 'component/icons/dots';
@@ -145,14 +144,14 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
                 <div className={cn('tab-content')}>
                     {activeTab === ETabs.Competence && editRequirements?.position?.name && (
                         <div className={cn('position')}>
-                            <H3>
+                            <H4>
                                 {t(
                                     'routes.project-request.requirements.edit-modal.people',
                                     {
                                         people  : editRequirements.count,
                                         position: editRequirements.position.name
                                     })}
-                            </H3>
+                            </H4>
 
                             <button
                                 type="button"

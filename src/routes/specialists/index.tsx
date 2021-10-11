@@ -18,13 +18,14 @@ import InputDictionary from 'component/form/input-dictionary';
 import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
 import Modal from 'component/modal';
-import { H2 } from 'component/header';
+import { H2, H3 } from 'component/header';
 import Button from 'component/button';
 import Request from 'component/request';
+import SectionHeader from 'component/section/header';
 
 import { mainRequest } from 'adapter/api/main';
 import { cv } from 'adapter/api/cv';
-import { CvList, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
+import { CvListReadFull, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 import { IValue } from 'component/form/select';
 
 import style from './index.module.pcss';
@@ -222,7 +223,7 @@ export const Specialists = () => {
         return '\u2014';
     };
 
-    const elUserItem = (cvItem: CvList, showLinkedItems = true) => {
+    const elUserItem = (cvItem: CvListReadFull, showLinkedItems = true) => {
         const firstName = cvItem.first_name;
         const lastName = cvItem.last_name;
         let title = `${firstName || ''} ${lastName || ''}`.trim();
@@ -300,7 +301,7 @@ export const Specialists = () => {
         <main className={cn('specialists')}>
             <section className={cn('specialists__main')}>
                 <div className={cn('specialists__main-top')}>
-                    <h2 className={cn('specialists__main-header')}>{t('routes.specialists.main.title')}</h2>
+                    <SectionHeader>{t('routes.specialists.main.title')}</SectionHeader>
                     <Link
                         to="/specialists/create"
                         className={cn('specialists__main-button')}
@@ -312,7 +313,7 @@ export const Specialists = () => {
             </section>
             <aside>
                 <div className={cn('specialists__search')}>
-                    <h3 className={cn('specialists__search-header')}>{t('routes.specialists.sidebar.filters.title')}</h3>
+                    <H3>{t('routes.specialists.sidebar.filters.title')}</H3>
                     <FormProvider {...context}>
                         <form className={cn('specialists__form')} onSubmit={onSubmit}>
                             <FormInput

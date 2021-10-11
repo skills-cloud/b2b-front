@@ -39,7 +39,9 @@
                 "recruiters_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -54,7 +56,9 @@
                 "resource_managers_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/acc/user/$id/",
+                        "x-url-object-list": "/api/acc/user/"
                     },
                     "type": "array",
                     "uniqueItems": true

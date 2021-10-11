@@ -7,11 +7,10 @@ import useClassnames, { IStyle } from 'hook/use-classnames';
 import Button from 'component/button';
 import Modal from 'component/modal';
 import Tooltip from 'component/tooltip';
-import IconDots from 'component/icons/dots';
 import IconArrowLeft from 'component/icons/arrow-left-full';
 import Error from 'component/error';
 import InputDictionary from 'component/form/input-dictionary';
-import CheckboxTree from 'component/checkbox-tree';
+import CompetenceSelector from 'component/competence-selector';
 
 import { position } from 'adapter/api/position';
 import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
@@ -57,7 +56,7 @@ const EDIT_COMPETENCIES_FORM_ID = 'EDIT_COMPETENCIES_FORM_ID';
 export const CompetenciesEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
+    const { specialistId } = useParams<{ specialistId: string }>();
     const methods = useForm<IFormValues>({
         defaultValues: {
             competencies  : props.fields || [{}],
@@ -69,7 +68,7 @@ export const CompetenciesEdit = (props: IProps) => {
         control: methods.control,
         name   : 'competencies'
     });
-    const { data: positionData, refetch } = position.useGetPositionListQuery({ cv_id: parseInt(id, 10) }, { refetchOnMountOrArgChange: true });
+    const { data: positionData, refetch } = position.useGetPositionListQuery({ cv_id: parseInt(specialistId, 10) }, { refetchOnMountOrArgChange: true });
     const [patchPosition, { isLoading }] = position.usePatchPositionByIdMutation();
     const [postPosition, { isLoading: isLoadingPost }] = position.usePostPositionMutation();
     const [deletePosition, { isLoading: isLoadingDelete }] = position.useDeletePositionMutation();
@@ -79,6 +78,7 @@ export const CompetenciesEdit = (props: IProps) => {
     const [checked, setChecked] = useState<Array<string>>([]);
     const [positionItem, setPositionItem] = useState<CvPositionRead>();
     const [error, setError] = useState<Array<string> | string | null>(null);
+    const [competenceExpirienceMap, setCompetenceExpirienceMap] = useState({});
 
     const onCancel = () => {
         props.onCancel?.();
@@ -107,7 +107,7 @@ export const CompetenciesEdit = (props: IProps) => {
             if(positionItem) {
                 return patchPosition({
                     id         : positionItem.id,
-                    cv_id      : parseInt(id, 10),
+                    cv_id      : parseInt(specialistId, 10),
                     position_id: positionItem.position_id
                 })
                     .unwrap()
@@ -126,7 +126,7 @@ export const CompetenciesEdit = (props: IProps) => {
             }
 
             postPosition({
-                cv_id      : parseInt(id, 10),
+                cv_id      : parseInt(specialistId, 10),
                 position_id: parseInt(formData.position_id?.value as string, 10)
             })
                 .unwrap()
@@ -144,10 +144,6 @@ export const CompetenciesEdit = (props: IProps) => {
                 });
         }
     }, [checked, activeWindow]);
-
-    const onClickSetExperience = (competenceId: string) => {
-        console.info('SET', competenceId);
-    };
 
     const onClickSubmit = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -355,10 +351,11 @@ export const CompetenciesEdit = (props: IProps) => {
             case 'checkbox': {
                 return (
                     <Fragment>
-                        <CheckboxTree
-                            onSetChecked={setChecked}
-                            competencies={checked}
-                            onClickExperience={onClickSetExperience}
+                        <CompetenceSelector
+                            setChecked={setChecked}
+                            checked={checked}
+                            competenceExpirienceMap={competenceExpirienceMap}
+                            setCompetenceExpirienceMap={setCompetenceExpirienceMap}
                         />
                         {elError}
                     </Fragment>

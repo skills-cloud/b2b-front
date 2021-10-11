@@ -75,7 +75,9 @@
                 "city_id": {
                     "nullable": true,
                     "title": "City id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/city/$id/",
+                    "x-url-object-list": "/api/dictionary/city/"
                 },
                 "country": {
                     "$ref": "#/definitions/Country"
@@ -83,11 +85,15 @@
                 "country_id": {
                     "nullable": true,
                     "title": "Country id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/country/$id/",
+                    "x-url-object-list": "/api/dictionary/country/"
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "date_from": {
                     "format": "date",
@@ -115,17 +121,58 @@
                     "title": "Требуется разрешение на работу",
                     "type": "boolean"
                 },
+                "organization_project_id": {
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Organization project id",
+                    "type": "integer"
+                },
+                "organization_project_name": {
+                    "minLength": 1,
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Organization project name",
+                    "type": "string"
+                },
                 "price": {
                     "nullable": true,
                     "title": "Ставка",
                     "type": "number"
+                },
+                "request_id": {
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Request id",
+                    "type": "integer"
+                },
+                "request_requirement_id": {
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Request requirement id",
+                    "type": "integer"
+                },
+                "request_requirement_name": {
+                    "minLength": 1,
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Request requirement name",
+                    "type": "string"
+                },
+                "request_title": {
+                    "minLength": 1,
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Request title",
+                    "type": "string"
                 },
                 "type_of_employment": {
                     "$ref": "#/definitions/TypeOfEmployment"
                 },
                 "type_of_employment_id": {
                     "title": "Type of employment id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/type-of-employment/$id/",
+                    "x-url-object-list": "/api/dictionary/type-of-employment/"
                 }
             },
             "required": [

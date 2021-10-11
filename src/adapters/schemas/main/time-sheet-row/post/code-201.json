@@ -1,0 +1,75 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/TimeSheetRow"
+        }
+    ],
+    "definitions": {
+        "TimeSheetRow": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "cv_id": {
+                    "title": "анкета исполнителя",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
+                },
+                "date_from": {
+                    "format": "date",
+                    "title": "Дата начала работ",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата окончания работ",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "request_id": {
+                    "title": "проектный запрос",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request/$id/",
+                    "x-url-object-list": "/api/main/request/"
+                },
+                "task_description": {
+                    "nullable": true,
+                    "title": "Описание задачи",
+                    "type": "string"
+                },
+                "task_name": {
+                    "maxLength": 1000,
+                    "minLength": 1,
+                    "title": "Название задачи",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                },
+                "work_time": {
+                    "title": "Затраченное время",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "cv_id",
+                "request_id",
+                "task_name",
+                "work_time"
+            ],
+            "type": "object"
+        }
+    }
+}

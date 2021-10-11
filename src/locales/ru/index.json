@@ -4,10 +4,14 @@
             "logo": "SKILLCLOUD",
             "nav": {
                 "specialists": "Специалисты",
+                "organizations": "Организации",
                 "requests": "Запросы",
                 "teams": "Команды",
                 "help": "Помощь"
             }
+        },
+        "calendar": {
+            "name-empty": "Не указано"
         },
         "user": {
             "header-bar": {
@@ -21,11 +25,21 @@
             "submit": "Submit",
             "input-file": {
                 "add": "Добавить файл"
+            },
+            "input-request": {
+                "empty": "Не указано"
             }
         },
         "checkbox-tree": {
             "search": "Поиск",
-            "experience": "Указать опыт"
+            "experience": {
+                "invariant_title": "Указать опыт",
+                "invariant": "Опыт не\u00A0указан",
+                "invariant_1": "Менее года",
+                "invariant_3": "1-3 года",
+                "invariant_5": "3-5 лет",
+                "invariant_100": "Более 5 лет"
+            }
         },
         "pdf": {
             "project": {
@@ -48,7 +62,24 @@
                 "rate": "Ставка",
                 "position_default": "{{position}} ({{count}} чел.)",
                 "position_empty": "Позиция не указана"
-            }
+            },
+            "download": "Скачать pdf"
+        },
+        "docx": {
+            "download": "Скачать docx"
+        },
+        "xlsx": {
+            "download": "Скачать xlsx"
+        },
+        "breadcrumbs": {
+            "specialists": "Специалисты",
+            "organizations": "Организации",
+            "requests": "Проектные запросы",
+            "projects": "Проекты",
+            "organization-projects": "Проекты",
+            "timesheets": "Таймшиты",
+            "main-info": "Основная информация",
+            "cards": "Карточки прав и доступа"
         }
     },
     "routes": {
@@ -66,6 +97,144 @@
         },
         "main": {
             "hello": "SkillCloud"
+        },
+        "organizations": {
+            "main": {
+                "title": "Организации",
+                "list": {
+                    "empty": "Поиск не дал результатов.",
+                    "customer": "Заказчик",
+                    "description": {
+                        "title": "Описание компании",
+                        "empty": "Описание не указано"
+                    }
+                }
+            },
+            "sidebar": {
+                "filters": {
+                    "title": "Фильтры",
+                    "form": {
+                        "search": {
+                            "label": "Название компании",
+                            "placeholder": "Введите название"
+                        },
+                        "customer": {
+                            "label": "Заказчик"
+                        }
+                    },
+                    "buttons": {
+                        "submit": "Применить",
+                        "clear": "Очистить"
+                    }
+                }
+            }
+        },
+        "timesheet": {
+            "sidebar": {
+                "title": "Фильтры",
+                "form": {
+                    "request": {
+                        "title": "Проектный запрос",
+                        "placeholder": "Выбрать проектный запрос"
+                    },
+                    "specialist": {
+                        "title": "Специалист",
+                        "placeholder": "Выбрать специалиста"
+                    },
+                    "task": {
+                        "title": "Задача",
+                        "placeholder": "Номер задачи"
+                    }
+                }
+            },
+            "content": {
+                "title": "Таймшиты",
+                "empty": "Результатов нет",
+                "empty-name": "Не указано",
+                "time": "{{time}} ч.",
+                "actions": {
+                    "edit": "Редактировать",
+                    "delete": "Удалить"
+                }
+            },
+            "confirm-modal": {
+                "header": "Точно удалить?",
+                "text": "Будет удалён таймшит проекта: {{name}}",
+                "empty-name": "Имя проекта не указано",
+                "cancel": "Отмена",
+                "delete": "Удалить"
+            },
+            "edit-modal": {
+                "header":"Основные данные",
+                "form": {
+                    "request": {
+                        "label": "Проектный запрос",
+                        "placeholder": "Введите проектный запрос"
+                    },
+                    "cv": {
+                        "label": "Специалист",
+                        "placeholder": "Введите имя специалиста"
+                    },
+                    "date": {
+                        "start": "Дата начала",
+                        "end": "Дата окончания"
+                    },
+                    "task": {
+                        "name": "Задача",
+                        "desc": "Описание задачи"
+                    },
+                    "time": "Количество часов"
+                },
+                "cancel": "Отмена",
+                "save": "Сохранить"
+            }
+        },
+        "organization": {
+            "blocks": {
+                "sections": {
+                    "main-info":"Основная информация",
+                    "projects": "Проекты",
+                    "cards": "Карточки прав и доступа"
+                },
+                "project": {
+                    "period": "Период",
+                    "industry": "Отрасль",
+                    "description": "Описание",
+                    "request": "Запросы"
+                },
+                "cards-count_0": "{{count}} пункт",
+                "cards-count_1": "{{count}} пункта",
+                "cards-count_2": "{{count}} пунктов",
+                "cards-count_3": "{{count}} пунктов",
+                "cards-count_4": "{{count}} пунктов",
+                "cards-count_5": "{{count}} пунктов",
+                "modal" : {
+                    "title_edit": "Редактирование карточки прав и доступа",
+                    "title_add": "Новая карточка прав и доступа",
+                    "cards-count_empty": "",
+                    "cards-count_full": "\u00A0({{value }})",
+                    "subdirectory": "Добавить подпункт",
+                    "edit": "Редактировать",
+                    "delete": "Удалить",
+                    "save": "Сохранить",
+                    "cancel":"Отмена"
+                },
+                "cards-edit": "Редактировать",
+                "cards-delete": "Удалить"
+            }
+        },
+        "organization-projects": {
+            "blocks": {
+                "sections": {
+                    "requests": "Проектные запросы",
+                    "main-info":"Основная информация",
+                    "timesheets": "Таймшиты",
+                    "cards":"Карточки прав и доступа"
+                },
+                "customer": "Заказчик",
+                "manager": "РП",
+                "timeframe": "Таймфрейм"
+            }
         },
         "person": {
             "add-specialist": "Добавить в проект",
@@ -391,6 +560,8 @@
                 "experience_3": "{{count}} лет",
                 "experience_4": "{{count}} лет",
                 "experience_5": "{{count}} лет",
+                "cards": "Карточки прав и доступа",
+                "cards-add": "Добавить",
                 "linked": {
                     "title": "Связанные кандидаты",
                     "why": "Почему связаны?"
@@ -401,6 +572,13 @@
                     "requirement-empty": "Нет доступных требований",
                     "requirement-no-name": "Название требования не указано"
                 }
+            },
+            "modal-card": {
+                "add-title": "Добавить карточки доступа",
+                "title_current": "Карточка «{{name}}»",
+                "title_add": "Добавить карточки доступа",
+                "cancel": "Отмена",
+                "submit": "Сохранить"
             },
             "sidebar": {
                 "filters": {
@@ -627,7 +805,8 @@
                     "applicant": "Кандидаты"
                 },
                 "specialists-sections": {
-                    "all": "Все кандидаты"
+                    "all": "Все кандидаты",
+                    "empty": "Название проектного запроса не указано"
                 },
                 "project-term": "Сроки проекта",
                 "competencies": {
@@ -706,6 +885,9 @@
                     "date_from": "Начало проекта",
                     "date_to": "Окончание проекта"
                 }
+            },
+            "sidebar": {
+                "documents": "Документы"
             }
         }
     },

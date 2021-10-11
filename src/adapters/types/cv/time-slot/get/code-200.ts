@@ -22,7 +22,13 @@ export type NoName7 = string;
 export type NoName8 = string;
 export type ID2 = number;
 export type NoName9 = boolean;
+export type OrganizationProjectId = number;
+export type OrganizationProjectName = string;
 export type NoName10 = number;
+export type RequestId = number;
+export type RequestRequirementId = number;
+export type RequestRequirementName = string;
+export type RequestTitle = string;
 export type NoName11 = string;
 export type ID3 = number;
 export type NoName12 = boolean;
@@ -40,7 +46,13 @@ export interface CvTimeSlotRead {
     description?: NoName8;
     id?: ID2;
     is_work_permit_required?: NoName9;
+    organization_project_id?: OrganizationProjectId;
+    organization_project_name?: OrganizationProjectName;
     price?: NoName10;
+    request_id?: RequestId;
+    request_requirement_id?: RequestRequirementId;
+    request_requirement_name?: RequestRequirementName;
+    request_title?: RequestTitle;
     type_of_employment?: TypeOfEmployment;
     type_of_employment_id: TypeOfEmploymentId;
 }

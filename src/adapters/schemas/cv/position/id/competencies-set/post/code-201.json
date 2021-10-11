@@ -9,7 +9,9 @@
             "properties": {
                 "competence_id": {
                     "title": "Competence id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/competence/$id/",
+                    "x-url-object-list": "/api/dictionary/competence/"
                 },
                 "cv_position_id": {
                     "readOnly": true,

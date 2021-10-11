@@ -50,14 +50,18 @@
                 "competencies_ids": {
                     "items": {
                         "nullable": true,
-                        "type": "integer"
+                        "type": "integer",
+                        "x-url-object-detail": "/api/dictionary/competence/$id/",
+                        "x-url-object-list": "/api/dictionary/competence/"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "cv_id": {
                     "title": "Cv id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/cv/cv/$id/",
+                    "x-url-object-list": "/api/cv/cv/"
                 },
                 "date": {
                     "format": "date",
@@ -75,21 +79,27 @@
                 },
                 "education_graduate_id": {
                     "title": "Education graduate id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/education-graduate/$id/",
+                    "x-url-object-list": "/api/dictionary/education-graduate/"
                 },
                 "education_place": {
                     "$ref": "#/definitions/EducationPlace"
                 },
                 "education_place_id": {
                     "title": "Education place id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/education-place/$id/",
+                    "x-url-object-list": "/api/dictionary/education-place/"
                 },
                 "education_speciality": {
                     "$ref": "#/definitions/EducationSpecialty"
                 },
                 "education_speciality_id": {
                     "title": "Education speciality id",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/education-specialty/$id/",
+                    "x-url-object-list": "/api/dictionary/education-specialty/"
                 },
                 "id": {
                     "readOnly": true,

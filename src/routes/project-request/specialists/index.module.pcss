@@ -172,4 +172,58 @@
         font-weight: 400;
         position: relative;
     }
+
+    &__column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    &__link {
+        font-family: Roboto, sans-serif;
+        font-size: 14px;
+        color: var(--color-text-ultra-light);
+        text-decoration: underline dotted;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+                text-decoration: none;
+            }
+        }
+    }
+
+    &__modal-content-list {
+        font-family: Roboto, sans-serif;
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    &__user-cards {
+        font-size: 14px;
+    }
+
+    &__user-card {
+        display: inline-block;
+        margin-right: 5px;
+        text-decoration: underline dotted;
+        text-decoration-color: var(--color-text-ultra-light);
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+                text-decoration: none;
+            }
+        }
+    }
+
+    &__modal-card-checkbox {
+        font-weight: normal;
+    }
+
+    &__modal-content-title {
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
 }

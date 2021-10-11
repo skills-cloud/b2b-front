@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { parse, stringify } from 'query-string';
 import { useHistory } from 'react-router';
-import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 
 import { useClassnames } from 'hook/use-classnames';
@@ -14,16 +13,12 @@ import Loader from 'component/loader';
 import Button from 'component/button';
 import IconPlus from 'component/icons/plus';
 import InputDictionary from 'component/form/input-dictionary';
-import Dropdown from 'component/dropdown';
 import InputMain from 'component/form/input-main';
+import { H3 } from 'component/header';
 
 import { mainRequest } from 'adapter/api/main';
-import { RequestRead } from 'adapter/types/main/request/get/code-200';
 
-import EditAction from 'component/section/actions/edit';
-import DeleteAction from 'component/section/actions/delete';
-
-import ConfirmModal from '../components/confirm-modal';
+import RequestList from 'component/request-list';
 import style from './index.module.pcss';
 
 export interface IDefaultValues {
@@ -47,10 +42,6 @@ const ProjectRequestList = () => {
     const history = useHistory();
     const { t, i18n } = useTranslation();
 
-    const [confirm, setConfirm] = useState<boolean>(false);
-    const [requestId, setRequestId] = useState<string>();
-    const [projectName, setProjectName] = useState<string>();
-
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
     const context = useForm({
@@ -58,18 +49,7 @@ const ProjectRequestList = () => {
         defaultValues
     });
 
-    const { data, isLoading, refetch } = mainRequest.useGetRequestListQuery(normalizeObject(qs));
-
-    const onClickConfirmDelete = (newRequestId?: string, newProjectName?: string) => () => {
-        setConfirm(true);
-        setRequestId(newRequestId);
-        setProjectName(newProjectName);
-    };
-
-    const onClickCancel = () => {
-        setProjectName(undefined);
-        setRequestId(undefined);
-    };
+    const { data, isLoading, refetch } = mainRequest.useGetMainRequestQuery(normalizeObject(qs));
 
     const onSubmit = context.handleSubmit(
         (formData) => {
@@ -101,120 +81,13 @@ const ProjectRequestList = () => {
         context.reset(defaultValues);
     };
 
-    const elRequestItem = (requestItem: RequestRead) => {
-        return (
-            <div key={requestItem.id} className={cn('request-list__request')}>
-                <div className={cn('request-list__request-top')}>
-                    <div className={cn('request-list__request-top-left')}>
-                        <Link to={`/project-request/${requestItem.id}#main-info`} className={cn('request-list__request-top-left-title')}>
-                            {requestItem.project?.name || t('routes.project-request-list.requests.request-item.title')}
-                        </Link>
-                        <span className={cn('request-list__request-top-left-subtitle')}>
-                            {t('routes.project-request-list.requests.request-item.date', {
-                                date: format(new Date(requestItem.start_date as string), 'dd.MM.yyyy')
-                            })}
-                        </span>
-                    </div>
-
-                    <div className={cn('request-list__request-top-right')}>
-                        <div className={cn('request-list__request-top-right-status')}>
-                            {t(`routes.project-request-list.requests.request-item.status.value.${requestItem.status}`)}
-                        </div>
-                        <div
-                            className={cn('request-list__request-top-right-priority', `request-list__request-top-right-priority_${requestItem.priority}`)}
-                        >
-                            {t(`routes.project-request-list.requests.request-item.priority.value.${requestItem.priority}`)}
-                        </div>
-                        <Dropdown
-                            items={[{
-                                elem: (
-                                    <div
-                                        className={cn('request-list__request-top-right-action')}
-                                        onClick={() => history.push(`/project-request/${requestItem.id}/edit`)}
-                                    >
-                                        <EditAction />
-                                        {t('routes.project-request-list.requests.actions.edit')}
-                                    </div>
-                                )
-                            }, {
-                                elem: (
-                                    <div
-                                        className={cn('request-list__request-top-right-action')}
-                                        onClick={onClickConfirmDelete(String(requestItem.id), requestItem.project?.name)}
-                                    >
-                                        <DeleteAction />
-                                        {t('routes.project-request-list.requests.actions.delete')}
-                                    </div>
-                                )
-                            }]}
-                        />
-                    </div>
-                </div>
-                <div className={cn('request-list__request-content')}>
-                    <div className={cn('request-list__request-content-block')}>
-                        <h5 className={cn('request-list__request-content-block-title')}>
-                            {t('routes.project-request-list.requests.content.creator')}
-                        </h5>
-                        <p className={cn('request-list__request-content-block-text')}>
-                            {requestItem.recruiter?.last_name || t('routes.project-request-list.requests.content.empty')}
-                        </p>
-                    </div>
-                    <div className={cn('request-list__request-content-block')}>
-                        <h5 className={cn('request-list__request-content-block-title')}>
-                            {t('routes.project-request-list.requests.content.resource-manager')}
-                        </h5>
-                        <p className={cn('request-list__request-content-block-text')}>
-                            {requestItem.resource_manager?.last_name || t('routes.project-request-list.requests.content.empty')}
-                        </p>
-                    </div>
-                    <div className={cn('request-list__request-content-block')}>
-                        <h5 className={cn('request-list__request-content-block-title')}>
-                            {t('routes.project-request-list.requests.content.industry-sector')}
-                        </h5>
-                        <p className={cn('request-list__request-content-block-text')}>
-                            {requestItem.industry_sector?.name || t('routes.project-request-list.requests.content.empty')}
-                        </p>
-                    </div>
-                    <div className={cn('request-list__request-content-block')}>
-                        <h5 className={cn('request-list__request-content-block-title')}>
-                            {t('routes.project-request-list.requests.content.count.title')}
-                        </h5>
-                        <p className={cn('request-list__request-content-block-text')}>
-                            {requestItem.requirements_count_sum ? t('routes.project-request-list.requests.content.count.value', { count: requestItem.requirements_count_sum }) : t('routes.project-request-list.requests.content.empty')}
-                        </p>
-                    </div>
-                    <div className={cn('request-list__request-content-block')}>
-                        <h5 className={cn('request-list__request-content-block-title')}>
-                            {t('routes.project-request-list.requests.content.rate.title')}
-                        </h5>
-                        <p className={cn('request-list__request-content-block-text')}>
-                            {requestItem.requirements?.[0]?.max_price ? t('routes.project-request-list.requests.content.rate.value', { count: requestItem.requirements?.[0]?.max_price }) : t('routes.project-request-list.requests.content.empty')}
-                        </p>
-                    </div>
-                    <div className={cn('request-list__request-content-block')}>
-                        <h5 className={cn('request-list__request-content-block-title')}>
-                            {t('routes.project-request-list.requests.content.candidates.title')}
-                        </h5>
-                        <p className={cn('request-list__request-content-block-text')}>
-                            {t('routes.project-request-list.requests.content.empty')}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
     const elRequests = useMemo(() => {
         if(isLoading) {
             return <Loader />;
         }
 
         if(data?.results?.length) {
-            return (
-                <div className={cn('request-list__requests')}>
-                    {data.results.map((requestItem) => elRequestItem(requestItem))}
-                </div>
-            );
+            return <RequestList requestList={data.results} />;
         }
 
         return <span className={cn('request-list__requests-empty')}>{t('routes.project-request-list.requests.empty')}</span>;
@@ -226,7 +99,7 @@ const ProjectRequestList = () => {
                 <div className={cn('request-list__main-top')}>
                     <h2 className={cn('request-list__main-header')}>{t('routes.project-request-list.title')}</h2>
                     <Link
-                        to="/project-request/create"
+                        to="/requests/create"
                         className={cn('request-list__main-button')}
                     >
                         <IconPlus />
@@ -235,7 +108,7 @@ const ProjectRequestList = () => {
                 {elRequests}
             </section>
             <aside className={cn('request-list__search')}>
-                <h3 className={cn('request-list__search-header')}>{t('routes.project-request-list.sidebar.filters.title')}</h3>
+                <H3>{t('routes.project-request-list.sidebar.filters.title')}</H3>
                 <FormProvider {...context}>
                     <form
                         onSubmit={onSubmit}
@@ -318,14 +191,6 @@ const ProjectRequestList = () => {
                     </form>
                 </FormProvider>
             </aside>
-            {confirm && requestId && (
-                <ConfirmModal
-                    setVisible={setConfirm}
-                    requestId={requestId}
-                    requestName={projectName}
-                    onClickCancel={onClickCancel}
-                />
-            )}
         </main>
     );
 };

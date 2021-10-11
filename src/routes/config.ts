@@ -12,6 +12,10 @@ import ProjectCreate from './project-request/create';
 import ProjectRequest from './project-request';
 import NotFound from 'route/not-found';
 import ProjectRequestList from 'route/project-request/list';
+import Organization from 'route/organization';
+import OrganizationProjects from 'route/organization-projects';
+import Timesheets from 'route/timesheet';
+import Organizations from 'route/organizations';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -20,6 +24,26 @@ export interface IProps extends RouteProps {
 
 // Базовые роуты
 export const baseRoutes: Array<IProps> = [{
+    exact    : true,
+    layout   : Layout,
+    path     : '/organizations',
+    component: Organizations
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/organizations/:organizationId/:subpage(projects|main-info|cards)?',
+    component: Organization
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/organizations/:organizationId/projects/:projectId/timesheets',
+    component: Timesheets
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/organizations/:organizationId/projects/:projectId/:subpage(main-info|requests)?',
+    component: OrganizationProjects
+}, {
     isPublic : true,
     exact    : true,
     layout   : Layout,
@@ -43,27 +67,24 @@ export const baseRoutes: Array<IProps> = [{
 }, {
     exact    : true,
     layout   : Layout,
-    path     : ['/specialists/:id', '/profile'],
+    path     : ['/specialists/:specialistId', '/profile'],
     component: Person
 }, {
     exact    : true,
     layout   : Layout,
-    path     : '/project-request/create',
+    path     : '/requests/create',
     component: ProjectCreate
 }, {
-    isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : '/project-request',
+    path     : '/requests',
     component: ProjectRequestList
 }, {
-    isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : ['/project-request/:id', '/project-request/:id/:subpage(edit|specialists)'],
+    path     : ['/requests/:requestId', '/requests/:requestId/:subpage(edit|specialists)'],
     component: ProjectRequest
 }, {
-    isPublic : true,
     exact    : true,
     layout   : Layout,
     path     : '/404',
