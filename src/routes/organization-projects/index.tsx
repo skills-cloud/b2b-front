@@ -19,8 +19,7 @@ import { mainRequest } from 'adapter/api/main';
 enum ESectionInvariants {
     MainInfo = 'main-info',
     Requests = 'requests',
-    Timesheets = 'timesheets',
-    Cards = 'cards'
+    Timesheets = 'timesheets'
 }
 
 const OrganizationProjects = () => {
