@@ -20,6 +20,7 @@ import { cv } from 'adapter/api/cv';
 import { mainRequest } from 'adapter/api/main';
 import { CvListReadFull, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 import { OrganizationProjectCardItemReadTree } from 'adapter/types/main/organization-project-card-item/get/code-200';
+import { RequestRequirementCvRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 
 import style from './index.module.pcss';
 
@@ -30,6 +31,8 @@ interface ICard extends OrganizationProjectCardItemReadTree{
 type TCardMap = Record<number, OrganizationProjectCardItemReadTree>;
 type TCardList = Array<OrganizationProjectCardItemReadTree>;
 type TUniqRootCard = Record<number, ICard>;
+
+type TCvList = CvListReadFull & RequestRequirementCvRead;
 
 const getMapFromTree = (
     list: TCardList,
@@ -51,7 +54,7 @@ const getMapFromTree = (
 };
 
 const getRootNode = (treeMap: TCardMap, id: number): OrganizationProjectCardItemReadTree => {
-    const parentId = treeMap[id].parent_id;
+    const parentId = treeMap[id]?.parent_id;
 
     if(parentId) {
         return getRootNode(treeMap, parentId);
@@ -85,7 +88,7 @@ export const Specialists = () => {
 
     const { data, isLoading } = mainRequest.useGetMainRequestByIdQuery({ id: requestId });
     const [post] = mainRequest.usePostRequestRequirementCvSetDetailsMutation();
-    const [cvList, setCvList] = useState<Array<CvListReadFull>>([]);
+    const [cvList, setCvList] = useState<Array<TCvList>>([]);
     const [cards, setCards] = useState<TCardMap>({});
     const [cardTree, setCardTree] = useState<TCardList>([]);
     const [visibleModal, setVisibleModal] = useState<number | null>(null);
@@ -102,14 +105,36 @@ export const Specialists = () => {
 
             return acc;
         }, [] as Array<number>);
+        const reqsCvList = data?.requirements?.reduce((acc, current) => {
+            if(current.cv_list) {
+                current.cv_list.forEach((cvItem) => {
+                    if(!acc.find((findItem) => findItem.id === cvItem.cv_id)) {
+                        acc.push({
+                            ...cvItem.cv,
+                            request_requirement_id             : cvItem.request_requirement_id,
+                            organization_project_card_items_ids: cvItem.organization_project_card_items_ids
+                        });
+                    }
+                });
+            }
 
-        if(reqsList) {
+            return acc;
+        }, [] as Array<RequestRequirementCvRead>);
+
+        if(reqsList && reqsCvList) {
             dispatch(cv.endpoints.getCvList.initiate({
                 id: reqsList
             }))
                 .then(({ data: respData }) => {
                     if(respData) {
-                        setCvList(respData.results);
+                        const results = respData.results.map((result) => {
+                            return {
+                                ...reqsCvList.find((reqResult) => (reqResult.id === result.id) && reqResult),
+                                ...result
+                            };
+                        });
+
+                        setCvList(results);
                     }
                 })
                 .catch(console.error);
@@ -169,7 +194,7 @@ export const Specialists = () => {
         return '\u2014';
     };
 
-    const elUserItem = (cvItem: CvListReadFull) => {
+    const elUserItem = (cvItem: TCvList) => {
         const firstName = cvItem.first_name;
         const lastName = cvItem.last_name;
         let title = `${firstName || ''} ${lastName || ''}`.trim();
@@ -183,7 +208,7 @@ export const Specialists = () => {
         if(Object.keys(cards).length > 0 && cvItem?.organization_project_card_items_ids) {
             rootCard = cvItem
                 .organization_project_card_items_ids
-                .map((id: string) => getRootNode(cards, parseInt(id, 10)))
+                .map((id: number) => getRootNode(cards, id))
                 .reduce((result: TUniqRootCard, item: OrganizationProjectCardItemReadTree) => {
                     if(!item?.id) {
                         return result;
@@ -209,11 +234,12 @@ export const Specialists = () => {
 
             cvItem
                 .organization_project_card_items_ids
-                .forEach((id: string) => {
+                .forEach((id: number) => {
                     methods.setValue(`card-${id}`, true);
                 });
 
-            methods.setValue('cv_id', cvItem.cv_id);
+            methods.setValue('cv_id', cvItem.id);
+            methods.setValue('requestId', cvItem.request_requirement_id);
         };
 
         return (
@@ -294,7 +320,7 @@ export const Specialists = () => {
             const cvListFiltered = cvList.filter((item) => item.requests_requirements?.find((req) => String(req.id) === hashValue));
             const dataToRender = hashValue === 'all' ? cvList : cvListFiltered;
 
-            if(dataToRender.length) {
+            if(dataToRender?.length) {
                 return (
                     <div className={cn('specialists__users')}>
                         {dataToRender.map((cvItem) => elUserItem(cvItem))}
@@ -334,7 +360,7 @@ export const Specialists = () => {
     const renderCard = cardTree.filter((item) => item.id === visibleModal);
 
     const applyCardForm = (formValues: Record<string, string | boolean>) => {
-        const { cv_id, ...values } = formValues;
+        const { cv_id, requestId: formRequestId, ...values } = formValues;
         const falsyRootIds = Object.keys(values)
             .filter((item) => !values[item])
             .map((item) => item.slice('card-'.length))
@@ -346,7 +372,7 @@ export const Specialists = () => {
             .filter((id) => !falsyIds.includes(id));
 
         post({
-            id   : hash.slice(1),
+            id   : hash.slice(1) === 'all' ? formRequestId as string : hash.slice(1),
             cv_id: String(cv_id),
             data : {
                 organization_project_card_items_ids: cardIds

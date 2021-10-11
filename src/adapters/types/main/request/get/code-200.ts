@@ -85,46 +85,48 @@ export type NoName46 = string;
 export type NoName47 = string;
 export type ID9 = number;
 export type RequestRequirementId1 = string;
-export type NoName48 = 'canceled' | 'candidate' | 'worker';
+export type NoName48 = 'canceled' | 'candidate' | 'pre-candidate' | 'worker';
 export type NoName49 = string;
 export type NoName50 = string;
+export type NoName51 = string;
+export type NoName52 = string;
 /**
  * float
  */
-export type NoName51 = number;
+export type NoName53 = number;
 export type ID10 = number;
-export type NoName52 = number;
-export type NoName53 = string;
-export type NoName54 = string;
-export type ID11 = number;
-export type NoName55 = boolean;
+export type NoName54 = number;
+export type NoName55 = string;
 export type NoName56 = string;
+export type ID11 = number;
+export type NoName57 = boolean;
+export type NoName58 = string;
 export type PositionId = number;
 export type RequestId = number;
-export type NoName57 = number;
-export type NoName58 = string;
-export type ID12 = number;
-export type NoName59 = boolean;
+export type NoName59 = number;
 export type NoName60 = string;
-export type TypeOfEmploymentId = number;
-export type NoName61 = string;
+export type ID12 = number;
+export type NoName61 = boolean;
 export type NoName62 = string;
-export type ID13 = number;
-export type NoName63 = boolean;
+export type TypeOfEmploymentId = number;
+export type NoName63 = string;
 export type NoName64 = string;
-export type NoName65 = string;
-export type ID14 = number;
-export type NoName66 = boolean;
+export type ID13 = number;
+export type NoName65 = boolean;
+export type NoName66 = string;
 export type NoName67 = string;
+export type ID14 = number;
+export type NoName68 = boolean;
+export type NoName69 = string;
 export type WorkLocationCityId = number;
 export type RequirementsCountSum = number;
-export type NoName68 = number;
-export type NoName69 = string;
-export type NoName70 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName70 = number;
 export type NoName71 = string;
+export type NoName72 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName73 = string;
 export type ID15 = number;
-export type NoName72 = string;
-export type NoName73 = number;
+export type NoName74 = string;
+export type NoName75 = number;
 
 export interface RequestRead {
     deadline_date?: NoName;
@@ -143,12 +145,12 @@ export interface RequestRead {
     requirements?: RequestRequirementRead[];
     requirements_count_sum?: RequirementsCountSum;
     resource_manager?: UserInline;
-    resource_manager_id?: NoName68;
-    start_date?: NoName69;
-    status?: NoName70;
-    title?: NoName71;
+    resource_manager_id?: NoName70;
+    start_date?: NoName71;
+    status?: NoName72;
+    title?: NoName73;
     type?: RequestType;
-    type_id?: NoName73;
+    type_id?: NoName75;
 }
 export interface IndustrySector {
     description?: NoName2;
@@ -204,18 +206,20 @@ export interface RequestRequirementRead {
     count?: NoName34;
     cv_list?: RequestRequirementCvRead[];
     cv_list_ids?: string[];
-    description?: NoName50;
-    experience_years?: NoName51;
+    date_from?: NoName50;
+    date_to?: NoName51;
+    description?: NoName52;
+    experience_years?: NoName53;
     id?: ID10;
-    max_price?: NoName52;
-    name?: NoName53;
+    max_price?: NoName54;
+    name?: NoName55;
     position?: Position;
     position_id?: PositionId;
     request_id: RequestId;
-    sorting?: NoName57;
+    sorting?: NoName59;
     type_of_employment?: TypeOfEmployment;
     type_of_employment_id?: TypeOfEmploymentId;
-    work_location_address?: NoName61;
+    work_location_address?: NoName63;
     work_location_city?: City;
     work_location_city_id?: WorkLocationCityId;
 }
@@ -263,31 +267,31 @@ export interface CvInlineShort {
     user_id?: UserId;
 }
 export interface Position {
-    description?: NoName54;
+    description?: NoName56;
     id?: ID11;
-    is_verified?: NoName55;
-    name: NoName56;
+    is_verified?: NoName57;
+    name: NoName58;
 }
 export interface TypeOfEmployment {
-    description?: NoName58;
+    description?: NoName60;
     id?: ID12;
-    is_verified?: NoName59;
-    name: NoName60;
+    is_verified?: NoName61;
+    name: NoName62;
 }
 export interface City {
     country: Country;
-    description?: NoName65;
+    description?: NoName67;
     id?: ID14;
-    is_verified?: NoName66;
-    name: NoName67;
+    is_verified?: NoName68;
+    name: NoName69;
 }
 export interface Country {
-    description?: NoName62;
+    description?: NoName64;
     id?: ID13;
-    is_verified?: NoName63;
-    name: NoName64;
+    is_verified?: NoName65;
+    name: NoName66;
 }
 export interface RequestType {
     id?: ID15;
-    name: NoName72;
+    name: NoName74;
 }

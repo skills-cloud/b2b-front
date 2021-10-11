@@ -1322,6 +1322,18 @@
                     "readOnly": true,
                     "type": "array"
                 },
+                "date_from": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата с",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата по",
+                    "type": "string"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -1460,10 +1472,49 @@
                     "title": "Требуется разрешение на работу",
                     "type": "boolean"
                 },
+                "organization_project_id": {
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Organization project id",
+                    "type": "integer"
+                },
+                "organization_project_name": {
+                    "minLength": 1,
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Organization project name",
+                    "type": "string"
+                },
                 "price": {
                     "nullable": true,
                     "title": "Ставка",
                     "type": "number"
+                },
+                "request_id": {
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Request id",
+                    "type": "integer"
+                },
+                "request_requirement_id": {
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Request requirement id",
+                    "type": "integer"
+                },
+                "request_requirement_name": {
+                    "minLength": 1,
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Request requirement name",
+                    "type": "string"
+                },
+                "request_title": {
+                    "minLength": 1,
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Request title",
+                    "type": "string"
                 },
                 "type_of_employment": {
                     "$ref": "#/definitions/TypeOfEmployment"
@@ -2057,6 +2108,7 @@
                     "enum": [
                         "canceled",
                         "candidate",
+                        "pre-candidate",
                         "worker"
                     ],
                     "title": "Статус",

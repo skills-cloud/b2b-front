@@ -23,7 +23,7 @@ enum ESectionInvariants {
     Cards = 'cards'
 }
 
-const ProjectRequest = () => {
+const OrganizationProjects = () => {
     const { t } = useTranslation();
     const { projectId, organizationId } = useParams<{ organizationId: string, projectId: string }>();
     const { data } = mainRequest.useGetMainOrganizationProjectByIdQuery({
@@ -82,4 +82,4 @@ const ProjectRequest = () => {
     );
 };
 
-export default ProjectRequest;
+export default OrganizationProjects;

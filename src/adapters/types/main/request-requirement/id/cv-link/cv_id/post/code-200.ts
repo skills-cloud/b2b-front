@@ -12,7 +12,7 @@ export type NoName1 = string;
 export type NoName2 = string;
 export type ID = number;
 export type RequestRequirementId = string;
-export type NoName3 = 'canceled' | 'candidate' | 'worker';
+export type NoName3 = 'canceled' | 'candidate' | 'pre-candidate' | 'worker';
 export type NoName4 = string;
 
 export interface RequestRequirementCv {

@@ -53,6 +53,7 @@
                     "enum": [
                         "canceled",
                         "candidate",
+                        "pre-candidate",
                         "worker"
                     ],
                     "title": "Статус",

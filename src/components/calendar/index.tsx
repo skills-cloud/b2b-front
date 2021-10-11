@@ -1,4 +1,5 @@
-import React, { useCallback, useState, MouseEvent } from 'react';
+import React, { useCallback, useState, MouseEvent, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     parse,
     isWithinInterval,
@@ -27,10 +28,14 @@ import {
 import { ru } from 'date-fns/locale';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
+import { useDispatch } from 'component/core/store';
 
 import IconArrowLeft from 'component/icons/arrow-left';
 import IconArrowRight from 'component/icons/arrow-right';
 import IconBurger from 'component/icons/burger';
+import Tooltip from 'component/tooltip';
+
+import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
 
@@ -46,7 +51,8 @@ export interface IProps {
     onClickDay?(date: Date): void,
     busyPeriods?: Array<{
         dates: Array<string>,
-        emp_id: number
+        emp_id: number,
+        organization_project_id?: number
     }>
 }
 
@@ -57,11 +63,53 @@ export const defaultProps = {
     locale      : ru
 };
 
+interface IOrganizationProject {
+    name: string,
+    id: number
+}
+
 export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
     const cn = useClassnames(style, props.className, true);
+    const { t } = useTranslation();
+    const dispatch = useDispatch();
     const [firstDate, setFirstDate] = useState(props.initialDate);
     const [secondDate, setSecondDate] = useState(addMonths(props.initialDate, 1));
     const [showMonthModal, setShowMonthModal] = useState<boolean>(false);
+    const [organizationsNames, setOrganizationsNames] = useState<Array<IOrganizationProject>>([]);
+
+    useEffect(() => {
+        if(props.busyPeriods) {
+            const organizationIds = props.busyPeriods.reduce((acc, curr) => {
+                if(!acc.includes(curr.organization_project_id as number)) {
+                    acc.push(curr.organization_project_id as number);
+                }
+
+                return acc;
+            }, [] as Array<number>);
+
+            Promise.all(organizationIds.map((orgId) => {
+                return dispatch(mainRequest.endpoints.getMainOrganizationProjectById.initiate({ id: String(orgId) }))
+                    .then(({ data }) => data);
+            }))
+                .then((resp) => {
+                    const newOrganizationsNames = resp.map((item) => {
+                        let name = item?.name;
+
+                        if(item?.organization?.name) {
+                            name = `${item.organization.name} - ${name}`;
+                        }
+
+                        return {
+                            name: name as string ?? t('components.calendar.name-empty'),
+                            id  : item?.id as number
+                        };
+                    });
+
+                    setOrganizationsNames(newOrganizationsNames);
+                })
+                .catch(console.error);
+        }
+    }, [JSON.stringify(props.busyPeriods)]);
 
     const isBusy = useCallback((value: Date) => {
         if(value && props.busyPeriods?.length) {
@@ -70,18 +118,25 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
                 .map((item) => ({
                     start : parse(item.dates[0], 'yyyy-MM-dd', new Date()),
                     end   : parse(item.dates[1], 'yyyy-MM-dd', new Date()),
-                    emp_id: item.emp_id
+                    emp_id: item.emp_id,
+                    name  : organizationsNames.find((org) => org.id === item.organization_project_id)?.name
                 }));
 
             for(const period of periods) {
                 if(isWithinInterval(value, period)) {
-                    return period.emp_id;
+                    return {
+                        status: period.emp_id,
+                        name  : period.name
+                    };
                 }
             }
         }
 
-        return false;
-    }, [props.busyPeriods]);
+        return {
+            status: null,
+            name  : null
+        };
+    }, [props.busyPeriods, JSON.stringify(organizationsNames)]);
 
     const onClickArrow = useCallback((amount: number) => (e: MouseEvent) => {
         e.preventDefault();
@@ -195,13 +250,13 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
                     });
 
                     return days.map((day) => {
-                        return (
+                        const dayInfo = isBusy(day);
+                        const content = (
                             <span
                                 key={day.getTime()}
-                                className={cn('date-picker-calendar__day', {
-                                    'date-picker-calendar__day_is-another'                         : !isSameMonth(isSecond ? secondDate : firstDate, day),
-                                    'date-picker-calendar__day_is-select'                          : props.selected?.some((item) => isSameDay(item, day)),
-                                    [`date-picker-calendar__day_type-of-employment-${isBusy(day)}`]: isBusy(day)
+                                className={cn('date-picker-calendar__day', `date-picker-calendar__day_${dayInfo.status}`, {
+                                    'date-picker-calendar__day_is-another': !isSameMonth(isSecond ? secondDate : firstDate, day),
+                                    'date-picker-calendar__day_is-select' : props.selected?.some((item) => isSameDay(item, day))
                                 })}
                                 onClick={() => {
                                     props.onClickDay?.(day);
@@ -211,6 +266,25 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
                                     weekStartsOn: props.weekStartsOn
                                 })}
                             />
+                        );
+
+                        if(dayInfo.name) {
+                            return (
+                                <Tooltip
+                                    key={day.getTime()}
+                                    content={dayInfo.name}
+                                    theme="dark"
+                                    className={cn('date-picker-calendar__day-wrapper')}
+                                >
+                                    {content}
+                                </Tooltip>
+                            );
+                        }
+
+                        return (
+                            <div key={day.getTime()} className={cn('date-picker-calendar__day-wrapper')}>
+                                {content}
+                            </div>
                         );
                     });
                 })}

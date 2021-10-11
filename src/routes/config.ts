@@ -15,6 +15,7 @@ import ProjectRequestList from 'route/project-request/list';
 import Organization from 'route/organization';
 import OrganizationProjects from 'route/organization-projects';
 import Timesheets from 'route/timesheet';
+import Organizations from 'route/organizations';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -23,6 +24,11 @@ export interface IProps extends RouteProps {
 
 // Базовые роуты
 export const baseRoutes: Array<IProps> = [{
+    exact    : true,
+    layout   : Layout,
+    path     : '/organizations',
+    component: Organizations
+}, {
     exact    : true,
     layout   : Layout,
     path     : '/organizations/:organizationId/:subpage(projects|main-info|cards)?',

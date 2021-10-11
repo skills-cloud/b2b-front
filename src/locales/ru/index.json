@@ -4,10 +4,14 @@
             "logo": "SKILLCLOUD",
             "nav": {
                 "specialists": "Специалисты",
+                "organizations": "Организации",
                 "requests": "Запросы",
                 "teams": "Команды",
                 "help": "Помощь"
             }
+        },
+        "calendar": {
+            "name-empty": "Не указано"
         },
         "user": {
             "header-bar": {
@@ -93,6 +97,37 @@
         },
         "main": {
             "hello": "SkillCloud"
+        },
+        "organizations": {
+            "main": {
+                "title": "Организации",
+                "list": {
+                    "empty": "Поиск не дал результатов.",
+                    "customer": "Заказчик",
+                    "description": {
+                        "title": "Описание компании",
+                        "empty": "Описание не указано"
+                    }
+                }
+            },
+            "sidebar": {
+                "filters": {
+                    "title": "Фильтры",
+                    "form": {
+                        "search": {
+                            "label": "Название компании",
+                            "placeholder": "Введите название"
+                        },
+                        "customer": {
+                            "label": "Заказчик"
+                        }
+                    },
+                    "buttons": {
+                        "submit": "Применить",
+                        "clear": "Очистить"
+                    }
+                }
+            }
         },
         "timesheet": {
             "sidebar": {

@@ -1,0 +1,79 @@
+.organizations {
+
+    &__organizations-empty {
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-black);
+        text-align: center;
+        display: block;
+    }
+
+    &__list-item {
+        padding: 24px 0;
+        position: relative;
+        display: grid;
+        grid-gap: 16px;
+
+        &::after {
+            content: "";
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--color-border);
+        }
+
+        &:first-child {
+            padding-top: 0;
+
+            &::after {
+                display: none;
+            }
+        }
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+
+    &__form {
+        display: grid;
+        grid-gap: 24px;
+    }
+
+    &__list-item-block {
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-between;
+        grid-gap: 8px;
+        font-size: 14px;
+        color: var(--color-text-light);
+
+        &_row {
+            grid-auto-flow: row;
+        }
+    }
+
+    &__list-item-link {
+        color: var(--color-text-dark);
+        font-weight: bold;
+        text-decoration: none;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__list-item-span {
+        text-transform: uppercase;
+    }
+
+    &__list-item-text {
+        color: var(--color-text-dark);
+    }
+}
