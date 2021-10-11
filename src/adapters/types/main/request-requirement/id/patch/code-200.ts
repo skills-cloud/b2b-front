@@ -8,31 +8,35 @@
 export type Code200 = RequestRequirement;
 export type NoName = number;
 export type NoName1 = string;
+export type NoName2 = string;
+export type NoName3 = string;
 /**
  * float
  */
-export type NoName2 = number;
+export type NoName4 = number;
 export type ID = number;
-export type NoName3 = number;
-export type NoName4 = string;
+export type NoName5 = number;
+export type NoName6 = string;
 export type PositionId = number;
 export type RequestId = number;
-export type NoName5 = number;
+export type NoName7 = number;
 export type TypeOfEmploymentId = number;
-export type NoName6 = string;
+export type NoName8 = string;
 export type WorkLocationCityId = number;
 
 export interface RequestRequirement {
     count?: NoName;
-    description?: NoName1;
-    experience_years?: NoName2;
+    date_from?: NoName1;
+    date_to?: NoName2;
+    description?: NoName3;
+    experience_years?: NoName4;
     id?: ID;
-    max_price?: NoName3;
-    name?: NoName4;
+    max_price?: NoName5;
+    name?: NoName6;
     position_id?: PositionId;
     request_id: RequestId;
-    sorting?: NoName5;
+    sorting?: NoName7;
     type_of_employment_id?: TypeOfEmploymentId;
-    work_location_address?: NoName6;
+    work_location_address?: NoName8;
     work_location_city_id?: WorkLocationCityId;
 }

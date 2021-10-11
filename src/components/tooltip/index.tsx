@@ -32,11 +32,12 @@ const TooltipError = (props: IProps = { theme: 'light' }) => {
             {...triggerProps}
             {...hoverProps}
             onClick={onClick}
+            className={cn('tooltip')}
         >
             {props.children}
             {isOver && (
                 renderLayer(
-                    <div className={cn('tooltip', `tooltip_${props.theme}`)} {...layerProps}>
+                    <div className={cn('tooltip__content', `tooltip__content_${props.theme}`)} {...layerProps}>
                         {props.content}
                     </div>
                 )

@@ -713,6 +713,7 @@
                     "enum": [
                         "canceled",
                         "candidate",
+                        "pre-candidate",
                         "worker"
                     ],
                     "title": "Статус",
@@ -757,6 +758,18 @@
                     },
                     "readOnly": true,
                     "type": "array"
+                },
+                "date_from": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата с",
+                    "type": "string"
+                },
+                "date_to": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата по",
+                    "type": "string"
                 },
                 "description": {
                     "nullable": true,
