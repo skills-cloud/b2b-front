@@ -43,8 +43,8 @@ const methods = {
         list  : mainRequest.endpoints.getMainOrganizationCustomer
     },
     [ERequestType.Project]: {
-        single: mainRequest.endpoints.getMainProjectById,
-        list  : mainRequest.endpoints.getMainProject
+        single: mainRequest.endpoints.getMainOrganizationProjectById,
+        list  : mainRequest.endpoints.getMainOrganizationProjectList
     },
     [ERequestType.RequestType]: {
         single: mainRequest.endpoints.getMainRequestTypeById,

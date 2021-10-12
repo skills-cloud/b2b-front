@@ -27,12 +27,12 @@ import style from './index.module.pcss';
 
 const MAIN_INFO_FIELDS = [
     'industry_sector',
-    'project',
+    'organization_project',
     'resource_manager',
     'recruiter',
     'type',
     'requirements',
-    'project_description',
+    'description',
     'customer'
 ] as const;
 
@@ -41,7 +41,7 @@ const PROJECT_TERM_FIELDS = ['project-term', 'duration'];
 const FORMAT_DATE = 'dd.MM.yyyy';
 
 const MainInfo = (data: RequestRead) => {
-    const { project, priority, status, start_date, deadline_date, requirements, id, type } = data;
+    const { project, priority, status, start_date, deadline_date, requirements, id } = data;
     const params = useParams<{ subpage?: string, requestId: string }>();
     const { t } = useTranslation();
     const cn = useClassnames(style);
@@ -102,11 +102,14 @@ const MainInfo = (data: RequestRead) => {
                     content = `${data[field]?.last_name} ${data[field]?.first_name.slice(0, 1)}.`;
                 }
                 break;
-            case 'project_description':
-                content = project?.description;
+            case 'description':
+                content = data?.description;
                 break;
             case 'requirements':
                 content = requirements?.length;
+                break;
+            case 'customer':
+                content = data?.organization_project?.organization?.name;
                 break;
             default:
                 content = data[field]?.name;
@@ -139,7 +142,7 @@ const MainInfo = (data: RequestRead) => {
         return (
             <div className={cn('gap-bottom')} id={ESectionInvariants.MainInfo}>
                 <SectionHeader dropdownActions={actions}>
-                    {type?.name || t('routes.project-request.blocks.empty-title')}
+                    {data?.title || t('routes.project-request.blocks.empty-title')}
                 </SectionHeader>
             </div>
         );

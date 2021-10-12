@@ -46,7 +46,7 @@ const RequestList = ({ requestList }: IRequestList) => {
                         <div className={cn('request-list__item-top')}>
                             <div className={cn('request-list__item-top-left')}>
                                 <Link to={`/requests/${requestItem.id}#main-info`} className={cn('request-list__item-top-left-title')}>
-                                    {requestItem.project?.name || t('routes.project-request-list.requests.request-item.title')}
+                                    {requestItem.title || t('routes.project-request-list.requests.request-item.title')}
                                 </Link>
                                 <span className={cn('request-list__item-top-left-subtitle')}>
                                     {t('routes.project-request-list.requests.request-item.date', {

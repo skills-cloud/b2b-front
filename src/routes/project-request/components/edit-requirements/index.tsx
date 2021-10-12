@@ -39,10 +39,10 @@ interface IEditRequirements {
 }
 
 interface IForm extends RequestRequirement{
-    type_of_employment: Array<{
+    type_of_employment: {
         value: string,
         label: string
-    }>,
+    },
     location: string,
     city: {
         value: string,
@@ -62,10 +62,10 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
 
     useEffect(() => {
         form.setValue('location', editRequirements?.work_location_address);
-        form.setValue('type_of_employment', editRequirements?.type_of_employment ? [{
+        form.setValue('type_of_employment', editRequirements?.type_of_employment ? {
             value: editRequirements?.type_of_employment?.id,
             label: editRequirements?.type_of_employment?.name
-        }] : undefined);
+        } : undefined);
         form.setValue('city', editRequirements?.work_location_city ? {
             value: editRequirements?.work_location_city?.id,
             label: editRequirements?.work_location_city?.name
@@ -88,16 +88,14 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
         date_to
     }: IForm) => {
         const cityId = city?.value;
-
-        const valueTypeOfEmployment = type_of_employment?.map(({ value }) => parseInt(value, 10));
+        const valueTypeOfEmployment = type_of_employment?.value;
         const id = editRequirements?.id;
 
         const body = {
             request_id           : requestId,
             work_location_address: location,
             work_location_city_id: cityId ? parseInt(cityId, 10) : undefined,
-            // костыль бек не может принимать массив
-            type_of_employment_id: valueTypeOfEmployment?.[0],
+            type_of_employment_id: valueTypeOfEmployment ? parseInt(valueTypeOfEmployment, 10) : undefined,
             max_price            : max_price,
             description          : description,
             name                 : name,
