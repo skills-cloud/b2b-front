@@ -49,8 +49,6 @@ const Access = (props: IProps) => {
         }
     });
 
-    console.log('timeSlotData', timeSlotData)
-
     const busyPeriodsWithId = useMemo(() => {
         if(timeSlotData?.results) {
             const periods = timeSlotData.results.filter((item) => item.date_to && item.date_from);

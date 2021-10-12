@@ -20,6 +20,7 @@ import Separator from 'component/separator';
 import Section from 'component/section';
 import Button from 'component/button';
 import Tooltip from 'component/tooltip';
+import Timeframe from 'component/timeframe';
 
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import AddRole from 'route/project-request/components/add-role';
@@ -114,7 +115,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     description,
                     work_location_city: location,
                     work_location_address: address,
-                    type_of_employment
+                    type_of_employment,
+                    date_from,
+                    date_to
                 } = requirement;
                 const ancor = index === 0 ? { id: ESectionInvariants.Requirements } : {};
                 let contextLocation = 'empty';
@@ -223,7 +226,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                             </React.Fragment>
                         )}
 
-                        {description && (
+                        {!!(description || (date_from && date_to)) && (
                             <React.Fragment>
                                 <Separator />
                                 <H4>
@@ -232,6 +235,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                 <SectionContentList>
                                     <SectionContentListItem title={t('routes.project-request.blocks.other.description')}>
                                         {description}
+                                    </SectionContentListItem>
+                                    <SectionContentListItem title={t('routes.project-request.blocks.other.deadline')}>
+                                        {!!(date_from && date_to) && <Timeframe startDate={date_from} endDate={date_to} />}
                                     </SectionContentListItem>
                                 </SectionContentList>
                             </React.Fragment>

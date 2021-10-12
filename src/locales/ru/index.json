@@ -774,13 +774,16 @@
                     "tab_location": "Расположение",
                     "tab_price": "Ставка",
                     "tab_other": "Разное",
+                    "tab_timing": "Сроки запроса",
                     "people" : "{{position}} ({{people}} чел.)",
                     "addRole": "Добавить роль",
                     "new-role": "Новая роль",
                     "people-in-roles" : "{{people}} чел.",
                     "position": "Начните вводить, например, “Front-end Dev”",
                     "title-field": "Название проекта",
-                    "add-request": "Добавить требование"
+                    "add-request": "Добавить требование",
+                    "date-from": "Дата начала",
+                    "date-to": "Дата окончания"
                 }
             },
             "blocks": {
@@ -839,7 +842,8 @@
                 },
                 "other": {
                     "description": "Описание",
-                    "title": "Разное"
+                    "title": "Разное",
+                    "deadline": "Сроки"
                 },
                 "priority": {
                     "30": "Низкий",

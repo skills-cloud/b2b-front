@@ -41,7 +41,7 @@ const PROJECT_TERM_FIELDS = ['project-term', 'duration'];
 const FORMAT_DATE = 'dd.MM.yyyy';
 
 const MainInfo = (data: RequestRead) => {
-    const { project, priority, status, start_date, deadline_date, requirements, id } = data;
+    const { project, priority, status, start_date, deadline_date, requirements, id, type } = data;
     const params = useParams<{ subpage?: string, requestId: string }>();
     const { t } = useTranslation();
     const cn = useClassnames(style);
@@ -139,7 +139,7 @@ const MainInfo = (data: RequestRead) => {
         return (
             <div className={cn('gap-bottom')} id={ESectionInvariants.MainInfo}>
                 <SectionHeader dropdownActions={actions}>
-                    {project?.name || t('routes.project-request.blocks.empty-title')}
+                    {type?.name || t('routes.project-request.blocks.empty-title')}
                 </SectionHeader>
             </div>
         );
