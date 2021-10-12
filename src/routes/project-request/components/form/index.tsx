@@ -18,6 +18,7 @@ import Tabs, { Tab } from 'component/tabs';
 
 import InputDictionary from 'component/form/input-dictionary';
 import InputMain from 'component/form/input-main';
+import Input from 'component/form/input';
 
 import style from './index.module.pcss';
 
@@ -107,9 +108,9 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                 value: defaultValues?.organization_project.organization_id,
                 label: defaultValues?.organization_project.organization?.name
             } : '',
-            project: defaultValues?.project ? {
-                value: defaultValues?.project?.id,
-                label: defaultValues?.project?.name
+            project: defaultValues?.organization_project ? {
+                value: defaultValues?.organization_project?.id,
+                label: defaultValues?.organization_project?.name
             } : '',
             type: defaultValues?.type ? {
                 value: defaultValues?.type?.id,
@@ -168,10 +169,6 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
             postData.industry_sector_id = parseInt(industry_sector.value, 10);
         }
 
-        if(project) {
-            postData.project_id = parseInt(project.value, 10);
-        }
-
         if(prioritySelect) {
             postData.priority = prioritySelect.value;
         }
@@ -198,8 +195,8 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
 
         const request = method({
             ...rest,
-            id                     : requestId as number,
-            organization_project_id: parseInt(customer.value, 10)
+            organization_project_id: parseInt(project.value, 10),
+            id                     : requestId as number
         });
 
         request
@@ -240,6 +237,11 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
             <FormProvider {...form}>
                 <form method="POST" id={formId} onSubmit={form.handleSubmit(onSubmit)}>
                     <div className={cn('form', { 'hide': activeTab === ETabs.ProjectTiming })}>
+                        <Input
+                            type="text"
+                            name="title"
+                            label={t('routes.project-request.create.form-title')}
+                        />
                         <InputDictionary
                             isMulti={false}
                             requestType={InputDictionary.requestType.IndustrySector}
