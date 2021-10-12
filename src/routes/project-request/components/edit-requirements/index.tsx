@@ -7,6 +7,7 @@ import { H4 } from 'component/header';
 import Tabs, { Tab } from 'component/tabs';
 import Input from 'component/form/input';
 import IconDots from 'component/icons/dots';
+import DeadlineDates from 'component/form/deadline-dates';
 
 import EditLocation from 'route/project-request/components/edit-location';
 import EditPrice from 'route/project-request/components/edit-price';
@@ -25,6 +26,7 @@ export enum ETabs {
     Location='location',
     Price='price',
     Other='other',
+    Timing='timing'
 }
 
 interface IEditRequirements {
@@ -37,15 +39,17 @@ interface IEditRequirements {
 }
 
 interface IForm extends RequestRequirement{
-    type_of_employment: {
+    type_of_employment: Array<{
         value: string,
         label: string
-    },
+    }>,
     location: string,
     city: {
         value: string,
         label: string
-    }
+    },
+    date_to: string,
+    date_from: string
 }
 
 const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, setActiveTab, requestId }: IEditRequirements) => {
@@ -58,10 +62,10 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
 
     useEffect(() => {
         form.setValue('location', editRequirements?.work_location_address);
-        form.setValue('type_of_employment', editRequirements?.type_of_employment ? {
+        form.setValue('type_of_employment', editRequirements?.type_of_employment ? [{
             value: editRequirements?.type_of_employment?.id,
             label: editRequirements?.type_of_employment?.name
-        } : undefined);
+        }] : undefined);
         form.setValue('city', editRequirements?.work_location_city ? {
             value: editRequirements?.work_location_city?.id,
             label: editRequirements?.work_location_city?.name
@@ -69,6 +73,8 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
         form.setValue('max_price', editRequirements?.max_price);
         form.setValue('description', editRequirements?.description);
         form.setValue('name', editRequirements?.name);
+        form.setValue('date_from', editRequirements?.date_from);
+        form.setValue('date_to', editRequirements?.date_to);
     }, [editRequirements]);
 
     const onSubmit = ({
@@ -77,20 +83,26 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
         city,
         max_price,
         description,
-        name
+        name,
+        date_from,
+        date_to
     }: IForm) => {
         const cityId = city?.value;
-        const valueTypeOfEmployment = type_of_employment?.value;
+
+        const valueTypeOfEmployment = type_of_employment?.map(({ value }) => parseInt(value, 10));
         const id = editRequirements?.id;
 
         const body = {
             request_id           : requestId,
             work_location_address: location,
             work_location_city_id: cityId ? parseInt(cityId, 10) : undefined,
-            type_of_employment_id: valueTypeOfEmployment ? parseInt(valueTypeOfEmployment, 10) : undefined,
+            // костыль бек не может принимать массив
+            type_of_employment_id: valueTypeOfEmployment?.[0],
             max_price            : max_price,
             description          : description,
-            name                 : name
+            name                 : name,
+            date_from            : date_from,
+            date_to              : date_to
         };
 
 
@@ -177,6 +189,13 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
                     )}
                     {activeTab === ETabs.Other && (
                         <EditOuther />
+                    )}
+                    {activeTab === ETabs.Timing && (
+                        <DeadlineDates labels={{
+                            dateFrom: t('routes.project-request.requirements.edit-modal.date-from'),
+                            dateTo  : t('routes.project-request.requirements.edit-modal.date-to')
+                        }}
+                        />
                     )}
                 </div>
             </form>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider, SubmitHandler, useFieldArray } from 'react-hook-form';
+import { useClassnames } from 'hook/use-classnames';
 import debounce from 'lodash.debounce';
 
 import { Request, NoName4, NoName2 } from 'adapter/types/main/request/id/patch/code-200';
@@ -12,13 +13,13 @@ import { acc } from 'src/adapters/api/acc';
 import { useDispatch } from 'component/core/store';
 import Select from 'component/form/select';
 import Textarea from 'component/form/textarea';
-import FormDate from 'component/form/date';
+import DeadlineDates from 'component/form/deadline-dates';
 import Tabs, { Tab } from 'component/tabs';
 
-import { useClassnames } from 'hook/use-classnames';
-import style from './index.module.pcss';
 import InputDictionary from 'component/form/input-dictionary';
 import InputMain from 'component/form/input-main';
+
+import style from './index.module.pcss';
 
 interface ISelect {
     value: string,
@@ -310,21 +311,19 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                     </div>
                     <div className={cn('form', { 'hide': activeTab === ETabs.Main })}>
                         {fields.map((field, index) => (
-                            <div className={cn('field-group-date')} key={field.fieldId}>
-                                <FormDate
-                                    name={`period.${index}.start_date`}
-                                    label={t('routes.project-request.blocks.period-form.date_from')}
-                                    direction="column"
-                                    defaultValue={field?.start_date}
-                                />
-                                <div className={cn('field-group-date__separator')} />
-                                <FormDate
-                                    name={`period.${index}.deadline_date`}
-                                    label={t('routes.project-request.blocks.period-form.date_to')}
-                                    direction="column"
-                                    defaultValue={field?.deadline_date}
-                                />
-                            </div>
+                            <DeadlineDates
+                                key={field.fieldId}
+                                nameDateFrom={`period.${index}.start_date`}
+                                nameDateTo={`period.${index}.deadline_date`}
+                                labels={{
+                                    dateFrom: t('routes.project-request.blocks.period-form.date_from'),
+                                    dateTo  : t('routes.project-request.blocks.period-form.date_to')
+                                }}
+                                defaultValues={{
+                                    dateFrom: field?.start_date,
+                                    dateTo  : field?.deadline_date
+                                }}
+                            />
                         ))}
                         {/* TODO Добавить блок приостановки проекта, как будет готов бек */}
                         {/* <a
