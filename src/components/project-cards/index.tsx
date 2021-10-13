@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -20,8 +20,11 @@ import Button from 'component/button';
 import Dropdown from 'component/dropdown/base';
 import DropdownMenuItem from 'component/dropdown/menu-item';
 import DropdownMenu from 'component/dropdown/menu';
-import Select from 'component/form/select';
+import Select, { IValue } from 'component/form/select';
+import InputDictionary from 'component/form/input-dictionary';
+
 import { mainRequest } from 'adapter/api/main';
+import { dictionary } from 'adapter/api/dictionary';
 
 import CardItem from './card-item';
 import style from './index.module.pcss';
@@ -31,7 +34,8 @@ const FORM_CREATE_CARD_FROM_TEMPLATE = 'FORM_CREATE_CARD_FROM_TEMPLATE';
 
 interface IForm {
     cardName: string,
-    cardNameSub: string
+    cardNameSub: string,
+    position: Array<IValue>
 }
 
 interface IProjectCards{
@@ -52,10 +56,21 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
     const cardGetParams = projectId ? { organization_project_id: [projectId] } : { organization_id: [organizationId] };
     const { data: cards, isLoading } = mainRequest.useGetOrganizationProjectCardItemQuery(cardGetParams);
     const { data: baseProjectCards } = mainRequest.useGetBaseProjectCardQuery(undefined);
+    const { data: positions } = dictionary.useGetPositionListQuery(undefined);
     const [patch] = mainRequest.usePatchMainOrganizationProjectCardMutation();
     const [post] = mainRequest.usePostMainOrganizationProjectCardMutation();
     const [remove] = mainRequest.useDeleteMainOrganizationProjectCardByIdMutation();
     const [createCardFromTeplate] = mainRequest.usePostBaseProjectCardMutation();
+
+    const positionMap = useMemo(() => {
+        return positions?.results.reduce((acc, item) => {
+            if(item.id) {
+                acc[item.id] = item.name;
+            }
+
+            return acc;
+        }, {});
+    }, positions?.results);
 
     const closeModal = useCallback(() => {
         setVisibleModalId(null);
@@ -72,10 +87,14 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
     useModalClose(visibleModalId !== null || showAllTree, setVisibleModal);
 
     useEffect(() => {
-        if(cards) {
+        if(cards && positionMap) {
             methods.setValue('cardName', visibleModalId !== null ? cards[visibleModalId].name : '');
+            methods.setValue('position', visibleModalId !== null ? cards[visibleModalId]?.positions_ids?.map((id) => ({
+                value: id,
+                label: positionMap[id]
+            })) : undefined);
         }
-    }, [cards, visibleModalId]);
+    }, [cards, visibleModalId, positionMap]);
 
     const editCard = (values: IForm) => {
         if(visibleModalId === null) {
@@ -97,7 +116,6 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
                 parent_id: cards[visibleModalId].id
             })
                 .unwrap()
-                .then(closeModal)
                 .catch(console.error);
 
             return;
@@ -108,11 +126,11 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
         }
 
         patch({
-            name: values.cardName,
-            id  : cards[visibleModalId].id
+            name         : values.cardName,
+            id           : cards[visibleModalId].id,
+            positions_ids: values?.position?.map(({ value }) => parseInt(value, 10))
         })
             .unwrap()
-            .then(closeModal)
             .catch(console.error);
     };
 
@@ -254,26 +272,37 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
                     onClose={() => {
                         setVisibleModalId(null);
                         setShowAllTree(false);
+                        setVisibleAddCard(false);
                     }}
                 >
                     <FormProvider {...methods}>
                         <form method="PATCH" onSubmit={methods.handleSubmit(editCard)} id={FORM_ORGANIZATION_CARD_ID}>
                             <Input name="cardName" type="text" />
                             {visibleModalId !== null && (
-                                <span
-                                    className={cn('organization__cards-add-subdirectory')}
-                                    onClick={() => {
-                                        setVisibleAddCard(true);
-                                    }}
-                                >
-                                    {t('routes.organization.blocks.modal.subdirectory')}
-                                </span>
+                                <div className={cn('organization__cards-column')}>
+                                    <InputDictionary
+                                        requestType={InputDictionary.requestType.Position}
+                                        name="position"
+                                        placeholder={t('routes.organization.blocks.modal.position')}
+                                    />
+                                    {visibleAddCard && (
+                                        <span className={cn('organization__cards-add-input')}>
+                                            <Input name="cardNameSub" type="text" />
+                                        </span>
+                                    )}
+                                    {!visibleAddCard && (
+                                        <span
+                                            className={cn('organization__cards-add-subdirectory')}
+                                            onClick={() => {
+                                                setVisibleAddCard(true);
+                                            }}
+                                        >
+                                            {t('routes.organization.blocks.modal.subdirectory')}
+                                        </span>
+                                    )}
+                                </div>
                             )}
-                            {visibleAddCard && (
-                                <span className={cn('organization__cards-add-input')}>
-                                    <Input name="cardNameSub" type="text" />
-                                </span>
-                            )}
+                            {}
                         </form>
                     </FormProvider>
                     <TreeList

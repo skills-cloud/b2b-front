@@ -215,6 +215,7 @@
                     "title_create-by-template": "Создать по шаблону",
                     "title_edit": "Редактирование карточки прав и доступа",
                     "title_add": "Новая карточка прав и доступа",
+                    "position": "Должность",
                     "cards-count_empty": "",
                     "cards-count_full": "\u00A0({{value }})",
                     "subdirectory": "Добавить подпункт",
