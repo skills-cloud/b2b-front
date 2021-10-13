@@ -21,4 +21,5 @@ export interface OrganizationProjectCardItemTree {
     name: NoName1;
     organization_project_id?: NoName2;
     parent_id?: NoName3;
+    positions_ids?: Array<number>
 }

@@ -191,6 +191,8 @@
         },
         "organization": {
             "blocks": {
+                "cards-create-by-template": "Создать по шаблону",
+                "cards-create": "Создать карточку",
                 "sections": {
                     "main-info":"Основная информация",
                     "projects": "Проекты",
@@ -209,8 +211,11 @@
                 "cards-count_4": "{{count}} пунктов",
                 "cards-count_5": "{{count}} пунктов",
                 "modal" : {
+                    "cards-template": "Шаблон карточек",
+                    "title_create-by-template": "Создать по шаблону",
                     "title_edit": "Редактирование карточки прав и доступа",
                     "title_add": "Новая карточка прав и доступа",
+                    "position": "Должность",
                     "cards-count_empty": "",
                     "cards-count_full": "\u00A0({{value }})",
                     "subdirectory": "Добавить подпункт",

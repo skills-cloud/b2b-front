@@ -177,6 +177,20 @@ export const mainRequest = createApi({
                 method: 'GET'
             })
         }),
+        getBaseProjectCard: build.query<Array<OrganizationProjectCardItemTree>, undefined>({
+            providesTags: ['main'],
+            query       : () => ({
+                url   : '/organization-project-card-item-template/',
+                method: 'GET'
+            })
+        }),
+        postBaseProjectCard: build.mutation<IPostBaseResponse, { project_id: string, root_card_item_id: string }>({
+            invalidatesTags: ['main'],
+            query          : ({ project_id, root_card_item_id }) => ({
+                url   : `/organization-project-card-item/create-tree-by-template/${project_id}/${root_card_item_id}/`,
+                method: 'POST'
+            })
+        }),
         postMainRequestRequirement: build.mutation<IPostBaseResponse, RequestRequirement>({
             invalidatesTags: ['main'],
             query          : (body) => ({
