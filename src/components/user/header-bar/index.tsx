@@ -40,7 +40,7 @@ export const UserHeaderBar = (props: IProps) => {
                 <div className={cn('user-header-bar__profile')}>
                     <UserAvatar
                         title={`${user.first_name || ''} ${user.last_name || ''}`.trim()}
-                        titleTo="/profile"
+                        titleTo="/"
                         className={cn('user-header-bar__avatar')}
                         avatar={{ src: user.photo, preset: 'small' }}
                     />

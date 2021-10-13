@@ -11,14 +11,17 @@ import IconArrowLeft from 'component/icons/arrow-left-full';
 import Error from 'component/error';
 import InputDictionary from 'component/form/input-dictionary';
 import CompetenceSelector from 'component/competence-selector';
+import Dropdown from 'component/dropdown';
+import EditAction from 'component/section/actions/edit';
+import DeleteAction from 'component/section/actions/delete';
+import DropdownMenu from 'component/dropdown/menu';
+import DropdownMenuItem from 'component/dropdown/menu-item';
+import DotsAction from 'component/section/actions/dots';
 
 import { position } from 'adapter/api/position';
 import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
 
 import style from './index.module.pcss';
-import Dropdown from 'component/dropdown';
-import EditAction from 'component/section/actions/edit';
-import DeleteAction from 'component/section/actions/delete';
 
 export interface IField {
     role?: string
@@ -29,17 +32,6 @@ export interface IProps {
     fields?: Array<IField>,
     onSubmit?(payload: Array<IField>): void,
     onCancel?(): void
-}
-
-export interface INodeCheckboxTree {
-    label: React.ReactNode,
-    value: string,
-    children?: Array<INodeCheckboxTree>,
-    className?: string,
-    disabled?: boolean,
-    icon?: React.ReactNode,
-    showCheckbox?: boolean,
-    title?: string
 }
 
 export interface IFormValues {
@@ -159,15 +151,16 @@ export const CompetenciesEdit = (props: IProps) => {
         }
     };
 
-    const onClickEdit = (positionItemParam: CvPositionRead) => () => {
+    const onClickEdit = (positionItemParam: CvPositionRead, onClose: () => void) => () => {
         const newChecked = positionItemParam.competencies?.map((item) => String(item.competence_id)) || [];
 
         setPositionItem(positionItemParam);
         setChecked(newChecked);
         setActiveWindow('checkbox');
+        onClose();
     };
 
-    const onClickDelete = (positionItemParam: CvPositionRead) => () => {
+    const onClickDelete = (positionItemParam: CvPositionRead, onClose: () => void) => () => {
         if(positionItemParam?.id) {
             deletePosition({
                 id: positionItemParam.id
@@ -175,6 +168,7 @@ export const CompetenciesEdit = (props: IProps) => {
                 .unwrap()
                 .then(() => {
                     refetch();
+                    onClose();
                 })
                 .catch(console.error);
         }
@@ -288,22 +282,25 @@ export const CompetenciesEdit = (props: IProps) => {
                                 <div className={cn('competencies-edit__info-list-top')}>
                                     <h5 className={cn('competencies-edit__info-list-role')}>{pos.position?.name || pos.title}</h5>
                                     <Dropdown
-                                        items={[{
-                                            elem: (
-                                                <div className={cn('competencies-edit__info-list-control')} onClick={onClickEdit(pos)}>
-                                                    <EditAction />
-                                                    {t('routes.person.blocks.competencies.controls.edit')}
-                                                </div>
-                                            )
-                                        }, {
-                                            elem: (
-                                                <div className={cn('competencies-edit__info-list-control')} onClick={onClickDelete(pos)}>
-                                                    <DeleteAction />
-                                                    {t('routes.person.blocks.competencies.controls.delete')}
-                                                </div>
-                                            )
-                                        }]}
-                                    />
+                                        render={({ onClose }) => (
+                                            <DropdownMenu>
+                                                <DropdownMenuItem selected={false} onClick={onClickEdit(pos, onClose)}>
+                                                    <div className={cn('competencies-edit__info-list-control')}>
+                                                        <EditAction />
+                                                        {t('routes.person.blocks.competencies.controls.edit')}
+                                                    </div>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem selected={false} onClick={onClickDelete(pos, onClose)}>
+                                                    <div className={cn('competencies-edit__info-list-control')}>
+                                                        <DeleteAction />
+                                                        {t('routes.person.blocks.competencies.controls.delete')}
+                                                    </div>
+                                                </DropdownMenuItem>
+                                            </DropdownMenu>
+                                        )}
+                                    >
+                                        <DotsAction />
+                                    </Dropdown>
                                 </div>
                                 <div className={cn('competencies-edit__list-item')}>
                                     <strong>{t('routes.person.blocks.competencies.skills')}</strong>

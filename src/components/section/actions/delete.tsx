@@ -1,9 +1,9 @@
-import React, { ButtonHTMLAttributes } from 'react';
+import React from 'react';
 
 import IconDelete from 'component/icons/delete';
-import Action from './index';
+import Action, { IAction } from './index';
 
-const DeleteAction = (props: ButtonHTMLAttributes<HTMLButtonElement>) => (
+const DeleteAction = (props: Omit<IAction<HTMLButtonElement | HTMLAnchorElement>, 'children'>) => (
     <Action {...props} type="button">
         <IconDelete />
     </Action>

@@ -17,7 +17,7 @@ import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import TreeList from 'component/tree-list';
 import Button from 'component/button';
-import Dropdown from 'component/dropdown/base';
+import Dropdown from 'component/dropdown';
 import DropdownMenuItem from 'component/dropdown/menu-item';
 import DropdownMenu from 'component/dropdown/menu';
 import Select, { IValue } from 'component/form/select';
@@ -55,12 +55,12 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
     const formCreateByTemplate = useForm();
     const cardGetParams = projectId ? { organization_project_id: [projectId] } : { organization_id: [organizationId] };
     const { data: cards, isLoading } = mainRequest.useGetOrganizationProjectCardItemQuery(cardGetParams);
-    const { data: baseProjectCards } = mainRequest.useGetBaseProjectCardQuery(undefined);
+    const { data: baseProjectCards } = mainRequest.useGetBaseProjectCardTemplateQuery(undefined);
     const { data: positions } = dictionary.useGetPositionListQuery(undefined);
     const [patch] = mainRequest.usePatchMainOrganizationProjectCardMutation();
     const [post] = mainRequest.usePostMainOrganizationProjectCardMutation();
     const [remove] = mainRequest.useDeleteMainOrganizationProjectCardByIdMutation();
-    const [createCardFromTeplate] = mainRequest.usePostBaseProjectCardMutation();
+    const [createCardFromTemplate] = mainRequest.usePostBaseProjectCardMutation();
 
     const positionMap = useMemo(() => {
         return positions?.results.reduce((acc, item) => {
@@ -70,7 +70,7 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
 
             return acc;
         }, {});
-    }, positions?.results);
+    }, [positions?.results]);
 
     const closeModal = useCallback(() => {
         setVisibleModalId(null);
@@ -134,11 +134,11 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
             .catch(console.error);
     };
 
-    const createCardFromTemplate = (values: { card_id: { value: string }}) => {
+    const createCardFromTemplateRequest = (values: { card_id: { value: string }}) => {
         if(!projectId) {
             return;
         }
-        createCardFromTeplate({
+        createCardFromTemplate({
             root_card_item_id: values.card_id.value,
             project_id       : projectId
         }).unwrap()
@@ -343,7 +343,7 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
                     <FormProvider {...formCreateByTemplate}>
                         <form
                             method="POST"
-                            onSubmit={formCreateByTemplate.handleSubmit(createCardFromTemplate)}
+                            onSubmit={formCreateByTemplate.handleSubmit(createCardFromTemplateRequest)}
                             id={FORM_CREATE_CARD_FROM_TEMPLATE}
                         >
                             <Select

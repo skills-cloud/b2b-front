@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useClassnames } from 'hook/use-classnames';
 
 import TreeList from 'component/tree-list';
-import Dropdown from 'component/dropdown/base';
+import Dropdown from 'component/dropdown';
 import DropdownMenuItem from 'component/dropdown/menu-item';
 import DropdownMenu from 'component/dropdown/menu';
 

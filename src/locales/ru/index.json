@@ -79,7 +79,9 @@
             "organization-projects": "Проекты",
             "timesheets": "Таймшиты",
             "main-info": "Основная информация",
-            "cards": "Карточки прав и доступа"
+            "cards": "Карточки прав и доступа",
+            "create": "Создать",
+            "edit": "Редактировать"
         }
     },
     "routes": {
@@ -204,6 +206,10 @@
                     "description": "Описание",
                     "request": "Запросы"
                 },
+                "empty": {
+                    "title": "У организации ещё нет проектов",
+                    "button": "Создать"
+                },
                 "cards-count_0": "{{count}} пункт",
                 "cards-count_1": "{{count}} пункта",
                 "cards-count_2": "{{count}} пунктов",
@@ -229,6 +235,7 @@
             }
         },
         "organization-projects": {
+            "empty": "Нет проектных запросов",
             "blocks": {
                 "sections": {
                     "requests": "Проектные запросы",
@@ -238,7 +245,7 @@
                 },
                 "customer": "Заказчик",
                 "manager": "РП",
-                "timeframe": "Таймфрейм"
+                "timeframe": "Сроки проекта"
             }
         },
         "person": {
@@ -647,6 +654,11 @@
         },
         "project-request-list": {
             "title": "Список проектных запросов",
+            "dropdown": {
+                "edit": "Редактировать",
+                "delete": "Удалить",
+                "search": "Поиск специалистов"
+            },
             "requests": {
                 "actions": {
                     "edit": "Редактировать",
@@ -898,6 +910,36 @@
             },
             "sidebar": {
                 "documents": "Документы"
+            }
+        },
+        "project": {
+            "create": {
+                "title": "Новый проект",
+                "required-error": "Обязательно для заполнения",
+                "name": {
+                    "title": "Название проекта",
+                    "placeholder": "Введите название проекта"
+                },
+                "industry_sector": {
+                    "title": "Отрасль",
+                    "placeholder": "Введите отрасль"
+                },
+                "manager": {
+                    "title": "Менеджер",
+                    "placeholder": "Введите имя менеджера"
+                },
+                "date-from": "Дата начала",
+                "date-to": "Дата окончания",
+                "resource_manager": {
+                    "title": "Ресурсный менеджер",
+                    "placeholder": "Введите имя ресурсного менеджера"
+                },
+                "recruiter": {
+                    "title": "Ответственный рекрутер",
+                    "placeholder": "Введите имя ответственного рекрутера"
+                },
+                "description": "Описание проекта",
+                "submit": "Создать проект"
             }
         }
     },

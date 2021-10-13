@@ -5,7 +5,7 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type Code201 = TimeSheetRow;
+export type Code201 = TimeSheetRowUpdate;
 export type NoName = string;
 export type NoName1 = number;
 export type NoName2 = string;
@@ -17,7 +17,7 @@ export type NoName6 = string;
 export type NoName7 = string;
 export type NoName8 = number;
 
-export interface TimeSheetRow {
+export interface TimeSheetRowUpdate {
     created_at?: NoName;
     cv_id: NoName1;
     date_from?: NoName2;

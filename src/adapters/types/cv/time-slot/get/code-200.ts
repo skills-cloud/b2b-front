@@ -22,17 +22,19 @@ export type NoName7 = string;
 export type NoName8 = string;
 export type ID2 = number;
 export type NoName9 = boolean;
+export type NoName10 = boolean;
+export type NoName11 = 'manual' | 'request_requirement';
 export type OrganizationProjectId = number;
 export type OrganizationProjectName = string;
-export type NoName10 = number;
+export type NoName12 = number;
 export type RequestId = number;
 export type RequestRequirementId = number;
 export type RequestRequirementName = string;
 export type RequestTitle = string;
-export type NoName11 = string;
-export type ID3 = number;
-export type NoName12 = boolean;
 export type NoName13 = string;
+export type ID3 = number;
+export type NoName14 = boolean;
+export type NoName15 = string;
 export type TypeOfEmploymentId = number;
 
 export interface CvTimeSlotRead {
@@ -45,10 +47,12 @@ export interface CvTimeSlotRead {
     date_to?: NoName7;
     description?: NoName8;
     id?: ID2;
-    is_work_permit_required?: NoName9;
+    is_free?: NoName9;
+    is_work_permit_required?: NoName10;
+    kind?: NoName11;
     organization_project_id?: OrganizationProjectId;
     organization_project_name?: OrganizationProjectName;
-    price?: NoName10;
+    price?: NoName12;
     request_id?: RequestId;
     request_requirement_id?: RequestRequirementId;
     request_requirement_name?: RequestRequirementName;
@@ -70,8 +74,8 @@ export interface Country {
     name: NoName2;
 }
 export interface TypeOfEmployment {
-    description?: NoName11;
+    description?: NoName13;
     id?: ID3;
-    is_verified?: NoName12;
-    name: NoName13;
+    is_verified?: NoName14;
+    name: NoName15;
 }

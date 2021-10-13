@@ -134,13 +134,23 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     <Section key={requirementId}>
                         <div className={cn('gap-bottom')}>
                             <SectionHeader
-                                dropdownActions={[{
-                                    elem: <EditAction onClick={onEditAction(requirementId)} />
-                                }, {
-                                    elem: <DeleteAction onClick={onDeleteAction(requirementId)} />
-                                }, {
-                                    elem: <SearchAction onClick={onClickSearch(requirementId)} />
-                                }]}
+                                dropdownActions={[
+                                    <EditAction
+                                        key="edit"
+                                        label={t('routes.project-request-list.dropdown.edit')}
+                                        onClick={onEditAction(requirementId)}
+                                    />,
+                                    <DeleteAction
+                                        key="delete"
+                                        label={t('routes.project-request-list.dropdown.delete')}
+                                        onClick={onDeleteAction(requirementId)}
+                                    />,
+                                    <SearchAction
+                                        key="search"
+                                        label={t('routes.project-request-list.dropdown.search')}
+                                        onClick={onClickSearch(requirementId)}
+                                    />
+                                ]}
                             >
                                 {name || t('routes.project-request.blocks.empty-title')}
                             </SectionHeader>

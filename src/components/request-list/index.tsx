@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 
@@ -14,6 +13,9 @@ import Dropdown from 'component/dropdown';
 
 import ConfirmModal from './confirm-modal';
 import style from './index.module.pcss';
+import DropdownMenu from 'component/dropdown/menu';
+import DropdownMenuItem from 'component/dropdown/menu-item';
+import DotsAction from 'component/section/actions/dots';
 
 interface IRequestList {
     requestList: Array<RequestRead>
@@ -21,7 +23,6 @@ interface IRequestList {
 
 const RequestList = ({ requestList }: IRequestList) => {
     const cn = useClassnames(style);
-    const history = useHistory();
     const { t } = useTranslation();
     const [confirm, setConfirm] = useState<boolean>(false);
     const [requestId, setRequestId] = useState<string>();
@@ -65,28 +66,25 @@ const RequestList = ({ requestList }: IRequestList) => {
                                     {t(`routes.project-request-list.requests.request-item.priority.value.${requestItem.priority}`)}
                                 </div>
                                 <Dropdown
-                                    items={[{
-                                        elem: (
-                                            <div
-                                                className={cn('request-list__item-top-right-action')}
-                                                onClick={() => history.push(`/requests/${requestItem.id}/edit`)}
-                                            >
-                                                <EditAction />
-                                                {t('routes.project-request-list.requests.actions.edit')}
-                                            </div>
-                                        )
-                                    }, {
-                                        elem: (
-                                            <div
-                                                className={cn('request-list__item-top-right-action')}
-                                                onClick={onClickConfirmDelete(String(requestItem.id), requestItem.project?.name)}
-                                            >
-                                                <DeleteAction />
-                                                {t('routes.project-request-list.requests.actions.delete')}
-                                            </div>
-                                        )
-                                    }]}
-                                />
+                                    render={() => (
+                                        <DropdownMenu>
+                                            <DropdownMenuItem selected={false}>
+                                                <EditAction
+                                                    to={`/requests/${requestItem.id}/edit`}
+                                                    label={t('routes.project-request-list.requests.actions.edit')}
+                                                />
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem selected={false}>
+                                                <DeleteAction
+                                                    onClick={onClickConfirmDelete(String(requestItem.id), requestItem.project?.name)}
+                                                    label={t('routes.project-request-list.requests.actions.delete')}
+                                                />
+                                            </DropdownMenuItem>
+                                        </DropdownMenu>
+                                    )}
+                                >
+                                    <DotsAction className={{ 'action__content': cn('request-list__icon-dots') }} />
+                                </Dropdown>
                             </div>
                         </div>
                         <div className={cn('request-list__item-content')}>

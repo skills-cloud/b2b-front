@@ -1,5 +1,4 @@
 import React, { useMemo, useState, Fragment, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -22,6 +21,9 @@ import { H2, H3 } from 'component/header';
 import Button from 'component/button';
 import Request from 'component/request';
 import SectionHeader from 'component/section/header';
+import AddAction from 'component/section/actions/add';
+import Section from 'component/section';
+import SidebarLayout from 'component/layout/sidebar';
 
 import { mainRequest } from 'adapter/api/main';
 import { cv } from 'adapter/api/cv';
@@ -297,85 +299,82 @@ export const Specialists = () => {
         return <span className={cn('specialists__users-empty')}>{t('routes.specialists.main.users.empty')}</span>;
     }, [JSON.stringify(data?.results), i18n.language, isLoading]);
 
+    const elSidebar = () => {
+        return (
+            <Section>
+                <H3>{t('routes.specialists.sidebar.filters.title')}</H3>
+                <FormProvider {...context}>
+                    <form className={cn('specialists__form')} onSubmit={onSubmit}>
+                        <FormInput
+                            name="search"
+                            type="search"
+                            label={t('routes.specialists.sidebar.filters.form.search.label')}
+                            placeholder={t('routes.specialists.sidebar.filters.form.search.placeholder')}
+                        />
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Position}
+                            defaultValue={Array.isArray(qs.position_id) ? qs.position_id : [qs.position_id as string]}
+                            name="position"
+                            direction="column"
+                            placeholder={t('routes.specialists.sidebar.filters.form.position.placeholder')}
+                            label={t('routes.specialists.sidebar.filters.form.position.label')}
+                            clearable={true}
+                        />
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Country}
+                            defaultValue={Array.isArray(qs.country_id) ? qs.country_id : [qs.country_id as string]}
+                            name="country"
+                            direction="column"
+                            placeholder={t('routes.specialists.sidebar.filters.form.country.placeholder')}
+                            label={t('routes.specialists.sidebar.filters.form.country.label')}
+                            clearable={true}
+                        />
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.City}
+                            defaultValue={Array.isArray(qs.city_id) ? qs.city_id : [qs.city_id as string]}
+                            name="city"
+                            direction="column"
+                            placeholder={t('routes.specialists.sidebar.filters.form.city.placeholder')}
+                            label={t('routes.specialists.sidebar.filters.form.city.label')}
+                            clearable={true}
+                        />
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Competence}
+                            defaultValue={qs.competencies_ids_any as Array<string>}
+                            clearable={true}
+                            name="competencies"
+                            direction="column"
+                            placeholder={t('routes.specialists.sidebar.filters.form.competencies.placeholder')}
+                            label={t('routes.specialists.sidebar.filters.form.competencies.label')}
+                        />
+                        <FormInput
+                            name="years"
+                            type="text"
+                            label={t('routes.specialists.sidebar.filters.form.years.label')}
+                            placeholder={t('routes.specialists.sidebar.filters.form.years.placeholder')}
+                        />
+                        <Button type="submit">
+                            {t('routes.specialists.sidebar.filters.buttons.submit')}
+                        </Button>
+                        <Button type="button" onClick={onClearFilter} isSecondary={true}>
+                            {t('routes.specialists.sidebar.filters.buttons.clear')}
+                        </Button>
+                    </form>
+                </FormProvider>
+            </Section>
+        );
+    };
+
     return (
-        <main className={cn('specialists')}>
-            <section className={cn('specialists__main')}>
-                <div className={cn('specialists__main-top')}>
-                    <SectionHeader>{t('routes.specialists.main.title')}</SectionHeader>
-                    <Link
-                        to="/specialists/create"
-                        className={cn('specialists__main-button')}
-                    >
-                        <IconPlus />
-                    </Link>
-                </div>
+        <SidebarLayout sidebar={elSidebar()}>
+            <Section>
+                <SectionHeader actions={<AddAction to="/specialists/create" />}>
+                    {t('routes.specialists.main.title')}
+                </SectionHeader>
                 {elUsers}
-            </section>
-            <aside>
-                <div className={cn('specialists__search')}>
-                    <H3>{t('routes.specialists.sidebar.filters.title')}</H3>
-                    <FormProvider {...context}>
-                        <form className={cn('specialists__form')} onSubmit={onSubmit}>
-                            <FormInput
-                                name="search"
-                                type="search"
-                                label={t('routes.specialists.sidebar.filters.form.search.label')}
-                                placeholder={t('routes.specialists.sidebar.filters.form.search.placeholder')}
-                            />
-                            <InputDictionary
-                                requestType={InputDictionary.requestType.Position}
-                                defaultValue={Array.isArray(qs.position_id) ? qs.position_id : [qs.position_id as string]}
-                                name="position"
-                                direction="column"
-                                placeholder={t('routes.specialists.sidebar.filters.form.position.placeholder')}
-                                label={t('routes.specialists.sidebar.filters.form.position.label')}
-                                clearable={true}
-                            />
-                            <InputDictionary
-                                requestType={InputDictionary.requestType.Country}
-                                defaultValue={Array.isArray(qs.country_id) ? qs.country_id : [qs.country_id as string]}
-                                name="country"
-                                direction="column"
-                                placeholder={t('routes.specialists.sidebar.filters.form.country.placeholder')}
-                                label={t('routes.specialists.sidebar.filters.form.country.label')}
-                                clearable={true}
-                            />
-                            <InputDictionary
-                                requestType={InputDictionary.requestType.City}
-                                defaultValue={Array.isArray(qs.city_id) ? qs.city_id : [qs.city_id as string]}
-                                name="city"
-                                direction="column"
-                                placeholder={t('routes.specialists.sidebar.filters.form.city.placeholder')}
-                                label={t('routes.specialists.sidebar.filters.form.city.label')}
-                                clearable={true}
-                            />
-                            <InputDictionary
-                                requestType={InputDictionary.requestType.Competence}
-                                defaultValue={qs.competencies_ids_any as Array<string>}
-                                clearable={true}
-                                name="competencies"
-                                direction="column"
-                                placeholder={t('routes.specialists.sidebar.filters.form.competencies.placeholder')}
-                                label={t('routes.specialists.sidebar.filters.form.competencies.label')}
-                            />
-                            <FormInput
-                                name="years"
-                                type="text"
-                                label={t('routes.specialists.sidebar.filters.form.years.label')}
-                                placeholder={t('routes.specialists.sidebar.filters.form.years.placeholder')}
-                            />
-                            <Button type="submit">
-                                {t('routes.specialists.sidebar.filters.buttons.submit')}
-                            </Button>
-                            <Button type="button" onClick={onClearFilter} isSecondary={true}>
-                                {t('routes.specialists.sidebar.filters.buttons.clear')}
-                            </Button>
-                        </form>
-                    </FormProvider>
-                </div>
-            </aside>
+            </Section>
             {elModal}
-        </main>
+        </SidebarLayout>
     );
 };
 

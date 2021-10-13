@@ -1,11 +1,11 @@
 {
     "allOf": [
         {
-            "$ref": "#/definitions/TimeSheetRow"
+            "$ref": "#/definitions/TimeSheetRowUpdate"
         }
     ],
     "definitions": {
-        "TimeSheetRow": {
+        "TimeSheetRowUpdate": {
             "properties": {
                 "created_at": {
                     "format": "date-time",

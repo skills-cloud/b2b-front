@@ -22,7 +22,6 @@ const Organization = () => {
     const { t } = useTranslation();
     const params = useParams<{ organizationId: string }>();
     const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.organizationId });
-    const { data: projectList } = mainRequest.useGetMainOrganizationProjectListQuery({ organization_id: params.organizationId });
 
     if(!data) {
         return null;
@@ -47,7 +46,7 @@ const Organization = () => {
                 <Section>
                     <SectionHeader>{data?.name}</SectionHeader>
                 </Section>
-                {projectList?.results && <ProjectList list={projectList.results} />}
+                <ProjectList />
                 <ProjectCards organizationId={params.organizationId} />
             </Wrapper>
         </SidebarLayout>
