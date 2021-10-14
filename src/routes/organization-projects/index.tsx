@@ -22,6 +22,7 @@ import { mainRequest } from 'adapter/api/main';
 
 import EditModal from './edit-modal';
 import style from './index.module.pcss';
+import AddAction from 'component/section/actions/add';
 
 enum ESectionInvariants {
     MainInfo = 'main-info',
@@ -45,7 +46,7 @@ const OrganizationProjects = () => {
         }
 
         if(requests?.results.length) {
-            return <RequestList requestList={requests.results} />;
+            return <RequestList fromOrganization={true} requestList={requests.results} />;
         }
 
         return (
@@ -61,6 +62,10 @@ const OrganizationProjects = () => {
 
     const elEditAction = () => {
         return <EditAction onClick={onClickEdit} />;
+    };
+
+    const elCreateRequest = () => {
+        return <AddAction to={`/organizations/${organizationId}/projects/${projectId}/requests/create`} />;
     };
 
     if(!data) {
@@ -101,7 +106,7 @@ const OrganizationProjects = () => {
                 </Section>
                 <Section>
                     <span id={ESectionInvariants.Requests} />
-                    <SectionHeader>
+                    <SectionHeader actions={elCreateRequest()}>
                         {t('routes.organization-projects.blocks.sections.requests')}
                     </SectionHeader>
                     {elRequests()}

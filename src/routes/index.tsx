@@ -3,12 +3,14 @@ import { Router, Route, Redirect, Switch, useLocation } from 'react-router';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { parse, stringify } from 'query-string';
+import { createBrowserHistory } from 'history';
 
 import { useSelector } from 'component/core/store';
-import history from 'component/core/history';
 import { key as userReducerName } from 'component/user/reducer';
 
 import { baseRoutes, IProps } from './config';
+
+const history = createBrowserHistory();
 
 export const Routes = () => {
     const location = useLocation();

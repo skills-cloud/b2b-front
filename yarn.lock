@@ -569,7 +569,7 @@
   dependencies:
     "@types/lodash" "*"
 
-"@types/lodash.unionby@^4.8.6":
+"@types/lodash.unionby@4.x.x":
   version "4.8.6"
   resolved "https://registry.yarnpkg.com/@types/lodash.unionby/-/lodash.unionby-4.8.6.tgz#e95f45792cbb7ddaab26eb60773e179d464dd742"
   integrity sha512-P0p+3J6h9C6KmlGQv17fHsey+dk9QRSA9iDnAbMYlGHXM6KkelF/d4Vd1slYj7nme3kiXZSehqvt8pjPwqtSpQ==

@@ -1,24 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider, SubmitHandler, useFieldArray } from 'react-hook-form';
 import { useClassnames } from 'hook/use-classnames';
-import debounce from 'lodash.debounce';
+import { useParams } from 'react-router';
 
-import { Request, NoName4, NoName2 } from 'adapter/types/main/request/id/patch/code-200';
-import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
-
-import { mainRequest } from 'src/adapters/api/main';
-import { acc } from 'src/adapters/api/acc';
-
-import { useDispatch } from 'component/core/store';
-import Select from 'component/form/select';
+import Select, { IValue } from 'component/form/select';
 import Textarea from 'component/form/textarea';
 import DeadlineDates from 'component/form/deadline-dates';
 import Tabs, { Tab } from 'component/tabs';
-
 import InputDictionary from 'component/form/input-dictionary';
 import InputMain from 'component/form/input-main';
+import InputProject from 'component/form/input-project';
 import Input from 'component/form/input';
+
+import { Request, NoName4, NoName2 } from 'adapter/types/main/request/id/patch/code-200';
+import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
+import { mainRequest } from 'src/adapters/api/main';
+import { acc } from 'src/adapters/api/acc';
 
 import style from './index.module.pcss';
 
@@ -76,14 +74,30 @@ const priorityInvariants = ['10', '20', '30'];
 
 const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequestForm) => {
     const cn = useClassnames(style);
-    const dispatch = useDispatch();
     const { t } = useTranslation();
-    const [activeTab, setActiveTab] = useState<ETabs>(ETabs.Main);
+    const params = useParams<{ organizationId: string, projectId: string }>();
+
     const [post] = mainRequest.usePostMainRequestMutation();
     const [patch] = mainRequest.usePatchMainRequestMutation();
+    const { data: accUsersData } = acc.useGetAccUserQuery(undefined);
+    const { data: projectData } = mainRequest.useGetMainOrganizationProjectByIdQuery({ id: params.projectId }, { skip: !params.projectId });
 
-    const startDate = defaultValues?.deadline_date;
-    const deadlineDate = defaultValues?.deadline_date;
+    const [activeTab, setActiveTab] = useState<ETabs>(ETabs.Main);
+    const [options, setOptions] = useState<Array<IValue>>([]);
+
+    useEffect(() => {
+        if(accUsersData?.results) {
+            const newOptions = accUsersData?.results.map((item) => ({
+                label: `${item.last_name} ${item.first_name}`.trim(),
+                value: String(item.id)
+            }));
+
+            setOptions(newOptions);
+        }
+    }, [JSON.stringify(accUsersData?.results)]);
+
+    const startDate = defaultValues?.deadline_date || projectData?.date_from;
+    const deadlineDate = defaultValues?.deadline_date || projectData?.date_to;
     const defaultDates = startDate && deadlineDate ? {
         start_date   : startDate,
         deadline_date: deadlineDate
@@ -133,20 +147,9 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
         name   : 'period'
     });
 
-    const onLoadAccUsers = debounce((search: string, callback) => {
-        dispatch(acc.endpoints.getAccUser.initiate({ search: search || undefined }))
-            .then(({ data }) => {
-                if(data?.results?.length) {
-                    callback(data.results.map((item) => ({
-                        label: `${item.last_name} ${item.first_name}`,
-                        value: String(item.id)
-                    })));
-                } else {
-                    callback(null);
-                }
-            })
-            .catch(console.error);
-    }, 150);
+    useEffect(() => {
+        form.setValue('period', [defaultDates]);
+    }, [JSON.stringify(projectData)]);
 
     const onSubmit: SubmitHandler<IFormValues> = ({
         period,
@@ -250,32 +253,34 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                             label={t('routes.project-request.create.industry_sector')}
                         />
                         <InputMain
+                            defaultValue={[params.organizationId]}
                             isMulti={false}
                             requestType={InputMain.requestType.Customer}
                             name="customer"
                             direction="column"
                             label={t('routes.project-request.create.customer')}
                             required={errorMessage}
+                            disabled={!!params.organizationId}
                         />
-                        <InputMain
-                            isMulti={false}
-                            requestType={InputMain.requestType.Project}
+                        <InputProject
+                            defaultValue={params.projectId}
                             name="project"
                             direction="column"
                             label={t('routes.project-request.create.project')}
+                            disabled={!!params.projectId}
                         />
                         <Select
                             name="recruiter"
                             direction="column"
                             label={t('routes.project-request.create.recruiter')}
-                            loadOptions={onLoadAccUsers}
+                            options={options}
                         />
                         <div className={cn('field-group')}>
                             <Select
                                 name="resource_manager"
                                 direction="column"
                                 label={t('routes.project-request.create.resource_manager')}
-                                loadOptions={onLoadAccUsers}
+                                options={options}
                             />
                             <InputMain
                                 isMulti={false}
@@ -322,8 +327,8 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                                     dateTo  : t('routes.project-request.blocks.period-form.date_to')
                                 }}
                                 defaultValues={{
-                                    dateFrom: field?.start_date,
-                                    dateTo  : field?.deadline_date
+                                    dateFrom: field?.start_date || projectData?.date_from,
+                                    dateTo  : field?.deadline_date || projectData?.date_to
                                 }}
                             />
                         ))}

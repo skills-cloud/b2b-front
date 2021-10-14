@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
@@ -45,7 +45,6 @@ const MainInfo = (data: RequestRead) => {
     const params = useParams<{ subpage?: string, requestId: string }>();
     const { t } = useTranslation();
     const cn = useClassnames(style);
-    const history = useHistory();
     const formatDistance = useFormatDistance();
     const [visible, setVisible] = useState(params?.subpage === 'edit');
     const [confirm, setConfirm] = useState<boolean>(false);
@@ -58,8 +57,6 @@ const MainInfo = (data: RequestRead) => {
 
     const onSetVisible = () => {
         setVisible(false);
-
-        history.push(`/requests/${params.requestId}`);
     };
 
     const renderProjectField = (field: typeof PROJECT_TERM_FIELDS[number]) => {
