@@ -120,7 +120,10 @@ export interface RequestRequirementCvRead {
     date_from?: NoName15;
     date_to?: NoName16;
     id?: ID3;
-    organization_project_card_items_ids?: number[];
+    organization_project_card_items?: Array<{
+        id: number,
+        date: string
+    }>;
     request_requirement_id?: RequestRequirementId1;
     status?: NoName17;
     updated_at?: NoName18;

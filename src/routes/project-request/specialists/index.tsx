@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ import Loader from 'component/loader';
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import Button from 'component/button';
+import InputDate from 'component/form/date';
 import Checkbox from 'component/form/checkbox';
 
 import { cv } from 'adapter/api/cv';
@@ -28,7 +29,11 @@ interface ICard extends OrganizationProjectCardItemReadTree{
     count: number
 }
 
-type TCardMap = Record<number, OrganizationProjectCardItemReadTree>;
+interface ICardMap extends OrganizationProjectCardItemReadTree{
+    cardCount?: number
+}
+
+type TCardMap = Record<number, ICardMap>;
 type TCardList = Array<OrganizationProjectCardItemReadTree>;
 type TUniqRootCard = Record<number, ICard>;
 
@@ -36,17 +41,32 @@ type TCvList = CvListReadFull & RequestRequirementCvRead;
 
 const getMapFromTree = (
     list: TCardList,
-    treeMap?: TCardMap
+    treeMap?: TCardMap,
+    rootNode?: ICardMap
 ) => {
     const result = treeMap || {};
+    let nextRootNode = rootNode;
 
-    list.forEach((item) => {
+    list.forEach((item, index) => {
         if(item.id) {
             result[item.id] = item;
         }
 
+        if(item.parent_id === null) {
+            nextRootNode = list[index];
+        }
+
+        if(nextRootNode?.id && item.children.length === 0) {
+            const count = result[nextRootNode.id]?.cardCount ?? 0;
+
+            result[nextRootNode.id] = {
+                ...nextRootNode,
+                cardCount: count + 1
+            };
+        }
+
         if(item.children.length > 0) {
-            getMapFromTree(item.children, result);
+            getMapFromTree(item.children, result, nextRootNode);
         }
     });
 
@@ -68,7 +88,11 @@ const getTreeIds = (rootIds: Array<string>, cards: TCardMap, ids: Array<string> 
         ids.push(String(id));
 
         if(cards[id].children.length > 0) {
-            return getTreeIds(cards[id].children.map((item: OrganizationProjectCardItemReadTree) => item.id), cards, ids);
+            return getTreeIds(
+                cards[id].children.map((item: OrganizationProjectCardItemReadTree) => item.id),
+                cards,
+                ids
+            );
         }
     });
 
@@ -77,6 +101,17 @@ const getTreeIds = (rootIds: Array<string>, cards: TCardMap, ids: Array<string> 
 
 const ALL_CARD_MODAL_ID = 0;
 const APPLY_CARD_FORM_ID = 'APPLY_CARD_FORM_ID';
+
+const CardWrapper = ({ level, children }: {level?: number, children: ReactNode}) => {
+    const cn = useClassnames(style);
+
+    if(level === undefined) {
+        return <div className={cn('specialists__modal-content-grid')}>{children}</div>;
+    }
+
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <React.Fragment>{children}</React.Fragment>;
+};
 
 export const Specialists = () => {
     const cn = useClassnames(style);
@@ -88,6 +123,7 @@ export const Specialists = () => {
 
     const { data, isLoading } = mainRequest.useGetMainRequestByIdQuery({ id: requestId });
     const [post] = mainRequest.usePostRequestRequirementCvSetDetailsMutation();
+    const [unLinkCard] = mainRequest.useDeleteMainRequestCvUnlinkByIdMutation();
     const [cvList, setCvList] = useState<Array<TCvList>>([]);
     const [cards, setCards] = useState<TCardMap>({});
     const [cardTree, setCardTree] = useState<TCardList>([]);
@@ -111,8 +147,8 @@ export const Specialists = () => {
                     if(!acc.find((findItem) => findItem.id === cvItem.cv_id)) {
                         acc.push({
                             ...cvItem.cv,
-                            request_requirement_id             : cvItem.request_requirement_id,
-                            organization_project_card_items_ids: cvItem.organization_project_card_items_ids
+                            request_requirement_id         : cvItem.request_requirement_id,
+                            organization_project_card_items: cvItem.organization_project_card_items
                         });
                     }
                 });
@@ -205,10 +241,10 @@ export const Specialists = () => {
             title = t('routes.specialists.main.first-name');
         }
 
-        if(Object.keys(cards).length > 0 && cvItem?.organization_project_card_items_ids) {
+        if(Object.keys(cards).length > 0 && cvItem?.organization_project_card_items) {
             rootCard = cvItem
-                .organization_project_card_items_ids
-                .map((id: number) => getRootNode(cards, id))
+                .organization_project_card_items
+                .map(({ id }) => getRootNode(cards, id))
                 .reduce((result: TUniqRootCard, item: OrganizationProjectCardItemReadTree) => {
                     if(!item?.id) {
                         return result;
@@ -219,7 +255,7 @@ export const Specialists = () => {
                     } else {
                         result[item.id] = {
                             ...item,
-                            count: 1
+                            count: 0
                         };
                     }
 
@@ -228,18 +264,19 @@ export const Specialists = () => {
         }
 
         const setForm = () => {
-            if(!cvItem.organization_project_card_items_ids) {
+            if(!cvItem.organization_project_card_items) {
                 return;
             }
 
             cvItem
-                .organization_project_card_items_ids
-                .forEach((id: number) => {
+                .organization_project_card_items
+                .forEach(({ id, date }: {id: number, date: string}) => {
+                    methods.setValue(`card-date-${id}`, date);
                     methods.setValue(`card-${id}`, true);
                 });
 
             methods.setValue('cv_id', cvItem.id);
-            methods.setValue('requestRequirementId', cvItem.request_requirement_id);
+            methods.setValue('requestRequirementId', (hash === '#all') ? cvItem.request_requirement_id : hash.slice(1));
         };
 
         return (
@@ -269,7 +306,7 @@ export const Specialists = () => {
                         </p>
                         {cvItem.price || '\u2014'}
                     </div>
-                    {!!cvItem?.organization_project_card_items_ids && (
+                    {!!cvItem?.organization_project_card_items && (
                         <div className={cn('specialists__user-cards')}>
                             <p className={cn('specialists__block-title')}>
                                 {t('routes.specialists.main.cards')}
@@ -277,19 +314,25 @@ export const Specialists = () => {
                             {Object.keys(rootCard).map((id: string) => {
                                 const item: ICard = rootCard[id];
 
+                                if(!item.id) {
+                                    return null;
+                                }
+
                                 return (
                                     <span
                                         key={item.id}
                                         className={cn('specialists__user-card')}
                                         onClick={() => {
                                             if(item.id) {
-                                                setVisibleModal(item.id);
                                                 setForm();
+                                                setVisibleModal(item.id);
                                             }
                                         }}
                                     >
                                         {item.name}
-                                        ({item.count})
+                                        <span className={cn('specialists__user-card-count')}>
+                                            ({item.count}/{cards[item.id].cardCount})
+                                        </span>
                                     </span>
                                 );
                             })}
@@ -297,8 +340,8 @@ export const Specialists = () => {
                             <span
                                 className={cn('specialists__link')}
                                 onClick={() => {
-                                    setVisibleModal(ALL_CARD_MODAL_ID);
                                     setForm();
+                                    setVisibleModal(ALL_CARD_MODAL_ID);
                                 }}
                             >
                                 {t('routes.specialists.main.cards-add')}
@@ -338,22 +381,35 @@ export const Specialists = () => {
         const currentLevel = level || 0;
 
         return cardList.map((item) => (
-            <React.Fragment key={item.id}>
-                {level === undefined && <div className={cn('specialists__modal-content-title')}>{item.name}</div>}
-                {item.children.length > 0 && (
-                    <div className={cn('specialists__modal-content-list')}>
-                        {renderTree(item.children, currentLevel + 1)}
-                    </div>)}
-                {level !== undefined && (
-                    <Checkbox
-                        name={`card-${item.id}`}
-                        label={item.name}
-                        className={{
-                            'checkbox__label': cn('specialists__modal-card-checkbox')
-                        }}
-                    />
-                )}
-            </React.Fragment>
+            <CardWrapper key={item.id} level={level}>
+                <React.Fragment>
+                    {level === undefined && (
+                        <React.Fragment>
+                            <div className={cn('specialists__modal-content-title')}>{item.name}</div>
+                            <div className={cn('specialists__modal-content-title')}>
+                                {t('routes.specialists.modal-card.date')}
+                            </div>
+                        </React.Fragment>
+                    )}
+                    {item.children.length > 0 && (
+                        renderTree(item.children, currentLevel + 1)
+                    )}
+                    {level !== undefined && (
+                        <React.Fragment>
+                            <Checkbox
+                                name={`card-${item.id}`}
+                                label={item.name}
+                                className={{
+                                    'checkbox__label': cn('specialists__modal-card-checkbox')
+                                }}
+                            />
+                            <div className={cn('specialists__modal-content-date')}>
+                                <InputDate name={`card-date-${item.id}`} />
+                            </div>
+                        </React.Fragment>
+                    )}
+                </React.Fragment>
+            </CardWrapper>
         ));
     };
 
@@ -363,24 +419,47 @@ export const Specialists = () => {
         const { cv_id, requestRequirementId, ...values } = formValues;
         const falsyRootIds = Object.keys(values)
             .filter((item) => !values[item])
+            .filter((item) => !item.includes('card-date-'))
             .map((item) => item.slice('card-'.length))
             .filter((item) => cards[item].parent_id === null);
         const falsyIds = getTreeIds(falsyRootIds, cards);
         const cardIds = Object.keys(values)
             .filter((item) => values[item])
+            .filter((item) => !item.includes('card-date-'))
             .map((item) => item.slice('card-'.length))
             .filter((id) => !falsyIds.includes(id));
 
-        post({
-            id   : String(requestRequirementId),
-            cv_id: String(cv_id),
-            data : {
-                organization_project_card_items_ids: cardIds
-            }
-        })
-            .unwrap()
+        let request;
+
+        if(cardIds.length === 0) {
+            request = unLinkCard({
+                id   : String(requestRequirementId),
+                cv_id: String(cv_id)
+            });
+        } else {
+            request = post({
+                id   : String(requestRequirementId),
+                cv_id: String(cv_id),
+                data : {
+                    organization_project_card_items: cardIds.map((id) => {
+                        const result: {id: string, date?: string} = {
+                            id: id
+                        };
+
+                        if(values[`card-date-${id}`]) {
+                            result.date = String(values[`card-date-${id}`]);
+                        }
+
+                        return result;
+                    })
+                }
+            });
+        }
+
+        request.unwrap()
             .then(() => {
                 setVisibleModal(null);
+                methods.reset();
             })
             .catch(console.error);
     };
