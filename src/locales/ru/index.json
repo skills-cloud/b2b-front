@@ -11,7 +11,9 @@
             }
         },
         "calendar": {
-            "name-empty": "Не указано"
+            "name-empty": "Не указано",
+            "tooltip_project": "Занят на проекте: {{project}}",
+            "tooltip_free": "Свободен для работы: {{status}}"
         },
         "user": {
             "header-bar": {

@@ -36,6 +36,7 @@ import IconBurger from 'component/icons/burger';
 import Tooltip from 'component/tooltip';
 
 import { mainRequest } from 'adapter/api/main';
+import { TypeOfEmployment } from 'adapter/types/cv/time-slot/id/get/code-200';
 
 import style from './index.module.pcss';
 
@@ -51,7 +52,7 @@ export interface IProps {
     onClickDay?(date: Date): void,
     busyPeriods?: Array<{
         dates: Array<string>,
-        emp_id: number,
+        emp?: TypeOfEmployment,
         organization_project_id?: number
     }>
 }
@@ -72,6 +73,7 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
     const dispatch = useDispatch();
+
     const [firstDate, setFirstDate] = useState(props.initialDate);
     const [secondDate, setSecondDate] = useState(addMonths(props.initialDate, 1));
     const [showMonthModal, setShowMonthModal] = useState<boolean>(false);
@@ -80,8 +82,8 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
     useEffect(() => {
         if(props.busyPeriods) {
             const organizationIds = props.busyPeriods.reduce((acc, curr) => {
-                if(!acc.includes(curr.organization_project_id as number)) {
-                    acc.push(curr.organization_project_id as number);
+                if(curr.organization_project_id && !acc.includes(curr.organization_project_id)) {
+                    acc.push(curr.organization_project_id);
                 }
 
                 return acc;
@@ -114,27 +116,29 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
     const isBusy = useCallback((value: Date) => {
         if(value && props.busyPeriods?.length) {
             const periods = props.busyPeriods
-                .filter((item) => isAfter(new Date(item.dates[1]), new Date(item.dates[0])))
+                .filter((item) => isAfter(new Date(item.dates[1]), new Date(item.dates[0])) || isSameDay(new Date(item.dates[1]), new Date(item.dates[0])))
                 .map((item) => ({
-                    start : parse(item.dates[0], 'yyyy-MM-dd', new Date()),
-                    end   : parse(item.dates[1], 'yyyy-MM-dd', new Date()),
-                    emp_id: item.emp_id,
-                    name  : organizationsNames.find((org) => org.id === item.organization_project_id)?.name
+                    start: parse(item.dates[0], 'yyyy-MM-dd', new Date()),
+                    end  : parse(item.dates[1], 'yyyy-MM-dd', new Date()),
+                    emp  : item.emp,
+                    name : organizationsNames.find((org) => org.id === item.organization_project_id)?.name
                 }));
 
             for(const period of periods) {
                 if(isWithinInterval(value, period)) {
                     return {
-                        status: period.emp_id,
-                        name  : period.name
+                        status  : period.emp?.id,
+                        emp_name: period.emp?.name,
+                        name    : period.name
                     };
                 }
             }
         }
 
         return {
-            status: null,
-            name  : null
+            emp_name: null,
+            status  : null,
+            name    : null
         };
     }, [props.busyPeriods, JSON.stringify(organizationsNames)]);
 
@@ -254,12 +258,16 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
                         const content = (
                             <span
                                 key={day.getTime()}
-                                className={cn('date-picker-calendar__day', `date-picker-calendar__day_${dayInfo.status}`, {
-                                    'date-picker-calendar__day_is-another': !isSameMonth(isSecond ? secondDate : firstDate, day),
-                                    'date-picker-calendar__day_is-select' : props.selected?.some((item) => isSameDay(item, day))
+                                className={cn('date-picker-calendar__day', {
+                                    'date-picker-calendar__day_is-another'                            : !isSameMonth(isSecond ? secondDate : firstDate, day),
+                                    'date-picker-calendar__day_is-select'                             : props.selected?.some((item) => isSameDay(item, day)),
+                                    'date-picker-calendar__day_busy'                                  : dayInfo.name,
+                                    [`date-picker-calendar__day_type-of-employment-${dayInfo.status}`]: dayInfo.status && !dayInfo.name
                                 })}
                                 onClick={() => {
-                                    props.onClickDay?.(day);
+                                    if(!dayInfo.name) {
+                                        props.onClickDay?.(day);
+                                    }
                                 }}
                                 children={format(day, 'd', {
                                     locale      : props.locale,
@@ -268,11 +276,15 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
                             />
                         );
 
-                        if(dayInfo.name) {
+                        if(dayInfo.name || dayInfo.emp_name) {
                             return (
                                 <Tooltip
                                     key={day.getTime()}
-                                    content={dayInfo.name}
+                                    content={t('components.calendar.tooltip', {
+                                        context: dayInfo.name ? 'project' : 'free',
+                                        status : dayInfo.emp_name,
+                                        project: dayInfo.name
+                                    })}
                                     theme="dark"
                                     className={cn('date-picker-calendar__day-wrapper')}
                                 >
