@@ -193,6 +193,10 @@
         }
     }
 
+    &__user-card-count {
+        color: var(--color-text-ultra-light);
+    }
+
     &__modal-content-list {
         font-family: Roboto, sans-serif;
         font-size: 14px;
@@ -225,5 +229,20 @@
     &__modal-content-title {
         font-weight: 500;
         margin-bottom: 8px;
+    }
+
+    &__modal-content-grid {
+        display: grid;
+        grid-template-columns: repeat(2, max-content);
+        grid-gap: 16px;
+        margin-bottom: 32px;
+
+        &:last-child {
+            margin: 0;
+        }
+    }
+
+    &__modal-content-date {
+        width: 150px;
     }
 }

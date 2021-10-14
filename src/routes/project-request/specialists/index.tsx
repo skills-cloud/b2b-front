@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ import Loader from 'component/loader';
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import Button from 'component/button';
+import InputDate from 'component/form/date';
 import Checkbox from 'component/form/checkbox';
 
 import { cv } from 'adapter/api/cv';
@@ -28,7 +29,11 @@ interface ICard extends OrganizationProjectCardItemReadTree{
     count: number
 }
 
-type TCardMap = Record<number, OrganizationProjectCardItemReadTree>;
+interface ICardMap extends OrganizationProjectCardItemReadTree{
+    cardCount?: number
+}
+
+type TCardMap = Record<number, ICardMap>;
 type TCardList = Array<OrganizationProjectCardItemReadTree>;
 type TUniqRootCard = Record<number, ICard>;
 
@@ -36,17 +41,32 @@ type TCvList = CvListReadFull & RequestRequirementCvRead;
 
 const getMapFromTree = (
     list: TCardList,
-    treeMap?: TCardMap
+    treeMap?: TCardMap,
+    rootNode?: ICardMap
 ) => {
     const result = treeMap || {};
+    let nextRootNode = rootNode;
 
-    list.forEach((item) => {
+    list.forEach((item, index) => {
         if(item.id) {
             result[item.id] = item;
         }
 
+        if(item.parent_id === null) {
+            nextRootNode = list[index];
+        }
+
+        if(nextRootNode?.id && item.children.length === 0) {
+            const count = result[nextRootNode.id]?.cardCount ?? 0;
+
+            result[nextRootNode.id] = {
+                ...nextRootNode,
+                cardCount: count + 1
+            };
+        }
+
         if(item.children.length > 0) {
-            getMapFromTree(item.children, result);
+            getMapFromTree(item.children, result, nextRootNode);
         }
     });
 
@@ -68,7 +88,11 @@ const getTreeIds = (rootIds: Array<string>, cards: TCardMap, ids: Array<string> 
         ids.push(String(id));
 
         if(cards[id].children.length > 0) {
-            return getTreeIds(cards[id].children.map((item: OrganizationProjectCardItemReadTree) => item.id), cards, ids);
+            return getTreeIds(
+                cards[id].children.map((item: OrganizationProjectCardItemReadTree) => item.id),
+                cards,
+                ids
+            );
         }
     });
 
@@ -77,6 +101,17 @@ const getTreeIds = (rootIds: Array<string>, cards: TCardMap, ids: Array<string> 
 
 const ALL_CARD_MODAL_ID = 0;
 const APPLY_CARD_FORM_ID = 'APPLY_CARD_FORM_ID';
+
+const CardWrapper = ({ level, children }: {level?: number, children: ReactNode}) => {
+    const cn = useClassnames(style);
+
+    if(level === undefined) {
+        return <div className={cn('specialists__modal-content-grid')}>{children}</div>;
+    }
+
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <React.Fragment>{children}</React.Fragment>;
+};
 
 export const Specialists = () => {
     const cn = useClassnames(style);
@@ -219,7 +254,7 @@ export const Specialists = () => {
                     } else {
                         result[item.id] = {
                             ...item,
-                            count: 1
+                            count: 0
                         };
                     }
 
@@ -277,6 +312,10 @@ export const Specialists = () => {
                             {Object.keys(rootCard).map((id: string) => {
                                 const item: ICard = rootCard[id];
 
+                                if(!item.id) {
+                                    return null;
+                                }
+
                                 return (
                                     <span
                                         key={item.id}
@@ -289,7 +328,9 @@ export const Specialists = () => {
                                         }}
                                     >
                                         {item.name}
-                                        ({item.count})
+                                        <span className={cn('specialists__user-card-count')}>
+                                            ({item.count}/{cards[item.id].cardCount})
+                                        </span>
                                     </span>
                                 );
                             })}
@@ -338,22 +379,35 @@ export const Specialists = () => {
         const currentLevel = level || 0;
 
         return cardList.map((item) => (
-            <React.Fragment key={item.id}>
-                {level === undefined && <div className={cn('specialists__modal-content-title')}>{item.name}</div>}
-                {item.children.length > 0 && (
-                    <div className={cn('specialists__modal-content-list')}>
-                        {renderTree(item.children, currentLevel + 1)}
-                    </div>)}
-                {level !== undefined && (
-                    <Checkbox
-                        name={`card-${item.id}`}
-                        label={item.name}
-                        className={{
-                            'checkbox__label': cn('specialists__modal-card-checkbox')
-                        }}
-                    />
-                )}
-            </React.Fragment>
+            <CardWrapper key={item.id} level={level}>
+                <React.Fragment>
+                    {level === undefined && (
+                        <React.Fragment>
+                            <div className={cn('specialists__modal-content-title')}>{item.name}</div>
+                            <div className={cn('specialists__modal-content-title')}>
+                                {t('routes.specialists.modal-card.date')}
+                            </div>
+                        </React.Fragment>
+                    )}
+                    {item.children.length > 0 && (
+                        renderTree(item.children, currentLevel + 1)
+                    )}
+                    {level !== undefined && (
+                        <React.Fragment>
+                            <Checkbox
+                                name={`card-${item.id}`}
+                                label={item.name}
+                                className={{
+                                    'checkbox__label': cn('specialists__modal-card-checkbox')
+                                }}
+                            />
+                            <div className={cn('specialists__modal-content-date')}>
+                                <InputDate name={`card-date-${item.id}`} />
+                            </div>
+                        </React.Fragment>
+                    )}
+                </React.Fragment>
+            </CardWrapper>
         ));
     };
 
@@ -363,6 +417,7 @@ export const Specialists = () => {
         const { cv_id, requestRequirementId, ...values } = formValues;
         const falsyRootIds = Object.keys(values)
             .filter((item) => !values[item])
+            .filter((item) => !item.includes('card-date-'))
             .map((item) => item.slice('card-'.length))
             .filter((item) => cards[item].parent_id === null);
         const falsyIds = getTreeIds(falsyRootIds, cards);

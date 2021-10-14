@@ -592,7 +592,8 @@
                 "title_current": "Карточка «{{name}}»",
                 "title_add": "Добавить карточки доступа",
                 "cancel": "Отмена",
-                "submit": "Сохранить"
+                "submit": "Сохранить",
+                "date": "Дата выдачи"
             },
             "sidebar": {
                 "filters": {
