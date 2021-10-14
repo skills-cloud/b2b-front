@@ -237,6 +237,7 @@ export interface Competence {
     parent_id?: ParentId;
 }
 export interface RequestRequirementCvRead {
+    [x: string]: { id: number; date: string; }[] | undefined;
     created_at?: NoName35;
     cv?: CvInlineShort;
     cv_id?: CvId;

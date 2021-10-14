@@ -559,7 +559,10 @@ export interface RequestRequirementCvRead {
     date_from?: NoName99;
     date_to?: NoName100;
     id?: ID26;
-    organization_project_card_items_ids?: number[];
+    organization_project_card_items?: Array<{
+        id: number,
+        date: string
+    }>;
     request_requirement_id?: RequestRequirementId1;
     status?: NoName101;
     updated_at?: NoName102;

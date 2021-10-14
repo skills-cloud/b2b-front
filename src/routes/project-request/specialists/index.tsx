@@ -146,8 +146,8 @@ export const Specialists = () => {
                     if(!acc.find((findItem) => findItem.id === cvItem.cv_id)) {
                         acc.push({
                             ...cvItem.cv,
-                            request_requirement_id             : cvItem.request_requirement_id,
-                            organization_project_card_items_ids: cvItem.organization_project_card_items_ids
+                            request_requirement_id         : cvItem.request_requirement_id,
+                            organization_project_card_items: cvItem.organization_project_card_items
                         });
                     }
                 });
@@ -240,10 +240,10 @@ export const Specialists = () => {
             title = t('routes.specialists.main.first-name');
         }
 
-        if(Object.keys(cards).length > 0 && cvItem?.organization_project_card_items_ids) {
+        if(Object.keys(cards).length > 0 && cvItem?.organization_project_card_items) {
             rootCard = cvItem
-                .organization_project_card_items_ids
-                .map((id: number) => getRootNode(cards, id))
+                .organization_project_card_items
+                .map(({ id }) => getRootNode(cards, id))
                 .reduce((result: TUniqRootCard, item: OrganizationProjectCardItemReadTree) => {
                     if(!item?.id) {
                         return result;
@@ -263,13 +263,14 @@ export const Specialists = () => {
         }
 
         const setForm = () => {
-            if(!cvItem.organization_project_card_items_ids) {
+            if(!cvItem.organization_project_card_items) {
                 return;
             }
 
             cvItem
-                .organization_project_card_items_ids
-                .forEach((id: number) => {
+                .organization_project_card_items
+                .forEach(({ id, date }: {id: number, date: string}) => {
+                    methods.setValue(`card-date-${id}`, date);
                     methods.setValue(`card-${id}`, true);
                 });
 
@@ -304,7 +305,7 @@ export const Specialists = () => {
                         </p>
                         {cvItem.price || '\u2014'}
                     </div>
-                    {!!cvItem?.organization_project_card_items_ids && (
+                    {!!cvItem?.organization_project_card_items && (
                         <div className={cn('specialists__user-cards')}>
                             <p className={cn('specialists__block-title')}>
                                 {t('routes.specialists.main.cards')}
@@ -322,8 +323,8 @@ export const Specialists = () => {
                                         className={cn('specialists__user-card')}
                                         onClick={() => {
                                             if(item.id) {
-                                                setVisibleModal(item.id);
                                                 setForm();
+                                                setVisibleModal(item.id);
                                             }
                                         }}
                                     >
@@ -338,8 +339,8 @@ export const Specialists = () => {
                             <span
                                 className={cn('specialists__link')}
                                 onClick={() => {
-                                    setVisibleModal(ALL_CARD_MODAL_ID);
                                     setForm();
+                                    setVisibleModal(ALL_CARD_MODAL_ID);
                                 }}
                             >
                                 {t('routes.specialists.main.cards-add')}
@@ -423,6 +424,7 @@ export const Specialists = () => {
         const falsyIds = getTreeIds(falsyRootIds, cards);
         const cardIds = Object.keys(values)
             .filter((item) => values[item])
+            .filter((item) => !item.includes('card-date-'))
             .map((item) => item.slice('card-'.length))
             .filter((id) => !falsyIds.includes(id));
 
@@ -430,12 +432,23 @@ export const Specialists = () => {
             id   : String(requestRequirementId),
             cv_id: String(cv_id),
             data : {
-                organization_project_card_items_ids: cardIds
+                organization_project_card_items: cardIds.map((id) => {
+                    const result: {id: string, date?: string} = {
+                        id: id
+                    };
+
+                    if(values[`card-date-${id}`]) {
+                        result.date = String(values[`card-date-${id}`]);
+                    }
+
+                    return result;
+                })
             }
         })
             .unwrap()
             .then(() => {
                 setVisibleModal(null);
+                methods.reset();
             })
             .catch(console.error);
     };
