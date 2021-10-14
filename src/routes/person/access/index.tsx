@@ -1,14 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { format } from 'date-fns';
+import { format, isWithinInterval, parse } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { useParams } from 'react-router';
 
 import useClassnames from 'hook/use-classnames';
 
 import DatePickerCalendar from 'component/calendar';
-// import IconPencil from 'component/icons/pencil';
+import IconPencil from 'component/icons/pencil';
 import Modal from 'component/modal';
 import Button from 'component/button';
 import Input from 'component/form/input';
@@ -17,6 +17,7 @@ import DateInput from 'component/form/date';
 
 import { timeslot } from 'adapter/api/timeslot';
 import { dictionary } from 'adapter/api/dictionary';
+import { CvTimeSlotRead } from 'adapter/types/cv/cv/id/get/code-200';
 
 import style from './index.module.pcss';
 
@@ -56,49 +57,49 @@ const Access = (props: IProps) => {
             return periods.map((item) => ({
                 dates                  : [item.date_from || '', item.date_to || ''],
                 id                     : item.id || '',
-                emp_id                 : item.type_of_employment?.id || 0,
+                emp                    : item.type_of_employment,
                 organization_project_id: item.organization_project_id
             }));
         }
     }, [timeSlotData?.results]);
 
-    // const onClickDay = (date: Date) => {
-    //     const periods = busyPeriodsWithId?.map((item) => ({
-    //         start : item.dates[0] ? parse(item.dates[0], 'yyyy-MM-dd', new Date()) : 0,
-    //         end   : item.dates[1] ? parse(item.dates[1], 'yyyy-MM-dd', new Date()) : 0,
-    //         id    : item.id,
-    //         emp_id: item.emp_id
-    //     })) || [];
-    //
-    //     let currentPeriod: CvTimeSlotRead | undefined;
-    //
-    //     for(const period of periods) {
-    //         if(isWithinInterval(date, period)) {
-    //             setActiveTimeSlotId(period.id as number);
-    //             currentPeriod = timeSlotData?.results.find((item) => period.emp_id === item.type_of_employment?.id);
-    //         }
-    //     }
-    //
-    //     setIsEdit(true);
-    //     setDayToEdit(date);
-    //
-    //     if(currentPeriod) {
-    //         const newTypeOfEmployment = {
-    //             value: currentPeriod.type_of_employment?.id as number,
-    //             label: currentPeriod.type_of_employment?.name as string
-    //         };
-    //
-    //         methods.setValue('date_from', currentPeriod.date_from || '');
-    //         methods.setValue('date_to', currentPeriod.date_to || '');
-    //         methods.setValue('price', currentPeriod.price as number);
-    //         methods.setValue('type_of_employment', newTypeOfEmployment);
-    //     } else {
-    //         const value = format(date, 'yyyy-MM-dd', { locale: ru });
-    //
-    //         methods.setValue('date_from', value);
-    //         methods.setValue('date_to', value);
-    //     }
-    // };
+    const onClickDay = (date: Date) => {
+        const periods = busyPeriodsWithId?.map((item) => ({
+            start: item.dates[0] ? parse(item.dates[0], 'yyyy-MM-dd', new Date()) : 0,
+            end  : item.dates[1] ? parse(item.dates[1], 'yyyy-MM-dd', new Date()) : 0,
+            id   : item.id,
+            emp  : item.emp
+        })) || [];
+
+        let currentPeriod: CvTimeSlotRead | undefined;
+
+        for(const period of periods) {
+            if(isWithinInterval(date, period)) {
+                setActiveTimeSlotId(period.id as number);
+                currentPeriod = timeSlotData?.results.find((item) => period.emp?.id === item.type_of_employment?.id);
+            }
+        }
+
+        setIsEdit(true);
+        setDayToEdit(date);
+
+        if(currentPeriod) {
+            const newTypeOfEmployment = {
+                value: currentPeriod.type_of_employment?.id as number,
+                label: currentPeriod.type_of_employment?.name as string
+            };
+
+            methods.setValue('date_from', currentPeriod.date_from || '');
+            methods.setValue('date_to', currentPeriod.date_to || '');
+            methods.setValue('price', currentPeriod.price as number);
+            methods.setValue('type_of_employment', newTypeOfEmployment);
+        } else {
+            const value = format(date, 'yyyy-MM-dd', { locale: ru });
+
+            methods.setValue('date_from', value);
+            methods.setValue('date_to', value);
+        }
+    };
 
     const onCloseEdit = () => {
         setIsEdit(false);
@@ -173,7 +174,7 @@ const Access = (props: IProps) => {
     const elEditWindow = () => {
         if(isEdit) {
             return (
-                <Modal className={cn('')} footer={elFooter()} header={t('routes.person.common.access.title')}>
+                <Modal footer={elFooter()} header={t('routes.person.common.access.title')}>
                     <FormProvider {...methods}>
                         <form className={cn('access__form')}>
                             <div className={cn('access__field-set')}>
@@ -220,17 +221,17 @@ const Access = (props: IProps) => {
         <div id={props.id} className={cn('access')}>
             <div className={cn('access__info-content-header')}>
                 <h2>{t('routes.person.common.access.title')}</h2>
-                {/* <div*/}
-                {/*    className={cn('access__control')}*/}
-                {/*    onClick={() => {*/}
-                {/*        setIsEdit(true);*/}
-                {/*    }}*/}
-                {/* >*/}
-                {/*    <IconPencil />*/}
-                {/* </div>*/}
+                <div
+                    className={cn('access__control')}
+                    onClick={() => {
+                        setIsEdit(true);
+                    }}
+                >
+                    <IconPencil />
+                </div>
             </div>
             <DatePickerCalendar
-                // onClickDay={onClickDay}
+                onClickDay={onClickDay}
                 busyPeriods={busyPeriodsWithId}
             />
             {elEditWindow()}
