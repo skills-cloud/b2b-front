@@ -95,7 +95,7 @@ export interface IGetRequestListParams {
 }
 
 export interface IParamsLinkCv {
-    data: Record<string, unknown>,
+    data?: Record<string, unknown>,
     cv_id: string,
     id: string
 }
@@ -419,6 +419,13 @@ export const mainRequest = createApi({
             invalidatesTags: ['main'],
             query          : ({ id }) => ({
                 url   : `/request/${id}/`,
+                method: 'DELETE'
+            })
+        }),
+        deleteMainRequestCvUnlinkById: build.mutation<undefined, IParamsLinkCv>({
+            invalidatesTags: ['main'],
+            query          : ({ id, cv_id }) => ({
+                url   : `/request-requirement/${id}/cv-unlink/${cv_id}/`,
                 method: 'DELETE'
             })
         }),

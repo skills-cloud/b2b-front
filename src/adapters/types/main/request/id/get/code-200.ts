@@ -237,14 +237,16 @@ export interface Competence {
     parent_id?: ParentId;
 }
 export interface RequestRequirementCvRead {
-    [x: string]: { id: number; date: string; }[] | undefined;
     created_at?: NoName35;
     cv?: CvInlineShort;
     cv_id?: CvId;
     date_from?: NoName46;
     date_to?: NoName47;
     id?: ID9;
-    organization_project_card_items_ids?: number[];
+    organization_project_card_items?: Array<{
+        id: number,
+        date: string
+    }>;
     request_requirement_id?: RequestRequirementId1;
     status?: NoName48;
     updated_at?: NoName49;

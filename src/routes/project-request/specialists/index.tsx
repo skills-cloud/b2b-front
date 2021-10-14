@@ -123,6 +123,7 @@ export const Specialists = () => {
 
     const { data, isLoading } = mainRequest.useGetMainRequestByIdQuery({ id: requestId });
     const [post] = mainRequest.usePostRequestRequirementCvSetDetailsMutation();
+    const [unLinkCard] = mainRequest.useDeleteMainRequestCvUnlinkByIdMutation();
     const [cvList, setCvList] = useState<Array<TCvList>>([]);
     const [cards, setCards] = useState<TCardMap>({});
     const [cardTree, setCardTree] = useState<TCardList>([]);
@@ -275,7 +276,7 @@ export const Specialists = () => {
                 });
 
             methods.setValue('cv_id', cvItem.id);
-            methods.setValue('requestRequirementId', cvItem.request_requirement_id);
+            methods.setValue('requestRequirementId', (hash === '#all') ? cvItem.request_requirement_id : hash.slice(1));
         };
 
         return (
@@ -428,24 +429,34 @@ export const Specialists = () => {
             .map((item) => item.slice('card-'.length))
             .filter((id) => !falsyIds.includes(id));
 
-        post({
-            id   : String(requestRequirementId),
-            cv_id: String(cv_id),
-            data : {
-                organization_project_card_items: cardIds.map((id) => {
-                    const result: {id: string, date?: string} = {
-                        id: id
-                    };
+        let request;
 
-                    if(values[`card-date-${id}`]) {
-                        result.date = String(values[`card-date-${id}`]);
-                    }
+        if(cardIds.length === 0) {
+            request = unLinkCard({
+                id   : String(requestRequirementId),
+                cv_id: String(cv_id)
+            });
+        } else {
+            request = post({
+                id   : String(requestRequirementId),
+                cv_id: String(cv_id),
+                data : {
+                    organization_project_card_items: cardIds.map((id) => {
+                        const result: {id: string, date?: string} = {
+                            id: id
+                        };
 
-                    return result;
-                })
-            }
-        })
-            .unwrap()
+                        if(values[`card-date-${id}`]) {
+                            result.date = String(values[`card-date-${id}`]);
+                        }
+
+                        return result;
+                    })
+                }
+            });
+        }
+
+        request.unwrap()
             .then(() => {
                 setVisibleModal(null);
                 methods.reset();
