@@ -116,6 +116,7 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
                 parent_id: cards[visibleModalId].id
             })
                 .unwrap()
+                .then(() => setVisibleAddCard(false))
                 .catch(console.error);
 
             return;
@@ -131,6 +132,7 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
             positions_ids: values?.position?.map(({ value }) => parseInt(value, 10))
         })
             .unwrap()
+            .then(() => setVisibleAddCard(false))
             .catch(console.error);
     };
 
