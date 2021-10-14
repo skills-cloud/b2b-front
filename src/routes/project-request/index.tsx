@@ -37,7 +37,7 @@ const ProjectRequest = () => {
     );
 
     const onClickBack = () => {
-        history.push(`/requests/${params.requestId}#main-info`);
+        history.goBack();
     };
 
     if(!data) {

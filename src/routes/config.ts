@@ -76,9 +76,12 @@ export const baseRoutes: Array<IProps> = [{
     path     : '/specialists/:specialistId',
     component: Person
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/requests/create',
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/requests/create',
+        '/organizations/:organizationId/projects/:projectId/requests/create'
+    ],
     component: ProjectCreate
 }, {
     exact    : true,
@@ -86,9 +89,13 @@ export const baseRoutes: Array<IProps> = [{
     path     : '/requests',
     component: ProjectRequestList
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : ['/requests/:requestId', '/requests/:requestId/:subpage(edit|specialists)'],
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/requests/:requestId',
+        '/requests/:requestId/:subpage(edit|specialists)',
+        '/organizations/:organizationId/projects/:projectId/requests/:requestId/:subpage(edit|specialists)?'
+    ],
     component: ProjectRequest
 }, {
     exact    : true,

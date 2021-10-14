@@ -41,7 +41,7 @@ export const acc = createApi({
         baseUrl: '/api/acc'
     }),
     endpoints: (build) => ({
-        getAccUser: build.query<IResponseGetAccUser, IQueryParams>({
+        getAccUser: build.query<IResponseGetAccUser, IQueryParams | undefined>({
             providesTags: ['acc'],
             query       : (params) => ({
                 url   : 'user/',

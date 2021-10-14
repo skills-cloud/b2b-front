@@ -354,9 +354,10 @@ export const mainRequest = createApi({
         }),
         getMainOrganizationProjectById: build.query<OrganizationProjectRead, IBaseGetById>({
             providesTags: ['main'],
-            query       : ({ id }) => ({
+            query       : ({ id, ...params }) => ({
                 url   : `/organization-project/${id}/`,
-                method: 'GET'
+                method: 'GET',
+                params
             })
         }),
         postRequestRequirementCompetenciesSet: build.mutation<IPostBaseResponse, IParamsCompetenciesSet>({
