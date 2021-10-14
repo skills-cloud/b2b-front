@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
 import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
@@ -45,6 +45,7 @@ const MainInfo = (data: RequestRead) => {
     const params = useParams<{ subpage?: string, requestId: string }>();
     const { t } = useTranslation();
     const cn = useClassnames(style);
+    const history = useHistory();
     const formatDistance = useFormatDistance();
     const [visible, setVisible] = useState(params?.subpage === 'edit');
     const [confirm, setConfirm] = useState<boolean>(false);
@@ -53,6 +54,12 @@ const MainInfo = (data: RequestRead) => {
 
     const onClickConfirmDelete = () => {
         setConfirm(true);
+    };
+
+    const onSetVisible = () => {
+        setVisible(false);
+
+        history.push(`/requests/${params.requestId}`);
     };
 
     const renderProjectField = (field: typeof PROJECT_TERM_FIELDS[number]) => {
@@ -123,24 +130,21 @@ const MainInfo = (data: RequestRead) => {
     };
 
     const elHeader = () => {
-        const actions = [{
-            elem: (
-                <div className={cn('main-info__header')} onClick={() => setVisible(true)}>
-                    <EditAction />
-                    {t('routes.project-request.blocks.header.controls.edit')}
-                </div>
-            )
-        }, {
-            elem: (
-                <div className={cn('main-info__header')} onClick={onClickConfirmDelete}>
-                    <DeleteAction className={cn('request-list__action')} />
-                    {t('routes.project-request.blocks.header.controls.delete')}
-                </div>
-            )
-        }];
+        const actions = [
+            <EditAction
+                key="edit"
+                onClick={() => setVisible(true)}
+                label={t('routes.project-request.blocks.header.controls.edit')}
+            />,
+            <DeleteAction
+                key="delete"
+                onClick={onClickConfirmDelete}
+                label={t('routes.project-request.blocks.header.controls.delete')}
+            />
+        ];
 
         return (
-            <div className={cn('gap-bottom')} id={ESectionInvariants.MainInfo}>
+            <div className={cn('main-info__gap-bottom')} id={ESectionInvariants.MainInfo}>
                 <SectionHeader dropdownActions={actions}>
                     {data?.title || t('routes.project-request.blocks.empty-title')}
                 </SectionHeader>
@@ -183,7 +187,7 @@ const MainInfo = (data: RequestRead) => {
                     </SectionContentListItem>
                 ))}
             </SectionContentList>
-            {visible && <EditModal setVisible={setVisible} fields={data} />}
+            {visible && <EditModal setVisible={onSetVisible} fields={data} />}
             {confirm && project && (
                 <ConfirmModal
                     setVisible={setConfirm}

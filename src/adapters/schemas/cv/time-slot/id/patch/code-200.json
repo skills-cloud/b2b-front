@@ -49,6 +49,10 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "is_free": {
+                    "title": "Свободен?",
+                    "type": "boolean"
+                },
                 "is_work_permit_required": {
                     "title": "Требуется разрешение на работу",
                     "type": "boolean"

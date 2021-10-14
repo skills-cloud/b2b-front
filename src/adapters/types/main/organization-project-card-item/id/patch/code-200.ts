@@ -5,7 +5,7 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type Code200 = OrganizationProjectCardItemTree;
+export type Code200 = OrganizationProjectCardItem;
 export type NoName = string;
 export type ID = number;
 export type NoName1 = string;
@@ -14,11 +14,13 @@ export type NoName1 = string;
  */
 export type NoName2 = number;
 export type NoName3 = number;
+export type NoName4 = number;
 
-export interface OrganizationProjectCardItemTree {
+export interface OrganizationProjectCardItem {
     description?: NoName;
     id?: ID;
     name: NoName1;
     organization_project_id?: NoName2;
     parent_id?: NoName3;
+    positions_ids?: NoName4[];
 }

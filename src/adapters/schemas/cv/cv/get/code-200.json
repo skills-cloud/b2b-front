@@ -1468,9 +1468,21 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "is_free": {
+                    "title": "Свободен?",
+                    "type": "boolean"
+                },
                 "is_work_permit_required": {
                     "title": "Требуется разрешение на работу",
                     "type": "boolean"
+                },
+                "kind": {
+                    "enum": [
+                        "manual",
+                        "request_requirement"
+                    ],
+                    "title": "Тип слота",
+                    "type": "string"
                 },
                 "organization_project_id": {
                     "nullable": true,

@@ -14,6 +14,7 @@ export type NoName1 = string;
  */
 export type NoName2 = number;
 export type NoName3 = number;
+export type NoName4 = number;
 
 export interface OrganizationProjectCardItemReadTree {
     children: OrganizationProjectCardItemReadTree[];
@@ -22,5 +23,5 @@ export interface OrganizationProjectCardItemReadTree {
     name: NoName1;
     organization_project_id?: NoName2;
     parent_id?: NoName3;
-    positions_ids?: Array<string>
+    positions_ids?: NoName4[];
 }

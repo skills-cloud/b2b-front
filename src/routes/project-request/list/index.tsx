@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { parse, stringify } from 'query-string';
 import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
 
 import { useClassnames } from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
@@ -11,10 +10,13 @@ import { normalizeObject } from 'src/helper/normalize-object';
 import InputSelect, { IValue } from 'component/form/select';
 import Loader from 'component/loader';
 import Button from 'component/button';
-import IconPlus from 'component/icons/plus';
+import AddAction from 'component/section/actions/add';
 import InputDictionary from 'component/form/input-dictionary';
 import InputMain from 'component/form/input-main';
 import { H3 } from 'component/header';
+import SidebarLayout from 'component/layout/sidebar';
+import Section from 'component/section';
+import SectionHeader from 'component/section/header';
 
 import { mainRequest } from 'adapter/api/main';
 
@@ -93,21 +95,9 @@ const ProjectRequestList = () => {
         return <span className={cn('request-list__requests-empty')}>{t('routes.project-request-list.requests.empty')}</span>;
     }, [JSON.stringify(data?.results), i18n.language, isLoading]);
 
-    return (
-        <main className={cn('request-list')}>
-            <section className={cn('request-list__main')}>
-                <div className={cn('request-list__main-top')}>
-                    <h2 className={cn('request-list__main-header')}>{t('routes.project-request-list.title')}</h2>
-                    <Link
-                        to="/requests/create"
-                        className={cn('request-list__main-button')}
-                    >
-                        <IconPlus />
-                    </Link>
-                </div>
-                {elRequests}
-            </section>
-            <aside className={cn('request-list__search')}>
+    const elSidebar = () => {
+        return (
+            <Section>
                 <H3>{t('routes.project-request-list.sidebar.filters.title')}</H3>
                 <FormProvider {...context}>
                     <form
@@ -190,8 +180,19 @@ const ProjectRequestList = () => {
                         </Button>
                     </form>
                 </FormProvider>
-            </aside>
-        </main>
+            </Section>
+        );
+    };
+
+    return (
+        <SidebarLayout sidebar={elSidebar()}>
+            <Section>
+                <SectionHeader actions={<AddAction to="/requests/create" />}>
+                    {t('routes.project-request-list.title')}
+                </SectionHeader>
+                {elRequests}
+            </Section>
+        </SidebarLayout>
     );
 };
 

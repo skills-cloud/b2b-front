@@ -259,16 +259,18 @@ export type NoName146 = string;
 export type NoName147 = string;
 export type ID34 = number;
 export type NoName148 = boolean;
+export type NoName149 = boolean;
+export type NoName150 = 'manual' | 'request_requirement';
 export type OrganizationProjectId = number;
 export type OrganizationProjectName = string;
-export type NoName149 = number;
+export type NoName151 = number;
 export type RequestId1 = number;
 export type RequestRequirementId2 = number;
 export type RequestRequirementName = string;
 export type RequestTitle = string;
 export type TypeOfEmploymentId1 = number;
-export type NoName150 = string;
-export type NoName151 = string;
+export type NoName152 = string;
+export type NoName153 = string;
 export type UserId1 = number;
 
 export interface CvDetailReadFull {
@@ -300,8 +302,8 @@ export interface CvDetailReadFull {
     projects?: CvProjectRead[];
     requests_requirements?: CvRequestRequirementInlineSerializer[];
     time_slots?: CvTimeSlotRead[];
-    time_to_contact_from?: NoName150;
-    time_to_contact_to?: NoName151;
+    time_to_contact_from?: NoName152;
+    time_to_contact_to?: NoName153;
     types_of_employment?: TypeOfEmployment[];
     types_of_employment_ids?: number[];
     user?: UserInline;
@@ -659,10 +661,12 @@ export interface CvTimeSlotRead {
     date_to?: NoName146;
     description?: NoName147;
     id?: ID34;
-    is_work_permit_required?: NoName148;
+    is_free?: NoName148;
+    is_work_permit_required?: NoName149;
+    kind?: NoName150;
     organization_project_id?: OrganizationProjectId;
     organization_project_name?: OrganizationProjectName;
-    price?: NoName149;
+    price?: NoName151;
     request_id?: RequestId1;
     request_requirement_id?: RequestRequirementId2;
     request_requirement_name?: RequestRequirementName;

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
+
+import useClassnames from 'hook/use-classnames';
 
 import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
@@ -13,8 +15,13 @@ import Timeframe from 'component/timeframe';
 import ShortName from 'component/short-name';
 import ProjectCards from 'component/project-cards';
 import Wrapper from 'component/section/wrapper';
+import Loader from 'component/loader';
+import EditAction from 'component/section/actions/edit';
 
 import { mainRequest } from 'adapter/api/main';
+
+import EditModal from './edit-modal';
+import style from './index.module.pcss';
 
 enum ESectionInvariants {
     MainInfo = 'main-info',
@@ -24,11 +31,37 @@ enum ESectionInvariants {
 
 const OrganizationProjects = () => {
     const { t } = useTranslation();
+    const cn = useClassnames(style);
     const { projectId, organizationId } = useParams<{ organizationId: string, projectId: string }>();
-    const { data } = mainRequest.useGetMainOrganizationProjectByIdQuery({
-        id: projectId
-    });
-    const { data: requests } = mainRequest.useGetMainRequestQuery({ organization_project_id: projectId });
+
+    const [visible, setVisible] = useState<boolean>(false);
+
+    const { data } = mainRequest.useGetMainOrganizationProjectByIdQuery({ id: projectId });
+    const { data: requests, isLoading } = mainRequest.useGetMainRequestQuery({ organization_project_id: projectId });
+
+    const elRequests = () => {
+        if(isLoading) {
+            return <Loader />;
+        }
+
+        if(requests?.results.length) {
+            return <RequestList requestList={requests.results} />;
+        }
+
+        return (
+            <div className={cn('organization-projects__empty')}>
+                {t('routes.organization-projects.empty')}
+            </div>
+        );
+    };
+
+    const onClickEdit = () => {
+        setVisible(true);
+    };
+
+    const elEditAction = () => {
+        return <EditAction onClick={onClickEdit} />;
+    };
 
     if(!data) {
         return null;
@@ -53,7 +86,7 @@ const OrganizationProjects = () => {
             <Wrapper>
                 <Section>
                     <span id={ESectionInvariants.MainInfo} />
-                    <SectionHeader>{data?.name}</SectionHeader>
+                    <SectionHeader actions={elEditAction()}>{data?.name}</SectionHeader>
                     <SectionContentList>
                         <SectionContentListItem title={t('routes.organization-projects.blocks.customer')}>
                             {data?.organization?.name}
@@ -66,17 +99,16 @@ const OrganizationProjects = () => {
                         </SectionContentListItem>
                     </SectionContentList>
                 </Section>
-                {requests?.results && (
-                    <Section>
-                        <span id={ESectionInvariants.Requests} />
-                        <SectionHeader>
-                            {t('routes.organization-projects.blocks.sections.requests')}
-                        </SectionHeader>
-                        <RequestList requestList={requests.results} />
-                    </Section>
-                )}
+                <Section>
+                    <span id={ESectionInvariants.Requests} />
+                    <SectionHeader>
+                        {t('routes.organization-projects.blocks.sections.requests')}
+                    </SectionHeader>
+                    {elRequests()}
+                </Section>
                 <ProjectCards projectId={projectId} organizationId={organizationId} />
             </Wrapper>
+            {visible && <EditModal setVisible={setVisible} fields={data} />}
         </SidebarLayout>
     );
 };

@@ -19,7 +19,7 @@ import InputRequest from 'component/form/input-request';
 import { IValue } from 'component/form/select';
 import Input from 'component/form/input';
 import InputCv from 'component/form/input-cv';
-import Dropdown from 'component/dropdown/base';
+import Dropdown from 'component/dropdown';
 import DropdownMenu from 'component/dropdown/menu';
 import DropdownMenuItem from 'component/dropdown/menu-item';
 import IconDots from 'component/icons/dots';

@@ -2,12 +2,15 @@ import React, { ReactNode } from 'react';
 
 import { useClassnames } from 'hook/use-classnames';
 import { H1 } from 'component/header';
-import Dropdown, { IItem } from 'component/dropdown';
+import Dropdown from 'component/dropdown';
+import DropdownMenu from 'component/dropdown/menu';
+import DotsAction from 'component/section/actions/dots';
 
 import style from './index.module.pcss';
+import DropdownMenuItem from 'component/dropdown/menu-item';
 
 export interface IProps {
-    dropdownActions?: Array<IItem>,
+    dropdownActions?: ReactNode | Array<ReactNode>,
     actions?: ReactNode,
     children: ReactNode
 }
@@ -20,8 +23,24 @@ const SectionHeader = ({ children, dropdownActions, actions }: IProps) => {
             return (
                 <Dropdown
                     className={cn('section__header-actions')}
-                    items={dropdownActions}
-                />
+                    render={() => (
+                        <DropdownMenu>
+                            {Array.isArray(dropdownActions) ? (
+                                dropdownActions?.map((item, index) => (
+                                    <DropdownMenuItem key={index} selected={false}>
+                                        {item}
+                                    </DropdownMenuItem>
+                                ))
+                            ) : (
+                                <DropdownMenuItem selected={false}>
+                                    {dropdownActions}
+                                </DropdownMenuItem>
+                            )}
+                        </DropdownMenu>
+                    )}
+                >
+                    <DotsAction />
+                </Dropdown>
             );
         }
 

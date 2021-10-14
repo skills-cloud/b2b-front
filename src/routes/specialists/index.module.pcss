@@ -1,19 +1,7 @@
 .specialists {
-    display: grid;
-    grid-auto-flow: column;
-    grid-column-gap: 16px;
-    grid-template-columns: 1fr 320px;
-    width: 100%;
-    max-width: 992px;
-    align-items: flex-start;
 
-    &__search,
-    &__main {
-        background-color: var(--color-white);
-        box-shadow: 0 1px 1px var(--color-shadow);
-        border-radius: 4px;
-        padding: 32px;
-        box-sizing: border-box;
+    &__users {
+        margin-top: 24px;
     }
 
     &__main {
@@ -22,23 +10,6 @@
         grid-auto-flow: row;
         grid-row-gap: 32px;
         grid-template-rows: max-content;
-    }
-
-    &__main-top {
-        display: grid;
-        grid-gap: 8px;
-        align-items: center;
-        grid-template-columns: 1fr 40px;
-    }
-
-    &__main-button {
-        display: block;
-        width: 40px;
-        height: 40px;
-        padding: 8px;
-        box-sizing: border-box;
-        background-color: var(--color-bg-button);
-        border-radius: 50%;
     }
 
     &__users-modal {
