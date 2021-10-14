@@ -239,7 +239,7 @@ export const Specialists = () => {
                 });
 
             methods.setValue('cv_id', cvItem.id);
-            methods.setValue('requestId', cvItem.request_requirement_id);
+            methods.setValue('requestRequirementId', cvItem.request_requirement_id);
         };
 
         return (
@@ -360,7 +360,7 @@ export const Specialists = () => {
     const renderCard = cardTree.filter((item) => item.id === visibleModal);
 
     const applyCardForm = (formValues: Record<string, string | boolean>) => {
-        const { cv_id, requestId: formRequestId, ...values } = formValues;
+        const { cv_id, requestRequirementId, ...values } = formValues;
         const falsyRootIds = Object.keys(values)
             .filter((item) => !values[item])
             .map((item) => item.slice('card-'.length))
@@ -372,7 +372,7 @@ export const Specialists = () => {
             .filter((id) => !falsyIds.includes(id));
 
         post({
-            id   : hash.slice(1) === 'all' ? formRequestId as string : hash.slice(1),
+            id   : String(requestRequirementId),
             cv_id: String(cv_id),
             data : {
                 organization_project_card_items_ids: cardIds
