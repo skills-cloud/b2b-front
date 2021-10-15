@@ -114,11 +114,11 @@ const Breadcrumbs = (props: IProps) => {
                 if(loadData) {
                     const name = 'name' in loadData ? loadData.name : '';
                     const lastName = 'last_name' in loadData ? loadData.last_name : '';
-                    const typeName = 'type' in loadData ? loadData.type?.name : '';
+                    const requestName = 'title' in loadData ? loadData.title : '';
 
                     return {
                         value        : item.id,
-                        name         : name || lastName || typeName,
+                        name         : name || lastName || requestName,
                         skipTranslate: true
                     };
                 }

@@ -6,7 +6,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { H4 } from 'component/header';
 import Tabs, { Tab } from 'component/tabs';
 import Input from 'component/form/input';
-import IconDots from 'component/icons/dots';
+import DotsAction from 'component/section/actions/dots';
 import DeadlineDates from 'component/form/deadline-dates';
 
 import EditLocation from 'route/project-request/components/edit-location';
@@ -122,14 +122,40 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
             .catch(console.error);
     };
 
+    const elCompetenceTab = () => {
+        if(activeTab === ETabs.Competence) {
+            if(editRequirements?.position?.name) {
+                return (
+                    <div className={cn('edit-requirements__position')}>
+                        <H4>
+                            {t(
+                                'routes.project-request.requirements.edit-modal.people',
+                                {
+                                    people  : editRequirements.count,
+                                    position: editRequirements.position.name
+                                })}
+                        </H4>
+
+                        <DotsAction onClick={onEditRole} />
+                    </div>
+                );
+            }
+
+            return (
+                <span className={cn('edit-requirements__empty')}>
+                    {t('routes.project-request.requirements.edit-modal.empty')}
+                </span>
+            );
+        }
+    };
+
     return (
         <FormProvider {...form}>
             <form
-                method="PATCH"
                 id={MAIN_REQUIREMENTS_FORM_ID}
                 onSubmit={form.handleSubmit(onSubmit)}
             >
-                <div className={cn('name-gap')}>
+                <div className={cn('edit-requirements__name-gap')}>
                     <Input
                         name="name"
                         type="text"
@@ -151,34 +177,8 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
                     ))}
                 </Tabs>
 
-                <div className={cn('tab-content')}>
-                    {activeTab === ETabs.Competence && editRequirements?.position?.name && (
-                        <div className={cn('position')}>
-                            <H4>
-                                {t(
-                                    'routes.project-request.requirements.edit-modal.people',
-                                    {
-                                        people  : editRequirements.count,
-                                        position: editRequirements.position.name
-                                    })}
-                            </H4>
-
-                            <button
-                                type="button"
-                                className={cn('position-edit')}
-                                onClick={onEditRole}
-                            >
-                                <IconDots
-                                    svg={{
-                                        width    : 24,
-                                        height   : 24,
-                                        className: cn('icon-dots')
-                                    }}
-                                />
-                            </button>
-                        </div>
-                    )}
-
+                <div className={cn('edit-requirements__tab-content')}>
+                    {elCompetenceTab()}
                     {activeTab === ETabs.Location && (
                         <EditLocation />
                     )}

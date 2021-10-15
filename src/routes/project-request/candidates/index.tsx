@@ -106,14 +106,14 @@ const CardWrapper = ({ level, children }: {level?: number, children: ReactNode})
     const cn = useClassnames(style);
 
     if(level === undefined) {
-        return <div className={cn('specialists__modal-content-grid')}>{children}</div>;
+        return <div className={cn('candidates__modal-content-grid')}>{children}</div>;
     }
 
     // eslint-disable-next-line react/jsx-no-useless-fragment
     return <React.Fragment>{children}</React.Fragment>;
 };
 
-export const Specialists = () => {
+export const Candidates = () => {
     const cn = useClassnames(style);
     const dispatch = useDispatch();
     const { hash } = useLocation();
@@ -192,20 +192,21 @@ export const Specialists = () => {
 
     const elAdditionalBlock = (cvItem?: CvCareerRead) => {
         if(cvItem) {
+            console.log('CV ITEM', cvItem)
             const dateFrom = cvItem.date_from ? new Date(cvItem.date_from) : new Date();
             const dateTo = cvItem.date_to ? new Date(cvItem.date_to) : new Date();
             const experience = differenceInCalendarYears(dateTo, dateFrom);
 
             return (
-                <div className={cn('specialists__user-info-block')}>
-                    <div className={cn('specialists__user-info-exp')}>
-                        <div className={cn('specialists__user-info-exp-years')}>
-                            {t('routes.specialists.main.experience', {
+                <div className={cn('candidates__user-info-block')}>
+                    <div className={cn('candidates__user-info-exp')}>
+                        <div className={cn('candidates__user-info-exp-years')}>
+                            {t('routes.candidates.main.experience', {
                                 count: experience
                             })}
                         </div>
-                        <div className={cn('specialists__user-info-exp-stars')}>
-                            <IconStar svg={{ className: cn('specialists__user-info-exp-star-icon') }} />
+                        <div className={cn('candidates__user-info-exp-stars')}>
+                            <IconStar svg={{ className: cn('candidates__user-info-exp-star-icon') }} />
                             {experience}
                         </div>
                     </div>
@@ -217,9 +218,9 @@ export const Specialists = () => {
     const elCompetencies = (competencies?: Array<CvPositionCompetenceRead>) => {
         if(competencies?.length) {
             return (
-                <div className={cn('specialists__competencies')}>
+                <div className={cn('candidates__competencies')}>
                     {competencies.map((comp) => (
-                        <div key={comp.competence_id} className={cn('specialists__competence')}>
+                        <div key={comp.competence_id} className={cn('candidates__competence')}>
                             {comp.competence?.name}
                         </div>
                     ))}
@@ -238,7 +239,7 @@ export const Specialists = () => {
         let rootCard = {};
 
         if(!firstName && !lastName) {
-            title = t('routes.specialists.main.first-name');
+            title = t('routes.candidates.main.first-name');
         }
 
         if(Object.keys(cards).length > 0 && cvItem?.organization_project_card_items) {
@@ -280,10 +281,10 @@ export const Specialists = () => {
         };
 
         return (
-            <div key={cvItem.id} className={cn('specialists__user')}>
-                <div className={cn('specialists__user-info')}>
+            <div key={cvItem.id} className={cn('candidates__user')}>
+                <div className={cn('candidates__user-info')}>
                     <UserAvatar
-                        className={cn('specialists__user-info-avatar')}
+                        className={cn('candidates__user-info-avatar')}
                         title={title}
                         subTitle={subTitle}
                         titleTo={`/specialists/${cvItem.id}`}
@@ -293,23 +294,23 @@ export const Specialists = () => {
                     />
                     {elAdditionalBlock(cvItem.career?.[0])}
                 </div>
-                <div className={cn('specialists__user-competencies')}>
-                    <p className={cn('specialists__block-title')}>
-                        {t('routes.specialists.main.competencies')}
+                <div className={cn('candidates__user-competencies')}>
+                    <p className={cn('candidates__block-title')}>
+                        {t('routes.candidates.main.competencies')}
                     </p>
                     {elCompetencies(cvItem.positions?.[0]?.competencies)}
                 </div>
-                <div className={cn('specialists__column')}>
-                    <div className={cn('specialists__user-rate')}>
-                        <p className={cn('specialists__block-title')}>
-                            {t('routes.specialists.main.rate')}
+                <div className={cn('candidates__column')}>
+                    <div className={cn('candidates__user-rate')}>
+                        <p className={cn('candidates__block-title')}>
+                            {t('routes.candidates.main.rate')}
                         </p>
                         {cvItem.price || '\u2014'}
                     </div>
                     {!!cvItem?.organization_project_card_items && (
-                        <div className={cn('specialists__user-cards')}>
-                            <p className={cn('specialists__block-title')}>
-                                {t('routes.specialists.main.cards')}
+                        <div className={cn('candidates__user-cards')}>
+                            <p className={cn('candidates__block-title')}>
+                                {t('routes.candidates.main.cards')}
                             </p>
                             {Object.keys(rootCard).map((id: string) => {
                                 const item: ICard = rootCard[id];
@@ -321,7 +322,7 @@ export const Specialists = () => {
                                 return (
                                     <span
                                         key={item.id}
-                                        className={cn('specialists__user-card')}
+                                        className={cn('candidates__user-card')}
                                         onClick={() => {
                                             if(item.id) {
                                                 setForm();
@@ -330,7 +331,7 @@ export const Specialists = () => {
                                         }}
                                     >
                                         {item.name}
-                                        <span className={cn('specialists__user-card-count')}>
+                                        <span className={cn('candidates__user-card-count')}>
                                             ({item.count}/{cards[item.id].cardCount})
                                         </span>
                                     </span>
@@ -338,13 +339,13 @@ export const Specialists = () => {
                             })}
 
                             <span
-                                className={cn('specialists__link')}
+                                className={cn('candidates__link')}
                                 onClick={() => {
                                     setForm();
                                     setVisibleModal(ALL_CARD_MODAL_ID);
                                 }}
                             >
-                                {t('routes.specialists.main.cards-add')}
+                                {t('routes.candidates.main.cards-add')}
                             </span>
                         </div>
                     )}
@@ -365,16 +366,16 @@ export const Specialists = () => {
 
             if(dataToRender?.length) {
                 return (
-                    <div className={cn('specialists__users')}>
+                    <div className={cn('candidates__users')}>
                         {dataToRender.map((cvItem) => elUserItem(cvItem))}
                     </div>
                 );
             }
 
-            return <span className={cn('specialists__users-empty')}>{t('routes.specialists.main.users.empty')}</span>;
+            return <span className={cn('candidates__users-empty')}>{t('routes.candidates.main.users.empty')}</span>;
         }
 
-        return <span className={cn('specialists__users-empty')}>{t('routes.specialists.main.users.empty')}</span>;
+        return <span className={cn('candidates__users-empty')}>{t('routes.candidates.main.users.empty')}</span>;
     }, [JSON.stringify(data?.requirements), JSON.stringify(cvList), hash, i18n.language, isLoading]);
 
     const renderTree = (cardList: TCardList, level?: number) => {
@@ -385,9 +386,9 @@ export const Specialists = () => {
                 <React.Fragment>
                     {level === undefined && (
                         <React.Fragment>
-                            <div className={cn('specialists__modal-content-title')}>{item.name}</div>
-                            <div className={cn('specialists__modal-content-title')}>
-                                {t('routes.specialists.modal-card.date')}
+                            <div className={cn('candidates__modal-content-title')}>{item.name}</div>
+                            <div className={cn('candidates__modal-content-title')}>
+                                {t('routes.candidates.modal-card.date')}
                             </div>
                         </React.Fragment>
                     )}
@@ -400,10 +401,10 @@ export const Specialists = () => {
                                 name={`card-${item.id}`}
                                 label={item.name}
                                 className={{
-                                    'checkbox__label': cn('specialists__modal-card-checkbox')
+                                    'checkbox__label': cn('candidates__modal-card-checkbox')
                                 }}
                             />
-                            <div className={cn('specialists__modal-content-date')}>
+                            <div className={cn('candidates__modal-content-date')}>
                                 <InputDate name={`card-date-${item.id}`} />
                             </div>
                         </React.Fragment>
@@ -465,13 +466,13 @@ export const Specialists = () => {
     };
 
     return (
-        <section className={cn('specialists')}>
-            <h2 className={cn('specialists__header')}>{t('routes.specialists.main.title')}</h2>
+        <section className={cn('candidates')}>
+            <h2 className={cn('candidates__header')}>{t('routes.candidates.main.title')}</h2>
             {elUsers}
             {visibleModal !== null && (
                 <Modal
                     header={
-                        t('routes.specialists.modal-card.title', {
+                        t('routes.candidates.modal-card.title', {
                             name   : renderCard.length === 1 ? renderCard[0].name : '',
                             context: renderCard.length === 1 ? 'current' : 'add'
                         })
@@ -483,10 +484,10 @@ export const Specialists = () => {
                                     setVisibleModal(null);
                                 }}
                             >
-                                {t('routes.specialists.modal-card.cancel')}
+                                {t('routes.candidates.modal-card.cancel')}
                             </Button>
                             <Button form={APPLY_CARD_FORM_ID} type="submit">
-                                {t('routes.specialists.modal-card.submit')}
+                                {t('routes.candidates.modal-card.submit')}
                             </Button>
                         </ModalFooterSubmit>
                     }
@@ -503,7 +504,7 @@ export const Specialists = () => {
                                     name={`card-${item.id}`}
                                     label={item.name}
                                     className={{
-                                        'checkbox__label': cn('specialists__modal-card-checkbox')
+                                        'checkbox__label': cn('candidates__modal-card-checkbox')
                                     }}
                                 />
                             ))}
@@ -515,4 +516,4 @@ export const Specialists = () => {
     );
 };
 
-export default Specialists;
+export default Candidates;

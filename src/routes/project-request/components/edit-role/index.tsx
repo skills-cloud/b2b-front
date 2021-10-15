@@ -30,7 +30,7 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
     const [checked, setChecked] = useState<Array<string>>(
         requirements.competencies?.map(({ competence }) => String(competence?.id)) || []
     );
-    const [competenceExpirienceMap, setCompetenceExpirienceMap] = useState(requirements.competencies?.reduce((acc, item) => {
+    const [competenceExperienceMap, setCompetenceExperienceMap] = useState(requirements.competencies?.reduce((acc, item) => {
         if(item.experience_years) {
             acc[item.competence_id] = item.experience_years;
         }
@@ -51,14 +51,14 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
 
         const competencies = checked.map((id) => ({
             competence_id   : parseInt(id, 10),
-            experience_years: competenceExpirienceMap[id]
+            experience_years: competenceExperienceMap[id]
         }));
 
         post({ id: requirementsId, competencies })
             .unwrap()
             .then(onClose)
             .catch(console.error);
-    }, [checked, competenceExpirienceMap]);
+    }, [checked, competenceExperienceMap]);
 
     return (
         <Modal
@@ -85,8 +85,8 @@ const EditRole = ({ onBack, onClose, requirements }: IEditRole) => {
                     <CompetenceSelector
                         setChecked={setChecked}
                         checked={checked}
-                        competenceExpirienceMap={competenceExpirienceMap}
-                        setCompetenceExpirienceMap={setCompetenceExpirienceMap}
+                        competenceExperienceMap={competenceExperienceMap}
+                        setCompetenceExperienceMap={setCompetenceExperienceMap}
                     />
                 </form>
             </FormProvider>

@@ -1,5 +1,5 @@
 import React, { useMemo, useState, Fragment, useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { differenceInCalendarYears } from 'date-fns';
@@ -25,7 +25,6 @@ import AddAction from 'component/section/actions/add';
 import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
 
-import { mainRequest } from 'adapter/api/main';
 import { cv } from 'adapter/api/cv';
 import { CvListReadFull, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 import { IValue } from 'component/form/select';
@@ -44,6 +43,7 @@ export const Specialists = () => {
     const cn = useClassnames(style);
     const history = useHistory();
     const { t, i18n } = useTranslation();
+    const params = useParams<{ requirementId: string, requestId: string, projectId: string }>();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
     const defaultValues = {
@@ -59,9 +59,7 @@ export const Specialists = () => {
     });
 
     const { data, isLoading, refetch } = cv.useGetCvListQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
-    const [postLinkCv, { isLoading: isLoadingRequest }] = mainRequest.usePostRequestRequirementLinkCvMutation();
 
-    const [fromRequestId, setFromRequestId] = useState<string>('');
     const [addToRequest, setAddToRequest] = useState<number | null>();
     const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -71,10 +69,6 @@ export const Specialists = () => {
                 ...defaultValues,
                 ...qs
             };
-
-            if(qs.from_request_id) {
-                setFromRequestId(qs.from_request_id as string);
-            }
 
             context.reset(newDefaultValues);
         }
@@ -95,22 +89,8 @@ export const Specialists = () => {
     };
 
     const onClickAddToRequest = useCallback((cvItemId?: number) => () => {
-        if(fromRequestId) {
-            if(cvItemId) {
-                postLinkCv({
-                    id   : fromRequestId,
-                    cv_id: String(cvItemId),
-                    data : {}
-                })
-                    .then(() => {
-                        console.info('OK');
-                    })
-                    .catch(console.error);
-            }
-        } else {
-            setAddToRequest(cvItemId);
-        }
-    }, [fromRequestId]);
+        setAddToRequest(cvItemId);
+    }, [params.requestId]);
 
     const onClickClose = () => {
         setShowModal(false);
@@ -156,27 +136,6 @@ export const Specialists = () => {
         );
     };
 
-    const elAddButton = (cvItemId?: number) => {
-        if(isLoadingRequest) {
-            return (
-                <div className={cn('specialists__user-info-exp-add')}>
-                    <Loader />
-                </div>
-            );
-        }
-
-        return (
-            <div className={cn('specialists__user-info-exp-add')}>
-                <IconPlus
-                    svg={{
-                        className: cn('specialists__user-info-exp-add-icon'),
-                        onClick  : onClickAddToRequest(cvItemId)
-                    }}
-                />
-            </div>
-        );
-    };
-
     const elAdditionalBlock = (cvItem?: CvCareerRead, showLinkedItems?: boolean, cvId?: number) => {
         if(cvItem) {
             const dateFrom = cvItem.date_from ? new Date(cvItem.date_from) : new Date();
@@ -195,7 +154,14 @@ export const Specialists = () => {
                             <IconStar svg={{ className: cn('specialists__user-info-exp-star-icon') }} />
                             {experience}
                         </div>
-                        {elAddButton(cvId)}
+                        <div className={cn('specialists__user-info-exp-add')}>
+                            <IconPlus
+                                svg={{
+                                    className: cn('specialists__user-info-exp-add-icon'),
+                                    onClick  : onClickAddToRequest(cvId)
+                                }}
+                            />
+                        </div>
                     </div>
                     {showLinkedParam && showLinkedItems && (
                         <div className={cn('specialists__user-linked')} onClick={onClickLinked(cvItem.id)}>
@@ -279,9 +245,17 @@ export const Specialists = () => {
         }
 
         if(addToRequest) {
-            return <Request showModal={Boolean(addToRequest)} specialistId={addToRequest} onClickClose={onClickClose} />;
+            return (
+                <Request
+                    projectId={params.projectId}
+                    requirementId={params.requirementId}
+                    requestId={params.requestId}
+                    specialistId={addToRequest}
+                    onClickClose={onClickClose}
+                />
+            );
         }
-    }, [showModal, addToRequest]);
+    }, [showModal, addToRequest, params.requestId, params.requirementId]);
 
     const elUsers = useMemo(() => {
         if(isLoading) {

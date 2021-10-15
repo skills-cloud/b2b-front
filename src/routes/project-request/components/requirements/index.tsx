@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { stringify } from 'query-string';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
@@ -48,6 +48,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const history = useHistory();
+    const { pathname } = useLocation();
     const [deleteMainRequestById] = mainRequest.useDeleteMainRequestRequirementByIdMutation();
     const [activeTab, setActiveTab] = useState<ETabs>(ETabs.Competence);
     const [editID, setEditID] = useState<number>();
@@ -66,12 +67,11 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
             if(req) {
                 const params = {
                     position_id         : req.position_id,
-                    years               : req.id,
-                    competencies_ids_any: req.competencies?.map((comp) => comp.competence_id),
-                    from_request_id     : req.id
+                    years               : req.experience_years,
+                    competencies_ids_any: req.competencies?.map((comp) => comp.competence_id)
                 };
 
-                history.push(`/specialists?${stringify(normalizeObject(params))}`);
+                history.push(`${pathname}/requirement/${requirementId}/specialists?${stringify(normalizeObject(params))}`);
             }
         }
     };
@@ -279,7 +279,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                         setModalStep(EModalSteps.NewRole);
                                     }}
                                 >
-                                    {t('routes.project-request.requirements.edit-modal.addRole')}
+                                    {t('routes.project-request.requirements.edit-modal.add-role')}
                                 </span>
                             )}
                             <Button

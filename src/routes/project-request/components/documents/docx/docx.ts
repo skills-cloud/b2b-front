@@ -91,8 +91,8 @@ class DocumentCreator {
                 this.createRow(i18n.t('components.pdf.project.project'), data.project?.name),
                 this.createRow(i18n.t('components.pdf.project.manager'), manager),
                 this.createRow(i18n.t('components.pdf.project.recruiter'), recruiter),
-                this.createRow(i18n.t('components.pdf.project.customer'), data.type?.name),
-                this.createRow(i18n.t('components.pdf.project.sector'), data.organization_project?.organization?.name)
+                this.createRow(i18n.t('components.pdf.project.customer'), data.organization_project?.organization?.name),
+                this.createRow(i18n.t('components.pdf.project.sector'), data.industry_sector?.name)
             ]
         });
     }
