@@ -47,8 +47,6 @@ const Request = (props: IProps) => {
         skip: !props.requestId
     });
     const { data: requirementData } = mainRequest.useGetMainRequestRequirementByIdQuery({ id: String(expandedId) }, { skip: !expandedId });
-    const cardsParams = props.projectId ? { organization_project_id: [parseInt(props.projectId, 10)] } : undefined;
-    const { data: baseProjectCards } = mainRequest.useGetBaseProjectCardQuery(cardsParams);
 
     const [addSpecialist, { isLoading: isLoadingAdd, isSuccess, isError }] = mainRequest.usePostRequestRequirementLinkCvMutation();
 
@@ -100,20 +98,15 @@ const Request = (props: IProps) => {
 
     const onSubmit = context.handleSubmit(
         (formData) => {
-            const currentProjectCards = baseProjectCards?.filter((item) => item.organization_project_id === parseInt((props.projectId || formData.project_id), 10));
-
-            if(currentProjectCards?.length) {
-                addSpecialist({
-                    id                             : String(formData.id),
-                    cv_id                          : String(props.specialistId),
-                    date_from                      : formData.date_from,
-                    date_to                        : formData.date_to,
-                    status                         : EStatus.PreCandidate,
-                    organization_project_card_items: currentProjectCards.map((card) => ({ id: card.id as number })) || []
-                })
-                    .unwrap()
-                    .catch(console.error);
-            }
+            addSpecialist({
+                id       : String(formData.id),
+                cv_id    : String(props.specialistId),
+                date_from: formData.date_from,
+                date_to  : formData.date_to,
+                status   : EStatus.PreCandidate
+            })
+                .unwrap()
+                .catch(console.error);
         },
         (formError) => {
             console.error(formError);

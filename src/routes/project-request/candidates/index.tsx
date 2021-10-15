@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,7 @@ import Checkbox from 'component/form/checkbox';
 
 import { cv } from 'adapter/api/cv';
 import { mainRequest } from 'adapter/api/main';
-import { CvListReadFull, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
+import { CvListReadFull, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 import { OrganizationProjectCardItemReadTree } from 'adapter/types/main/organization-project-card-item/get/code-200';
 import { RequestRequirementCvRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 
@@ -37,7 +37,7 @@ type TCardMap = Record<number, ICardMap>;
 type TCardList = Array<OrganizationProjectCardItemReadTree>;
 type TUniqRootCard = Record<number, ICard>;
 
-type TCvList = CvListReadFull & RequestRequirementCvRead;
+type TCvList = Omit<CvListReadFull, 'rating' | 'projects'> & Omit<RequestRequirementCvRead, 'cv_id'>;
 
 const getMapFromTree = (
     list: TCardList,
@@ -101,6 +101,7 @@ const getTreeIds = (rootIds: Array<string>, cards: TCardMap, ids: Array<string> 
 
 const ALL_CARD_MODAL_ID = 0;
 const APPLY_CARD_FORM_ID = 'APPLY_CARD_FORM_ID';
+const RATING_FORM_ID = 'RATING_FORM_ID';
 
 const CardWrapper = ({ level, children }: {level?: number, children: ReactNode}) => {
     const cn = useClassnames(style);
@@ -118,16 +119,19 @@ export const Candidates = () => {
     const dispatch = useDispatch();
     const { hash } = useLocation();
     const { requestId } = useParams<{ requestId: string }>();
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const methods = useForm();
 
-    const { data, isLoading } = mainRequest.useGetMainRequestByIdQuery({ id: requestId });
+    const { data, isLoading, refetch } = mainRequest.useGetMainRequestByIdQuery({ id: requestId }, { refetchOnMountOrArgChange: true });
     const [post] = mainRequest.usePostRequestRequirementCvSetDetailsMutation();
     const [unLinkCard] = mainRequest.useDeleteMainRequestCvUnlinkByIdMutation();
     const [cvList, setCvList] = useState<Array<TCvList>>([]);
     const [cards, setCards] = useState<TCardMap>({});
     const [cardTree, setCardTree] = useState<TCardList>([]);
     const [visibleModal, setVisibleModal] = useState<number | null>(null);
+    const [ratingCvItem, setRatingCvItem] = useState<TCvList | null>(null);
+    const [activeStar, setActiveStar] = useState<number>(0);
+    const [hoveredStar, setHoveredStar] = useState<number>(0);
 
     useEffect(() => {
         const reqsList = data?.requirements?.reduce((acc, current) => {
@@ -163,12 +167,10 @@ export const Candidates = () => {
             }))
                 .then(({ data: respData }) => {
                     if(respData) {
-                        const results = respData.results.map((result) => {
-                            return {
-                                ...reqsCvList.find((reqResult) => (reqResult.id === result.id) && reqResult),
-                                ...result
-                            };
-                        });
+                        const results = respData.results.map((result) => ({
+                            ...reqsCvList.find((reqResult) => (reqResult.id === result.id) && reqResult),
+                            ...result
+                        }));
 
                         setCvList(results);
                     }
@@ -190,11 +192,26 @@ export const Candidates = () => {
         }
     }, [JSON.stringify(data)]);
 
-    const elAdditionalBlock = (cvItem?: CvCareerRead) => {
-        if(cvItem) {
-            console.log('CV ITEM', cvItem)
-            const dateFrom = cvItem.date_from ? new Date(cvItem.date_from) : new Date();
-            const dateTo = cvItem.date_to ? new Date(cvItem.date_to) : new Date();
+    const onSetRating = (cvItemForRating?: TCvList) => () => {
+        if(cvItemForRating) {
+            setRatingCvItem(cvItemForRating);
+        }
+    };
+
+    const onClickStar = (rating: number, cvItemRating: TCvList) => () => {
+        setActiveStar(rating);
+
+        methods.setValue('rating', rating);
+        methods.setValue('cv_id', cvItemRating.id);
+        methods.setValue('id', cvItemRating.request_requirement_id);
+    };
+
+    const elAdditionalBlock = (cvItem?: TCvList) => {
+        const careerItem = cvItem?.career?.[0];
+
+        if(cvItem && careerItem) {
+            const dateFrom = careerItem.date_from ? new Date(careerItem.date_from) : new Date();
+            const dateTo = careerItem.date_to ? new Date(careerItem.date_to) : new Date();
             const experience = differenceInCalendarYears(dateTo, dateFrom);
 
             return (
@@ -205,9 +222,9 @@ export const Candidates = () => {
                                 count: experience
                             })}
                         </div>
-                        <div className={cn('candidates__user-info-exp-stars')}>
+                        <div className={cn('candidates__user-info-exp-stars')} onClick={onSetRating(cvItem)}>
                             <IconStar svg={{ className: cn('candidates__user-info-exp-star-icon') }} />
-                            {experience}
+                            {cvItem.rating || 0}
                         </div>
                     </div>
                 </div>
@@ -271,7 +288,7 @@ export const Candidates = () => {
 
             cvItem
                 .organization_project_card_items
-                .forEach(({ id, date }: {id: number, date: string}) => {
+                .forEach(({ id, date }: { id: number, date?: string }) => {
                     methods.setValue(`card-date-${id}`, date);
                     methods.setValue(`card-${id}`, true);
                 });
@@ -292,7 +309,7 @@ export const Candidates = () => {
                             src: cvItem.photo
                         }}
                     />
-                    {elAdditionalBlock(cvItem.career?.[0])}
+                    {elAdditionalBlock(cvItem)}
                 </div>
                 <div className={cn('candidates__user-competencies')}>
                     <p className={cn('candidates__block-title')}>
@@ -354,7 +371,7 @@ export const Candidates = () => {
         );
     };
 
-    const elUsers = useMemo(() => {
+    const elUsers = () => {
         if(isLoading) {
             return <Loader />;
         }
@@ -376,7 +393,7 @@ export const Candidates = () => {
         }
 
         return <span className={cn('candidates__users-empty')}>{t('routes.candidates.main.users.empty')}</span>;
-    }, [JSON.stringify(data?.requirements), JSON.stringify(cvList), hash, i18n.language, isLoading]);
+    };
 
     const renderTree = (cardList: TCardList, level?: number) => {
         const currentLevel = level || 0;
@@ -416,6 +433,22 @@ export const Candidates = () => {
 
     const renderCard = cardTree.filter((item) => item.id === visibleModal);
 
+    const setUserRating = (formValues: Record<string, number>) => {
+        post({
+            id    : String(formValues.id),
+            cv_id : String(formValues.cv_id),
+            rating: formValues.rating
+        })
+            .unwrap()
+            .then(() => {
+                setRatingCvItem(null);
+                setActiveStar(0);
+                methods.reset();
+                refetch();
+            })
+            .catch(console.error);
+    };
+
     const applyCardForm = (formValues: Record<string, string | boolean>) => {
         const { cv_id, requestRequirementId, ...values } = formValues;
         const falsyRootIds = Object.keys(values)
@@ -439,21 +472,19 @@ export const Candidates = () => {
             });
         } else {
             request = post({
-                id   : String(requestRequirementId),
-                cv_id: String(cv_id),
-                data : {
-                    organization_project_card_items: cardIds.map((id) => {
-                        const result: {id: string, date?: string} = {
-                            id: id
-                        };
+                id                             : String(requestRequirementId),
+                cv_id                          : String(cv_id),
+                organization_project_card_items: cardIds.map((id) => {
+                    const result: { id: number, date?: string } = {
+                        id: parseInt(id, 10)
+                    };
 
-                        if(values[`card-date-${id}`]) {
-                            result.date = String(values[`card-date-${id}`]);
-                        }
+                    if(values[`card-date-${id}`]) {
+                        result.date = String(values[`card-date-${id}`]);
+                    }
 
-                        return result;
-                    })
-                }
+                    return result;
+                })
             });
         }
 
@@ -465,11 +496,9 @@ export const Candidates = () => {
             .catch(console.error);
     };
 
-    return (
-        <section className={cn('candidates')}>
-            <h2 className={cn('candidates__header')}>{t('routes.candidates.main.title')}</h2>
-            {elUsers}
-            {visibleModal !== null && (
+    const elCardsModal = () => {
+        if(visibleModal !== null) {
+            return (
                 <Modal
                     header={
                         t('routes.candidates.modal-card.title', {
@@ -479,11 +508,7 @@ export const Candidates = () => {
                     }
                     footer={
                         <ModalFooterSubmit>
-                            <Button
-                                isSecondary={true} onClick={() => {
-                                    setVisibleModal(null);
-                                }}
-                            >
+                            <Button isSecondary={true} onClick={() => setVisibleModal(null)}>
                                 {t('routes.candidates.modal-card.cancel')}
                             </Button>
                             <Button form={APPLY_CARD_FORM_ID} type="submit">
@@ -511,7 +536,62 @@ export const Candidates = () => {
                         </form>
                     </FormProvider>
                 </Modal>
-            )}
+            );
+        }
+    };
+
+    const elRatingModal = () => {
+        if(ratingCvItem) {
+            const ratingArr = [1, 2, 3, 4, 5];
+
+            return (
+                <Modal
+                    header={t('routes.candidates.modal-rating.title')}
+                    footer={
+                        <ModalFooterSubmit>
+                            <Button isSecondary={true} onClick={() => setRatingCvItem(null)}>
+                                {t('routes.candidates.modal-rating.cancel')}
+                            </Button>
+                            <Button form={RATING_FORM_ID} type="submit">
+                                {t('routes.candidates.modal-rating.submit')}
+                            </Button>
+                        </ModalFooterSubmit>
+                    }
+                    onClose={() => setRatingCvItem(null)}
+                >
+                    <FormProvider {...methods}>
+                        <form
+                            method="POST"
+                            onSubmit={methods.handleSubmit(setUserRating)}
+                            id={RATING_FORM_ID}
+                            className={cn('candidates__star-form')}
+                        >
+                            {ratingArr.map((item) => (
+                                <IconStar
+                                    key={item}
+                                    svg={{
+                                        className: cn('candidates__star', {
+                                            'candidates__star_active': activeStar >= item || hoveredStar >= item
+                                        }),
+                                        onClick     : onClickStar(item, ratingCvItem),
+                                        onMouseOver : () => setHoveredStar(item),
+                                        onMouseLeave: () => setHoveredStar(0)
+                                    }}
+                                />
+                            ))}
+                        </form>
+                    </FormProvider>
+                </Modal>
+            );
+        }
+    };
+
+    return (
+        <section className={cn('candidates')}>
+            <h2 className={cn('candidates__header')}>{t('routes.candidates.main.title')}</h2>
+            {elUsers()}
+            {elCardsModal()}
+            {elRatingModal()}
         </section>
     );
 };
