@@ -70,7 +70,7 @@ export const CompetenciesEdit = (props: IProps) => {
     const [checked, setChecked] = useState<Array<string>>([]);
     const [positionItem, setPositionItem] = useState<CvPositionRead>();
     const [error, setError] = useState<Array<string> | string | null>(null);
-    const [competenceExpirienceMap, setCompetenceExpirienceMap] = useState({});
+    const [competenceExperienceMap, setCompetenceExperienceMap] = useState({});
 
     const onCancel = () => {
         props.onCancel?.();
@@ -100,7 +100,8 @@ export const CompetenciesEdit = (props: IProps) => {
                 return patchPosition({
                     id         : positionItem.id,
                     cv_id      : parseInt(specialistId, 10),
-                    position_id: positionItem.position_id
+                    position_id: positionItem.position_id,
+                    years      : positionItem.years
                 })
                     .unwrap()
                     .then(() => {
@@ -351,8 +352,8 @@ export const CompetenciesEdit = (props: IProps) => {
                         <CompetenceSelector
                             setChecked={setChecked}
                             checked={checked}
-                            competenceExpirienceMap={competenceExpirienceMap}
-                            setCompetenceExpirienceMap={setCompetenceExpirienceMap}
+                            competenceExperienceMap={competenceExperienceMap}
+                            setCompetenceExperienceMap={setCompetenceExperienceMap}
                         />
                         {elError}
                     </Fragment>

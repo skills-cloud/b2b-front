@@ -26,8 +26,7 @@ import AddAction from 'component/section/actions/add';
 
 enum ESectionInvariants {
     MainInfo = 'main-info',
-    Requests = 'requests',
-    Timesheets = 'timesheets'
+    Requests = 'requests'
 }
 
 const OrganizationProjects = () => {

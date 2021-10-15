@@ -14,12 +14,12 @@ import Section from 'component/section';
 import DeleteAction from 'component/section/actions/delete';
 
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
-import ESectionInvariants from 'route/project-request/components/section-invariants';
 
 import { useClassnames } from 'hook/use-classnames';
 import useFormatDistance from 'component/dates/format-distance';
 import useModalClose from 'component/modal/use-modal-close';
 
+import ESectionInvariants from '../section-invariants';
 import EditModal from '../edit-modal';
 import ConfirmModal from '../confirm-modal';
 import projectRequest from './data.mock';

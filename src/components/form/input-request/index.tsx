@@ -132,7 +132,7 @@ const InputRequest = (props: IProps & typeof defaultProps) => {
                 .then(({ data: loadData }) => {
                     if(loadData?.results?.length) {
                         const res = loadData.results.map((item) => ({
-                            label: item?.type?.name as string || t('components.form.input-request.empty'),
+                            label: item?.title as string || t('components.form.input-request.empty'),
                             value: String(item.id)
                         }));
 
@@ -179,7 +179,7 @@ const InputRequest = (props: IProps & typeof defaultProps) => {
 
                         return dispatch(method)
                             .then((resp) => ({
-                                label: resp.data?.type?.name as string || t('components.form.input-request.empty'),
+                                label: resp.data?.title as string || t('components.form.input-request.empty'),
                                 value: String(resp.data?.id) || ''
                             }));
                     }))
@@ -211,7 +211,7 @@ const InputRequest = (props: IProps & typeof defaultProps) => {
             .then(({ data: loadData }) => {
                 if(loadData?.results?.length) {
                     const res = loadData.results.map((item) => ({
-                        label: item?.type?.name as string || t('components.form.input-request.empty'),
+                        label: item?.title as string || t('components.form.input-request.empty'),
                         value: String(item.id)
                     }));
 

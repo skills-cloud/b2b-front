@@ -37,7 +37,7 @@ export const baseRoutes: Array<IProps> = [{
 }, {
     exact    : true,
     layout   : Layout,
-    path     : '/organizations/:organizationId/projects/:projectId/timesheets',
+    path     : '/organizations/:organizationId/projects/:projectId/requests/:requestId/timesheets',
     component: Timesheets
 }, {
     exact    : true,
@@ -61,9 +61,12 @@ export const baseRoutes: Array<IProps> = [{
     path     : '/',
     component: Main
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/specialists',
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/specialists',
+        '/organizations/:organizationId/projects/:projectId/requests/:requestId/requirement/:requirementId/specialists'
+    ],
     component: Specialists
 }, {
     exact    : true,
@@ -71,9 +74,12 @@ export const baseRoutes: Array<IProps> = [{
     path     : '/specialists/create',
     component: SpecialistsCreate
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/specialists/:specialistId',
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/specialists/:specialistId',
+        '/organizations/:organizationId/projects/:projectId/requests/specialists/:specialistId'
+    ],
     component: Person
 }, {
     exact : true,
@@ -94,7 +100,7 @@ export const baseRoutes: Array<IProps> = [{
     path  : [
         '/requests/:requestId',
         '/requests/:requestId/:subpage(edit|specialists)',
-        '/organizations/:organizationId/projects/:projectId/requests/:requestId/:subpage(edit|specialists)?'
+        '/organizations/:organizationId/projects/:projectId/requests/:requestId/:subpage(edit|candidates|requirement)?'
     ],
     component: ProjectRequest
 }, {

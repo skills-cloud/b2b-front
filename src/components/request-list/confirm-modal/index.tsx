@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
 
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
@@ -17,7 +16,6 @@ interface IEditModal {
 
 const ConfirmModal = ({ setVisible, requestId, requestName, onClickCancel }: IEditModal) => {
     const { t } = useTranslation();
-    const history = useHistory();
 
     const [deleteMainRequestById] = mainRequest.useDeleteMainRequestByIdMutation();
 
@@ -26,7 +24,6 @@ const ConfirmModal = ({ setVisible, requestId, requestName, onClickCancel }: IEd
             deleteMainRequestById({ id: requestId })
                 .unwrap()
                 .then(() => {
-                    history.push('/requests');
                     setVisible(false);
                 })
                 .catch(console.error);

@@ -9,26 +9,26 @@ import SidebarLayout from 'component/layout/sidebar';
 import Section from 'component/section';
 import IconArrowLeftFull from 'component/icons/arrow-left-full';
 import SidebarNav, { NavItem } from 'component/nav';
-
-import ESectionInvariants from 'route/project-request/components/section-invariants';
-import MainInfo from 'route/project-request/components/main-info';
-import Requirements from 'route/project-request/components/requirements';
-import Customer from 'route/project-request/components/customer';
-import ProjectRequestPdf from 'route/project-request/components/documents/pdf';
-import ProjectRequestDocx from 'route/project-request/components/documents/docx';
-import ProjectRequestCsv from 'route/project-request/components/documents/xlsx';
 import { H5 } from 'component/header';
 import Wrapper from 'component/section/wrapper';
 
 import { mainRequest } from 'adapter/api/main';
 
-import Specialists from './specialists';
+import MainInfo from './components/main-info';
+import Requirements from './components/requirements';
+import Customer from './components/customer';
+import ProjectRequestPdf from './components/documents/pdf';
+import ProjectRequestDocx from './components/documents/docx';
+import ProjectRequestCsv from './components/documents/xlsx';
+import ESectionInvariants from './components/section-invariants';
+import Candidates from './candidates';
 import style from './index.module.pcss';
 
 const ProjectRequest = () => {
     const cn = useClassnames(style);
     const { hash } = useLocation();
     const history = useHistory();
+    const location = useLocation();
     const { t } = useTranslation();
     const params = useParams<{ subpage?: string, requestId: string }>();
     const { data } = mainRequest.useGetMainRequestByIdQuery(
@@ -45,8 +45,8 @@ const ProjectRequest = () => {
     }
 
     const elContent = () => {
-        if(params.subpage === 'specialists') {
-            return <Specialists />;
+        if(params.subpage === 'candidates') {
+            return <Candidates />;
         }
 
         return (
@@ -85,11 +85,11 @@ const ProjectRequest = () => {
                         {t(`routes.project-request.blocks.sections.${nav}`)}
                     </NavItem>
                 ))}
-                <NavItem
-                    to={`/requests/${params.requestId}/specialists/#all`}
-                    selected={hash.slice(1) === 'applicant'}
-                >
+                <NavItem to={`${location.pathname}/candidates/#all`}>
                     {t('routes.project-request.blocks.sections.applicant')}
+                </NavItem>
+                <NavItem to={`${location.pathname}/timesheets`}>
+                    {t('routes.project-request.blocks.sections.timesheets')}
                 </NavItem>
             </Fragment>
         );

@@ -74,6 +74,7 @@
             "download": "Скачать xlsx"
         },
         "breadcrumbs": {
+            "candidates": "Кандидаты",
             "specialists": "Специалисты",
             "organizations": "Организации",
             "requests": "Проектные запросы",
@@ -83,7 +84,8 @@
             "main-info": "Основная информация",
             "cards": "Карточки прав и доступа",
             "create": "Создать",
-            "edit": "Редактировать"
+            "edit": "Редактировать",
+            "requirement": "Требование"
         }
     },
     "routes": {
@@ -242,7 +244,6 @@
                 "sections": {
                     "requests": "Проектные запросы",
                     "main-info":"Основная информация",
-                    "timesheets": "Таймшиты",
                     "cards":"Карточки прав и доступа"
                 },
                 "customer": "Заказчик",
@@ -557,6 +558,34 @@
                 }
             }
         },
+        "candidates": {
+            "main": {
+                "title": "Специалисты",
+                "users": {
+                    "empty": "Поиск не дал результатов."
+                },
+                "first-name": "Имя не указано",
+                "last-name": "Фамилия не указана",
+                "competencies": "Ключевые навыки",
+                "rate": "Ставка в час",
+                "experience_0": "{{count}} год",
+                "experience_1": "{{count}} года",
+                "experience_2": "{{count}} лет",
+                "experience_3": "{{count}} лет",
+                "experience_4": "{{count}} лет",
+                "experience_5": "{{count}} лет",
+                "cards": "Карточки прав и доступа",
+                "cards-add": "Добавить"
+            },
+            "modal-card": {
+                "add-title": "Добавить карточки доступа",
+                "title_current": "Карточка «{{name}}»",
+                "title_add": "Добавить карточки доступа",
+                "cancel": "Отмена",
+                "submit": "Сохранить",
+                "date": "Дата выдачи"
+            }
+        },
         "specialists": {
             "main": {
                 "title": "Специалисты",
@@ -787,6 +816,7 @@
             },
             "requirements": {
                 "edit-modal": {
+                    "empty": "Не добавлено ни одной роли",
                     "header_competence": "Компетенции",
                     "header_not_competence": "Условия работы",
                     "cancel": "Отмена",
@@ -797,7 +827,7 @@
                     "tab_other": "Разное",
                     "tab_timing": "Сроки запроса",
                     "people" : "{{position}} ({{people}} чел.)",
-                    "addRole": "Добавить роль",
+                    "add-role": "Добавить роль",
                     "new-role": "Новая роль",
                     "people-in-roles" : "{{people}} чел.",
                     "position": "Начните вводить, например, “Front-end Dev”",
@@ -826,7 +856,8 @@
                     "main-info": "Основная информация",
                     "requirements": "Требования к сотруднику",
                     "employer": "Заказчик",
-                    "applicant": "Кандидаты"
+                    "applicant": "Кандидаты",
+                    "timesheets": "Таймшиты"
                 },
                 "specialists-sections": {
                     "all": "Все кандидаты",

@@ -86,7 +86,7 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem selected={false}>
                                                     <DeleteAction
-                                                        onClick={onClickConfirmDelete(String(requestItem.id), requestItem.project?.name)}
+                                                        onClick={onClickConfirmDelete(String(requestItem.id), requestItem.title)}
                                                         label={t('routes.project-request-list.requests.actions.delete')}
                                                     />
                                                 </DropdownMenuItem>
