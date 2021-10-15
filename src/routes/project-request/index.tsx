@@ -118,7 +118,7 @@ const ProjectRequest = () => {
         const header = params.subpage === 'candidates' && (
             <div className={cn('project-request__header')}>
                 <IconArrowLeftFull svg={{ className: cn('project-request__icon-back'), onClick: onClickBack }} />
-                {data?.project?.name}
+                {data?.title}
             </div>
         );
 
