@@ -621,14 +621,6 @@
                     "requirement-no-name": "Название требования не указано"
                 }
             },
-            "modal-card": {
-                "add-title": "Добавить карточки доступа",
-                "title_current": "Карточка «{{name}}»",
-                "title_add": "Добавить карточки доступа",
-                "cancel": "Отмена",
-                "submit": "Сохранить",
-                "date": "Дата выдачи"
-            },
             "sidebar": {
                 "filters": {
                     "title": "Фильтры",
