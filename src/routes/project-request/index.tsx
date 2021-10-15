@@ -94,7 +94,7 @@ const ProjectRequest = () => {
             </Fragment>
         );
 
-        if(params.subpage === 'specialists') {
+        if(params.subpage === 'candidates') {
             content = (
                 <Fragment>
                     <NavItem
@@ -115,7 +115,7 @@ const ProjectRequest = () => {
             );
         }
 
-        const header = params.subpage === 'specialists' && (
+        const header = params.subpage === 'candidates' && (
             <div className={cn('project-request__header')}>
                 <IconArrowLeftFull svg={{ className: cn('project-request__icon-back'), onClick: onClickBack }} />
                 {data?.project?.name}

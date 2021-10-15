@@ -108,8 +108,8 @@ export interface IParamsLinkCv {
     status?: EStatus,
     date_from?: string,
     date_to?: string,
-    rating?: 1 | 2 | 3 | 4 | 5,
-    organization_project_card_items: Array<RequestRequirementCvOrganizationProjectCardItem>
+    rating?: number,
+    organization_project_card_items?: Array<RequestRequirementCvOrganizationProjectCardItem>
 }
 
 export enum ERequestStatus {

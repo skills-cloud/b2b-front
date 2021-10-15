@@ -24,7 +24,7 @@ export interface RequestRequirementCv {
     date_from?: NoName1;
     date_to?: NoName2;
     id?: ID;
-    organization_project_card_items: RequestRequirementCvOrganizationProjectCardItem[];
+    organization_project_card_items?: RequestRequirementCvOrganizationProjectCardItem[];
     rating?: NoName3;
     request_requirement_id?: RequestRequirementId;
     status?: NoName4;

@@ -123,7 +123,7 @@ export interface RequestRequirementCvRead {
     date_from?: NoName15;
     date_to?: NoName16;
     id?: ID3;
-    organization_project_card_items: RequestRequirementCvOrganizationProjectCardItem[];
+    organization_project_card_items?: RequestRequirementCvOrganizationProjectCardItem[];
     rating?: NoName17;
     request_requirement_id?: RequestRequirementId1;
     status?: NoName18;

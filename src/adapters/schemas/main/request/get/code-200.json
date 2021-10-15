@@ -750,9 +750,6 @@
                     "type": "string"
                 }
             },
-            "required": [
-                "organization_project_card_items"
-            ],
             "type": "object"
         },
         "RequestRequirementRead": {
