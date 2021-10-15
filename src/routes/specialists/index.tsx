@@ -10,7 +10,6 @@ import { normalizeObject } from 'src/helper/normalize-object';
 import useModalClose from 'component/modal/use-modal-close';
 
 import IconPlus from 'component/icons/plus';
-import IconStar from 'component/icons/star';
 import IconClose from 'component/icons/close';
 import FormInput from 'component/form/input';
 import InputDictionary from 'component/form/input-dictionary';
@@ -26,7 +25,7 @@ import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
 
 import { cv } from 'adapter/api/cv';
-import { CvListReadFull, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
+import { CvListReadFull, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 import { IValue } from 'component/form/select';
 
 import style from './index.module.pcss';

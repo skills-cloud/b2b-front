@@ -179,11 +179,11 @@ export const Candidates = () => {
                 .catch(console.error);
         }
 
-        if(data?.project_id) {
+        if(data?.organization_project_id) {
             dispatch(mainRequest
                 .endpoints
                 .getOrganizationProjectCardItem
-                .initiate({ organization_project_id: [String(data.project_id)] })
+                .initiate({ organization_project_id: [String(data.organization_project_id)] })
             ).then(({ data: cardItems }) => {
                 if(cardItems) {
                     setCardTree(cardItems);
