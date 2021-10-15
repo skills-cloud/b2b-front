@@ -244,7 +244,7 @@ const Request = (props: IProps) => {
         if(request.requirements?.length) {
             return (
                 <div key={request.id} className={cn('request__item')}>
-                    <H4>{request.project?.name || t('routes.specialists.main.projects.empty-name')}</H4>
+                    <H4>{request.title || t('routes.specialists.main.projects.empty-name')}</H4>
                     <ul className={cn('request__item-requirements')}>
                         {elRequestRequirements(request.organization_project?.id, request.requirements)}
                     </ul>

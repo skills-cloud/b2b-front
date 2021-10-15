@@ -30,6 +30,7 @@ import { CvListReadFull, CvCareerRead, CvPositionCompetenceRead } from 'adapter/
 import { IValue } from 'component/form/select';
 
 import style from './index.module.pcss';
+import StarRating from 'component/star-rating';
 
 export interface IFormValues {
     search?: string,
@@ -136,8 +137,10 @@ export const Specialists = () => {
         );
     };
 
-    const elAdditionalBlock = (cvItem?: CvCareerRead, showLinkedItems?: boolean, cvId?: number) => {
-        if(cvItem) {
+    const elAdditionalBlock = (cvListFull?: CvListReadFull, showLinkedItems?: boolean, cvId?: number) => {
+        const cvItem = cvListFull?.career?.[0];
+
+        if(cvListFull && cvItem) {
             const dateFrom = cvItem.date_from ? new Date(cvItem.date_from) : new Date();
             const dateTo = cvItem.date_to ? new Date(cvItem.date_to) : new Date();
             const experience = differenceInCalendarYears(dateTo, dateFrom);
@@ -150,10 +153,7 @@ export const Specialists = () => {
                                 count: experience
                             })}
                         </div>
-                        <div className={cn('specialists__user-info-exp-stars')}>
-                            <IconStar svg={{ className: cn('specialists__user-info-exp-star-icon') }} />
-                            {experience}
-                        </div>
+                        <StarRating rating={cvListFull.rating} />
                         <div className={cn('specialists__user-info-exp-add')}>
                             <IconPlus
                                 svg={{
@@ -213,7 +213,7 @@ export const Specialists = () => {
                             src: cvItem.photo
                         }}
                     />
-                    {elAdditionalBlock(cvItem.career?.[0], showLinkedItems, cvItem.id)}
+                    {elAdditionalBlock(cvItem, showLinkedItems, cvItem.id)}
                 </div>
                 <div className={cn('specialists__user-competencies')}>
                     <p className={cn('specialists__block-title')}>

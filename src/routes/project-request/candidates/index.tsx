@@ -24,6 +24,7 @@ import { OrganizationProjectCardItemReadTree } from 'adapter/types/main/organiza
 import { RequestRequirementCvRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 
 import style from './index.module.pcss';
+import StarRating from 'component/star-rating';
 
 interface ICard extends OrganizationProjectCardItemReadTree{
     count: number
@@ -222,10 +223,7 @@ export const Candidates = () => {
                                 count: experience
                             })}
                         </div>
-                        <div className={cn('candidates__user-info-exp-stars')} onClick={onSetRating(cvItem)}>
-                            <IconStar svg={{ className: cn('candidates__user-info-exp-star-icon') }} />
-                            {cvItem.rating || 0}
-                        </div>
+                        <StarRating rating={cvItem.rating || 0} onClick={onSetRating(cvItem)} />
                     </div>
                 </div>
             );
