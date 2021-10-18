@@ -14,12 +14,12 @@ import Section from 'component/section';
 import DeleteAction from 'component/section/actions/delete';
 
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
-import ESectionInvariants from 'route/project-request/components/section-invariants';
 
 import { useClassnames } from 'hook/use-classnames';
 import useFormatDistance from 'component/dates/format-distance';
 import useModalClose from 'component/modal/use-modal-close';
 
+import ESectionInvariants from '../section-invariants';
 import EditModal from '../edit-modal';
 import ConfirmModal from '../confirm-modal';
 import projectRequest from './data.mock';
@@ -27,12 +27,12 @@ import style from './index.module.pcss';
 
 const MAIN_INFO_FIELDS = [
     'industry_sector',
-    'project',
+    'organization_project',
     'resource_manager',
     'recruiter',
     'type',
     'requirements',
-    'project_description',
+    'description',
     'customer'
 ] as const;
 
@@ -53,6 +53,10 @@ const MainInfo = (data: RequestRead) => {
 
     const onClickConfirmDelete = () => {
         setConfirm(true);
+    };
+
+    const onSetVisible = () => {
+        setVisible(false);
     };
 
     const renderProjectField = (field: typeof PROJECT_TERM_FIELDS[number]) => {
@@ -102,11 +106,14 @@ const MainInfo = (data: RequestRead) => {
                     content = `${data[field]?.last_name} ${data[field]?.first_name.slice(0, 1)}.`;
                 }
                 break;
-            case 'project_description':
-                content = project?.description;
+            case 'description':
+                content = data?.description;
                 break;
             case 'requirements':
                 content = requirements?.length;
+                break;
+            case 'customer':
+                content = data?.organization_project?.organization?.name;
                 break;
             default:
                 content = data[field]?.name;
@@ -120,26 +127,23 @@ const MainInfo = (data: RequestRead) => {
     };
 
     const elHeader = () => {
-        const actions = [{
-            elem: (
-                <div className={cn('main-info__header')} onClick={() => setVisible(true)}>
-                    <EditAction />
-                    {t('routes.project-request.blocks.header.controls.edit')}
-                </div>
-            )
-        }, {
-            elem: (
-                <div className={cn('main-info__header')} onClick={onClickConfirmDelete}>
-                    <DeleteAction className={cn('request-list__action')} />
-                    {t('routes.project-request.blocks.header.controls.delete')}
-                </div>
-            )
-        }];
+        const actions = [
+            <EditAction
+                key="edit"
+                onClick={() => setVisible(true)}
+                label={t('routes.project-request.blocks.header.controls.edit')}
+            />,
+            <DeleteAction
+                key="delete"
+                onClick={onClickConfirmDelete}
+                label={t('routes.project-request.blocks.header.controls.delete')}
+            />
+        ];
 
         return (
-            <div className={cn('gap-bottom')} id={ESectionInvariants.MainInfo}>
+            <div className={cn('main-info__gap-bottom')} id={ESectionInvariants.MainInfo}>
                 <SectionHeader dropdownActions={actions}>
-                    {project?.name || t('routes.project-request.blocks.empty-title')}
+                    {data?.title || t('routes.project-request.blocks.empty-title')}
                 </SectionHeader>
             </div>
         );
@@ -180,7 +184,7 @@ const MainInfo = (data: RequestRead) => {
                     </SectionContentListItem>
                 ))}
             </SectionContentList>
-            {visible && <EditModal setVisible={setVisible} fields={data} />}
+            {visible && <EditModal setVisible={onSetVisible} fields={data} />}
             {confirm && project && (
                 <ConfirmModal
                     setVisible={setConfirm}

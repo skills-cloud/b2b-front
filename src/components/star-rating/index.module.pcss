@@ -1,0 +1,52 @@
+.star-rating {
+    padding: 5px 10px;
+    border-radius: 16px;
+    background-color: var(--color-gray-10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-120);
+    font-size: 12px;
+    line-height: 14px;
+
+    &_hoverable {
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__icon {
+        width: 20px;
+        height: 20px;
+        fill: var(--color-gray-100);
+        margin-right: 4px;
+        stroke: var(--color-gray-100);
+
+        &_active {
+            fill: var(--color-dark-orange);
+            stroke: var(--color-dark-orange);
+        }
+
+        &_active-quarter {
+            --url: url("#quarter");
+            stroke: var(--color-dark-orange);
+            fill: var(--url);
+        }
+
+        &_active-half {
+            --url: url("#half");
+            stroke: var(--color-dark-orange);
+            fill: var(--url);
+        }
+
+        &_active-most {
+            --url: url("#most");
+            stroke: var(--color-dark-orange);
+            fill: var(--url);
+        }
+    }
+}

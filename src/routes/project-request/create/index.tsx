@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory, useParams } from 'react-router';
 
 import PageCentred from 'component/layout/page-centered';
 import Section from 'component/section';
 import Button from 'component/button';
-import history from 'component/core/history';
 
 import ProjectRequestForm from 'route/project-request/components/form';
 
@@ -15,15 +15,22 @@ const FORM_ID = 'PROJECT_CREATE_FORM_ID';
 
 const ProjectsCreateForm = () => {
     const cn = useClassnames(style);
+    const history = useHistory();
     const { t } = useTranslation();
+    const params = useParams<{ organizationId: string, projectId: string }>();
 
     return (
         <PageCentred>
             <Section title={t('routes.project-request.create.title')}>
                 <div className={cn('form')}>
                     <ProjectRequestForm
-                        formId={FORM_ID} onSuccess={(id) => {
-                            history.push(`/requests/${id}#main-info`);
+                        formId={FORM_ID}
+                        onSuccess={(id) => {
+                            if(params.projectId && params.organizationId) {
+                                history.push(`/organizations/${params.organizationId}/projects/${params.projectId}/requests/${id}#main-info`);
+                            } else {
+                                history.push(`/requests/${id}#main-info`);
+                            }
                         }}
                     />
                     <div className={cn('separator')} />

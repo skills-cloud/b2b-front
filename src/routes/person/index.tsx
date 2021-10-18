@@ -111,7 +111,7 @@ export const Person = () => {
                 <Certificates id="person-block-certificates" />
                 <Files id="person-block-files" />
             </div>
-            <Request specialistId={parseInt(specialistId, 10)} showModal={showModal} onClickClose={onCloseModal} />
+            {showModal && <Request specialistId={parseInt(specialistId, 10)} onClickClose={onCloseModal} />}
         </div>
     );
 };

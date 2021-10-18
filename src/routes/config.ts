@@ -16,6 +16,7 @@ import Organization from 'route/organization';
 import OrganizationProjects from 'route/organization-projects';
 import Timesheets from 'route/timesheet';
 import Organizations from 'route/organizations';
+import OrganizationProjectCreate from 'route/organization-projects/create';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -36,8 +37,13 @@ export const baseRoutes: Array<IProps> = [{
 }, {
     exact    : true,
     layout   : Layout,
-    path     : '/organizations/:organizationId/projects/:projectId/timesheets',
+    path     : '/organizations/:organizationId/projects/:projectId/requests/:requestId/timesheets',
     component: Timesheets
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/organizations/:organizationId/projects/create',
+    component: OrganizationProjectCreate
 }, {
     exact    : true,
     layout   : Layout,
@@ -55,9 +61,12 @@ export const baseRoutes: Array<IProps> = [{
     path     : '/',
     component: Main
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/specialists',
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/specialists',
+        '/organizations/:organizationId/projects/:projectId/requests/:requestId/requirement/:requirementId/specialists'
+    ],
     component: Specialists
 }, {
     exact    : true,
@@ -65,14 +74,20 @@ export const baseRoutes: Array<IProps> = [{
     path     : '/specialists/create',
     component: SpecialistsCreate
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : ['/specialists/:specialistId', '/profile'],
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/specialists/:specialistId',
+        '/organizations/:organizationId/projects/:projectId/requests/specialists/:specialistId'
+    ],
     component: Person
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/requests/create',
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/requests/create',
+        '/organizations/:organizationId/projects/:projectId/requests/create'
+    ],
     component: ProjectCreate
 }, {
     exact    : true,
@@ -80,9 +95,13 @@ export const baseRoutes: Array<IProps> = [{
     path     : '/requests',
     component: ProjectRequestList
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : ['/requests/:requestId', '/requests/:requestId/:subpage(edit|specialists)'],
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/requests/:requestId',
+        '/requests/:requestId/:subpage(edit|specialists)',
+        '/organizations/:organizationId/projects/:projectId/requests/:requestId/:subpage(edit|candidates|requirement)?'
+    ],
     component: ProjectRequest
 }, {
     exact    : true,

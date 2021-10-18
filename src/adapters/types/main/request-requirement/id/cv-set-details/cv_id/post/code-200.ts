@@ -11,9 +11,12 @@ export type CvId = string;
 export type NoName1 = string;
 export type NoName2 = string;
 export type ID = number;
+export type Date = string;
+export type Id = number;
+export type NoName3 = number;
 export type RequestRequirementId = string;
-export type NoName3 = 'canceled' | 'candidate' | 'pre-candidate' | 'worker';
-export type NoName4 = string;
+export type NoName4 = 'canceled' | 'candidate' | 'pre-candidate' | 'worker';
+export type NoName5 = string;
 
 export interface RequestRequirementCv {
     created_at?: NoName;
@@ -21,8 +24,13 @@ export interface RequestRequirementCv {
     date_from?: NoName1;
     date_to?: NoName2;
     id?: ID;
-    organization_project_card_items_ids?: number[];
+    organization_project_card_items?: RequestRequirementCvOrganizationProjectCardItem[];
+    rating?: NoName3;
     request_requirement_id?: RequestRequirementId;
-    status?: NoName3;
-    updated_at?: NoName4;
+    status?: NoName4;
+    updated_at?: NoName5;
+}
+export interface RequestRequirementCvOrganizationProjectCardItem {
+    date?: Date;
+    id: Id;
 }

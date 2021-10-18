@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { stringify } from 'query-string';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
@@ -20,6 +20,7 @@ import Separator from 'component/separator';
 import Section from 'component/section';
 import Button from 'component/button';
 import Tooltip from 'component/tooltip';
+import Timeframe from 'component/timeframe';
 
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import AddRole from 'route/project-request/components/add-role';
@@ -47,6 +48,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const history = useHistory();
+    const { pathname } = useLocation();
     const [deleteMainRequestById] = mainRequest.useDeleteMainRequestRequirementByIdMutation();
     const [activeTab, setActiveTab] = useState<ETabs>(ETabs.Competence);
     const [editID, setEditID] = useState<number>();
@@ -65,12 +67,11 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
             if(req) {
                 const params = {
                     position_id         : req.position_id,
-                    years               : req.id,
-                    competencies_ids_any: req.competencies?.map((comp) => comp.competence_id),
-                    from_request_id     : req.id
+                    years               : req.experience_years,
+                    competencies_ids_any: req.competencies?.map((comp) => comp.competence_id)
                 };
 
-                history.push(`/specialists?${stringify(normalizeObject(params))}`);
+                history.push(`${pathname}/requirement/${requirementId}/specialists?${stringify(normalizeObject(params))}`);
             }
         }
     };
@@ -114,7 +115,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     description,
                     work_location_city: location,
                     work_location_address: address,
-                    type_of_employment
+                    type_of_employment,
+                    date_from,
+                    date_to
                 } = requirement;
                 const ancor = index === 0 ? { id: ESectionInvariants.Requirements } : {};
                 let contextLocation = 'empty';
@@ -131,13 +134,23 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     <Section key={requirementId}>
                         <div className={cn('gap-bottom')}>
                             <SectionHeader
-                                dropdownActions={[{
-                                    elem: <EditAction onClick={onEditAction(requirementId)} />
-                                }, {
-                                    elem: <DeleteAction onClick={onDeleteAction(requirementId)} />
-                                }, {
-                                    elem: <SearchAction onClick={onClickSearch(requirementId)} />
-                                }]}
+                                dropdownActions={[
+                                    <EditAction
+                                        key="edit"
+                                        label={t('routes.project-request-list.dropdown.edit')}
+                                        onClick={onEditAction(requirementId)}
+                                    />,
+                                    <DeleteAction
+                                        key="delete"
+                                        label={t('routes.project-request-list.dropdown.delete')}
+                                        onClick={onDeleteAction(requirementId)}
+                                    />,
+                                    <SearchAction
+                                        key="search"
+                                        label={t('routes.project-request-list.dropdown.search')}
+                                        onClick={onClickSearch(requirementId)}
+                                    />
+                                ]}
                             >
                                 {name || t('routes.project-request.blocks.empty-title')}
                             </SectionHeader>
@@ -223,7 +236,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                             </React.Fragment>
                         )}
 
-                        {description && (
+                        {!!(description || (date_from && date_to)) && (
                             <React.Fragment>
                                 <Separator />
                                 <H4>
@@ -232,6 +245,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                 <SectionContentList>
                                     <SectionContentListItem title={t('routes.project-request.blocks.other.description')}>
                                         {description}
+                                    </SectionContentListItem>
+                                    <SectionContentListItem title={t('routes.project-request.blocks.other.deadline')}>
+                                        {!!(date_from && date_to) && <Timeframe startDate={date_from} endDate={date_to} />}
                                     </SectionContentListItem>
                                 </SectionContentList>
                             </React.Fragment>
@@ -263,7 +279,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                         setModalStep(EModalSteps.NewRole);
                                     }}
                                 >
-                                    {t('routes.project-request.requirements.edit-modal.addRole')}
+                                    {t('routes.project-request.requirements.edit-modal.add-role')}
                                 </span>
                             )}
                             <Button

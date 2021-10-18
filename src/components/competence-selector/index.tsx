@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useClassnames } from 'hook/use-classnames';
 
 import TreeList from 'component/tree-list';
-import Dropdown from 'component/dropdown/base';
+import Dropdown from 'component/dropdown';
 import DropdownMenuItem from 'component/dropdown/menu-item';
 import DropdownMenu from 'component/dropdown/menu';
 
@@ -13,13 +13,13 @@ import { dictionary } from 'adapter/api/dictionary';
 import style from './index.module.pcss';
 
 type TOnChangeExperience = (id: number, expirienceId: number) => void;
-type TCompetenceExpirienceMap = Record<string, number>;
+type TCompetenceExperienceMap = Record<string, number>;
 
 interface ICompetenceSelector {
     checked: Array<string>,
     setChecked: (id: Array<string>) => void,
-    competenceExpirienceMap: TCompetenceExpirienceMap,
-    setCompetenceExpirienceMap: (expirienceMap: TCompetenceExpirienceMap) => void
+    competenceExperienceMap: TCompetenceExperienceMap,
+    setCompetenceExperienceMap: (experienceMap: TCompetenceExperienceMap) => void
 }
 
 
@@ -28,10 +28,10 @@ const experienceYears = [1, 3, 5, 100];
 interface IExperienceSelector {
     id?: number,
     onChangeExperience: TOnChangeExperience,
-    competenceExpirienceMap: TCompetenceExpirienceMap
+    competenceExperienceMap: TCompetenceExperienceMap
 }
 
-const ExperienceSelector = ({ id, onChangeExperience, competenceExpirienceMap }: IExperienceSelector) => {
+const ExperienceSelector = ({ id, onChangeExperience, competenceExperienceMap }: IExperienceSelector) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
 
@@ -46,7 +46,7 @@ const ExperienceSelector = ({ id, onChangeExperience, competenceExpirienceMap }:
                     {experienceYears.map((item) => (
                         <DropdownMenuItem
                             key={item}
-                            selected={competenceExpirienceMap[id] === item}
+                            selected={competenceExperienceMap[id] === item}
                             onClick={() => {
                                 onChangeExperience(id, item);
                                 onClose();
@@ -60,20 +60,20 @@ const ExperienceSelector = ({ id, onChangeExperience, competenceExpirienceMap }:
         >
             <span className={cn('competence-selector__experience-activator')}>
                 {t('components.checkbox-tree.experience.invariant', {
-                    context: competenceExpirienceMap[id] ?? 'title'
+                    context: competenceExperienceMap[id] ?? 'title'
                 })}
             </span>
         </Dropdown>
     );
 };
 
-const CompetenceSelector = ({ checked, setChecked, competenceExpirienceMap, setCompetenceExpirienceMap }: ICompetenceSelector) => {
+const CompetenceSelector = ({ checked, setChecked, competenceExperienceMap, setCompetenceExperienceMap }: ICompetenceSelector) => {
     const cn = useClassnames(style);
     const { data, isLoading } = dictionary.useGetCompetenceTreeQuery(undefined);
 
     const onSetRequirementExperience: TOnChangeExperience = (competenceId, experienceId) => {
-        setCompetenceExpirienceMap({
-            ...competenceExpirienceMap,
+        setCompetenceExperienceMap({
+            ...competenceExperienceMap,
             [competenceId]: experienceId
         });
     };
@@ -96,7 +96,7 @@ const CompetenceSelector = ({ checked, setChecked, competenceExpirienceMap, setC
                     <ExperienceSelector
                         id={props?.id}
                         onChangeExperience={onSetRequirementExperience}
-                        competenceExpirienceMap={competenceExpirienceMap}
+                        competenceExperienceMap={competenceExperienceMap}
                     />
                 </span>
             )}

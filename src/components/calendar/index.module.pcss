@@ -202,9 +202,54 @@
             }
         }
 
-        /* Занят */
-        &_0 {
+        /* Занят на проекте */
+        &_busy {
+            border-color: var(--color-blue-primary);
+            line-height: 26px;
+            border-width: 3px;
+        }
+
+        /* Офис полная */
+        &_type-of-employment-1 {
+            border-color: var(--color-dark-orange);
+            line-height: 26px;
+            border-width: 3px;
+        }
+
+        /* Офис частичная */
+        &_type-of-employment-2 {
+            border-left-color: var(--color-dark-orange);
+            border-bottom-color: var(--color-dark-orange);
+            line-height: 26px;
+            border-width: 3px;
+        }
+
+        /* Удалёнка полная */
+        &_type-of-employment-3 {
             border-color: var(--color-calendar-border-selected);
+            line-height: 26px;
+            border-width: 3px;
+        }
+
+        /* Удалёнка частичная */
+        &_type-of-employment-4 {
+            border-top-color: var(--color-calendar-border-selected);
+            border-right-color: var(--color-calendar-border-selected);
+            line-height: 26px;
+            border-width: 3px;
+        }
+
+        /* Офис / Удалёнка полная */
+        &_type-of-employment-5 {
+            border-color: var(--color-calendar-border-selected) var(--color-calendar-border-selected) var(--color-dark-orange) var(--color-dark-orange);
+            line-height: 26px;
+            border-width: 3px;
+        }
+
+        /* Офис / Удалёнка частичная */
+        &_type-of-employment-6 {
+            border-top-color: var(--color-calendar-border-selected);
+            border-bottom-color: var(--color-dark-orange);
             line-height: 26px;
             border-width: 3px;
         }

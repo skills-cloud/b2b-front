@@ -1,11 +1,11 @@
 {
     "allOf": [
         {
-            "$ref": "#/definitions/OrganizationProjectCardItemTree"
+            "$ref": "#/definitions/OrganizationProjectCardItem"
         }
     ],
     "definitions": {
-        "OrganizationProjectCardItemTree": {
+        "OrganizationProjectCardItem": {
             "properties": {
                 "description": {
                     "nullable": true,
@@ -37,6 +37,17 @@
                     "type": "integer",
                     "x-url-object-detail": "/api/main/organization-project-card-item/$id/",
                     "x-url-object-list": "/api/main/organization-project-card-item/"
+                },
+                "positions_ids": {
+                    "items": {
+                        "nullable": true,
+                        "title": "должности",
+                        "type": "integer",
+                        "x-url-object-detail": "/api/dictionary/position/$id/",
+                        "x-url-object-list": "/api/dictionary/position/"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
                 }
             },
             "required": [

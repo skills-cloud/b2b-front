@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useForm, FormProvider } from 'react-hook-form';
 
 import { IStyle, useClassnames } from 'hook/use-classnames';
-import useModalClose from 'component/modal/use-modal-close';
 
 import Loader from 'component/loader';
 import { H2, H4 } from 'component/header';
@@ -10,107 +10,221 @@ import IconPlus from 'component/icons/plus';
 import IconApply from 'component/icons/apply';
 import Modal from 'component/modal';
 import IconClose from 'component/icons/close';
+import DateInput from 'component/form/date';
 
-import { mainRequest } from 'adapter/api/main';
+import { EStatus, mainRequest } from 'adapter/api/main';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/get/code-200';
+import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 
 import style from './index.module.pcss';
+import IconChevronRight from 'component/icons/chevron-right';
+import IconWarning from 'component/icons/warning';
 
 export interface IProps {
+    requestId?: string,
+    projectId?: string,
+    requirementId?: string,
     className?: IStyle | string,
     specialistId?: number,
-    showModal: boolean,
     onClickClose?(): void
 }
 
 const Request = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
+    const context = useForm({
+        mode: 'onChange'
+    });
 
-    const { data, isLoading } = mainRequest.useGetMainRequestQuery(undefined);
-
-    const [addSpecialist, { isLoading: isLoadingAdd, isSuccess }] = mainRequest.usePostRequestRequirementLinkCvMutation();
-
+    const [expandedId, setExpandedId] = useState<number>();
+    const [expandedProjectId, setExpandedProjectId] = useState<number>();
     const [currentReqId, setCurrentReqId] = useState<number>();
-    const [showModal, setShowModal] = useState<boolean>(false);
+
+    const { data, isLoading } = mainRequest.useGetMainRequestQuery(undefined, { skip: !!props.requestId });
+    const { data: requestData, isLoading: isLoadingRequest } = mainRequest.useGetMainRequestByIdQuery({
+        id: props.requestId as string
+    }, {
+        skip: !props.requestId
+    });
+    const { data: requirementData } = mainRequest.useGetMainRequestRequirementByIdQuery({ id: String(expandedId) }, { skip: !expandedId });
+
+    const [addSpecialist, { isLoading: isLoadingAdd, isSuccess, isError }] = mainRequest.usePostRequestRequirementLinkCvMutation();
 
     useEffect(() => {
-        setShowModal(props.showModal);
-    }, [props.showModal]);
+        if(requestData?.requirements) {
+            const requirement = requestData?.requirements.find((item) => String(item.id) === props.requirementId);
 
-    useModalClose(showModal, setShowModal);
+            if(requirement) {
+                context.reset({
+                    date_from : requirement.date_from,
+                    date_to   : requirement.date_to,
+                    id        : requirement.id,
+                    project_id: requestData.organization_project_id
+                });
+            }
+        }
+    }, [JSON.stringify(requestData?.requirements)]);
+
+    useEffect(() => {
+        if(requirementData && expandedProjectId) {
+            context.reset({
+                date_from : requirementData.date_from,
+                date_to   : requirementData.date_to,
+                id        : requirementData.id,
+                project_id: expandedProjectId
+            });
+        }
+    }, [JSON.stringify(requirementData), expandedProjectId]);
 
     const onClickClose = () => {
-        setShowModal(false);
         props.onClickClose?.();
     };
 
-    const onClickAddSpecialist = (requirementId?: number) => () => {
-        if(requirementId) {
-            setCurrentReqId(requirementId);
+    const onClickExpand = (projectId?: number, reqId?: number) => () => {
+        if(projectId) {
+            setExpandedProjectId(projectId);
+        }
 
+        if(reqId) {
+            setExpandedId((oldState) => {
+                if(reqId !== oldState) {
+                    return reqId;
+                }
+
+                return undefined;
+            });
+        }
+    };
+
+    const onSubmit = context.handleSubmit(
+        (formData) => {
             addSpecialist({
-                id   : String(requirementId),
-                cv_id: String(props.specialistId),
-                data : {}
+                id       : String(formData.id),
+                cv_id    : String(props.specialistId),
+                date_from: formData.date_from,
+                date_to  : formData.date_to,
+                status   : EStatus.PreCandidate
             })
                 .unwrap()
                 .catch(console.error);
+        },
+        (formError) => {
+            console.error(formError);
+        }
+    );
+
+    const onClickAddSpecialist = (requirementId?: number) => (e: MouseEvent<HTMLOrSVGElement>) => {
+        e.preventDefault();
+
+        if(requirementId) {
+            setCurrentReqId(requirementId);
+
+            void onSubmit();
         }
     };
 
     const elIconStatus = (reqId?: number) => {
+        const wrapperClass = cn('request__icon-wrapper', {
+            'request__icon-wrapper_success': isSuccess && currentReqId === reqId
+        });
         let content = (
-            <IconPlus
-                svg={{
-                    onClick  : onClickAddSpecialist(reqId),
-                    className: cn('request__item-add-icon')
-                }}
-            />
+            <button
+                type="submit"
+                className={wrapperClass}
+            >
+                <IconPlus
+                    svg={{
+                        onClick  : onClickAddSpecialist(reqId),
+                        className: cn('request__item-add-icon')
+                    }}
+                />
+            </button>
         );
 
         if(isLoadingAdd && currentReqId === reqId) {
             content = <Loader />;
         }
 
-        if(isSuccess && currentReqId === reqId) {
+        if(isError && currentReqId === reqId) {
             content = (
-                <IconApply
+                <IconWarning
                     svg={{
-                        className: cn('request__item-add-icon', 'request__item-add-icon_apply')
+                        className: cn('request__item-add-icon', 'request__item-add-icon_warning')
                     }}
                 />
             );
         }
 
+        if(isSuccess && currentReqId === reqId) {
+            content = (
+                <div className={wrapperClass}>
+                    <IconApply
+                        svg={{
+                            className: cn('request__item-add-icon', 'request__item-add-icon_apply')
+                        }}
+                    />
+                </div>
+            );
+        }
+
         return (
-            <div
-                className={cn('request__item-add-icon-wrapper', {
-                    'request__item-add-icon-wrapper_success': isSuccess && currentReqId === reqId
-                })}
-            >
+            <div className={cn('request__item-content')}>
                 {content}
             </div>
         );
     };
 
-    const elRequestRequirements = (requirements?: Array<RequestRequirementRead>) => {
-        if(requirements?.length) {
-            return (
-                requirements?.map((requirement) => (
-                    <li key={requirement.id} className={cn('request__item-requirement')}>
-                        {requirement.name || requirement.position?.name || t('routes.specialists.main.projects.requirement-no-name')}
-                        {elIconStatus(requirement.id)}
-                    </li>
-                ))
-            );
-        }
-
+    const elForm = (requirement: RequestRequirementRead) => {
         return (
-            <li className={cn('request__item-requirement')}>
-                {t('routes.specialists.main.projects.requirement-empty')}
-            </li>
+            <FormProvider {...context}>
+                <form className={cn('request__form')}>
+                    <DateInput name="date_from" />
+                    <DateInput name="date_to" />
+                    {elIconStatus(requirement.id)}
+                </form>
+            </FormProvider>
         );
+    };
+
+    const elRequestRequirements = (projectId?: number, requirements?: Array<RequestRequirementRead>) => {
+        if(requirements?.length) {
+            if(props.requirementId) {
+                const itemToRender = requirements.find((item) => String(item.id) === props.requirementId);
+
+                if(itemToRender) {
+                    return (
+                        <li className={cn('request__item-requirement')}>
+                            {itemToRender.name || itemToRender.position?.name || t('routes.specialists.main.projects.requirement-no-name')}
+                            {elForm(itemToRender)}
+                        </li>
+                    );
+                }
+            }
+
+            return requirements?.map((requirement) => {
+                return (
+                    <li
+                        key={requirement.id}
+                        className={cn('request__item-requirement', {
+                            'request__item-requirement_full': expandedId !== requirement.id
+                        })}
+                    >
+                        <div className={cn('request__item-requirement-expand')}>
+                            <IconChevronRight
+                                svg={{
+                                    onClick  : onClickExpand(projectId, requirement.id),
+                                    className: cn('request__expand-arrow', {
+                                        'request__expand-arrow_down': expandedId === requirement.id
+                                    })
+                                }}
+                            />
+                            {requirement.name || requirement.position?.name || t('routes.specialists.main.projects.requirement-no-name')}
+                        </div>
+                        {expandedId === requirement.id && elForm(requirement)}
+                    </li>
+                );
+            });
+        }
     };
 
     const elModalHeader = () => {
@@ -126,34 +240,40 @@ const Request = (props: IProps) => {
         );
     };
 
+    const elRequestItem = (request: RequestRead) => {
+        if(request.requirements?.length) {
+            return (
+                <div key={request.id} className={cn('request__item')}>
+                    <H4>{request.title || t('routes.specialists.main.projects.empty-name')}</H4>
+                    <ul className={cn('request__item-requirements')}>
+                        {elRequestRequirements(request.organization_project?.id, request.requirements)}
+                    </ul>
+                </div>
+            );
+        }
+    };
+
     const elContent = () => {
-        if(isLoading) {
+        if(isLoading || isLoadingRequest) {
             return <Loader />;
         }
 
         if(data?.results.length) {
-            return data?.results?.map((request) => (
-                <div key={request.id} className={cn('request__item')}>
-                    <H4>{request.project?.name || t('routes.specialists.main.projects.empty-name')}</H4>
-                    <ul className={cn('request__item-requirements')}>
-                        {elRequestRequirements(request.requirements)}
-                    </ul>
-                </div>
-            ));
+            return data?.results?.map((request) => elRequestItem(request));
+        }
+
+        if(requestData) {
+            return elRequestItem(requestData);
         }
     };
 
-    if(showModal) {
-        return (
-            <Modal header={elModalHeader()}>
-                <div className={cn('request')}>
-                    {elContent()}
-                </div>
-            </Modal>
-        );
-    }
-
-    return null;
+    return (
+        <Modal header={elModalHeader()}>
+            <div className={cn('request')}>
+                {elContent()}
+            </div>
+        </Modal>
+    );
 };
 
 export default Request;

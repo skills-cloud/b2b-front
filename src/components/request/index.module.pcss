@@ -11,32 +11,35 @@
 
     &__item-requirements {
         display: grid;
-        margin: 0;
+        margin: 16px 0 0;
+        padding-left: 0;
     }
 
     &__item-requirement {
         display: grid;
-        grid-auto-columns: max-content;
-        grid-auto-flow: column;
+        grid-template-columns: 1fr 2fr;
         align-items: center;
         grid-gap: 16px;
-        padding: 10px 12px;
         border-radius: 3px;
+        min-height: 40px;
+        box-sizing: border-box;
 
-        @media (hover: hover) and (pointer: fine) {
-
-            &:hover {
-                background-color: var(--color-gray-10);
-            }
+        &_full {
+            grid-template-columns: none;
         }
     }
 
-    &__item-add-icon-wrapper {
+    &__item-requirement-expand {
+        display: grid;
+        grid-gap: 8px;
+        grid-template-columns: 24px 1fr;
+        align-items: center;
+    }
+
+    &__icon-wrapper {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 20px;
-        height: 20px;
         border-radius: 50%;
         background-color: var(--color-gray-90);
 
@@ -53,15 +56,66 @@
         }
     }
 
+    &__expand-arrow {
+        transition: 300ms ease transform;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        @media screen and (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
+
+        &_down {
+            transform: rotate(90deg);
+        }
+    }
+
+    &__form {
+        display: grid;
+        grid-template-columns: 1fr 1fr 30px;
+        align-items: center;
+        grid-gap: 16px;
+    }
+
+    &__item-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+    }
+
     &__item-add-icon {
-        width: 16px;
-        height: 16px;
+        width: 24px;
+        height: 24px;
         fill: var(--color-white);
 
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
         &_apply {
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             fill: var(--color-dark-green);
+
+            & > g {
+                fill: var(--color-white);
+            }
+        }
+
+        &_warning {
+            width: 30px;
+            height: 30px;
+            fill: var(--color-red-error);
 
             & > g {
                 fill: var(--color-white);

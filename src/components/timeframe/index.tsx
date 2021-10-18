@@ -13,7 +13,7 @@ const Timeframe = ({ startDate, endDate }: ITimeframe) => {
         return null;
     }
     const dateFrom = format(new Date(startDate), FORMAT_DATE);
-    const dateTo = format(new Date(startDate), FORMAT_DATE);
+    const dateTo = format(new Date(endDate), FORMAT_DATE);
 
     return <React.Fragment>{dateFrom}&nbsp;&mdash; {dateTo}</React.Fragment>;
 };

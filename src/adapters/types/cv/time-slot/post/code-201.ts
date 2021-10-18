@@ -14,7 +14,8 @@ export type NoName1 = string;
 export type NoName2 = string;
 export type ID = number;
 export type NoName3 = boolean;
-export type NoName4 = number;
+export type NoName4 = boolean;
+export type NoName5 = number;
 export type TypeOfEmploymentId = number;
 
 export interface CvTimeSlot {
@@ -25,7 +26,8 @@ export interface CvTimeSlot {
     date_to?: NoName1;
     description?: NoName2;
     id?: ID;
-    is_work_permit_required?: NoName3;
-    price?: NoName4;
+    is_free?: NoName3;
+    is_work_permit_required?: NoName4;
+    price?: NoName5;
     type_of_employment_id: TypeOfEmploymentId;
 }

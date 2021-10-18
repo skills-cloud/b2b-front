@@ -9,10 +9,17 @@ import { RequestType as RequestTypeById } from 'adapter/types/main/request-type/
 import { RequestRequirementRead, RequestRequirementCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
+import { OrganizationProject } from 'adapter/types/main/organization-project/post/code-201';
 import { OrganizationProjectCardItemReadTree } from 'adapter/types/main/organization-project-card-item/get/code-200';
-import { OrganizationProjectCardItemTree } from 'adapter/types/main/organization-project-card-item/post/code-201';
+import { OrganizationProjectCardItem } from 'adapter/types/main/organization-project-card-item/post/code-201';
 import { TimeSheetRowRead } from 'adapter/types/main/time-sheet-row/get/code-200';
 import { TimeSheetRowRead as ITimeSheetRowReadById } from 'adapter/types/main/time-sheet-row/id/get/code-200';
+import { OrganizationProjectCardItemTemplate } from 'adapter/types/main/organization-project-card-item-template/get/code-200';
+import { RequestRequirementCvOrganizationProjectCardItem } from 'adapter/types/main/request-requirement/id/cv-link/cv_id/post/code-200';
+
+export interface IOrganizationProjectPost extends OrganizationProject {
+    id: number
+}
 
 interface IBaseGetById {
     id: string
@@ -25,28 +32,22 @@ interface IQueryParams {
     page_size?: number
 }
 
+export interface IResponseBase {
+    count: number,
+    next?: string,
+    previous?: string
+}
+
 export interface IGetOrganizationListQueryParams extends IQueryParams {
     is_customer?: 'true' | 'false'
 }
 
-export interface IResponseGetOrganizationProject {
-    total: number,
-    max_page_size: number,
-    page_size: number,
-    page_number: number,
-    page_next: number,
-    page_previous: number,
+export interface IResponseGetOrganizationProject extends IResponseBase {
     results: Array<OrganizationProjectRead>
 }
 
 export interface IGetOrganizationProjectListQueryParams extends IQueryParams {
     organization_id?: string
-}
-
-export interface IResponseBase {
-    count: number,
-    next?: string,
-    previous?: string
 }
 
 interface IResponseGetOrganization extends IResponseBase {
@@ -94,10 +95,21 @@ export interface IGetRequestListParams {
     page_size?: number
 }
 
+export enum EStatus {
+    PreCandidate = 'pre-candidate',
+    Candidate = 'candidate',
+    Cancelled = 'canceled',
+    Worker = 'worker'
+}
+
 export interface IParamsLinkCv {
-    data: Record<string, unknown>,
     cv_id: string,
-    id: string
+    id: string,
+    status?: EStatus,
+    date_from?: string,
+    date_to?: string,
+    rating?: number,
+    organization_project_card_items?: Array<RequestRequirementCvOrganizationProjectCardItem>
 }
 
 export enum ERequestStatus {
@@ -163,6 +175,15 @@ export interface IResponsePostTimeSheet extends IDataPostTimeSheet {
     updated_at?: string
 }
 
+export interface IPostResponseOrganizationProjectCardItem extends OrganizationProjectCardItem {
+    id?: number
+}
+
+export interface IGetProjectCardParams {
+    organization_project_id?: Array<number>,
+    organization_id?: Array<number>
+}
+
 export const mainRequest = createApi({
     reducerPath: 'api/main/request',
     tagTypes   : ['main'],
@@ -175,6 +196,50 @@ export const mainRequest = createApi({
             query       : ({ id }) => ({
                 url   : `/request-requirement/${id}/`,
                 method: 'GET'
+            })
+        }),
+        getBaseProjectCardTemplate: build.query<Array<OrganizationProjectCardItemTemplate>, undefined>({
+            providesTags: ['main'],
+            query       : () => ({
+                url   : '/organization-project-card-item-template/',
+                method: 'GET'
+            })
+        }),
+        getBaseProjectCard: build.query<Array<OrganizationProjectCardItemReadTree>, IGetProjectCardParams | undefined>({
+            providesTags: ['main'],
+            query       : () => ({
+                url   : '/organization-project-card-item/',
+                method: 'GET'
+            })
+        }),
+        postBaseProjectCard: build.mutation<OrganizationProjectCardItemReadTree, { project_id: string, root_card_item_id: string }>({
+            invalidatesTags: ['main'],
+            query          : ({ project_id, root_card_item_id }) => ({
+                url   : `/organization-project-card-item/create-tree-by-template/${project_id}/${root_card_item_id}/`,
+                method: 'POST'
+            })
+        }),
+        postMainOrganizationProjectCard: build.mutation<IPostResponseOrganizationProjectCardItem, OrganizationProjectCardItem>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/organization-project-card-item/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainOrganizationProjectCard: build.mutation<IPostResponseOrganizationProjectCardItem, IPostResponseOrganizationProjectCardItem>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...body }) => ({
+                url   : `/organization-project-card-item/${id}/`,
+                method: 'PATCH',
+                body
+            })
+        }),
+        deleteMainOrganizationProjectCardById: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/organization-project-card-item/${id}`,
+                method: 'DELETE'
             })
         }),
         postMainRequestRequirement: build.mutation<IPostBaseResponse, RequestRequirement>({
@@ -279,6 +344,22 @@ export const mainRequest = createApi({
                 params
             })
         }),
+        postMainOrganizationProject: build.mutation<IOrganizationProjectPost, OrganizationProject>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/organization-project/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainOrganizationProject: build.mutation<IOrganizationProjectPost, IOrganizationProjectPost>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...rest }) => ({
+                url   : `/organization-project/${id}/`,
+                method: 'PATCH',
+                body  : rest
+            })
+        }),
         getOrganizationProjectCardItem: build.query<Array<OrganizationProjectCardItemReadTree>,
         { organization_id?: Array<string>, organization_project_id?: Array<string>}>({
             providesTags: ['main'],
@@ -290,32 +371,10 @@ export const mainRequest = createApi({
         }),
         getMainOrganizationProjectById: build.query<OrganizationProjectRead, IBaseGetById>({
             providesTags: ['main'],
-            query       : ({ id }) => ({
+            query       : ({ id, ...params }) => ({
                 url   : `/organization-project/${id}/`,
-                method: 'GET'
-            })
-        }),
-        deleteMainOrganizationProjectCardById: build.mutation<OrganizationProjectCardItemTree, IBaseGetById>({
-            invalidatesTags: ['main'],
-            query          : ({ id }) => ({
-                url   : `/organization-project-card-item/${id}`,
-                method: 'DELETE'
-            })
-        }),
-        postMainOrganizationProjectCard: build.mutation<OrganizationProjectCardItemTree, OrganizationProjectCardItemTree>({
-            invalidatesTags: ['main'],
-            query          : (body) => ({
-                url   : '/organization-project-card-item/',
-                method: 'POST',
-                body
-            })
-        }),
-        patchMainOrganizationProjectCard: build.mutation<OrganizationProjectCardItemTree, OrganizationProjectCardItemTree>({
-            invalidatesTags: ['main'],
-            query          : ({ id, ...body }) => ({
-                url   : `/organization-project-card-item/${id}/`,
-                method: 'PATCH',
-                body
+                method: 'GET',
+                params
             })
         }),
         postRequestRequirementCompetenciesSet: build.mutation<IPostBaseResponse, IParamsCompetenciesSet>({
@@ -328,10 +387,10 @@ export const mainRequest = createApi({
         }),
         postRequestRequirementLinkCv: build.mutation<{ status: string }, IParamsLinkCv>({
             invalidatesTags: ['main'],
-            query          : ({ id, cv_id, data }) => ({
+            query          : ({ id, cv_id, ...rest }) => ({
                 url   : `/request-requirement/${id}/cv-link/${cv_id}/`,
                 method: 'POST',
-                body  : data
+                body  : rest
             })
         }),
         getMainRequest: build.query<IResponseRequestList, IGetRequestListParams | undefined>({
@@ -367,16 +426,23 @@ export const mainRequest = createApi({
         }),
         postRequestRequirementCvSetDetails: build.mutation<{ status: string }, IParamsLinkCv>({
             invalidatesTags: ['main'],
-            query          : ({ id, cv_id, data }) => ({
+            query          : ({ id, cv_id, ...rest }) => ({
                 url   : `/request-requirement/${id}/cv-set-details/${cv_id}/`,
                 method: 'POST',
-                body  : data
+                body  : rest
             })
         }),
         deleteMainRequestById: build.mutation<undefined, IBaseGetById>({
             invalidatesTags: ['main'],
             query          : ({ id }) => ({
                 url   : `/request/${id}/`,
+                method: 'DELETE'
+            })
+        }),
+        deleteMainRequestCvUnlinkById: build.mutation<undefined, IParamsLinkCv>({
+            invalidatesTags: ['main'],
+            query          : ({ id, cv_id }) => ({
+                url   : `/request-requirement/${id}/cv-unlink/${cv_id}/`,
                 method: 'DELETE'
             })
         }),

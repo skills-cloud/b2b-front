@@ -1,4 +1,4 @@
-.specialists {
+.candidates {
     position: relative;
     display: grid;
     grid-auto-flow: row;
@@ -73,7 +73,7 @@
         grid-auto-columns: max-content;
         grid-template-rows: max-content;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
     }
 
     &__user-info-exp-years {
@@ -118,13 +118,43 @@
         color: var(--color-gray-120);
         font-size: 12px;
         line-height: 14px;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
     }
 
-    &__user-info-exp-star-icon {
-        width: 12px;
-        height: 12px;
-        fill: var(--color-gray-120);
-        margin-right: 4px;
+    &__star-form {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        grid-gap: 8px;
+        justify-content: center;
+        margin: 24px 0;
+    }
+
+    &__star {
+        stroke: var(--color-gray-100);
+        fill: none;
+        width: 60px;
+        height: 60px;
+
+        &_active {
+            fill: var(--color-dark-orange);
+            stroke: var(--color-dark-orange);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+                fill: var(--color-dark-orange);
+                stroke: var(--color-dark-orange);
+            }
+        }
     }
 
     &__user-info-exp-add {
@@ -193,6 +223,10 @@
         }
     }
 
+    &__user-card-count {
+        color: var(--color-text-ultra-light);
+    }
+
     &__modal-content-list {
         font-family: Roboto, sans-serif;
         font-size: 14px;
@@ -225,5 +259,20 @@
     &__modal-content-title {
         font-weight: 500;
         margin-bottom: 8px;
+    }
+
+    &__modal-content-grid {
+        display: grid;
+        grid-template-columns: repeat(2, max-content);
+        grid-gap: 16px;
+        margin-bottom: 32px;
+
+        &:last-child {
+            margin: 0;
+        }
+    }
+
+    &__modal-content-date {
+        width: 150px;
     }
 }

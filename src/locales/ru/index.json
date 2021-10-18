@@ -11,7 +11,9 @@
             }
         },
         "calendar": {
-            "name-empty": "Не указано"
+            "name-empty": "Не указано",
+            "tooltip_project": "Занят на проекте: {{project}}",
+            "tooltip_free": "Свободен для работы: {{status}}"
         },
         "user": {
             "header-bar": {
@@ -72,6 +74,7 @@
             "download": "Скачать xlsx"
         },
         "breadcrumbs": {
+            "candidates": "Кандидаты",
             "specialists": "Специалисты",
             "organizations": "Организации",
             "requests": "Проектные запросы",
@@ -79,7 +82,10 @@
             "organization-projects": "Проекты",
             "timesheets": "Таймшиты",
             "main-info": "Основная информация",
-            "cards": "Карточки прав и доступа"
+            "cards": "Карточки прав и доступа",
+            "create": "Создать",
+            "edit": "Редактировать",
+            "requirement": "Требование"
         }
     },
     "routes": {
@@ -191,6 +197,8 @@
         },
         "organization": {
             "blocks": {
+                "cards-create-by-template": "Создать по шаблону",
+                "cards-create": "Создать карточку",
                 "sections": {
                     "main-info":"Основная информация",
                     "projects": "Проекты",
@@ -202,6 +210,10 @@
                     "description": "Описание",
                     "request": "Запросы"
                 },
+                "empty": {
+                    "title": "У организации ещё нет проектов",
+                    "button": "Создать"
+                },
                 "cards-count_0": "{{count}} пункт",
                 "cards-count_1": "{{count}} пункта",
                 "cards-count_2": "{{count}} пунктов",
@@ -209,8 +221,11 @@
                 "cards-count_4": "{{count}} пунктов",
                 "cards-count_5": "{{count}} пунктов",
                 "modal" : {
+                    "cards-template": "Шаблон карточек",
+                    "title_create-by-template": "Создать по шаблону",
                     "title_edit": "Редактирование карточки прав и доступа",
                     "title_add": "Новая карточка прав и доступа",
+                    "position": "Должность",
                     "cards-count_empty": "",
                     "cards-count_full": "\u00A0({{value }})",
                     "subdirectory": "Добавить подпункт",
@@ -224,16 +239,16 @@
             }
         },
         "organization-projects": {
+            "empty": "Нет проектных запросов",
             "blocks": {
                 "sections": {
                     "requests": "Проектные запросы",
                     "main-info":"Основная информация",
-                    "timesheets": "Таймшиты",
                     "cards":"Карточки прав и доступа"
                 },
                 "customer": "Заказчик",
                 "manager": "РП",
-                "timeframe": "Таймфрейм"
+                "timeframe": "Сроки проекта"
             }
         },
         "person": {
@@ -543,6 +558,39 @@
                 }
             }
         },
+        "candidates": {
+            "main": {
+                "title": "Специалисты",
+                "users": {
+                    "empty": "Поиск не дал результатов."
+                },
+                "first-name": "Имя не указано",
+                "last-name": "Фамилия не указана",
+                "competencies": "Ключевые навыки",
+                "rate": "Ставка в час",
+                "experience_0": "{{count}} год",
+                "experience_1": "{{count}} года",
+                "experience_2": "{{count}} лет",
+                "experience_3": "{{count}} лет",
+                "experience_4": "{{count}} лет",
+                "experience_5": "{{count}} лет",
+                "cards": "Карточки прав и доступа",
+                "cards-add": "Добавить"
+            },
+            "modal-card": {
+                "add-title": "Добавить карточки доступа",
+                "title_current": "Карточка «{{name}}»",
+                "title_add": "Добавить карточки доступа",
+                "cancel": "Отмена",
+                "submit": "Сохранить",
+                "date": "Дата выдачи"
+            },
+            "modal-rating": {
+                "title": "Оцените специалиста",
+                "cancel": "Отмена",
+                "submit": "Сохранить"
+            }
+        },
         "specialists": {
             "main": {
                 "title": "Специалисты",
@@ -572,13 +620,6 @@
                     "requirement-empty": "Нет доступных требований",
                     "requirement-no-name": "Название требования не указано"
                 }
-            },
-            "modal-card": {
-                "add-title": "Добавить карточки доступа",
-                "title_current": "Карточка «{{name}}»",
-                "title_add": "Добавить карточки доступа",
-                "cancel": "Отмена",
-                "submit": "Сохранить"
             },
             "sidebar": {
                 "filters": {
@@ -642,6 +683,11 @@
         },
         "project-request-list": {
             "title": "Список проектных запросов",
+            "dropdown": {
+                "edit": "Редактировать",
+                "delete": "Удалить",
+                "search": "Поиск специалистов"
+            },
             "requests": {
                 "actions": {
                     "edit": "Редактировать",
@@ -742,9 +788,10 @@
                 "type": "Тип запроса",
                 "priority": "Приоритет",
                 "status": "Статус",
-                "description": "Описание проекта",
+                "description": "Описание запроса",
                 "submit": "Создать запрос",
-                "required-error": "Обязательно для заполнения"
+                "required-error": "Обязательно для заполнения",
+                "form-title": "Название проектного запроса"
             },
             "customer": {
                 "title": "Заказчик",
@@ -766,6 +813,7 @@
             },
             "requirements": {
                 "edit-modal": {
+                    "empty": "Не добавлено ни одной роли",
                     "header_competence": "Компетенции",
                     "header_not_competence": "Условия работы",
                     "cancel": "Отмена",
@@ -774,13 +822,16 @@
                     "tab_location": "Расположение",
                     "tab_price": "Ставка",
                     "tab_other": "Разное",
+                    "tab_timing": "Сроки запроса",
                     "people" : "{{position}} ({{people}} чел.)",
-                    "addRole": "Добавить роль",
+                    "add-role": "Добавить роль",
                     "new-role": "Новая роль",
                     "people-in-roles" : "{{people}} чел.",
                     "position": "Начните вводить, например, “Front-end Dev”",
                     "title-field": "Название проекта",
-                    "add-request": "Добавить требование"
+                    "add-request": "Добавить требование",
+                    "date-from": "Дата начала",
+                    "date-to": "Дата окончания"
                 }
             },
             "blocks": {
@@ -802,7 +853,8 @@
                     "main-info": "Основная информация",
                     "requirements": "Требования к сотруднику",
                     "employer": "Заказчик",
-                    "applicant": "Кандидаты"
+                    "applicant": "Кандидаты",
+                    "timesheets": "Таймшиты"
                 },
                 "specialists-sections": {
                     "all": "Все кандидаты",
@@ -839,7 +891,8 @@
                 },
                 "other": {
                     "description": "Описание",
-                    "title": "Разное"
+                    "title": "Разное",
+                    "deadline": "Сроки"
                 },
                 "priority": {
                     "30": "Низкий",
@@ -854,12 +907,12 @@
                 },
                 "main-info": {
                     "industry_sector": "Отрасль",
-                    "project": "Проект",
+                    "organization_project": "Проект",
                     "resource_manager": "Рес. менеджер",
                     "recruiter": "Отв. рекрутер",
                     "type": "Тип запроса",
                     "requirements": "Общее кол-во",
-                    "project_description": "Описание проекта",
+                    "description": "Описание запроса",
                     "customer": "Заказчик"
                 },
                 "duration": "Продолжительность",
@@ -888,6 +941,36 @@
             },
             "sidebar": {
                 "documents": "Документы"
+            }
+        },
+        "project": {
+            "create": {
+                "title": "Новый проект",
+                "required-error": "Обязательно для заполнения",
+                "name": {
+                    "title": "Название проекта",
+                    "placeholder": "Введите название проекта"
+                },
+                "industry_sector": {
+                    "title": "Отрасль",
+                    "placeholder": "Введите отрасль"
+                },
+                "manager": {
+                    "title": "Менеджер",
+                    "placeholder": "Введите имя менеджера"
+                },
+                "date-from": "Дата начала",
+                "date-to": "Дата окончания",
+                "resource_manager": {
+                    "title": "Ресурсный менеджер",
+                    "placeholder": "Введите имя ресурсного менеджера"
+                },
+                "recruiter": {
+                    "title": "Ответственный рекрутер",
+                    "placeholder": "Введите имя ответственного рекрутера"
+                },
+                "description": "Описание проекта",
+                "submit": "Создать проект"
             }
         }
     },

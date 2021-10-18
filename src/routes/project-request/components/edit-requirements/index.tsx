@@ -6,7 +6,8 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { H4 } from 'component/header';
 import Tabs, { Tab } from 'component/tabs';
 import Input from 'component/form/input';
-import IconDots from 'component/icons/dots';
+import DotsAction from 'component/section/actions/dots';
+import DeadlineDates from 'component/form/deadline-dates';
 
 import EditLocation from 'route/project-request/components/edit-location';
 import EditPrice from 'route/project-request/components/edit-price';
@@ -25,6 +26,7 @@ export enum ETabs {
     Location='location',
     Price='price',
     Other='other',
+    Timing='timing'
 }
 
 interface IEditRequirements {
@@ -45,7 +47,9 @@ interface IForm extends RequestRequirement{
     city: {
         value: string,
         label: string
-    }
+    },
+    date_to: string,
+    date_from: string
 }
 
 const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, setActiveTab, requestId }: IEditRequirements) => {
@@ -69,6 +73,8 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
         form.setValue('max_price', editRequirements?.max_price);
         form.setValue('description', editRequirements?.description);
         form.setValue('name', editRequirements?.name);
+        form.setValue('date_from', editRequirements?.date_from);
+        form.setValue('date_to', editRequirements?.date_to);
     }, [editRequirements]);
 
     const onSubmit = ({
@@ -77,7 +83,9 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
         city,
         max_price,
         description,
-        name
+        name,
+        date_from,
+        date_to
     }: IForm) => {
         const cityId = city?.value;
         const valueTypeOfEmployment = type_of_employment?.value;
@@ -90,7 +98,9 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
             type_of_employment_id: valueTypeOfEmployment ? parseInt(valueTypeOfEmployment, 10) : undefined,
             max_price            : max_price,
             description          : description,
-            name                 : name
+            name                 : name,
+            date_from            : date_from,
+            date_to              : date_to
         };
 
 
@@ -112,14 +122,40 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
             .catch(console.error);
     };
 
+    const elCompetenceTab = () => {
+        if(activeTab === ETabs.Competence) {
+            if(editRequirements?.position?.name) {
+                return (
+                    <div className={cn('edit-requirements__position')}>
+                        <H4>
+                            {t(
+                                'routes.project-request.requirements.edit-modal.people',
+                                {
+                                    people  : editRequirements.count,
+                                    position: editRequirements.position.name
+                                })}
+                        </H4>
+
+                        <DotsAction onClick={onEditRole} />
+                    </div>
+                );
+            }
+
+            return (
+                <span className={cn('edit-requirements__empty')}>
+                    {t('routes.project-request.requirements.edit-modal.empty')}
+                </span>
+            );
+        }
+    };
+
     return (
         <FormProvider {...form}>
             <form
-                method="PATCH"
                 id={MAIN_REQUIREMENTS_FORM_ID}
                 onSubmit={form.handleSubmit(onSubmit)}
             >
-                <div className={cn('name-gap')}>
+                <div className={cn('edit-requirements__name-gap')}>
                     <Input
                         name="name"
                         type="text"
@@ -141,34 +177,8 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
                     ))}
                 </Tabs>
 
-                <div className={cn('tab-content')}>
-                    {activeTab === ETabs.Competence && editRequirements?.position?.name && (
-                        <div className={cn('position')}>
-                            <H4>
-                                {t(
-                                    'routes.project-request.requirements.edit-modal.people',
-                                    {
-                                        people  : editRequirements.count,
-                                        position: editRequirements.position.name
-                                    })}
-                            </H4>
-
-                            <button
-                                type="button"
-                                className={cn('position-edit')}
-                                onClick={onEditRole}
-                            >
-                                <IconDots
-                                    svg={{
-                                        width    : 24,
-                                        height   : 24,
-                                        className: cn('icon-dots')
-                                    }}
-                                />
-                            </button>
-                        </div>
-                    )}
-
+                <div className={cn('edit-requirements__tab-content')}>
+                    {elCompetenceTab()}
                     {activeTab === ETabs.Location && (
                         <EditLocation />
                     )}
@@ -177,6 +187,13 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
                     )}
                     {activeTab === ETabs.Other && (
                         <EditOuther />
+                    )}
+                    {activeTab === ETabs.Timing && (
+                        <DeadlineDates labels={{
+                            dateFrom: t('routes.project-request.requirements.edit-modal.date-from'),
+                            dateTo  : t('routes.project-request.requirements.edit-modal.date-to')
+                        }}
+                        />
                     )}
                 </div>
             </form>

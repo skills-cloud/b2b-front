@@ -1,11 +1,9 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useRef, useEffect } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { Link } from 'react-router-dom';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 
 import style from './index.module.pcss';
-import IconDots from 'component/icons/dots';
 
 export interface IItem {
     elem: ReactNode,
@@ -15,63 +13,58 @@ export interface IItem {
 
 export interface IProps {
     className?: string | IStyle,
-    items?: Array<IItem>,
-    top?: string,
-    left?: string,
-    right?: string,
+    align?: 'bottom',
+    render: ({ onClose }: {onClose: () => void}) => ReactNode,
+    children: ReactNode,
     onOutsideClick?: () => void
 }
 
-const Dropdown = (props: IProps) => {
-    const cn = useClassnames(style, props.className, true);
-    const [open, setOpen] = useState<boolean>();
+const Dropdown = ({ render, className, align = 'bottom', children, onOutsideClick }: IProps) => {
+    const cn = useClassnames(style, className, true);
+    const activatorRef = useRef<HTMLDivElement>(null);
+    const [visible, setVisible] = useState<boolean>();
+    const [styles, setStyles] = useState<{top?: number}>({});
 
-    const onClickDots = () => {
-        setOpen((oldState) => !oldState);
-    };
-
-    const onOutsideClick = () => {
-        setOpen(false);
-
-        props.onOutsideClick?.();
-    };
-
-    const elContent = () => {
-        if(open) {
-            return (
-                <div className={cn('dropdown__content')} style={{ top: props.top, left: props.left, right: props.right }}>
-                    {props.items?.map((item, i) => {
-                        if(item.to) {
-                            return (
-                                <Link
-                                    className={cn('dropdown__item')}
-                                    key={i}
-                                    to={item.to}
-                                >
-                                    {item.elem}
-                                </Link>
-                            );
-                        }
-
-                        return (
-                            <div className={cn('dropdown__item')} key={i} onClick={item.onClick}>{item.elem}</div>
-                        );
-                    })}
-                </div>
-            );
+    useEffect(() => {
+        if(visible && activatorRef.current) {
+            switch (align) {
+                case 'bottom':
+                    setStyles({
+                        top: activatorRef.current.clientHeight
+                    });
+                    break;
+            }
         }
-    };
+    }, [visible, align]);
+
 
     return (
-        <OutsideClickHandler onOutsideClick={onOutsideClick}>
+        <OutsideClickHandler onOutsideClick={() => {
+            setVisible(false);
+            onOutsideClick?.();
+        }}
+        >
             <div className={cn('dropdown')}>
-                <IconDots
-                    svg={{
-                        onClick  : onClickDots,
-                        className: cn('dropdown__icon')
+                <div
+                    ref={activatorRef}
+                    className={cn('dropdown__activator')} onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        setVisible(!visible);
                     }}
-                />
-                {elContent()}
+                >
+                    {children}
+                </div>
+                {visible && (
+                    <div
+                        className={cn('dropdown__content')} style={styles} onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }}
+                    >
+                        {render({ onClose: () => setVisible(false) })}
+                    </div>
+                )}
             </div>
         </OutsideClickHandler>
     );

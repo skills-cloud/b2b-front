@@ -17,12 +17,14 @@ const EditLocation = () => {
         <div className={cn('form')}>
             <Input name="location" type="text" label={t('routes.project-request.blocks.location.point')} />
             <InputDictionary
+                isMulti={false}
                 requestType={InputDictionary.requestType.City}
                 name="city"
                 direction="column"
                 label={t('routes.project-request.blocks.location.address')}
             />
             <InputDictionary
+                isMulti={false}
                 requestType={InputDictionary.requestType.TypeOfEmployment}
                 name="type_of_employment"
                 direction="column"

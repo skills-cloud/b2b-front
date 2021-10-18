@@ -1,6 +1,5 @@
 import React, { useMemo, useState, Fragment, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { differenceInCalendarYears } from 'date-fns';
@@ -11,7 +10,6 @@ import { normalizeObject } from 'src/helper/normalize-object';
 import useModalClose from 'component/modal/use-modal-close';
 
 import IconPlus from 'component/icons/plus';
-import IconStar from 'component/icons/star';
 import IconClose from 'component/icons/close';
 import FormInput from 'component/form/input';
 import InputDictionary from 'component/form/input-dictionary';
@@ -22,13 +20,16 @@ import { H2, H3 } from 'component/header';
 import Button from 'component/button';
 import Request from 'component/request';
 import SectionHeader from 'component/section/header';
+import AddAction from 'component/section/actions/add';
+import Section from 'component/section';
+import SidebarLayout from 'component/layout/sidebar';
 
-import { mainRequest } from 'adapter/api/main';
 import { cv } from 'adapter/api/cv';
-import { CvListReadFull, CvCareerRead, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
+import { CvListReadFull, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 import { IValue } from 'component/form/select';
 
 import style from './index.module.pcss';
+import StarRating from 'component/star-rating';
 
 export interface IFormValues {
     search?: string,
@@ -42,6 +43,7 @@ export const Specialists = () => {
     const cn = useClassnames(style);
     const history = useHistory();
     const { t, i18n } = useTranslation();
+    const params = useParams<{ requirementId: string, requestId: string, projectId: string }>();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
     const defaultValues = {
@@ -57,9 +59,7 @@ export const Specialists = () => {
     });
 
     const { data, isLoading, refetch } = cv.useGetCvListQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
-    const [postLinkCv, { isLoading: isLoadingRequest }] = mainRequest.usePostRequestRequirementLinkCvMutation();
 
-    const [fromRequestId, setFromRequestId] = useState<string>('');
     const [addToRequest, setAddToRequest] = useState<number | null>();
     const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -69,10 +69,6 @@ export const Specialists = () => {
                 ...defaultValues,
                 ...qs
             };
-
-            if(qs.from_request_id) {
-                setFromRequestId(qs.from_request_id as string);
-            }
 
             context.reset(newDefaultValues);
         }
@@ -93,22 +89,8 @@ export const Specialists = () => {
     };
 
     const onClickAddToRequest = useCallback((cvItemId?: number) => () => {
-        if(fromRequestId) {
-            if(cvItemId) {
-                postLinkCv({
-                    id   : fromRequestId,
-                    cv_id: String(cvItemId),
-                    data : {}
-                })
-                    .then(() => {
-                        console.info('OK');
-                    })
-                    .catch(console.error);
-            }
-        } else {
-            setAddToRequest(cvItemId);
-        }
-    }, [fromRequestId]);
+        setAddToRequest(cvItemId);
+    }, [params.requestId]);
 
     const onClickClose = () => {
         setShowModal(false);
@@ -154,29 +136,10 @@ export const Specialists = () => {
         );
     };
 
-    const elAddButton = (cvItemId?: number) => {
-        if(isLoadingRequest) {
-            return (
-                <div className={cn('specialists__user-info-exp-add')}>
-                    <Loader />
-                </div>
-            );
-        }
+    const elAdditionalBlock = (cvListFull?: CvListReadFull, showLinkedItems?: boolean, cvId?: number) => {
+        const cvItem = cvListFull?.career?.[0];
 
-        return (
-            <div className={cn('specialists__user-info-exp-add')}>
-                <IconPlus
-                    svg={{
-                        className: cn('specialists__user-info-exp-add-icon'),
-                        onClick  : onClickAddToRequest(cvItemId)
-                    }}
-                />
-            </div>
-        );
-    };
-
-    const elAdditionalBlock = (cvItem?: CvCareerRead, showLinkedItems?: boolean, cvId?: number) => {
-        if(cvItem) {
+        if(cvListFull && cvItem) {
             const dateFrom = cvItem.date_from ? new Date(cvItem.date_from) : new Date();
             const dateTo = cvItem.date_to ? new Date(cvItem.date_to) : new Date();
             const experience = differenceInCalendarYears(dateTo, dateFrom);
@@ -189,11 +152,15 @@ export const Specialists = () => {
                                 count: experience
                             })}
                         </div>
-                        <div className={cn('specialists__user-info-exp-stars')}>
-                            <IconStar svg={{ className: cn('specialists__user-info-exp-star-icon') }} />
-                            {experience}
+                        <StarRating rating={cvListFull.rating} />
+                        <div className={cn('specialists__user-info-exp-add')}>
+                            <IconPlus
+                                svg={{
+                                    className: cn('specialists__user-info-exp-add-icon'),
+                                    onClick  : onClickAddToRequest(cvId)
+                                }}
+                            />
                         </div>
-                        {elAddButton(cvId)}
                     </div>
                     {showLinkedParam && showLinkedItems && (
                         <div className={cn('specialists__user-linked')} onClick={onClickLinked(cvItem.id)}>
@@ -245,7 +212,7 @@ export const Specialists = () => {
                             src: cvItem.photo
                         }}
                     />
-                    {elAdditionalBlock(cvItem.career?.[0], showLinkedItems, cvItem.id)}
+                    {elAdditionalBlock(cvItem, showLinkedItems, cvItem.id)}
                 </div>
                 <div className={cn('specialists__user-competencies')}>
                     <p className={cn('specialists__block-title')}>
@@ -277,9 +244,17 @@ export const Specialists = () => {
         }
 
         if(addToRequest) {
-            return <Request showModal={Boolean(addToRequest)} specialistId={addToRequest} onClickClose={onClickClose} />;
+            return (
+                <Request
+                    projectId={params.projectId}
+                    requirementId={params.requirementId}
+                    requestId={params.requestId}
+                    specialistId={addToRequest}
+                    onClickClose={onClickClose}
+                />
+            );
         }
-    }, [showModal, addToRequest]);
+    }, [showModal, addToRequest, params.requestId, params.requirementId]);
 
     const elUsers = useMemo(() => {
         if(isLoading) {
@@ -297,85 +272,82 @@ export const Specialists = () => {
         return <span className={cn('specialists__users-empty')}>{t('routes.specialists.main.users.empty')}</span>;
     }, [JSON.stringify(data?.results), i18n.language, isLoading]);
 
+    const elSidebar = () => {
+        return (
+            <Section>
+                <H3>{t('routes.specialists.sidebar.filters.title')}</H3>
+                <FormProvider {...context}>
+                    <form className={cn('specialists__form')} onSubmit={onSubmit}>
+                        <FormInput
+                            name="search"
+                            type="search"
+                            label={t('routes.specialists.sidebar.filters.form.search.label')}
+                            placeholder={t('routes.specialists.sidebar.filters.form.search.placeholder')}
+                        />
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Position}
+                            defaultValue={Array.isArray(qs.position_id) ? qs.position_id : [qs.position_id as string]}
+                            name="position"
+                            direction="column"
+                            placeholder={t('routes.specialists.sidebar.filters.form.position.placeholder')}
+                            label={t('routes.specialists.sidebar.filters.form.position.label')}
+                            clearable={true}
+                        />
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Country}
+                            defaultValue={Array.isArray(qs.country_id) ? qs.country_id : [qs.country_id as string]}
+                            name="country"
+                            direction="column"
+                            placeholder={t('routes.specialists.sidebar.filters.form.country.placeholder')}
+                            label={t('routes.specialists.sidebar.filters.form.country.label')}
+                            clearable={true}
+                        />
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.City}
+                            defaultValue={Array.isArray(qs.city_id) ? qs.city_id : [qs.city_id as string]}
+                            name="city"
+                            direction="column"
+                            placeholder={t('routes.specialists.sidebar.filters.form.city.placeholder')}
+                            label={t('routes.specialists.sidebar.filters.form.city.label')}
+                            clearable={true}
+                        />
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Competence}
+                            defaultValue={qs.competencies_ids_any as Array<string>}
+                            clearable={true}
+                            name="competencies"
+                            direction="column"
+                            placeholder={t('routes.specialists.sidebar.filters.form.competencies.placeholder')}
+                            label={t('routes.specialists.sidebar.filters.form.competencies.label')}
+                        />
+                        <FormInput
+                            name="years"
+                            type="text"
+                            label={t('routes.specialists.sidebar.filters.form.years.label')}
+                            placeholder={t('routes.specialists.sidebar.filters.form.years.placeholder')}
+                        />
+                        <Button type="submit">
+                            {t('routes.specialists.sidebar.filters.buttons.submit')}
+                        </Button>
+                        <Button type="button" onClick={onClearFilter} isSecondary={true}>
+                            {t('routes.specialists.sidebar.filters.buttons.clear')}
+                        </Button>
+                    </form>
+                </FormProvider>
+            </Section>
+        );
+    };
+
     return (
-        <main className={cn('specialists')}>
-            <section className={cn('specialists__main')}>
-                <div className={cn('specialists__main-top')}>
-                    <SectionHeader>{t('routes.specialists.main.title')}</SectionHeader>
-                    <Link
-                        to="/specialists/create"
-                        className={cn('specialists__main-button')}
-                    >
-                        <IconPlus />
-                    </Link>
-                </div>
+        <SidebarLayout sidebar={elSidebar()}>
+            <Section>
+                <SectionHeader actions={<AddAction to="/specialists/create" />}>
+                    {t('routes.specialists.main.title')}
+                </SectionHeader>
                 {elUsers}
-            </section>
-            <aside>
-                <div className={cn('specialists__search')}>
-                    <H3>{t('routes.specialists.sidebar.filters.title')}</H3>
-                    <FormProvider {...context}>
-                        <form className={cn('specialists__form')} onSubmit={onSubmit}>
-                            <FormInput
-                                name="search"
-                                type="search"
-                                label={t('routes.specialists.sidebar.filters.form.search.label')}
-                                placeholder={t('routes.specialists.sidebar.filters.form.search.placeholder')}
-                            />
-                            <InputDictionary
-                                requestType={InputDictionary.requestType.Position}
-                                defaultValue={Array.isArray(qs.position_id) ? qs.position_id : [qs.position_id as string]}
-                                name="position"
-                                direction="column"
-                                placeholder={t('routes.specialists.sidebar.filters.form.position.placeholder')}
-                                label={t('routes.specialists.sidebar.filters.form.position.label')}
-                                clearable={true}
-                            />
-                            <InputDictionary
-                                requestType={InputDictionary.requestType.Country}
-                                defaultValue={Array.isArray(qs.country_id) ? qs.country_id : [qs.country_id as string]}
-                                name="country"
-                                direction="column"
-                                placeholder={t('routes.specialists.sidebar.filters.form.country.placeholder')}
-                                label={t('routes.specialists.sidebar.filters.form.country.label')}
-                                clearable={true}
-                            />
-                            <InputDictionary
-                                requestType={InputDictionary.requestType.City}
-                                defaultValue={Array.isArray(qs.city_id) ? qs.city_id : [qs.city_id as string]}
-                                name="city"
-                                direction="column"
-                                placeholder={t('routes.specialists.sidebar.filters.form.city.placeholder')}
-                                label={t('routes.specialists.sidebar.filters.form.city.label')}
-                                clearable={true}
-                            />
-                            <InputDictionary
-                                requestType={InputDictionary.requestType.Competence}
-                                defaultValue={qs.competencies_ids_any as Array<string>}
-                                clearable={true}
-                                name="competencies"
-                                direction="column"
-                                placeholder={t('routes.specialists.sidebar.filters.form.competencies.placeholder')}
-                                label={t('routes.specialists.sidebar.filters.form.competencies.label')}
-                            />
-                            <FormInput
-                                name="years"
-                                type="text"
-                                label={t('routes.specialists.sidebar.filters.form.years.label')}
-                                placeholder={t('routes.specialists.sidebar.filters.form.years.placeholder')}
-                            />
-                            <Button type="submit">
-                                {t('routes.specialists.sidebar.filters.buttons.submit')}
-                            </Button>
-                            <Button type="button" onClick={onClearFilter} isSecondary={true}>
-                                {t('routes.specialists.sidebar.filters.buttons.clear')}
-                            </Button>
-                        </form>
-                    </FormProvider>
-                </div>
-            </aside>
+            </Section>
             {elModal}
-        </main>
+        </SidebarLayout>
     );
 };
 

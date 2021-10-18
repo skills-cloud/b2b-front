@@ -283,6 +283,26 @@
             ],
             "type": "object"
         },
+        "RequestRequirementCvOrganizationProjectCardItem": {
+            "properties": {
+                "date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Date",
+                    "type": "string"
+                },
+                "id": {
+                    "title": "Id",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-project-card-item/$id/",
+                    "x-url-object-list": "/api/main/organization-project-card-item/"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        },
         "RequestRequirementCvRead": {
             "properties": {
                 "created_at": {
@@ -316,14 +336,18 @@
                     "title": "ID",
                     "type": "integer"
                 },
-                "organization_project_card_items_ids": {
+                "organization_project_card_items": {
                     "items": {
-                        "type": "integer",
-                        "x-url-object-detail": "/api/main/organization-project-card-item/$id/",
-                        "x-url-object-list": "/api/main/organization-project-card-item/"
+                        "$ref": "#/definitions/RequestRequirementCvOrganizationProjectCardItem"
                     },
-                    "type": "array",
-                    "uniqueItems": true
+                    "type": "array"
+                },
+                "rating": {
+                    "maximum": 5,
+                    "minimum": 1,
+                    "nullable": true,
+                    "title": "Рейтинг",
+                    "type": "integer"
                 },
                 "request_requirement_id": {
                     "readOnly": true,
