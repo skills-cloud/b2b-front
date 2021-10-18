@@ -226,6 +226,8 @@
                     "title_edit": "Редактирование карточки прав и доступа",
                     "title_add": "Новая карточка прав и доступа",
                     "position": "Должность",
+                    "card-sub": "Подпункт карточки",
+                    "card-title": "Название карточки",
                     "cards-count_empty": "",
                     "cards-count_full": "\u00A0({{value }})",
                     "subdirectory": "Добавить подпункт",

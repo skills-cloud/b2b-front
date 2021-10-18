@@ -78,6 +78,10 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
         setVisibleAddCard(false);
     }, [setVisibleModalId, setShowAllTree]);
 
+    useEffect(() => {
+        methods.setValue('cardNameSub', '');
+    }, [visibleAddCard]);
+
     const setVisibleModal = useCallback((state) => {
         if(!state) {
             closeModal();
@@ -279,17 +283,22 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
                 >
                     <FormProvider {...methods}>
                         <form method="PATCH" onSubmit={methods.handleSubmit(editCard)} id={FORM_ORGANIZATION_CARD_ID}>
-                            <Input name="cardName" type="text" />
+                            <Input name="cardName" type="text" label={t('routes.organization.blocks.modal.card-title')} />
                             {visibleModalId !== null && (
                                 <div className={cn('organization__cards-column')}>
                                     <InputDictionary
                                         requestType={InputDictionary.requestType.Position}
                                         name="position"
-                                        placeholder={t('routes.organization.blocks.modal.position')}
+                                        direction="column"
+                                        label={t('routes.organization.blocks.modal.position')}
                                     />
                                     {visibleAddCard && (
                                         <span className={cn('organization__cards-add-input')}>
-                                            <Input name="cardNameSub" type="text" />
+                                            <Input
+                                                name="cardNameSub"
+                                                type="text"
+                                                label={t('routes.organization.blocks.modal.card-sub')}
+                                            />
                                         </span>
                                     )}
                                     {!visibleAddCard && (
