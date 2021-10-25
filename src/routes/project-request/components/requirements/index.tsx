@@ -271,17 +271,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                         </Header>
                     }
                     footer={
-                        <ModalFooterSubmit withAction={activeTab === ETabs.Competence}>
-                            {activeTab === ETabs.Competence && (
-                                <span
-                                    className={cn('add-role')}
-                                    onClick={() => {
-                                        setModalStep(EModalSteps.NewRole);
-                                    }}
-                                >
-                                    {t('routes.project-request.requirements.edit-modal.add-role')}
-                                </span>
-                            )}
+                        <ModalFooterSubmit>
                             <Button
                                 isSecondary={true} onClick={() => {
                                     setModalStep(EModalSteps.Close);
@@ -311,8 +301,8 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
             {step === EModalSteps.NewRole && (
                 <AddRole
                     requestId={requestId}
-                    onBack={() => {
-                        setModalStep(EModalSteps.Base);
+                    onClose={() => {
+                        setModalStep(EModalSteps.Close);
                     }}
                     nextStep={(id) => {
                         setEditID(id);
