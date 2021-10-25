@@ -68,6 +68,7 @@ export const baseRoutes: Array<IProps> = [{
     layout: Layout,
     path  : [
         '/specialists',
+        '/requests/:requestId/requirement/:requirementId/specialists',
         '/organizations/:organizationId/projects/:projectId/requests/:requestId/requirement/:requirementId/specialists'
     ],
     component: Specialists
