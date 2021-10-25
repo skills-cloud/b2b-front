@@ -20,9 +20,10 @@ const ADD_ROLE_FORM_ID = 'ADD_ROLE_FORM_ID';
 const PEOPLE_SELECT = Array.from({ length: 10 }, (_, i) => i + 1);
 
 interface IAddRole {
-    onBack: () => void,
+    onBack?: () => void,
     requestId: number,
-    nextStep: (id: number) => void
+    nextStep: (id: number) => void,
+    onClose: () => void
 }
 
 interface IForm {
@@ -36,7 +37,7 @@ interface IForm {
     }
 }
 
-const AddRole = ({ onBack, requestId, nextStep }: IAddRole) => {
+const AddRole = ({ onBack, requestId, nextStep, onClose }: IAddRole) => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const [post] = mainRequest.usePostMainRequestRequirementMutation({});
@@ -71,7 +72,7 @@ const AddRole = ({ onBack, requestId, nextStep }: IAddRole) => {
             header={t('routes.project-request.requirements.edit-modal.new-role')}
             footer={
                 <ModalFooterSubmit>
-                    <Button isSecondary={true} onClick={onBack}>
+                    <Button isSecondary={true} onClick={onClose}>
                         {t('routes.project-request.requirements.edit-modal.cancel')}
                     </Button>
                     <Button type="submit" form={ADD_ROLE_FORM_ID}>
