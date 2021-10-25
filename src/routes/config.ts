@@ -35,9 +35,12 @@ export const baseRoutes: Array<IProps> = [{
     path     : '/organizations/:organizationId/:subpage(projects|main-info|cards)?',
     component: Organization
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/organizations/:organizationId/projects/:projectId/requests/:requestId/timesheets',
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/organizations/:organizationId/projects/:projectId/requests/:requestId/timesheets',
+        '/requests/:requestId/timesheets'
+    ],
     component: Timesheets
 }, {
     exact    : true,
@@ -99,7 +102,7 @@ export const baseRoutes: Array<IProps> = [{
     layout: Layout,
     path  : [
         '/requests/:requestId',
-        '/requests/:requestId/:subpage(edit|specialists)',
+        '/requests/:requestId/:subpage(edit|candidates)',
         '/organizations/:organizationId/projects/:projectId/requests/:requestId/:subpage(edit|candidates|requirement)?'
     ],
     component: ProjectRequest
