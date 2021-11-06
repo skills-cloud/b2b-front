@@ -11,45 +11,46 @@ export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
 export type ParentId = string;
-export type CvId = number;
-export type NoName3 = string;
-export type NoName4 = string;
+export type NoName3 = number;
+export type NoName4 = number;
 export type NoName5 = string;
-export type ID1 = number;
 export type NoName6 = string;
-export type ID2 = number;
-export type NoName7 = boolean;
+export type NoName7 = string;
+export type ID1 = number;
 export type NoName8 = string;
-export type IndustrySectorId = number;
+export type ID2 = number;
 export type NoName9 = boolean;
 export type NoName10 = string;
-export type NoName11 = string;
-export type ID3 = number;
+export type NoName11 = number;
 export type NoName12 = boolean;
 export type NoName13 = string;
-export type OrganizationId = number;
 export type NoName14 = string;
-export type ID4 = number;
+export type ID3 = number;
 export type NoName15 = boolean;
 export type NoName16 = string;
-export type PositionId = number;
+export type NoName17 = number;
+export type NoName18 = string;
+export type ID4 = number;
+export type NoName19 = boolean;
+export type NoName20 = string;
+export type NoName21 = number;
 
 export interface CvProjectRead {
     competencies?: CompetenceInline[];
-    competencies_ids?: number[];
-    cv_id: CvId;
-    date_from?: NoName3;
-    date_to?: NoName4;
-    description?: NoName5;
+    competencies_ids?: NoName3[];
+    cv_id: NoName4;
+    date_from?: NoName5;
+    date_to?: NoName6;
+    description?: NoName7;
     id?: ID1;
     industry_sector?: IndustrySector;
-    industry_sector_id?: IndustrySectorId;
-    is_verified?: NoName9;
-    name: NoName10;
+    industry_sector_id?: NoName11;
+    is_verified?: NoName12;
+    name: NoName13;
     organization?: Organization;
-    organization_id: OrganizationId;
+    organization_id: NoName17;
     position?: Position;
-    position_id: PositionId;
+    position_id: NoName21;
 }
 export interface CompetenceInline {
     description?: NoName;
@@ -59,20 +60,20 @@ export interface CompetenceInline {
     parent_id?: ParentId;
 }
 export interface IndustrySector {
-    description?: NoName6;
+    description?: NoName8;
     id?: ID2;
-    is_verified?: NoName7;
-    name: NoName8;
+    is_verified?: NoName9;
+    name: NoName10;
 }
 export interface Organization {
-    description?: NoName11;
+    description?: NoName14;
     id?: ID3;
-    is_customer?: NoName12;
-    name: NoName13;
+    is_customer?: NoName15;
+    name: NoName16;
 }
 export interface Position {
-    description?: NoName14;
+    description?: NoName18;
     id?: ID4;
-    is_verified?: NoName15;
-    name: NoName16;
+    is_verified?: NoName19;
+    name: NoName20;
 }

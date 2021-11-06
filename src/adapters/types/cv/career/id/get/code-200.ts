@@ -11,57 +11,59 @@ export type ID = number;
 export type NoName1 = boolean;
 export type NoName2 = string;
 export type ParentId = string;
-export type CvId = number;
-export type NoName3 = string;
-export type NoName4 = string;
+export type NoName3 = number;
+export type NoName4 = number;
 export type NoName5 = string;
-export type CvCareerId = string;
 export type NoName6 = string;
-export type FileExt = string;
 export type NoName7 = string;
+export type CvCareerId = string;
+export type NoName8 = string;
+export type FileExt = string;
+export type NoName9 = string;
 export type FileSize = string;
 export type ID1 = number;
 export type ID2 = number;
-export type NoName8 = boolean;
-export type NoName9 = string;
-export type ID3 = number;
 export type NoName10 = boolean;
 export type NoName11 = string;
-export type OrganizationId = number;
-export type NoName12 = string;
-export type ID4 = number;
-export type NoName13 = boolean;
-export type NoName14 = string;
-export type PositionId = number;
+export type ID3 = number;
+export type NoName12 = boolean;
+export type NoName13 = string;
+export type NoName14 = number;
 export type NoName15 = string;
-export type NoName16 = string;
+export type ID4 = number;
+export type NoName16 = boolean;
 export type NoName17 = string;
-export type NoName18 = string;
-export type ID5 = number;
-export type NoName19 = number;
-export type NoName20 = number;
+export type NoName18 = number;
+export type NoName19 = string;
+export type NoName20 = string;
 export type NoName21 = string;
-export type NoName22 = number;
+export type NoName22 = string;
+export type ID5 = number;
 export type NoName23 = number;
 export type NoName24 = number;
 export type NoName25 = string;
+export type NoName26 = number;
+export type NoName27 = number;
+export type NoName28 = number;
+export type NoName29 = string;
+export type NoName30 = number;
 
 export interface CvCareerRead {
     competencies?: CompetenceInline[];
-    competencies_ids?: number[];
-    cv_id: CvId;
-    date_from?: NoName3;
-    date_to?: NoName4;
-    description?: NoName5;
+    competencies_ids?: NoName3[];
+    cv_id: NoName4;
+    date_from?: NoName5;
+    date_to?: NoName6;
+    description?: NoName7;
     files?: CvCareerFileRead[];
     id?: ID2;
-    is_verified?: NoName8;
+    is_verified?: NoName10;
     organization?: Organization;
-    organization_id: OrganizationId;
+    organization_id: NoName14;
     position?: Position;
-    position_id?: PositionId;
+    position_id?: NoName18;
     projects?: OrganizationProject[];
-    projects_ids?: number[];
+    projects_ids?: NoName30[];
 }
 export interface CompetenceInline {
     description?: NoName;
@@ -72,35 +74,35 @@ export interface CompetenceInline {
 }
 export interface CvCareerFileRead {
     cv_career_id?: CvCareerId;
-    file?: NoName6;
+    file?: NoName8;
     file_ext?: FileExt;
-    file_name?: NoName7;
+    file_name?: NoName9;
     file_size?: FileSize;
     id?: ID1;
 }
 export interface Organization {
-    description?: NoName9;
+    description?: NoName11;
     id?: ID3;
-    is_customer?: NoName10;
-    name: NoName11;
+    is_customer?: NoName12;
+    name: NoName13;
 }
 export interface Position {
-    description?: NoName12;
+    description?: NoName15;
     id?: ID4;
-    is_verified?: NoName13;
-    name: NoName14;
+    is_verified?: NoName16;
+    name: NoName17;
 }
 export interface OrganizationProject {
-    created_at?: NoName15;
-    date_from?: NoName16;
-    date_to?: NoName17;
-    description?: NoName18;
+    created_at?: NoName19;
+    date_from?: NoName20;
+    date_to?: NoName21;
+    description?: NoName22;
     id?: ID5;
-    industry_sector_id?: NoName19;
-    manager_id?: NoName20;
-    name: NoName21;
-    organization_id: NoName22;
-    recruiters_ids?: NoName23[];
-    resource_managers_ids?: NoName24[];
-    updated_at?: NoName25;
+    industry_sector_id?: NoName23;
+    manager_id?: NoName24;
+    name: NoName25;
+    organization_id: NoName26;
+    recruiters_ids?: NoName27[];
+    resource_managers_ids?: NoName28[];
+    updated_at?: NoName29;
 }

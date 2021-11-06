@@ -179,11 +179,18 @@
         }
     }
 
-    &__projects {
-        cursor: pointer;
+    &__project-link {
+        color: var(--color-text-dark);
         text-decoration-line: underline;
         text-decoration-style: dashed;
         text-underline-offset: 3px;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
     }
 
     &__icon-apply {

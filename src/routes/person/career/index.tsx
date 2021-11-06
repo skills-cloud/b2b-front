@@ -1,6 +1,7 @@
 import React, { useState, useMemo, Fragment, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import IconPencil from 'component/icons/pencil';
@@ -139,14 +140,25 @@ export const Career = (props: IProps) => {
                                 </li>
                                 {field.projects && (
                                     <li className={cn('career__list-item')}>
-                                        <strong>{t('routes.person.career.fields.projects')}</strong>
+                                        <strong>{t('routes.person.career.fields.projects.label')}</strong>
                                         <div className={cn('career__projects')}>
                                             {field.projects.map((project, i) => {
+                                                let content = `${project.name}, `;
+
                                                 if(i + 1 === field.projects?.length) {
-                                                    return project.name;
+                                                    content = project.name;
                                                 }
 
-                                                return `${project.name}, `;
+                                                return (
+                                                    <Link
+                                                        target="_blank"
+                                                        className={cn('career__project-link')}
+                                                        key={i}
+                                                        to={`/organizations/${project.organization_id}/projects/${project.id}`}
+                                                    >
+                                                        {content}
+                                                    </Link>
+                                                );
                                             })}
                                         </div>
                                     </li>

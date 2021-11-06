@@ -11,7 +11,6 @@ import EditAction from 'component/section/actions/edit';
 import DeleteAction from 'component/section/actions/delete';
 import SearchAction from 'component/section/actions/search';
 import Modal from 'component/modal';
-import useModalClose from 'component/modal/use-modal-close';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import SectionContentList from 'component/section/content-list';
 import Header, { H4 } from 'component/header';
@@ -57,8 +56,6 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
     const onClose = useCallback(() => {
         setModalStep(EModalSteps.Close);
     }, []);
-
-    useModalClose(step !== EModalSteps.Close, onClose);
 
     const onClickSearch = (requirementId?: number) => () => {
         if(requirementId) {

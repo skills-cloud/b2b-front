@@ -14,13 +14,13 @@
                     "type": "string"
                 },
                 "contact_type_id": {
-                    "title": "Contact type id",
+                    "title": "Тип контактной информации",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/contact-type/$id/",
                     "x-url-object-list": "/api/dictionary/contact-type/"
                 },
                 "cv_id": {
-                    "title": "Cv id",
+                    "title": "Анкета",
                     "type": "integer",
                     "x-url-object-detail": "/api/cv/cv/$id/",
                     "x-url-object-list": "/api/cv/cv/"

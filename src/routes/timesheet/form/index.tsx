@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 
@@ -9,7 +9,7 @@ import Input from 'component/form/input';
 
 import { useClassnames } from 'hook/use-classnames';
 
-import { IGetRequestListParams, mainRequest } from 'src/adapters/api/main';
+import { mainRequest } from 'src/adapters/api/main';
 import { TimeSheetRowRead } from 'adapter/types/main/time-sheet-row/get/code-200';
 import { IGetCvListFilters } from 'adapter/api/cv';
 
@@ -29,12 +29,12 @@ interface IFormValues extends Omit<TimeSheetRowRead, 'request' | 'cv'> {
 interface IProps {
     formId: string,
     onSuccess: (id?: number) => void,
-    defaultValues?: TimeSheetRowRead,
+    defaultValues?: Partial<TimeSheetRowRead>,
     cvFilters?: IGetCvListFilters,
-    requestFilters?: IGetRequestListParams
+    requestId?: string
 }
 
-const TimesheetForm = ({ formId, onSuccess, defaultValues, cvFilters, requestFilters }: IProps) => {
+const TimesheetForm = ({ formId, onSuccess, defaultValues, cvFilters, requestId }: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
 
@@ -54,6 +54,8 @@ const TimesheetForm = ({ formId, onSuccess, defaultValues, cvFilters, requestFil
             } : ''
         }
     });
+
+    useEffect(() => {}, []);
 
     const onSubmit = form.handleSubmit(
         (formData: SubmitHandler<IFormValues>) => {
@@ -84,7 +86,8 @@ const TimesheetForm = ({ formId, onSuccess, defaultValues, cvFilters, requestFil
             <form method="POST" id={formId} onSubmit={onSubmit}>
                 <div className={cn('form')}>
                     <InputRequest
-                        filters={requestFilters}
+                        defaultValue={[requestId as string]}
+                        disabled={true}
                         isMulti={false}
                         requestType={InputRequest.requestType.Request}
                         name="request"

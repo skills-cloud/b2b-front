@@ -7,12 +7,12 @@ import style from './index.module.pcss';
 interface INavItem {
     children: ReactNode,
     selected?: boolean,
+    replace?: boolean,
     to: string
 }
 
-const NavItem: FC<INavItem> = ({ children, to, selected }) => {
+const NavItem: FC<INavItem> = ({ replace, children, to, selected }) => {
     const cn = useClassnames(style);
-    const isAncor = to.startsWith('#');
 
     const match = useRouteMatch({ path: to });
     const [active, setActive] = useState<boolean>();
@@ -26,21 +26,15 @@ const NavItem: FC<INavItem> = ({ children, to, selected }) => {
             'nav__item_selected': selected || active
         })}
         >
-            {isAncor && (
-                <a href={to} className={cn('nav__item-link')}>
-                    {children}
-                </a>
-            )}
-            {!isAncor && (
-                <NavLink
-                    to={to}
-                    isActive={() => match?.isExact || !!selected}
-                    className={cn('nav__item-link')}
-                    activeClassName={cn('nav__item-link_active')}
-                >
-                    {children}
-                </NavLink>
-            )}
+            <NavLink
+                replace={replace}
+                to={to}
+                isActive={() => match?.isExact || !!selected}
+                className={cn('nav__item-link')}
+                activeClassName={cn('nav__item-link_active')}
+            >
+                {children}
+            </NavLink>
         </li>
     );
 };

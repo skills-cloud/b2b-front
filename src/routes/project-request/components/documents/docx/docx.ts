@@ -28,7 +28,7 @@ class DocumentCreator {
                 {
                     children: [
                         new Paragraph({
-                            text   : props.project?.name || i18n.t('components.pdf.project.name'),
+                            text   : props.module?.organization_project?.name || i18n.t('components.pdf.project.name'),
                             heading: HeadingLevel.HEADING_1,
                             spacing: { after: 200 }
                         }),
@@ -55,7 +55,7 @@ class DocumentCreator {
                             heading: HeadingLevel.HEADING_2,
                             spacing: { before: 200, after: 200 }
                         }),
-                        this.createCustomer(props.organization_project?.organization)
+                        this.createCustomer(props.module?.organization_project?.organization)
                     ]
                 }
             ]
@@ -88,10 +88,10 @@ class DocumentCreator {
             alignment: AlignmentType.LEFT,
             rows     : [
                 this.createRow(i18n.t('components.pdf.project.sector'), data.industry_sector?.name),
-                this.createRow(i18n.t('components.pdf.project.project'), data.project?.name),
+                this.createRow(i18n.t('components.pdf.project.project'), data.module?.organization_project?.name),
                 this.createRow(i18n.t('components.pdf.project.manager'), manager),
                 this.createRow(i18n.t('components.pdf.project.recruiter'), recruiter),
-                this.createRow(i18n.t('components.pdf.project.customer'), data.organization_project?.organization?.name),
+                this.createRow(i18n.t('components.pdf.project.customer'), data.module?.organization_project?.organization?.name),
                 this.createRow(i18n.t('components.pdf.project.sector'), data.industry_sector?.name)
             ]
         });

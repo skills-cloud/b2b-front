@@ -9,7 +9,6 @@ import { useDispatch } from 'component/core/store';
 
 import FormDate from 'component/form/date';
 import FormInput from 'component/form/input';
-import Button from 'component/button';
 import InputSelect from 'component/form/select';
 import InputDictionary from 'component/form/input-dictionary';
 
@@ -25,6 +24,8 @@ export interface IProps {
     onCancel?(): void,
     onSubmit?(): void
 }
+
+export const CERT_EDIT_FORM = 'CERT_EDIT_FORM';
 
 const EditForm = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
@@ -171,66 +172,60 @@ const EditForm = (props: IProps) => {
         <form
             className={cn('edit-form')}
             onSubmit={onSubmit}
+            id={CERT_EDIT_FORM}
         >
-            <div className={cn('edit-form__form-body')}>
-                <h2 className={cn('edit-form__header')}>{t('routes.person.certificates.header')}</h2>
-                <FormProvider {...methods}>
-                    <div className={cn('edit-form__career')}>
-                        <div className={cn('edit-form__field')}>
-                            <strong>{t('routes.person.certificates.fields.name')}</strong>
-                            <FormInput name="certificate.name" type="text" />
-                        </div>
-                        <div className={cn('edit-form__field')}>
-                            <strong>{t('routes.person.certificates.fields.date')}</strong>
-                            <FormDate name="certificate.date" />
-                        </div>
-                        <div className={cn('edit-form__field')}>
-                            <strong>{t('routes.person.certificates.fields.grade')}</strong>
-                            <InputSelect
-                                name="certificate.education_graduate"
-                                loadOptions={onLoadGraduateOptions}
-                                placeholder="Начните вводить степень"
-                            />
-                        </div>
-                        <div className={cn('edit-form__field')}>
-                            <strong>{t('routes.person.certificates.fields.place')}</strong>
-                            <InputSelect
-                                name="certificate.education_place"
-                                loadOptions={onLoadPlaceOptions}
-                                placeholder="Начните вводить место обучения"
-                            />
-                        </div>
-                        <div className={cn('edit-form__field')}>
-                            <strong>{t('routes.person.certificates.fields.speciality')}</strong>
-                            <InputSelect
-                                name="certificate.education_speciality"
-                                loadOptions={onLoadSpecialityOptions}
-                                placeholder="Начните вводить специальность"
-                            />
-                        </div>
-                        <div className={cn('edit-form__field')}>
-                            <strong>{t('routes.person.certificates.fields.number')}</strong>
-                            <FormInput name="certificate.number" type="text" />
-                        </div>
-                        <div className={cn('edit-form__field')}>
-                            <strong>{t('routes.person.certificates.fields.competencies')}</strong>
-                            <InputDictionary
-                                requestType={InputDictionary.requestType.Competence}
-                                name="certificate.competencies"
-                                placeholder={t('routes.person.certificates.fields.competencies')}
-                            />
-                        </div>
-                        <div className={cn('edit-form__field')}>
-                            <strong>{t('routes.person.certificates.fields.description')}</strong>
-                            <FormInput name="certificate.description" type="text" />
-                        </div>
+            <FormProvider {...methods}>
+                <div className={cn('edit-form__career')}>
+                    <div className={cn('edit-form__field')}>
+                        <strong>{t('routes.person.certificates.fields.name')}</strong>
+                        <FormInput name="certificate.name" type="text" />
                     </div>
-                </FormProvider>
-            </div>
-            <div className={cn('edit-form__form-footer')}>
-                <Button isSecondary={true} onClick={props.onCancel}>{t('routes.person.certificates.edit.buttons.cancel')}</Button>
-                <Button type="submit">{t('routes.person.certificates.edit.buttons.save')}</Button>
-            </div>
+                    <div className={cn('edit-form__field')}>
+                        <strong>{t('routes.person.certificates.fields.date')}</strong>
+                        <FormDate name="certificate.date" />
+                    </div>
+                    <div className={cn('edit-form__field')}>
+                        <strong>{t('routes.person.certificates.fields.grade')}</strong>
+                        <InputSelect
+                            name="certificate.education_graduate"
+                            loadOptions={onLoadGraduateOptions}
+                            placeholder="Начните вводить степень"
+                        />
+                    </div>
+                    <div className={cn('edit-form__field')}>
+                        <strong>{t('routes.person.certificates.fields.place')}</strong>
+                        <InputSelect
+                            name="certificate.education_place"
+                            loadOptions={onLoadPlaceOptions}
+                            placeholder="Начните вводить место обучения"
+                        />
+                    </div>
+                    <div className={cn('edit-form__field')}>
+                        <strong>{t('routes.person.certificates.fields.speciality')}</strong>
+                        <InputSelect
+                            name="certificate.education_speciality"
+                            loadOptions={onLoadSpecialityOptions}
+                            placeholder="Начните вводить специальность"
+                        />
+                    </div>
+                    <div className={cn('edit-form__field')}>
+                        <strong>{t('routes.person.certificates.fields.number')}</strong>
+                        <FormInput name="certificate.number" type="text" />
+                    </div>
+                    <div className={cn('edit-form__field')}>
+                        <strong>{t('routes.person.certificates.fields.competencies')}</strong>
+                        <InputDictionary
+                            requestType={InputDictionary.requestType.Competence}
+                            name="certificate.competencies"
+                            placeholder={t('routes.person.certificates.fields.competencies')}
+                        />
+                    </div>
+                    <div className={cn('edit-form__field')}>
+                        <strong>{t('routes.person.certificates.fields.description')}</strong>
+                        <FormInput name="certificate.description" type="text" />
+                    </div>
+                </div>
+            </FormProvider>
         </form>
     );
 };

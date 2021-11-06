@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 import { Organization } from 'adapter/types/main/organization/get/code-200';
+import { Organization as PostOrganization } from 'adapter/types/main/organization/post/code-201';
+import { Organization as PatchOrganization } from 'adapter/types/main/organization/id/patch/code-200';
 import { Organization as OrganizationById } from 'adapter/types/main/organization/id/get/code-200';
 import { ProjectRead } from 'adapter/types/main/project/get/code-200';
 import { ProjectRead as ProjectReadById } from 'adapter/types/main/project/id/get/code-200';
@@ -295,19 +297,35 @@ export const mainRequest = createApi({
                 method: 'GET'
             })
         }),
+        getMainOrganizationById: build.query<OrganizationById, IBaseGetById>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : `/organization/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        postMainOrganization: build.mutation<PostOrganization, PostOrganization>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/organization/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainOrganization: build.mutation<PatchOrganization, PatchOrganization>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...body }) => ({
+                url   : `/organization/${id}/`,
+                method: 'PATCH',
+                body
+            })
+        }),
         getMainOrganization: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization/',
                 method: 'GET',
                 params
-            })
-        }),
-        getMainOrganizationById: build.query<OrganizationById, IBaseGetById>({
-            providesTags: ['main'],
-            query       : (params) => ({
-                url   : `/organization/${params.id}/`,
-                method: 'GET'
             })
         }),
         getMainOrganizationCustomer: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({

@@ -17,12 +17,12 @@ export type NoName4 = number;
 export type ID = number;
 export type NoName5 = number;
 export type NoName6 = string;
-export type PositionId = number;
-export type RequestId = number;
 export type NoName7 = number;
-export type TypeOfEmploymentId = number;
-export type NoName8 = string;
-export type WorkLocationCityId = number;
+export type NoName8 = number;
+export type NoName9 = number;
+export type NoName10 = number;
+export type NoName11 = string;
+export type NoName12 = number;
 
 export interface RequestRequirement {
     count?: NoName;
@@ -33,10 +33,10 @@ export interface RequestRequirement {
     id?: ID;
     max_price?: NoName5;
     name?: NoName6;
-    position_id?: PositionId;
-    request_id: RequestId;
-    sorting?: NoName7;
-    type_of_employment_id?: TypeOfEmploymentId;
-    work_location_address?: NoName8;
-    work_location_city_id?: WorkLocationCityId;
+    position_id?: NoName7;
+    request_id: NoName8;
+    sorting?: NoName9;
+    type_of_employment_id?: NoName10;
+    work_location_address?: NoName11;
+    work_location_city_id?: NoName12;
 }

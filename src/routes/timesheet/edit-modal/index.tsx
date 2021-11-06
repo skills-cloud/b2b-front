@@ -6,21 +6,20 @@ import ModalFooterSubmit from 'component/modal/footer-submit';
 import Button from 'component/button';
 
 import { TimeSheetRowRead } from 'adapter/types/main/time-sheet-row/get/code-200';
+import { IGetCvListFilters } from 'adapter/api/cv';
 
 import TimesheetForm from '../form';
-import { IGetCvListFilters } from 'adapter/api/cv';
-import { IGetRequestListParams } from 'adapter/api/main';
 
 interface IEditModal {
     setVisible: (visible: boolean) => void,
-    fields?: TimeSheetRowRead,
+    fields?: Partial<TimeSheetRowRead>,
     cvFilters?: IGetCvListFilters,
-    requestFilters?: IGetRequestListParams
+    requestId?: string
 }
 
 const FORM_TIMESHEET_ID = 'FORM_MAIN_ID';
 
-const EditModal = ({ setVisible, cvFilters, fields, requestFilters }: IEditModal) => {
+const EditModal = ({ setVisible, cvFilters, fields, requestId }: IEditModal) => {
     const { t } = useTranslation();
 
     return (
@@ -49,7 +48,7 @@ const EditModal = ({ setVisible, cvFilters, fields, requestFilters }: IEditModal
                 }}
                 defaultValues={fields}
                 cvFilters={cvFilters}
-                requestFilters={requestFilters}
+                requestId={requestId}
             />
         </Modal>
     );

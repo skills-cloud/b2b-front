@@ -16,6 +16,7 @@ import ModalFooterSubmit from 'component/modal/footer-submit';
 import Button from 'component/button';
 import InputDate from 'component/form/date';
 import Checkbox from 'component/form/checkbox';
+import StarRating from 'component/star-rating';
 
 import { cv } from 'adapter/api/cv';
 import { mainRequest } from 'adapter/api/main';
@@ -24,7 +25,6 @@ import { OrganizationProjectCardItemReadTree } from 'adapter/types/main/organiza
 import { RequestRequirementCvRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 
 import style from './index.module.pcss';
-import StarRating from 'component/star-rating';
 
 interface ICard extends OrganizationProjectCardItemReadTree{
     count: number
@@ -179,11 +179,11 @@ export const Candidates = () => {
                 .catch(console.error);
         }
 
-        if(data?.organization_project_id) {
+        if(data?.module?.organization_project_id) {
             dispatch(mainRequest
                 .endpoints
                 .getOrganizationProjectCardItem
-                .initiate({ organization_project_id: [String(data.organization_project_id)] })
+                .initiate({ organization_project_id: [String(data.module?.organization_project_id)] })
             ).then(({ data: cardItems }) => {
                 if(cardItems) {
                     setCardTree(cardItems);

@@ -55,13 +55,13 @@
                 },
                 "position_id": {
                     "nullable": true,
-                    "title": "Position id",
+                    "title": "Должность",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/position/$id/",
                     "x-url-object-list": "/api/dictionary/position/"
                 },
                 "request_id": {
-                    "title": "Request id",
+                    "title": "Запрос",
                     "type": "integer",
                     "x-url-object-detail": "/api/main/request/$id/",
                     "x-url-object-list": "/api/main/request/"
@@ -74,7 +74,7 @@
                 },
                 "type_of_employment_id": {
                     "nullable": true,
-                    "title": "Type of employment id",
+                    "title": "Тип занятости",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/type-of-employment/$id/",
                     "x-url-object-list": "/api/dictionary/type-of-employment/"
@@ -87,7 +87,7 @@
                 },
                 "work_location_city_id": {
                     "nullable": true,
-                    "title": "Work location city id",
+                    "title": "Город",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/city/$id/",
                     "x-url-object-list": "/api/dictionary/city/"

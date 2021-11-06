@@ -8,7 +8,7 @@
         "RequestRequirementCompetence": {
             "properties": {
                 "competence_id": {
-                    "title": "Competence id",
+                    "title": "Компетенция",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/competence/$id/",
                     "x-url-object-list": "/api/dictionary/competence/"
@@ -23,7 +23,13 @@
                     ],
                     "nullable": true,
                     "title": "Опыт лет",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-enum-description": {
+                        "1": "Менее года",
+                        "3": "1 – 3 года",
+                        "5": "3 - 5 лет",
+                        "100": "Более 5 лет"
+                    }
                 },
                 "id": {
                     "readOnly": true,

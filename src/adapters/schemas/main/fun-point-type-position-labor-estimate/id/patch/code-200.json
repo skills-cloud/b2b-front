@@ -1,0 +1,58 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/FunPointTypePositionLaborEstimateWrite"
+        }
+    ],
+    "definitions": {
+        "FunPointTypePositionLaborEstimateWrite": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "fun_point_type_id": {
+                    "title": "Модули / тип функциональной точки",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/fun-point-type/$id/",
+                    "x-url-object-list": "/api/main/fun-point-type/"
+                },
+                "hours": {
+                    "description": "в часах",
+                    "title": "Норматив",
+                    "type": "number"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "position_id": {
+                    "title": "Должность",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "fun_point_type_id",
+                "position_id"
+            ],
+            "type": "object"
+        }
+    }
+}

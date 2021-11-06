@@ -101,21 +101,21 @@
                 },
                 "citizenship_id": {
                     "nullable": true,
-                    "title": "Citizenship id",
+                    "title": "Гражданство",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/citizenship/$id/",
                     "x-url-object-list": "/api/dictionary/citizenship/"
                 },
                 "city_id": {
                     "nullable": true,
-                    "title": "City id",
+                    "title": "Город",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/city/$id/",
                     "x-url-object-list": "/api/dictionary/city/"
                 },
                 "country_id": {
                     "nullable": true,
-                    "title": "Country id",
+                    "title": "Страна",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/country/$id/",
                     "x-url-object-list": "/api/dictionary/country/"
@@ -132,7 +132,12 @@
                                 "workdays"
                             ],
                             "title": "Дни для связи",
-                            "type": "string"
+                            "type": "string",
+                            "x-enum-description": {
+                                "all": "Все дни",
+                                "weekends": "Выходные дни",
+                                "workdays": "Будние дни"
+                            }
                         }
                     ]
                 },
@@ -153,7 +158,11 @@
                                 "M"
                             ],
                             "title": "Пол",
-                            "type": "string"
+                            "type": "string",
+                            "x-enum-description": {
+                                "F": "Женский",
+                                "M": "Мужской"
+                            }
                         }
                     ]
                 },
@@ -202,7 +211,7 @@
                 },
                 "user_id": {
                     "nullable": true,
-                    "title": "User id",
+                    "title": "Пользователь",
                     "type": "integer",
                     "x-url-object-detail": "/api/acc/user/$id/",
                     "x-url-object-list": "/api/acc/user/"
@@ -244,7 +253,7 @@
                     "$ref": "#/definitions/Competence"
                 },
                 "competence_id": {
-                    "title": "Competence id",
+                    "title": "Компетенция",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/competence/$id/",
                     "x-url-object-list": "/api/dictionary/competence/"
@@ -259,7 +268,13 @@
                     ],
                     "nullable": true,
                     "title": "Опыт лет",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-enum-description": {
+                        "1": "Менее года",
+                        "3": "1 – 3 года",
+                        "5": "3 - 5 лет",
+                        "100": "Более 5 лет"
+                    }
                 },
                 "id": {
                     "readOnly": true,
@@ -292,7 +307,7 @@
                     "type": "string"
                 },
                 "id": {
-                    "title": "Id",
+                    "title": "Организации / карточка проекта организации",
                     "type": "integer",
                     "x-url-object-detail": "/api/main/organization-project-card-item/$id/",
                     "x-url-object-list": "/api/main/organization-project-card-item/"
@@ -362,7 +377,13 @@
                         "worker"
                     ],
                     "title": "Статус",
-                    "type": "string"
+                    "type": "string",
+                    "x-enum-description": {
+                        "canceled": "Canceled",
+                        "candidate": "Candidate",
+                        "pre-candidate": "Pre Candidate",
+                        "worker": "Worker"
+                    }
                 },
                 "updated_at": {
                     "format": "date-time",
@@ -448,13 +469,13 @@
                 },
                 "position_id": {
                     "nullable": true,
-                    "title": "Position id",
+                    "title": "Должность",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/position/$id/",
                     "x-url-object-list": "/api/dictionary/position/"
                 },
                 "request_id": {
-                    "title": "Request id",
+                    "title": "Запрос",
                     "type": "integer",
                     "x-url-object-detail": "/api/main/request/$id/",
                     "x-url-object-list": "/api/main/request/"
@@ -470,7 +491,7 @@
                 },
                 "type_of_employment_id": {
                     "nullable": true,
-                    "title": "Type of employment id",
+                    "title": "Тип занятости",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/type-of-employment/$id/",
                     "x-url-object-list": "/api/dictionary/type-of-employment/"
@@ -486,7 +507,7 @@
                 },
                 "work_location_city_id": {
                     "nullable": true,
-                    "title": "Work location city id",
+                    "title": "Город",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/city/$id/",
                     "x-url-object-list": "/api/dictionary/city/"

@@ -6,18 +6,18 @@
  */
 
 export type Code201 = CvPosition;
-export type CvId = number;
+export type NoName = number;
 export type ID = number;
-export type PositionId = number;
-export type NoName = string;
+export type NoName1 = number;
+export type NoName2 = string;
 export type YearStarted = number;
 export type Years = number;
 
 export interface CvPosition {
-    cv_id: CvId;
+    cv_id: NoName;
     id?: ID;
-    position_id?: PositionId;
-    title?: NoName;
+    position_id?: NoName1;
+    title?: NoName2;
     year_started?: YearStarted;
     years?: Years;
 }

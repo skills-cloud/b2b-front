@@ -6,7 +6,6 @@ import { useClassnames } from 'hook/use-classnames';
 import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
 import Modal from 'component/modal';
-import useModalClose from 'component/modal/use-modal-close';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import Header from 'component/header';
 import Section from 'component/section';
@@ -37,8 +36,6 @@ const Customer = ({ customer, requestId }: ICustomer) => {
     const onClose = useCallback(() => {
         setModalStep(EModalSteps.Close);
     }, []);
-
-    useModalClose(step !== EModalSteps.Close, onClose);
 
     const onEditAction = () => {
         setModalStep(EModalSteps.Base);
