@@ -7,17 +7,17 @@
 
 export type Code201 = CvContact;
 export type NoName = string;
-export type ContactTypeId = number;
-export type CvId = number;
+export type NoName1 = number;
+export type NoName2 = number;
 export type ID = number;
-export type NoName1 = boolean;
-export type NoName2 = string;
+export type NoName3 = boolean;
+export type NoName4 = string;
 
 export interface CvContact {
     comment?: NoName;
-    contact_type_id: ContactTypeId;
-    cv_id: CvId;
+    contact_type_id: NoName1;
+    cv_id: NoName2;
     id?: ID;
-    is_primary?: NoName1;
-    value: NoName2;
+    is_primary?: NoName3;
+    value: NoName4;
 }

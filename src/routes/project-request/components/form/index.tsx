@@ -118,13 +118,13 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                 value: defaultValues?.industry_sector?.id,
                 label: defaultValues?.industry_sector?.name
             } : '',
-            customer: defaultValues?.organization_project ? {
-                value: defaultValues?.organization_project.organization_id,
-                label: defaultValues?.organization_project.organization?.name
+            customer: defaultValues?.module?.organization_project ? {
+                value: defaultValues?.module.organization_project.organization_id,
+                label: defaultValues?.module.organization_project.organization?.name
             } : '',
-            project: defaultValues?.organization_project ? {
-                value: defaultValues?.organization_project?.id,
-                label: defaultValues?.organization_project?.name
+            project: defaultValues?.module?.organization_project ? {
+                value: defaultValues?.module.organization_project?.id,
+                label: defaultValues?.module.organization_project?.name
             } : '',
             type: defaultValues?.type ? {
                 value: defaultValues?.type?.id,

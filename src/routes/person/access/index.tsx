@@ -76,7 +76,7 @@ const Access = (props: IProps) => {
         for(const period of periods) {
             if(isWithinInterval(date, period)) {
                 setActiveTimeSlotId(period.id as number);
-                currentPeriod = timeSlotData?.results.find((item) => period.emp?.id === item.type_of_employment?.id);
+                currentPeriod = timeSlotData?.results.find((item) => period.id === item.id);
             }
         }
 
@@ -174,7 +174,11 @@ const Access = (props: IProps) => {
     const elEditWindow = () => {
         if(isEdit) {
             return (
-                <Modal footer={elFooter()} header={t('routes.person.common.access.title')}>
+                <Modal
+                    footer={elFooter()}
+                    header={t('routes.person.common.access.title')}
+                    onClose={() => setIsEdit(false)}
+                >
                     <FormProvider {...methods}>
                         <form className={cn('access__form')}>
                             <div className={cn('access__field-set')}>

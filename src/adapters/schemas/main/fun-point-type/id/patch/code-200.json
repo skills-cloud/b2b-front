@@ -1,0 +1,51 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/FunPointTypeWrite"
+        }
+    ],
+    "definitions": {
+        "FunPointTypeWrite": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "organization_id": {
+                    "title": "заказчик",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        }
+    }
+}

@@ -14,7 +14,7 @@ import InputDictionary from 'component/form/input-dictionary';
 import { dictionary } from 'adapter/api/dictionary';
 import { cv } from 'adapter/api/cv';
 import { contact } from 'adapter/api/contact';
-import { CvDetailReadFull, NoName65 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
+import { CvDetailReadFull, NoName85 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
 import { CvDetailWrite } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
@@ -88,7 +88,7 @@ export const CommonEdit = (props: IProps) => {
             main_contact: null
         }
     });
-    const [patchCvById] = cv.usePatchCvByIdMutation();
+    const [patchCvById, { isLoading }] = cv.usePatchCvByIdMutation();
     const [postContact] = contact.usePostContactMutation();
     const [patchContact] = contact.usePatchContactMutation();
     const [deleteContact] = contact.useDeleteContactMutation();
@@ -214,13 +214,24 @@ export const CommonEdit = (props: IProps) => {
         return (
             <div className={cn('common-edit__form-footer')}>
                 {elAppend}
-                <Button isSecondary={true} onClick={props.onCancel} className={cn('common-edit__button-secondary')}>
+                <Button
+                    isSecondary={true}
+                    onClick={props.onCancel}
+                    disabled={isLoading}
+                    className={cn('common-edit__button-secondary')}
+                >
                     {t('routes.person.common.edit.buttons.cancel')}
                 </Button>
-                <Button onClick={onSubmit}>{t('routes.person.common.edit.buttons.save')}</Button>
+                <Button
+                    onClick={onSubmit}
+                    disabled={isLoading}
+                    isLoading={isLoading}
+                >
+                    {t('routes.person.common.edit.buttons.save')}
+                </Button>
             </div>
         );
-    }, [activeTab]);
+    }, [activeTab, isLoading]);
 
     const elFormContent = () => {
         if(activeTab === 'main') {

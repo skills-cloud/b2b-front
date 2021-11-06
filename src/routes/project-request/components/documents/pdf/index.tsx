@@ -32,7 +32,7 @@ const ProjectRequestPdf = () => {
             doc.setFont('Roboto-Medium', 'normal');
 
             doc.setFontSize(20);
-            doc.text(data.project?.name || t('components.pdf.project.name'), startX, startY, { align: 'left' });
+            doc.text(data.module?.organization_project?.name || t('components.pdf.project.name'), startX, startY, { align: 'left' });
 
             startY += 30;
 
@@ -48,7 +48,7 @@ const ProjectRequestPdf = () => {
             startY += 16;
 
             doc.text(t('components.pdf.project.project'), startX, startY, { align: 'left' });
-            doc.text(data.project?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+            doc.text(data.module?.organization_project?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             const manager = `${data.resource_manager?.last_name || ''} ${(data.resource_manager?.first_name || '').slice(0, 1)}`;
 
@@ -72,7 +72,7 @@ const ProjectRequestPdf = () => {
             startY += 16;
 
             doc.text(t('components.pdf.project.customer'), startX, startY, { align: 'left' });
-            doc.text(data.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+            doc.text(data.module?.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             startY += 30;
 
@@ -145,7 +145,7 @@ const ProjectRequestPdf = () => {
 
             doc.setFontSize(10);
             doc.text(t('components.pdf.project.customer'), startX, startY, { align: 'left' });
-            doc.text(data.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+            doc.text(data.module?.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             return doc;
         }

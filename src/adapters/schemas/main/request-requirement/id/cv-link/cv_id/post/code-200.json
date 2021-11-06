@@ -61,7 +61,13 @@
                         "worker"
                     ],
                     "title": "Статус",
-                    "type": "string"
+                    "type": "string",
+                    "x-enum-description": {
+                        "canceled": "Canceled",
+                        "candidate": "Candidate",
+                        "pre-candidate": "Pre Candidate",
+                        "worker": "Worker"
+                    }
                 },
                 "updated_at": {
                     "format": "date-time",
@@ -81,7 +87,7 @@
                     "type": "string"
                 },
                 "id": {
-                    "title": "Id",
+                    "title": "Организации / карточка проекта организации",
                     "type": "integer",
                     "x-url-object-detail": "/api/main/organization-project-card-item/$id/",
                     "x-url-object-list": "/api/main/organization-project-card-item/"

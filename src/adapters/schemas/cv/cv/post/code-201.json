@@ -15,21 +15,21 @@
                 },
                 "citizenship_id": {
                     "nullable": true,
-                    "title": "Citizenship id",
+                    "title": "Гражданство",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/citizenship/$id/",
                     "x-url-object-list": "/api/dictionary/citizenship/"
                 },
                 "city_id": {
                     "nullable": true,
-                    "title": "City id",
+                    "title": "Город",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/city/$id/",
                     "x-url-object-list": "/api/dictionary/city/"
                 },
                 "country_id": {
                     "nullable": true,
-                    "title": "Country id",
+                    "title": "Страна",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/country/$id/",
                     "x-url-object-list": "/api/dictionary/country/"
@@ -46,7 +46,12 @@
                                 "workdays"
                             ],
                             "title": "Дни для связи",
-                            "type": "string"
+                            "type": "string",
+                            "x-enum-description": {
+                                "all": "Все дни",
+                                "weekends": "Выходные дни",
+                                "workdays": "Будние дни"
+                            }
                         }
                     ]
                 },
@@ -67,7 +72,11 @@
                                 "M"
                             ],
                             "title": "Пол",
-                            "type": "string"
+                            "type": "string",
+                            "x-enum-description": {
+                                "F": "Женский",
+                                "M": "Мужской"
+                            }
                         }
                     ]
                 },
@@ -89,6 +98,7 @@
                 "linked_ids": {
                     "items": {
                         "nullable": true,
+                        "title": "Анкета",
                         "type": "integer",
                         "x-url-object-detail": "/api/cv/cv/$id/",
                         "x-url-object-list": "/api/cv/cv/"
@@ -112,6 +122,7 @@
                 "physical_limitations_ids": {
                     "items": {
                         "nullable": true,
+                        "title": "Физическая особенность",
                         "type": "integer",
                         "x-url-object-detail": "/api/dictionary/physical-limitation/$id/",
                         "x-url-object-list": "/api/dictionary/physical-limitation/"
@@ -137,6 +148,7 @@
                 "types_of_employment_ids": {
                     "items": {
                         "nullable": true,
+                        "title": "Физическая особенность",
                         "type": "integer",
                         "x-url-object-detail": "/api/dictionary/physical-limitation/$id/",
                         "x-url-object-list": "/api/dictionary/physical-limitation/"
@@ -146,7 +158,7 @@
                 },
                 "user_id": {
                     "nullable": true,
-                    "title": "User id",
+                    "title": "Пользователь",
                     "type": "integer",
                     "x-url-object-detail": "/api/acc/user/$id/",
                     "x-url-object-list": "/api/acc/user/"

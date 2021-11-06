@@ -74,7 +74,7 @@
                 },
                 "city_id": {
                     "nullable": true,
-                    "title": "City id",
+                    "title": "Город",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/city/$id/",
                     "x-url-object-list": "/api/dictionary/city/"
@@ -84,13 +84,13 @@
                 },
                 "country_id": {
                     "nullable": true,
-                    "title": "Country id",
+                    "title": "Страна",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/country/$id/",
                     "x-url-object-list": "/api/dictionary/country/"
                 },
                 "cv_id": {
-                    "title": "Cv id",
+                    "title": "Анкета",
                     "type": "integer",
                     "x-url-object-detail": "/api/cv/cv/$id/",
                     "x-url-object-list": "/api/cv/cv/"
@@ -131,7 +131,11 @@
                         "request_requirement"
                     ],
                     "title": "Тип слота",
-                    "type": "string"
+                    "type": "string",
+                    "x-enum-description": {
+                        "manual": "Manual",
+                        "request_requirement": "Request Requirement"
+                    }
                 },
                 "organization_project_id": {
                     "nullable": true,
@@ -181,7 +185,7 @@
                     "$ref": "#/definitions/TypeOfEmployment"
                 },
                 "type_of_employment_id": {
-                    "title": "Type of employment id",
+                    "title": "Тип занятости",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/type-of-employment/$id/",
                     "x-url-object-list": "/api/dictionary/type-of-employment/"

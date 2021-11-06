@@ -6,22 +6,22 @@
  */
 
 export type Code201 = RequestRequirementCompetence;
-export type CompetenceId = number;
+export type NoName = number;
 /**
  * `1` : *Менее года*
  * `3` : *1 – 3 года*
  * `5` : *3 - 5 лет*
  * `100` : *Более 5 лет*
  */
-export type NoName = 1 | 100 | 3 | 5;
+export type NoName1 = 1 | 100 | 3 | 5;
 export type ID = number;
 export type RequestRequirementId = string;
-export type NoName1 = number;
+export type NoName2 = number;
 
 export interface RequestRequirementCompetence {
-    competence_id: CompetenceId;
-    experience_years?: NoName;
+    competence_id: NoName;
+    experience_years?: NoName1;
     id?: ID;
     request_requirement_id?: RequestRequirementId;
-    sorting?: NoName1;
+    sorting?: NoName2;
 }

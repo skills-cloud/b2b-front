@@ -17,6 +17,7 @@ import OrganizationProjects from 'route/organization-projects';
 import Timesheets from 'route/timesheet';
 import Organizations from 'route/organizations';
 import OrganizationProjectCreate from 'route/organization-projects/create';
+import OrganizationCreate from 'route/organizations/create';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -29,6 +30,11 @@ export const baseRoutes: Array<IProps> = [{
     layout   : Layout,
     path     : '/organizations',
     component: Organizations
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/organizations/create',
+    component: OrganizationCreate
 }, {
     exact    : true,
     layout   : Layout,

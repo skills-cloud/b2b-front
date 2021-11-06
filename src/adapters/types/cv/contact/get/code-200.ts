@@ -11,20 +11,20 @@ export type NoName1 = string;
 export type ID = number;
 export type NoName2 = boolean;
 export type NoName3 = string;
-export type ContactTypeId = number;
-export type CvId = number;
+export type NoName4 = number;
+export type NoName5 = number;
 export type ID1 = number;
-export type NoName4 = boolean;
-export type NoName5 = string;
+export type NoName6 = boolean;
+export type NoName7 = string;
 
 export interface CvContactRead {
     comment?: NoName;
     contact_type?: ContactType;
-    contact_type_id: ContactTypeId;
-    cv_id: CvId;
+    contact_type_id: NoName4;
+    cv_id: NoName5;
     id?: ID1;
-    is_primary?: NoName4;
-    value: NoName5;
+    is_primary?: NoName6;
+    value: NoName7;
 }
 export interface ContactType {
     description?: NoName1;

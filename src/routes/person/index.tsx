@@ -21,6 +21,8 @@ import Access from './access';
 import Career from './career';
 import Competencies from './competencies';
 
+import { cv } from 'adapter/api/cv';
+
 import style from './common/index.module.pcss';
 
 export const Person = () => {
@@ -29,6 +31,10 @@ export const Person = () => {
     const { t } = useTranslation();
 
     const [showModal, setShowModal] = useState<boolean>(false);
+
+    const { data } = cv.useGetCvByIdQuery({ id: specialistId });
+
+    console.log('DATA', data)
 
     const onClickShowModal = () => {
         setShowModal(true);

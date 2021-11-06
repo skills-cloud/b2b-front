@@ -8,157 +8,287 @@
 export type Code200 = TimeSheetRowRead;
 export type NoName = string;
 export type NoName1 = string;
-export type CitizenshipId = number;
-export type CityId = number;
-export type CountryId = number;
-export type NoName2 = 'all' | 'weekends' | 'workdays';
-export type NoName3 = string;
-export type NoName4 = 'F' | 'M';
-export type ID = number;
-export type NoName5 = boolean;
+export type NoName2 = number;
+export type NoName3 = number;
+export type NoName4 = number;
+export type NoName5 = 'all' | 'weekends' | 'workdays';
 export type NoName6 = string;
-export type NoName7 = string;
-export type Photo = string;
-export type NoName8 = number;
+export type NoName7 = 'F' | 'M';
+export type ID = number;
+export type NoName8 = boolean;
 export type NoName9 = string;
 export type NoName10 = string;
-export type UserId = number;
+export type Photo = string;
 export type NoName11 = number;
 export type NoName12 = string;
 export type NoName13 = string;
+export type NoName14 = number;
+export type NoName15 = number;
+export type NoName16 = string;
+export type NoName17 = string;
 export type ID1 = number;
-export type NoName14 = string;
-export type NoName15 = string;
-export type ID2 = number;
-export type NoName16 = number;
-export type NoName17 = number;
 export type NoName18 = string;
 export type NoName19 = string;
-export type NoName20 = string;
+export type ID2 = number;
+export type NoName20 = number;
 export type NoName21 = string;
 export type ID3 = number;
 export type NoName22 = string;
-export type ID4 = number;
-export type NoName23 = boolean;
-export type NoName24 = string;
-export type NoName25 = number;
-export type NoName26 = string;
-export type ID5 = number;
-export type NoName27 = string;
 export type Photo1 = string;
-export type NoName28 = number;
+export type NoName23 = number;
+export type NoName24 = string;
+export type NoName25 = string;
+export type NoName26 = string;
+export type Difficulty = number;
+export type NoName27 = string;
+export type NoName28 = string;
 export type NoName29 = string;
-export type NoName30 = string;
-export type ID6 = number;
-export type NoName31 = boolean;
+export type NoName30 = number;
+export type NoName31 = number;
+export type ID4 = number;
 export type NoName32 = string;
 export type NoName33 = number;
-export type NoName34 = number;
-export type RequestsCount = number;
+export type NoName34 = string;
 export type NoName35 = number;
 export type NoName36 = string;
-export type NoName37 = number;
-export type NoName38 = 10 | 20 | 30;
+export type NoName37 = string;
+export type ID5 = number;
+export type NoName38 = string;
+export type NoName39 = string;
+export type ID6 = number;
+export type NoName40 = boolean;
+export type NoName41 = string;
+export type NoName42 = number;
+export type NoName43 = string;
+export type NoName44 = number;
 /**
- * На текущий момент не используется.<br>Надо задавать связку с проектом заказчика
+ * в часах
  */
-export type NoName39 = number;
-export type NoName40 = number;
-export type NoName41 = number;
-export type NoName42 = string;
-export type NoName43 = 'closed' | 'done' | 'draft' | 'in_progress';
-export type NoName44 = string;
 export type NoName45 = number;
-export type NoName46 = number;
-export type NoName47 = string;
+export type ID7 = number;
+export type NoName46 = string;
+export type ID8 = number;
+export type NoName47 = boolean;
 export type NoName48 = string;
-export type NoName49 = string;
+export type NoName49 = number;
 export type NoName50 = number;
+export type NoName51 = string;
+export type NoName52 = string;
+export type NoName53 = number;
+export type ID9 = number;
+export type NoName54 = number;
+export type NoName55 = string;
+export type NoName56 = number;
+export type NoName57 = string;
+export type NoName58 = string;
+export type ID10 = number;
+export type NoName59 = number;
+export type NoName60 = string;
+export type NoName61 = string;
+export type NoName62 = string;
+export type NoName63 = string;
+export type NoName64 = string;
+export type ID11 = number;
+export type NoName65 = string;
+export type ID12 = number;
+export type NoName66 = boolean;
+export type NoName67 = string;
+export type NoName68 = number;
+export type NoName69 = number;
+export type ModulesCount = number;
+export type NoName70 = string;
+export type NoName71 = number;
+export type NoName72 = number;
+export type NoName73 = number;
+export type NoName74 = string;
+export type NoName75 = number;
+export type NoName76 = number;
+export type NoName77 = string;
+export type NoName78 = number;
+export type ID13 = number;
+export type NoName79 = number;
+export type NoName80 = number;
+export type NoName81 = number;
+export type NoName82 = string;
+export type NoName83 = number;
+export type NoName84 = string;
+export type NoName85 = string;
+export type NoName86 = number;
+export type NoName87 = 10 | 20 | 30;
+export type NoName88 = number;
+export type NoName89 = number;
+export type NoName90 = string;
+export type NoName91 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName92 = string;
+export type NoName93 = number;
+export type NoName94 = number;
+export type NoName95 = string;
+export type NoName96 = string;
+export type NoName97 = string;
+export type NoName98 = number;
 
 export interface TimeSheetRowRead {
     created_at?: NoName;
     cv: CvInlineShort;
-    cv_id: NoName11;
-    date_from?: NoName12;
-    date_to?: NoName13;
+    cv_id: NoName15;
+    date_from?: NoName16;
+    date_to?: NoName17;
     id?: ID1;
     request: RequestInline;
-    request_id: NoName46;
-    task_description?: NoName47;
-    task_name: NoName48;
-    updated_at?: NoName49;
-    work_time: NoName50;
+    request_id: NoName94;
+    task_description?: NoName95;
+    task_name: NoName96;
+    updated_at?: NoName97;
+    work_time: NoName98;
 }
 export interface CvInlineShort {
     birth_date?: NoName1;
-    citizenship_id?: CitizenshipId;
-    city_id?: CityId;
-    country_id?: CountryId;
-    days_to_contact?: null | NoName2;
-    first_name?: NoName3;
-    gender?: null | NoName4;
+    citizenship_id?: NoName2;
+    city_id?: NoName3;
+    country_id?: NoName4;
+    days_to_contact?: null | NoName5;
+    first_name?: NoName6;
+    gender?: null | NoName7;
     id?: ID;
-    is_resource_owner?: NoName5;
-    last_name?: NoName6;
-    middle_name?: NoName7;
+    is_resource_owner?: NoName8;
+    last_name?: NoName9;
+    middle_name?: NoName10;
     photo?: Photo;
-    price?: NoName8;
-    time_to_contact_from?: NoName9;
-    time_to_contact_to?: NoName10;
-    user_id?: UserId;
+    price?: NoName11;
+    time_to_contact_from?: NoName12;
+    time_to_contact_to?: NoName13;
+    user_id?: NoName14;
 }
 export interface RequestInline {
-    deadline_date?: NoName14;
-    description?: NoName15;
+    deadline_date?: NoName18;
+    description?: NoName19;
     id?: ID2;
-    industry_sector_id?: NoName16;
-    manager_id?: NoName17;
-    organization_project?: OrganizationProjectInline;
-    organization_project_id: NoName37;
-    priority?: NoName38;
-    project_id?: NoName39;
-    recruiter_id?: NoName40;
-    resource_manager_id?: NoName41;
-    start_date?: NoName42;
-    status?: NoName43;
-    title?: NoName44;
-    type_id?: NoName45;
-}
-export interface OrganizationProjectInline {
-    created_at?: NoName18;
-    date_from?: NoName19;
-    date_to?: NoName20;
-    description?: NoName21;
-    id?: ID3;
-    industry_sector?: IndustrySector;
-    industry_sector_id?: NoName25;
+    industry_sector_id?: NoName20;
     manager?: UserInline;
-    manager_id?: NoName28;
-    name: NoName29;
-    organization?: Organization;
-    organization_id: NoName33;
-    recruiters?: UserInline[];
-    recruiters_ids?: NoName34[];
-    requests_count?: RequestsCount;
-    resource_managers?: UserInline[];
-    resource_managers_ids?: NoName35[];
-    updated_at?: NoName36;
-}
-export interface IndustrySector {
-    description?: NoName22;
-    id?: ID4;
-    is_verified?: NoName23;
-    name: NoName24;
+    manager_id?: NoName23;
+    module?: ModuleInline;
+    module_id: NoName86;
+    priority?: NoName87;
+    recruiter_id?: NoName88;
+    resource_manager_id?: NoName89;
+    start_date?: NoName90;
+    status?: NoName91;
+    title?: NoName92;
+    type_id?: NoName93;
 }
 export interface UserInline {
-    first_name: NoName26;
-    id?: ID5;
-    last_name: NoName27;
+    first_name: NoName21;
+    id?: ID3;
+    last_name: NoName22;
     photo?: Photo1;
 }
-export interface Organization {
-    description?: NoName30;
-    id?: ID6;
-    is_customer?: NoName31;
+export interface ModuleInline {
+    created_at?: NoName24;
+    deadline_date?: NoName25;
+    description?: NoName26;
+    difficulty?: Difficulty;
+    fun_points?: ModuleFunPointInline[];
+    goals?: NoName58;
+    id?: ID10;
+    manager?: UserInline;
+    manager_id?: NoName59;
+    name: NoName60;
+    organization_project?: OrganizationProjectInline;
+    organization_project_id: NoName75;
+    positions_labor_estimates?: ModulePositionLaborEstimateInline[];
+    sorting?: NoName83;
+    start_date?: NoName84;
+    updated_at?: NoName85;
+}
+export interface ModuleFunPointInline {
+    created_at?: NoName27;
+    description?: NoName28;
+    difficulty_level?: FunPointTypeDifficultyLevelInline;
+    difficulty_level_id: NoName35;
+    fun_point_type?: FunPointTypeInline;
+    fun_point_type_id: NoName53;
+    id?: ID9;
+    module_id: NoName54;
+    name: NoName55;
+    sorting?: NoName56;
+    updated_at?: NoName57;
+}
+export interface FunPointTypeDifficultyLevelInline {
+    created_at?: NoName29;
+    factor?: NoName30;
+    fun_point_type_id: NoName31;
+    id?: ID4;
     name: NoName32;
+    sorting?: NoName33;
+    updated_at?: NoName34;
+}
+export interface FunPointTypeInline {
+    created_at?: NoName36;
+    description?: NoName37;
+    difficulty_levels?: FunPointTypeDifficultyLevelInline[];
+    id?: ID5;
+    name: NoName38;
+    organization?: Organization;
+    organization_id?: NoName42;
+    positions_labor_estimates?: FunPointTypePositionLaborEstimateInline[];
+    updated_at?: NoName52;
+}
+export interface Organization {
+    description?: NoName39;
+    id?: ID6;
+    is_customer?: NoName40;
+    name: NoName41;
+}
+export interface FunPointTypePositionLaborEstimateInline {
+    created_at?: NoName43;
+    fun_point_type_id: NoName44;
+    hours?: NoName45;
+    id?: ID7;
+    position?: Position;
+    position_id: NoName49;
+    sorting?: NoName50;
+    updated_at?: NoName51;
+}
+export interface Position {
+    description?: NoName46;
+    id?: ID8;
+    is_verified?: NoName47;
+    name: NoName48;
+}
+export interface OrganizationProjectInline {
+    created_at?: NoName61;
+    date_from?: NoName62;
+    date_to?: NoName63;
+    description?: NoName64;
+    id?: ID11;
+    industry_sector?: IndustrySector;
+    industry_sector_id?: NoName68;
+    manager?: UserInline;
+    manager_id?: NoName69;
+    modules_count?: ModulesCount;
+    name: NoName70;
+    organization?: Organization;
+    organization_id: NoName71;
+    recruiters?: UserInline[];
+    recruiters_ids?: NoName72[];
+    resource_managers?: UserInline[];
+    resource_managers_ids?: NoName73[];
+    updated_at?: NoName74;
+}
+export interface IndustrySector {
+    description?: NoName65;
+    id?: ID12;
+    is_verified?: NoName66;
+    name: NoName67;
+}
+export interface ModulePositionLaborEstimateInline {
+    count?: NoName76;
+    created_at?: NoName77;
+    hours?: NoName78;
+    id?: ID13;
+    module_id: NoName79;
+    position?: Position;
+    position_id: NoName80;
+    sorting?: NoName81;
+    updated_at?: NoName82;
 }

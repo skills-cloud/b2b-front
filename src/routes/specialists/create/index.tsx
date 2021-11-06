@@ -17,7 +17,7 @@ import Loader from 'component/loader';
 
 import { dictionary } from 'adapter/api/dictionary';
 import { CvCareerId } from 'adapter/types/cv/career/id/get/code-200';
-import { NoName3 as IGenderType } from 'adapter/types/cv/cv/post/code-201';
+import { NoName6 as IGenderType } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
 
@@ -277,7 +277,7 @@ export const SpecialistsCreate = () => {
                                 direction="column"
                                 placeholder={t('routes.specialists-create.main.form.gender.title')}
                                 options={[{
-                                    value: 'М',
+                                    value: 'M',
                                     label: t('routes.specialists-create.main.form.gender.M')
                                 }, {
                                     value: 'F',

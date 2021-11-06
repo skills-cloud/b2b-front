@@ -6,27 +6,28 @@
  */
 
 export type Code201 = CvCertificate;
-export type CvId = number;
-export type NoName = string;
-export type NoName1 = string;
-export type EducationGraduateId = number;
-export type EducationPlaceId = number;
-export type EducationSpecialityId = number;
-export type ID = number;
-export type NoName2 = boolean;
+export type NoName = number;
+export type NoName1 = number;
+export type NoName2 = string;
 export type NoName3 = string;
-export type NoName4 = string;
+export type NoName4 = number;
+export type NoName5 = number;
+export type NoName6 = number;
+export type ID = number;
+export type NoName7 = boolean;
+export type NoName8 = string;
+export type NoName9 = string;
 
 export interface CvCertificate {
-    competencies_ids?: number[];
-    cv_id: CvId;
-    date?: NoName;
-    description?: NoName1;
-    education_graduate_id: EducationGraduateId;
-    education_place_id: EducationPlaceId;
-    education_speciality_id: EducationSpecialityId;
+    competencies_ids?: NoName[];
+    cv_id: NoName1;
+    date?: NoName2;
+    description?: NoName3;
+    education_graduate_id: NoName4;
+    education_place_id: NoName5;
+    education_speciality_id: NoName6;
     id?: ID;
-    is_verified?: NoName2;
-    name?: NoName3;
-    number?: NoName4;
+    is_verified?: NoName7;
+    name?: NoName8;
+    number?: NoName9;
 }

@@ -8,7 +8,7 @@
         "CvPositionCompetence": {
             "properties": {
                 "competence_id": {
-                    "title": "Competence id",
+                    "title": "Компетенция",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/competence/$id/",
                     "x-url-object-list": "/api/dictionary/competence/"

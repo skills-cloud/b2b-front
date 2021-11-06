@@ -35,7 +35,7 @@
                     "$ref": "#/definitions/Competence"
                 },
                 "competence_id": {
-                    "title": "Competence id",
+                    "title": "Компетенция",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/competence/$id/",
                     "x-url-object-list": "/api/dictionary/competence/"
@@ -105,13 +105,14 @@
                 "competencies_ids": {
                     "items": {
                         "nullable": true,
+                        "title": "Компетенция роли",
                         "type": "integer"
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "cv_id": {
-                    "title": "Cv id",
+                    "title": "Анкета",
                     "type": "integer",
                     "x-url-object-detail": "/api/cv/cv/$id/",
                     "x-url-object-list": "/api/cv/cv/"
@@ -133,7 +134,7 @@
                 },
                 "position_id": {
                     "nullable": true,
-                    "title": "Position id",
+                    "title": "Должность",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/position/$id/",
                     "x-url-object-list": "/api/dictionary/position/"

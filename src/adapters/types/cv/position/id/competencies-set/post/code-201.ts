@@ -6,12 +6,12 @@
  */
 
 export type Code201 = CvPositionCompetence;
-export type CompetenceId = number;
+export type NoName = number;
 export type CvPositionId = string;
 export type Years = number;
 
 export interface CvPositionCompetence {
-    competence_id: CompetenceId;
+    competence_id: NoName;
     cv_position_id?: CvPositionId;
     years?: Years;
 }

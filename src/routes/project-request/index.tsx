@@ -53,7 +53,7 @@ const ProjectRequest = () => {
             <Fragment>
                 <MainInfo {...data} />
                 {data.id && <Requirements requirements={data?.requirements} requestId={data.id} />}
-                {data.id && <Customer customer={data.organization_project?.organization} requestId={data.id} />}
+                {data.id && <Customer customer={data.module?.organization_project?.organization} requestId={data.id} />}
             </Fragment>
         );
     };
@@ -78,6 +78,7 @@ const ProjectRequest = () => {
             <Fragment>
                 {Object.values(ESectionInvariants).map((nav) => (
                     <NavItem
+                        replace={true}
                         to={`#${nav}`}
                         selected={nav === hash.slice(1)}
                         key={nav}
@@ -98,12 +99,15 @@ const ProjectRequest = () => {
             content = (
                 <Fragment>
                     <NavItem
-                        to="#all" selected={hash.slice(1) === 'all'}
+                        to="#all"
+                        replace={true}
+                        selected={hash.slice(1) === 'all'}
                     >
                         {t('routes.project-request.blocks.specialists-sections.all')}
                     </NavItem>
                     {data?.requirements?.map((req) => (
                         <NavItem
+                            replace={true}
                             to={`#${req.id}`}
                             selected={String(req.id) === hash.slice(1)}
                             key={req.id}

@@ -15,7 +15,6 @@ import AddAction from 'component/section/actions/add';
 import Loader from 'component/loader';
 import Button from 'component/button';
 import Wrapper from 'component/section/wrapper';
-import InputRequest from 'component/form/input-request';
 import { IValue } from 'component/form/select';
 import Input from 'component/form/input';
 import InputCv from 'component/form/input-cv';
@@ -35,20 +34,18 @@ import style from './index.module.pcss';
 
 export interface IFormValues {
     task_name?: string,
-    cv_id?: Array<IValue> | null,
-    request_id?: Array<IValue>
+    cv_id?: Array<IValue> | null
 }
 
 const Timesheets = () => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const history = useHistory();
-    const params = useParams<{ projectId: string }>();
+    const params = useParams<{ projectId: string, requestId: string }>();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
     const defaultValues = {
-        task_name : '',
-        cv_id     : [],
-        request_id: []
+        task_name: '',
+        cv_id    : []
     };
     const context = useForm<IFormValues>({
         mode: 'all',
@@ -65,6 +62,10 @@ const Timesheets = () => {
         ...obj,
         ...qs
     });
+    const { data: requestData } = mainRequest.useGetMainRequestByIdQuery(
+        { id: params.requestId },
+        { refetchOnMountOrArgChange: true }
+    );
 
     useEffect(() => {
         if(Object.values(qs).length) {
@@ -95,9 +96,8 @@ const Timesheets = () => {
     const onSubmit = context.handleSubmit(
         (formData) => {
             const objectToNormalize = {
-                task_name : formData.task_name,
-                cv_id     : formData.cv_id?.map((item) => item?.value),
-                request_id: formData.request_id?.map((item) => item?.value)
+                task_name: formData.task_name,
+                cv_id    : formData.cv_id?.map((item) => item?.value)
             };
 
             history.replace({
@@ -147,15 +147,6 @@ const Timesheets = () => {
                     <H3>{t('routes.timesheet.sidebar.title')}</H3>
                     <FormProvider {...context}>
                         <form className={cn('timesheet__form')} onSubmit={onSubmit}>
-                            <InputRequest
-                                label={t('routes.timesheet.sidebar.form.request.title')}
-                                placeholder={t('routes.timesheet.sidebar.form.request.placeholder')}
-                                name="request"
-                                direction="column"
-                                requestType={InputRequest.requestType.Request}
-                                isMulti={true}
-                                clearable={false}
-                            />
                             {elInputCv()}
                             <Input
                                 name="task_name"
@@ -201,7 +192,7 @@ const Timesheets = () => {
             return (
                 <div key={item.id} className={cn('timesheet__item')}>
                     <div className={cn('timesheet__item-element')}>
-                        {item.request?.organization_project?.name || t('routes.timesheet.content.empty-name')}
+                        {item.request?.module?.organization_project?.name || t('routes.timesheet.content.empty-name')}
                         <span className={cn('timesheet__item-element-sub-text')}>
                             {item.request?.title || t('routes.timesheet.content.empty-name')}
                         </span>
@@ -248,7 +239,7 @@ const Timesheets = () => {
     const elConfirmModal = () => {
         if(deleteId) {
             const itemToDelete = data?.results.find((item) => item.id === deleteId);
-            const projectName = itemToDelete?.request.organization_project?.name;
+            const projectName = itemToDelete?.request.module?.organization_project?.name;
 
             return (
                 <ConfirmModal
@@ -265,8 +256,10 @@ const Timesheets = () => {
             const cvFilters = {
                 id: data?.results.map((item) => item.cv_id)
             };
-            const requestFilters = {
-                organization_project_id: params.projectId
+
+            const defaultValuesNew = {
+                date_from: requestData?.start_date,
+                date_to  : requestData?.deadline_date
             };
 
             return (
@@ -275,9 +268,9 @@ const Timesheets = () => {
                         setEditTimesheet(null);
                         setShowModal(false);
                     }}
-                    fields={editTimesheet ?? undefined}
+                    fields={editTimesheet || defaultValuesNew}
                     cvFilters={cvFilters}
-                    requestFilters={requestFilters}
+                    requestId={params.requestId}
                 />
             );
         }

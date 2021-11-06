@@ -44,8 +44,8 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
         <React.Fragment>
             <div className={cn('request-list')}>
                 {requestList.map((requestItem) => {
-                    const organizationId = requestItem.organization_project?.organization_id;
-                    const projectId = requestItem.organization_project?.id;
+                    const organizationId = requestItem.module?.organization_project?.organization_id;
+                    const projectId = requestItem.module?.organization_project?.id;
                     let requestUrl = `/requests/${requestItem.id}#main-info`;
 
                     if(fromOrganization) {

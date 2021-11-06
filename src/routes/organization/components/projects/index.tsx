@@ -25,7 +25,7 @@ enum EProjectInvariants {
     Period = 'period',
     Industry = 'industry',
     Description = 'description',
-    Request = 'request'
+    Module = 'module'
 }
 
 const ProjectList = () => {
@@ -47,8 +47,8 @@ const ProjectList = () => {
             case EProjectInvariants.Industry:
                 content = project?.industry_sector?.name;
                 break;
-            case EProjectInvariants.Request:
-                content = project?.requests_count;
+            case EProjectInvariants.Module:
+                content = project?.modules_count;
                 break;
             default:
                 content = null;
@@ -71,12 +71,10 @@ const ProjectList = () => {
                 <React.Fragment key={item.id}>
                     {index > 0 && <Separator />}
                     <SectionContentList>
-                        <div className={cn('projects__header')}>
+                        <Link to={`/organizations/${organizationId}/projects/${item.id}`} className={cn('projects__header')}>
                             <H4>{item?.name}</H4>
-                            <Link to={`/organizations/${organizationId}/projects/${item.id}`}>
-                                <IconChevronRight />
-                            </Link>
-                        </div>
+                            <IconChevronRight />
+                        </Link>
                         {Object.values(EProjectInvariants).map((field) => renderField(field, item))}
                     </SectionContentList>
                 </React.Fragment>

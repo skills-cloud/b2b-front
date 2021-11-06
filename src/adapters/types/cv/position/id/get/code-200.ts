@@ -9,41 +9,42 @@ export type Code200 = CvPositionRead;
 export type ID = number;
 export type NoName = string;
 export type ParentId = string;
-export type CompetenceId = number;
+export type NoName1 = number;
 export type CvPositionId = string;
 export type Years = number;
-export type CvId = number;
+export type NoName2 = number;
+export type NoName3 = number;
 export type CvPositionId1 = string;
-export type NoName1 = string;
+export type NoName4 = string;
 export type FileExt = string;
-export type NoName2 = string;
+export type NoName5 = string;
 export type FileSize = string;
 export type ID1 = number;
 export type ID2 = number;
-export type NoName3 = string;
-export type ID3 = number;
-export type NoName4 = boolean;
-export type NoName5 = string;
-export type PositionId = number;
 export type NoName6 = string;
+export type ID3 = number;
+export type NoName7 = boolean;
+export type NoName8 = string;
+export type NoName9 = number;
+export type NoName10 = string;
 export type YearStarted = number;
 export type Years1 = number;
 
 export interface CvPositionRead {
     competencies?: CvPositionCompetenceRead[];
-    competencies_ids?: number[];
-    cv_id: CvId;
+    competencies_ids?: NoName2[];
+    cv_id: NoName3;
     files?: CvPositionFileRead[];
     id?: ID2;
     position?: Position;
-    position_id?: PositionId;
-    title?: NoName6;
+    position_id?: NoName9;
+    title?: NoName10;
     year_started?: YearStarted;
     years?: Years1;
 }
 export interface CvPositionCompetenceRead {
     competence?: Competence;
-    competence_id: CompetenceId;
+    competence_id: NoName1;
     cv_position_id?: CvPositionId;
     years?: Years;
 }
@@ -54,15 +55,15 @@ export interface Competence {
 }
 export interface CvPositionFileRead {
     cv_position_id?: CvPositionId1;
-    file?: NoName1;
+    file?: NoName4;
     file_ext?: FileExt;
-    file_name?: NoName2;
+    file_name?: NoName5;
     file_size?: FileSize;
     id?: ID1;
 }
 export interface Position {
-    description?: NoName3;
+    description?: NoName6;
     id?: ID3;
-    is_verified?: NoName4;
-    name: NoName5;
+    is_verified?: NoName7;
+    name: NoName8;
 }

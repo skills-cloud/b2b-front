@@ -21,6 +21,7 @@ import Wrapper from 'component/section/wrapper';
 import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
+import AddAction from 'component/section/actions/add';
 
 export interface IFormValues {
     search?: string,
@@ -152,7 +153,9 @@ export const Organizations = () => {
         <SidebarLayout sidebar={elSidebar()}>
             <Section>
                 <Wrapper>
-                    <SectionHeader>{t('routes.organizations.main.title')}</SectionHeader>
+                    <SectionHeader actions={<AddAction to="/organizations/create" />}>
+                        {t('routes.organizations.main.title')}
+                    </SectionHeader>
                     {elOrganizations}
                 </Wrapper>
             </Section>

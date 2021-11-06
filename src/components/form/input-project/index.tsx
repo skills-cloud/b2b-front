@@ -38,6 +38,7 @@ export interface IProps {
     requestLimit?: number,
     requestOffset?: number,
     elError?: boolean,
+    isMulti?: boolean,
     onChange?(value: IValue): void
 }
 
@@ -159,7 +160,7 @@ const InputProject = (props: IProps & typeof defaultProps) => {
             defaultValue  : renderValue,
             placeholder   : props.placeholder,
             autoFocus     : props.autoFocus,
-            isMulti       : false,
+            isMulti       : props.isMulti,
             isClearable   : props.clearable,
             tabIndex      : props.tabIndex,
             cacheOption   : true,
