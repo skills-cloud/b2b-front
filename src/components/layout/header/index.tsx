@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import UserHeaderBar from 'component/user/header-bar';
+import { HELP, ORGANIZATIONS, REQUESTS, SPECIALISTS, TEAMS } from 'helper/url-list';
 
 import style from './index.module.pcss';
 
@@ -49,31 +50,31 @@ export const Header = (props: IProps) => {
                 />
                 <nav className={cn('header__nav')}>
                     <NavLink
-                        to="/specialists"
+                        to={SPECIALISTS}
                         className={cn('header__nav-link')}
                         activeClassName={cn('header__nav-link_active')}
                         children={t('components.header.nav.specialists')}
                     />
                     <NavLink
-                        to="/organizations"
+                        to={ORGANIZATIONS}
                         className={cn('header__nav-link')}
                         activeClassName={cn('header__nav-link_active')}
                         children={t('components.header.nav.organizations')}
                     />
                     <NavLink
-                        to="/requests"
+                        to={REQUESTS}
                         className={cn('header__nav-link')}
                         activeClassName={cn('header__nav-link_active')}
                         children={t('components.header.nav.requests')}
                     />
                     <NavLink
-                        to="/teams"
+                        to={TEAMS}
                         className={cn('header__nav-link')}
                         activeClassName={cn('header__nav-link_active')}
                         children={t('components.header.nav.teams')}
                     />
                     <NavLink
-                        to="/help"
+                        to={HELP}
                         className={cn('header__nav-link')}
                         activeClassName={cn('header__nav-link_active')}
                         children={t('components.header.nav.help')}

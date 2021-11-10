@@ -14,7 +14,8 @@ export interface IProps {
     footer?: ReactNode,
     children: ReactNode,
     onClose?: () => void,
-    onBack?: () => void
+    onBack?: () => void,
+    footerWithAction?: boolean
 }
 
 export const Modal = (props: IProps) => {
@@ -66,7 +67,15 @@ export const Modal = (props: IProps) => {
                         </div>
                         {props.children}
                     </div>
-                    {props.footer && <div className={cn('modal__footer')}>{props.footer}</div>}
+                    {props.footer && (
+                        <div
+                            className={cn('modal__footer', {
+                                'modal__footer_with_action': props.footerWithAction
+                            })}
+                        >
+                            {props.footer}
+                        </div>
+                    )}
                 </OutsideClickHandler>
             </div>
         </div>

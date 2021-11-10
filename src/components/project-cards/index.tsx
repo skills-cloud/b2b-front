@@ -194,8 +194,7 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
 
     return (
         <React.Fragment>
-            <Section>
-                <span id="cards" />
+            <Section id="cards">
                 <SectionHeader actions={addAction}>
                     {t('routes.organization.blocks.sections.cards')}
                 </SectionHeader>

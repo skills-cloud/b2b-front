@@ -24,6 +24,7 @@ export interface IProps {
 }
 
 export enum EItems {
+    Module = 'modules',
     Requests = 'requests',
     Projects = 'projects',
     Specialists = 'specialists',
@@ -42,10 +43,12 @@ interface IParams {
     projectId: string,
     specialistId: string,
     organizationId: string,
-    timesheetId: string
+    timesheetId: string,
+    moduleId: string
 }
 
 const config = {
+    [EItems.Module]       : mainRequest.endpoints.getMainModuleById,
     [EItems.Projects]     : mainRequest.endpoints.getMainOrganizationProjectById,
     [EItems.Requests]     : mainRequest.endpoints.getMainRequestById,
     [EItems.Timesheets]   : mainRequest.endpoints.getMainTimeSheetRowById,
@@ -106,6 +109,13 @@ const Breadcrumbs = (props: IProps) => {
             requestList.push({
                 dispatch: dispatch(config[EItems.Timesheets].initiate({ id: params.timesheetId })),
                 id      : EItems.Timesheets
+            });
+        }
+
+        if(params.moduleId) {
+            requestList.push({
+                dispatch: dispatch(config[EItems.Module].initiate({ id: params.moduleId })),
+                id      : EItems.Module
             });
         }
 

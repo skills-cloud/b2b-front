@@ -47,6 +47,7 @@ module.exports = (env = {}) => {
                 'route'    : resolve(DIR_SRC, 'routes'),
                 'locale'   : resolve(DIR_SRC, 'locales'),
                 'adapter'  : resolve(DIR_SRC, 'adapters'),
+                'helper'   : resolve(DIR_SRC, 'helper'),
                 'src'      : DIR_SRC
             }
         },

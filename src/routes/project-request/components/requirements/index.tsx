@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { stringify } from 'query-string';
 import { useHistory, useLocation } from 'react-router';
 
+import { ORGANIZATION_PROJECT_MODULE_REQUEST_REQUIREMENT_SPECIALISTS } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
 
@@ -68,7 +69,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     competencies_ids_any: req.competencies?.map((comp) => comp.competence_id)
                 };
 
-                history.push(`${pathname}/requirement/${requirementId}/specialists?${stringify(normalizeObject(params))}`);
+                history.push(`${ORGANIZATION_PROJECT_MODULE_REQUEST_REQUIREMENT_SPECIALISTS(pathname, requirementId)}?${stringify(normalizeObject(params))}`);
             }
         }
     };

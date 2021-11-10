@@ -2,8 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { differenceInCalendarYears } from 'date-fns';
 
-import UserAvatar from 'component/user/avatar';
+import { SPECIALIST_ID } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
+
+import UserAvatar from 'component/user/avatar';
 import StarRating from 'component/star-rating';
 import IconApply from 'component/icons/apply';
 import IconPlus from 'component/icons/plus';
@@ -116,7 +118,7 @@ const UserItem = (props: IProps & typeof defaultProps) => {
                 className={cn('user-item__user-info-avatar')}
                 title={title}
                 subTitle={subTitle}
-                titleTo={`/specialists/${props.cvItem.id}`}
+                titleTo={SPECIALIST_ID(props.cvItem.id)}
                 avatar={{
                     src: props.cvItem.photo
                 }}

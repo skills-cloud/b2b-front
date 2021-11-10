@@ -67,7 +67,7 @@ const OrganizationCreateForm = (props: IProps) => {
                     placeholder={t('routes.organization.create.name.placeholder')}
                 />
                 <Textarea
-                    rows={2}
+                    rows={6}
                     name="description"
                     label={t('routes.organization.create.description')}
                 />

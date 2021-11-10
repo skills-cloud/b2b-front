@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import { ORGANIZATION_PROJECT_ID } from 'helper/url-list';
 import useClassnames, { IStyle } from 'hook/use-classnames';
+
 import IconPencil from 'component/icons/pencil';
 import Button from 'component/button';
 import IconFileImage from 'component/icons/file-image';
@@ -154,7 +156,7 @@ export const Career = (props: IProps) => {
                                                         target="_blank"
                                                         className={cn('career__project-link')}
                                                         key={i}
-                                                        to={`/organizations/${project.organization_id}/projects/${project.id}`}
+                                                        to={ORGANIZATION_PROJECT_ID(project.organization_id, project.id)}
                                                     >
                                                         {content}
                                                     </Link>

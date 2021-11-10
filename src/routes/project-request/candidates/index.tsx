@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { differenceInCalendarYears } from 'date-fns';
 import { useForm, FormProvider } from 'react-hook-form';
 
+import { SPECIALIST_ID } from 'src/helper/url-list';
 import useClassnames from 'hook/use-classnames';
 import { useDispatch } from 'component/core/store';
 
@@ -302,7 +303,7 @@ export const Candidates = () => {
                         className={cn('candidates__user-info-avatar')}
                         title={title}
                         subTitle={subTitle}
-                        titleTo={`/specialists/${cvItem.id}`}
+                        titleTo={SPECIALIST_ID(cvItem.id)}
                         avatar={{
                             src: cvItem.photo
                         }}

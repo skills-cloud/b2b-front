@@ -2,15 +2,17 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 
+import { ORGANIZATION_ID } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 
 import PageCentred from 'component/layout/page-centered';
 import Section from 'component/section';
 import Button from 'component/button';
 
+import { mainRequest } from 'adapter/api/main';
+
 import OrganizationCreateForm from '../form';
 import style from './index.module.pcss';
-import { mainRequest } from 'adapter/api/main';
 
 export const ORGANIZATION_CREATE_FORM_ID = 'ORGANIZATION_CREATE_FORM_ID';
 
@@ -23,7 +25,7 @@ const OrganizationCreate = () => {
     const [, { isLoading: isPatchLoading }] = mainRequest.usePatchMainOrganizationMutation();
 
     const onSuccess = (id: number) => {
-        history.push(`/organizations/${id}`);
+        history.push(ORGANIZATION_ID(id));
     };
 
     return (

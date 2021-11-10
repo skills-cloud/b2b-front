@@ -8,14 +8,16 @@ interface ISection {
     title?: string,
     children: ReactNode,
     withoutPaddings?: boolean,
-    className?: IStyle | string
+    className?: IStyle | string,
+    id?: string
 }
 
-const Section = ({ title, children, withoutPaddings = false, className }: ISection) => {
+const Section = ({ id, title, children, withoutPaddings = false, className }: ISection) => {
     const cn = useClassnames(style, className, true);
 
     return (
         <section
+            id={id}
             className={cn('section', {
                 'section_without-paddings': withoutPaddings
             })}

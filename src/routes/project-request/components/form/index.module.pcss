@@ -1,34 +1,25 @@
-.form {
-    display: grid;
-    grid-gap: 24px;
-}
+.project-request {
 
-.field-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 24px;
-}
+    &__form {
+        display: grid;
+        grid-gap: 24px;
 
-.separator {
-    display: block;
-    margin: 8px -32px 0;
-    height: 1px;
-    background-color: var(--color-separator-default);
-}
+        &_hide {
+            display: none;
+        }
+    }
 
-.submit-wrapper {
-    display: flex;
-    justify-content: flex-end;
-}
+    &__field-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 24px;
+    }
 
-.hide {
-    display: none;
-}
-
-.append {
-    display: inline-block;
-    font-size: 12px;
-    line-height: 1.16;
-    color: var(--color-blue-primary);
-    margin-top: 12px;
+    &__append {
+        display: inline-block;
+        font-size: 12px;
+        line-height: 1.16;
+        color: var(--color-blue-primary);
+        margin-top: 12px;
+    }
 }

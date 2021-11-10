@@ -7,7 +7,7 @@ const EditOuther = () => {
     const { t } = useTranslation();
 
     return (
-        <Textarea rows={3} name="description" label={t('routes.project-request.blocks.other.description')} />
+        <Textarea rows={6} name="description" label={t('routes.project-request.blocks.other.description')} />
     );
 };
 

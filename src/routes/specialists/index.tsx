@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { parse, stringify } from 'query-string';
 
+import { SPECIALIST_CREATE } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
 
@@ -251,7 +252,7 @@ export const Specialists = () => {
         <SidebarLayout sidebar={elSidebar()}>
             <Section>
                 <Wrapper>
-                    <SectionHeader actions={<AddAction to="/specialists/create" />}>
+                    <SectionHeader actions={<AddAction to={SPECIALIST_CREATE} />}>
                         {t('routes.specialists.main.title')}
                     </SectionHeader>
                     {elUsers()}
