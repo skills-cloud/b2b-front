@@ -73,23 +73,6 @@ export const ORGANIZATION_PROJECT_MODULE_REQUEST_ID = (
 
     return path.join('');
 };
-export const ORGANIZATION_PROJECT_MODULE_REQUIREMENT = (
-    organizationId?: string | number,
-    projectId?: string | number,
-    moduleId?: string | number,
-    requestId?: string | number,
-    requirementId?: string | number
-) => {
-    const path = [
-        `/organizations/${organizationId}`,
-        `/projects/${projectId}`,
-        `/modules/${moduleId}`,
-        `/requests/${requestId}`,
-        `/requirement/${requirementId}`
-    ];
-
-    return path.join('');
-};
 export const ORGANIZATION_PROJECT_MODULE_REQUEST_REQUIREMENT_SPECIALISTS = (
     pathname: string,
     requirementId?: string | number
