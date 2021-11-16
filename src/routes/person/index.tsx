@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 
 import IconApply from 'component/icons/apply';
@@ -27,14 +28,14 @@ import style from './common/index.module.pcss';
 
 export const Person = () => {
     const cn = useClassnames(style);
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const { t } = useTranslation();
 
     const [showModal, setShowModal] = useState<boolean>(false);
 
     const { data } = cv.useGetCvByIdQuery({ id: specialistId });
 
-    console.log('DATA', data)
+    console.info('DATA', data);
 
     const onClickShowModal = () => {
         setShowModal(true);

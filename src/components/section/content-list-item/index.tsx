@@ -17,8 +17,8 @@ const SectionContentListItem = ({ children, title }: ISectionContentListItem) =>
 
     return (
         <div className={cn('section__content-list-item')}>
-            <div>{ title }</div>
-            <div>{ children }</div>
+            <div>{title}</div>
+            <div>{children}</div>
         </div>
     );
 };

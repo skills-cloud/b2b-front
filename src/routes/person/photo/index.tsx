@@ -3,11 +3,13 @@ import axios from 'axios';
 import { useParams } from 'react-router';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
+import { IParams } from 'helper/url-list';
+
+import Loader from 'component/loader';
 
 import { cv } from 'adapter/api/cv';
 
 import style from './index.module.pcss';
-import Loader from 'component/loader';
 
 export interface IProps {
     className?: string | IStyle,
@@ -17,7 +19,7 @@ export interface IProps {
 
 export const Photo = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
 
     const { data, isLoading, isSuccess } = cv.useGetCvByIdQuery({ id: specialistId });
     const [postPhoto, { isLoading: isPostLoading }] = cv.useSetCvPhotoByIdMutation();

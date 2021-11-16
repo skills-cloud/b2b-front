@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
 
-import { ORGANIZATION_PROJECT_MODULE_CREATE, ORGANIZATION_PROJECT_MODULE_ID } from 'helper/url-list';
+import { IParams, ORGANIZATION_PROJECT_MODULE_CREATE, ORGANIZATION_PROJECT_MODULE_ID } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 
 import SectionContentListItem from 'component/section/content-list-item';
@@ -16,7 +16,6 @@ import Separator from 'component/separator';
 import SectionContentList from 'component/section/content-list';
 import Loader from 'component/loader';
 
-import { mainRequest } from 'adapter/api/main';
 import { ModuleRead } from 'adapter/types/main/module/get/code-200';
 
 import style from './index.module.pcss';
@@ -32,17 +31,15 @@ enum EModuleInvariants {
 }
 
 interface IProps {
-    id?: string
+    id?: string,
+    modules?: Array<ModuleRead>,
+    isLoading?: boolean
 }
 
 const ModulesList = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { projectId, organizationId } = useParams<{ organizationId: string, projectId: string }>();
-
-    const { data: modules, isLoading } = mainRequest.useGetMainModuleQuery({
-        organization_id: [parseInt(organizationId, 10)]
-    });
+    const { projectId, organizationId } = useParams<IParams>();
 
     const renderField = (field: EModuleInvariants, module: ModuleRead) => {
         let content = null;
@@ -100,12 +97,12 @@ const ModulesList = (props: IProps) => {
     };
 
     const elContent = () => {
-        if(isLoading) {
+        if(props.isLoading) {
             return <Loader />;
         }
 
-        if(modules?.results?.length) {
-            return modules?.results?.map((moduleItem, index) => {
+        if(props.modules?.length) {
+            return props.modules?.map((moduleItem, index) => {
                 return (
                     <Fragment key={moduleItem.id}>
                         {index > 0 && <Separator />}

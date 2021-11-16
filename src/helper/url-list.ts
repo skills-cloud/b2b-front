@@ -1,3 +1,14 @@
+export interface IParams {
+    requestId: string,
+    projectId: string,
+    specialistId: string,
+    organizationId: string,
+    requirementId: string,
+    timesheetId: string,
+    moduleId: string,
+    subpage?: string
+}
+
 /* eslint-disable @typescript-eslint/naming-convention */
 export const SPECIALISTS = '/specialists';
 export const SPECIALIST_CREATE = '/specialists/create';
@@ -28,6 +39,20 @@ export const ORGANIZATION_PROJECT_MODULE_ID = (
         `/organizations/${organizationId}`,
         `/projects/${projectId}`,
         `/modules/${moduleId}`
+    ];
+
+    return path.join('');
+};
+export const ORGANIZATION_PROJECT_MODULE_FUN_POINTS = (
+    organizationId?: string | number,
+    projectId?: string | number,
+    moduleId?: string | number
+) => {
+    const path = [
+        `/organizations/${organizationId}`,
+        `/projects/${projectId}`,
+        `/modules/${moduleId}`,
+        '/fun-points'
     ];
 
     return path.join('');

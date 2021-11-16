@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router';
 
+import { IParams, ORGANIZATION_PROJECT_MODULE_ID } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 
 import PageCentred from 'component/layout/page-centered';
@@ -10,7 +11,6 @@ import Button from 'component/button';
 
 import ModuleCreateForm from '../form';
 import style from './index.module.pcss';
-import { ORGANIZATION_PROJECT_MODULE_ID } from 'helper/url-list';
 
 const FORM_ID = 'MODULE_CREATE_FORM_ID';
 
@@ -18,7 +18,7 @@ const ModuleCreate = () => {
     const cn = useClassnames(style);
     const history = useHistory();
     const { t } = useTranslation();
-    const params = useParams<{ organizationId: string, projectId: string }>();
+    const params = useParams<IParams>();
 
     return (
         <PageCentred>

@@ -17,7 +17,7 @@ interface IEditModal {
     requestId?: string
 }
 
-const FORM_TIMESHEET_ID = 'FORM_MAIN_ID';
+const FORM_TIMESHEET_ID = 'FORM_TIMESHEET_ID';
 
 const EditModal = ({ setVisible, cvFilters, fields, requestId }: IEditModal) => {
     const { t } = useTranslation();

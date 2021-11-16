@@ -1,0 +1,30 @@
+.resource-edit {
+
+    &__content {
+        display: grid;
+        grid-template-columns: 1fr 40px;
+        grid-gap: 24px;
+    }
+
+    &__form {
+        display: grid;
+        grid-gap: 24px;
+    }
+
+    &__item,
+    &__form-header {
+        display: grid;
+        grid-gap: 24px;
+        grid-template-columns: 5fr 1fr 1fr 40px;
+    }
+
+    &__form-header {
+        padding-top: 16px;
+    }
+
+    &__form-header-item {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: var(--color-text-light);
+    }
+}

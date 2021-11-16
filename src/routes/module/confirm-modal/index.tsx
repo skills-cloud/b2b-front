@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router';
 
-import { ORGANIZATION_PROJECT_ID } from 'helper/url-list';
+import { IParams, ORGANIZATION_PROJECT_ID } from 'helper/url-list';
 
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import Button from 'component/button';
+import Error from 'component/error';
 
 import { mainRequest } from 'adapter/api/main';
 
@@ -16,21 +17,19 @@ interface IEditModal {
     onClickCancel?(): void
 }
 
-interface IParams {
-    organizationId: string,
-    projectId: string,
-    moduleId: string
-}
-
 const ConfirmModal = ({ setVisible, moduleName, onClickCancel }: IEditModal) => {
     const { t } = useTranslation();
     const history = useHistory();
     const { organizationId, moduleId, projectId } = useParams<IParams>();
 
+    const [error, setError] = useState<string | null>(null);
+
     const [deleteModule] = mainRequest.useDeleteMainModuleByIdMutation();
 
     const onClickDelete = () => {
         if(moduleId) {
+            setError(null);
+
             deleteModule({ id: moduleId })
                 .unwrap()
                 .then(() => {
@@ -38,9 +37,17 @@ const ConfirmModal = ({ setVisible, moduleName, onClickCancel }: IEditModal) => 
 
                     history.push(ORGANIZATION_PROJECT_ID(organizationId, projectId));
                 })
-                .catch(console.error);
+                .catch((err) => {
+                    setError(err.data?.details?.[0]);
+                });
         }
     };
+
+    const elError = useMemo(() => {
+        if(error) {
+            return <Error elIcon={true}>{error}</Error>;
+        }
+    }, [error]);
 
     return (
         <Modal
@@ -66,6 +73,7 @@ const ConfirmModal = ({ setVisible, moduleName, onClickCancel }: IEditModal) => 
             {t('routes.module.confirm.text', {
                 name: moduleName || t('routes.module.confirm.empty-name')
             })}
+            {elError}
         </Modal>
     );
 };

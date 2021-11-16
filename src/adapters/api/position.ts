@@ -59,7 +59,8 @@ export const position = createApi({
             })
         }),
         patchPositionById: build.mutation<IResponsePatchPosition, IResponsePatchPosition>({
-            query: (body) => {
+            invalidatesTags: ['position'],
+            query          : (body) => {
                 const { id, ...rest } = body;
 
                 return {
@@ -70,21 +71,24 @@ export const position = createApi({
             }
         }),
         postPosition: build.mutation<IResponsePostPosition, TDataPostPosition>({
-            query: (body) => ({
+            invalidatesTags: ['position'],
+            query          : (body) => ({
                 url   : 'position/',
                 method: 'POST',
                 body
             })
         }),
         postPositionCompetenciesById: build.mutation<IResponsePostPosition, IDataPostCompetence>({
-            query: ({ id, data }) => ({
+            invalidatesTags: ['position'],
+            query          : ({ id, data }) => ({
                 url   : `position/${id}/competencies-set/`,
                 method: 'POST',
                 body  : data
             })
         }),
         postUploadFileToPosition: build.mutation<CvPositionFileRead, IPostPositionFileParams>({
-            query: (body) => ({
+            invalidatesTags: ['position'],
+            query          : (body) => ({
                 url   : 'position/',
                 method: 'POST',
                 body
@@ -98,7 +102,8 @@ export const position = createApi({
             })
         }),
         deletePosition: build.mutation<undefined, { id: number }>({
-            query: (body) => ({
+            invalidatesTags: ['position'],
+            query          : (body) => ({
                 url   : `position/${body.id}/`,
                 method: 'DELETE'
             })

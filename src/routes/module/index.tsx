@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import { ORGANIZATION_PROJECT_MODULE_ID, ORGANIZATION_PROJECT_MODULE_REQUEST_CREATE } from 'helper/url-list';
+import { IParams, ORGANIZATION_PROJECT_MODULE_REQUEST_CREATE } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 
 import Section from 'component/section';
@@ -27,18 +27,15 @@ import { mainRequest } from 'adapter/api/main';
 
 import ConfirmModal from './confirm-modal';
 import EditModal from './edit';
+import FunPointsComponent from './fun-points';
+import ResourceValueComponent from './resource-value';
 import style from './index.module.pcss';
 
 enum ESectionInvariants {
     MainInfo = 'main-info',
+    ResourceValue = 'resource-value',
     FunPoints = 'fun-points',
     Requests = 'requests'
-}
-
-interface IParams {
-    organizationId: string,
-    projectId: string,
-    moduleId: string
 }
 
 const Module = () => {
@@ -106,10 +103,7 @@ const Module = () => {
             <Section withoutPaddings={true}>
                 <SidebarNav>
                     {Object.values(ESectionInvariants).map((nav) => (
-                        <NavItem
-                            key={nav}
-                            to={`${ORGANIZATION_PROJECT_MODULE_ID(organizationId, projectId, moduleId)}/${nav}`}
-                        >
+                        <NavItem key={nav} to={`#${nav}`}>
                             {t(`routes.module.blocks.sections.${nav}`)}
                         </NavItem>
                     ))}
@@ -134,11 +128,31 @@ const Module = () => {
                         <SectionContentListItem title={t('routes.module.blocks.manager')}>
                             <ShortName lastName={data?.manager?.last_name} firstName={data?.manager?.first_name} />
                         </SectionContentListItem>
-                        <SectionContentListItem title={t('routes.module.blocks.timeframe')}>
-
+                        <SectionContentListItem title={t('routes.module.blocks.goals')}>
+                            {data?.goals}
+                        </SectionContentListItem>
+                        <SectionContentListItem title={t('routes.module.blocks.start')}>
+                            {data?.start_date}
+                        </SectionContentListItem>
+                        <SectionContentListItem title={t('routes.module.blocks.deadline')}>
+                            {data?.deadline_date}
+                        </SectionContentListItem>
+                        <SectionContentListItem title={t('routes.module.blocks.description')}>
+                            {data?.description}
                         </SectionContentListItem>
                     </SectionContentList>
                 </Section>
+                <FunPointsComponent
+                    id={ESectionInvariants.FunPoints}
+                    funPoints={data?.fun_points}
+                    difficulty={data?.difficulty}
+                    isLoading={isLoading}
+                />
+                <ResourceValueComponent
+                    id={ESectionInvariants.ResourceValue}
+                    resourceValue={data?.positions_labor_estimates}
+                    isLoading={isLoading}
+                />
                 <Section id={ESectionInvariants.Requests}>
                     <SectionHeader actions={elCreateRequest()}>
                         {t('routes.module.blocks.sections.requests')}

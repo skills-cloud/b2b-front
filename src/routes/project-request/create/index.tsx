@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router';
 
+import { IParams, ORGANIZATION_PROJECT_MODULE_REQUEST_ID } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 
 import PageCentred from 'component/layout/page-centered';
@@ -10,15 +11,8 @@ import Button from 'component/button';
 
 import ProjectRequestForm from '../components/form';
 import style from './index.module.pcss';
-import { ORGANIZATION_PROJECT_MODULE_REQUEST_ID } from 'helper/url-list';
 
 const FORM_ID = 'PROJECT_REQUEST_CREATE_FORM_ID';
-
-interface IParams {
-    organizationId: string,
-    projectId: string,
-    moduleId: string
-}
 
 const ProjectRequestCreateForm = () => {
     const cn = useClassnames(style);

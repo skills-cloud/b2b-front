@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LocationDescriptor } from 'history';
 import { useLocation, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
+import { IParams } from 'helper/url-list';
 import { useClassnames, IStyle } from 'hook/use-classnames';
 
 import { mainRequest } from 'adapter/api/main';
@@ -38,15 +39,6 @@ interface IPath {
     skipTranslate?: boolean
 }
 
-interface IParams {
-    requestId: string,
-    projectId: string,
-    specialistId: string,
-    organizationId: string,
-    timesheetId: string,
-    moduleId: string
-}
-
 const config = {
     [EItems.Module]       : mainRequest.endpoints.getMainModuleById,
     [EItems.Projects]     : mainRequest.endpoints.getMainOrganizationProjectById,
@@ -64,9 +56,16 @@ const Breadcrumbs = (props: IProps) => {
     const location = useLocation();
     const [path, setPath] = useState<Array<IPath>>([]);
 
+    // TODO подумать над оптимизацией крошек и отображения вида Организация Яндекс > Проект название
+    const ignoredPathNames = useMemo(() => ({
+        'resource-value': true,
+        'requirement'   : true
+    }), []);
+
     useEffect(() => {
         const newPath = location.pathname.split('/').filter((value) => !!value).reduce((acc, curr, index, array) => {
-            if(!parseInt(curr, 10)) {
+            // TODO костыль с игнором некоторыъ путей
+            if(!parseInt(curr, 10) && !ignoredPathNames[curr]) {
                 acc[curr] = {
                     id: array[index + 1] ? parseInt(array[index + 1], 10) : undefined
                 };

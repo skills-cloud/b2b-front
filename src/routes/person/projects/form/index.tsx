@@ -4,7 +4,9 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
 import debounce from 'lodash.debounce';
 
+import { IParams } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
+
 import FormInput from 'component/form/input';
 import FormDate from 'component/form/date';
 import InputSelect from 'component/form/select';
@@ -44,7 +46,7 @@ const CareerForm = (props: IProjectForm) => {
     const dispatch = useDispatch();
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const methods = useForm(props.defaultValues);
     const [postProject, { isLoading: isPostLoading }] = project.usePostProjectMutation();
     const [patchProject, { isLoading: isPatchLoading }] = project.usePatchProjectByIdMutation();

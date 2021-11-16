@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode, useEffect, useMemo } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
@@ -14,12 +14,29 @@ export interface IProps {
     footer?: ReactNode,
     children: ReactNode,
     onClose?: () => void,
-    onBack?: () => void,
-    footerWithAction?: boolean
+    onBack?: () => void
 }
 
 export const Modal = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
+
+    const onOutsideClick = () => {
+        props.onClose?.();
+    };
+
+    const escClick = (e: KeyboardEvent) => {
+        if(e.key === 'Escape') {
+            props.onClose?.();
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('keydown', escClick, false);
+
+        return () => {
+            document.removeEventListener('keydown', escClick, false);
+        };
+    }, []);
 
     const elHeader = useMemo(() => {
         if(typeof props.header === 'string') {
@@ -28,10 +45,6 @@ export const Modal = (props: IProps) => {
 
         return props.header;
     }, [props.header]);
-
-    const onOutsideClick = () => {
-        props.onClose?.();
-    };
 
     return (
         <div className={cn('modal')}>
@@ -68,11 +81,7 @@ export const Modal = (props: IProps) => {
                         {props.children}
                     </div>
                     {props.footer && (
-                        <div
-                            className={cn('modal__footer', {
-                                'modal__footer_with_action': props.footerWithAction
-                            })}
-                        >
+                        <div className={cn('modal__footer')}>
                             {props.footer}
                         </div>
                     )}

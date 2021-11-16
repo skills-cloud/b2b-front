@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { ORGANIZATION_PROJECT_ID } from 'helper/url-list';
+import { IParams, ORGANIZATION_PROJECT_ID } from 'helper/url-list';
 import useClassnames, { IStyle } from 'hook/use-classnames';
 
 import IconPencil from 'component/icons/pencil';
@@ -25,7 +25,7 @@ export interface IProps {
 
 export const Career = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const { t } = useTranslation();

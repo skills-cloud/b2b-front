@@ -89,7 +89,7 @@ const UserItem = (props: IProps & typeof defaultProps) => {
                             })}
                         </div>
                         <StarRating rating={props.cvItem.rating} />
-                        {elAddButton(cvItemCareer.id)}
+                        {elAddButton(props.cvItem.id)}
                     </div>
                     {showLinkedParam && showLinkedParam.length > 0 && props.showLinkedItems && (
                         <div className={cn('user-item__user-linked')} onClick={onClickLinked(props.cvItem.id)}>

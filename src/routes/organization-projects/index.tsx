@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import { ORGANIZATION_PROJECT_ID } from 'helper/url-list';
+import { IParams } from 'helper/url-list';
+import useClassnames from 'hook/use-classnames';
 
 import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
@@ -16,9 +17,12 @@ import Wrapper from 'component/section/wrapper';
 import EditAction from 'component/section/actions/edit';
 
 import { mainRequest } from 'adapter/api/main';
+import { ModulePositionLaborEstimateInline } from 'adapter/types/main/module/get/code-200';
 
 import EditModal from './edit-modal';
+import Resources from './resources';
 import ModulesList from './modules-list';
+import style from './index.module.pcss';
 
 enum ESectionInvariants {
     MainInfo = 'main-info',
@@ -26,12 +30,17 @@ enum ESectionInvariants {
 }
 
 const OrganizationProjects = () => {
+    const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { projectId, organizationId } = useParams<{ organizationId: string, projectId: string }>();
+    const { projectId } = useParams<IParams>();
 
     const [visible, setVisible] = useState<boolean>(false);
 
     const { data } = mainRequest.useGetMainOrganizationProjectByIdQuery({ id: projectId });
+
+    const { data: modules, isLoading: isLoadingModules } = mainRequest.useGetMainModuleQuery({
+        organization_project_id: [parseInt(projectId, 10)]
+    });
 
     const onClickEdit = () => {
         setVisible(true);
@@ -46,10 +55,7 @@ const OrganizationProjects = () => {
             <Section withoutPaddings={true}>
                 <SidebarNav>
                     {Object.values(ESectionInvariants).map((nav) => (
-                        <NavItem
-                            key={nav}
-                            to={`${ORGANIZATION_PROJECT_ID(organizationId, projectId)}/${nav}`}
-                        >
+                        <NavItem key={nav} to={`#${nav}`}>
                             {t(`routes.organization-projects.blocks.sections.${nav}`)}
                         </NavItem>
                     ))}
@@ -57,6 +63,20 @@ const OrganizationProjects = () => {
             </Section>
         );
     };
+
+    const elResources = useMemo(() => {
+        if(modules) {
+            const resources = modules.results.reduce((acc, curr) => {
+                if(curr.positions_labor_estimates?.length) {
+                    acc.push(...curr.positions_labor_estimates);
+                }
+
+                return acc;
+            }, [] as Array<ModulePositionLaborEstimateInline>);
+
+            return <Resources isLoading={isLoadingModules} resources={resources} />;
+        }
+    }, [JSON.stringify(modules)]);
 
     if(!data) {
         return null;
@@ -66,6 +86,9 @@ const OrganizationProjects = () => {
         <SidebarLayout sidebar={elSidebar()}>
             <Wrapper>
                 <Section id={ESectionInvariants.MainInfo}>
+                    <span className={cn('organization-project__sub-header')}>
+                        {t('routes.organization-projects.sub-header')}
+                    </span>
                     <SectionHeader actions={elEditAction()}>{data?.name}</SectionHeader>
                     <SectionContentList>
                         <SectionContentListItem title={t('routes.organization-projects.blocks.customer')}>
@@ -77,10 +100,17 @@ const OrganizationProjects = () => {
                         <SectionContentListItem title={t('routes.organization-projects.blocks.timeframe')}>
                             <Timeframe startDate={data?.date_from} endDate={data?.date_to} />
                         </SectionContentListItem>
+                        <SectionContentListItem title={t('routes.organization-projects.blocks.description')}>
+                            {data?.description}
+                        </SectionContentListItem>
                     </SectionContentList>
                 </Section>
-                <ModulesList id={ESectionInvariants.Modules} />
-                {/* <Resouces />*/}
+                <ModulesList
+                    isLoading={isLoadingModules}
+                    modules={modules?.results}
+                    id={ESectionInvariants.Modules}
+                />
+                {elResources}
             </Wrapper>
             {visible && <EditModal setVisible={setVisible} fields={data} />}
         </SidebarLayout>

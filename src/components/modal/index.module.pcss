@@ -39,14 +39,10 @@
         display: grid;
         padding: 24px 32px;
         grid-auto-flow: column;
-        grid-template-columns: min-content min-content;
+        grid-auto-columns: 1fr;
         align-items: center;
         justify-content: flex-end;
         column-gap: 12px;
-
-        &_with-action {
-            grid-template-columns: 1fr min-content min-content;
-        }
     }
 
     &__button {

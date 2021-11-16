@@ -1,7 +1,9 @@
-import React, { ReactNode, FC, useState, useEffect } from 'react';
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import React, { ReactNode, FC } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
+
 import style from './index.module.pcss';
 
 interface INavItem {
@@ -11,25 +13,19 @@ interface INavItem {
     to: string
 }
 
-const NavItem: FC<INavItem> = ({ replace, children, to, selected }) => {
+const NavItem: FC<INavItem> = ({ replace, children, to }) => {
     const cn = useClassnames(style);
-
-    const match = useRouteMatch({ path: to });
-    const [active, setActive] = useState<boolean>();
-
-    useEffect(() => {
-        setActive(match?.isExact);
-    }, [match?.isExact]);
+    const { hash } = useLocation();
 
     return (
         <li className={cn('nav__item', {
-            'nav__item_selected': selected || active
+            'nav__item_selected': hash === to
         })}
         >
             <NavLink
                 replace={replace}
                 to={to}
-                isActive={() => match?.isExact || !!selected}
+                isActive={() => hash === to}
                 className={cn('nav__item-link')}
                 activeClassName={cn('nav__item-link_active')}
             >

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider, SubmitHandler, useFieldArray } from 'react-hook-form';
-import { useClassnames } from 'hook/use-classnames';
 import { useParams } from 'react-router';
+
+import { IParams } from 'helper/url-list';
+import { useClassnames } from 'hook/use-classnames';
 
 import Select, { IValue } from 'component/form/select';
 import Textarea from 'component/form/textarea';
@@ -12,6 +14,7 @@ import InputDictionary from 'component/form/input-dictionary';
 import InputMain from 'component/form/input-main';
 import InputProject from 'component/form/input-project';
 import Input from 'component/form/input';
+import InputModule from 'component/form/input-module';
 
 import { Request, NoName4, NoName2 } from 'adapter/types/main/request/id/patch/code-200';
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
@@ -19,7 +22,6 @@ import { mainRequest } from 'src/adapters/api/main';
 import { acc } from 'src/adapters/api/acc';
 
 import style from './index.module.pcss';
-import InputModule from 'component/form/input-module';
 
 interface ISelect {
     value: string,
@@ -57,12 +59,6 @@ interface IProjectsRequestForm {
 enum ETabs {
     Main,
     ProjectTiming
-}
-
-interface IParams {
-    organizationId: string,
-    projectId: string,
-    moduleId: string
 }
 
 const statusInvariants = ['closed', 'done', 'draft', 'in_progress'];

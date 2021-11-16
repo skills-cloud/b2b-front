@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { parse, stringify } from 'query-string';
 import { useForm, FormProvider } from 'react-hook-form';
 
+import { IParams } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
 
@@ -41,7 +42,7 @@ const Timesheets = () => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const history = useHistory();
-    const params = useParams<{ projectId: string, requestId: string }>();
+    const params = useParams<IParams>();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
     const defaultValues = {
         task_name: '',

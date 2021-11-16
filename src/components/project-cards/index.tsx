@@ -81,11 +81,11 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
         methods.setValue('cardNameSub', '');
     }, [visibleAddCard]);
 
-    const setVisibleModal = useCallback((state) => {
-        if(!state) {
-            closeModal();
-        }
-    }, [closeModal]);
+    // const setVisibleModal = useCallback((state) => {
+    //     if(!state) {
+    //         closeModal();
+    //     }
+    // }, [closeModal]);
 
     useEffect(() => {
         if(cards && positionMap) {
@@ -136,6 +136,8 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
             .then(() => setVisibleAddCard(false))
             .catch(console.error);
     };
+
+    // TODO error catch
 
     const createCardFromTemplateRequest = (values: { card_id: { value: string }}) => {
         if(!projectId) {

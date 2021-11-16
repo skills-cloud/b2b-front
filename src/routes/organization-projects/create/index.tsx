@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
-import { ORGANIZATION_PROJECTS } from 'helper/url-list';
+import { IParams, ORGANIZATION_PROJECTS } from 'helper/url-list';
 
 import PageCentred from 'component/layout/page-centered';
 import Section from 'component/section';
@@ -18,7 +18,7 @@ const OrganizationProjectCreate = () => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const history = useHistory();
-    const params = useParams<{ organizationId: string }>();
+    const params = useParams<IParams>();
 
     const onSuccess = () => {
         history.push(ORGANIZATION_PROJECTS(params.organizationId));

@@ -4,6 +4,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
 import debounce from 'lodash.debounce';
 
+import { IParams } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 import { useDispatch } from 'component/core/store';
 
@@ -40,7 +41,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const params = useParams<{ organizationId: string }>();
+    const params = useParams<IParams>();
     const context = useForm({
         mode         : 'onChange',
         defaultValues: {

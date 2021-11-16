@@ -1,14 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useClassnames } from 'hook/use-classnames';
 import { useParams } from 'react-router';
+
+import { IParams } from 'helper/url-list';
+import { useClassnames } from 'hook/use-classnames';
 
 import Select, { IValue } from 'component/form/select';
 import Textarea from 'component/form/textarea';
 import DeadlineDates from 'component/form/deadline-dates';
 import InputProject from 'component/form/input-project';
 import Input from 'component/form/input';
+import InputMain from 'component/form/input-main';
+import Error from 'component/error';
 
 import { ModuleWrite } from 'adapter/types/main/module/id/patch/code-200';
 import { ModuleRead } from 'adapter/types/main/module/id/get/code-200';
@@ -16,8 +20,6 @@ import { mainRequest } from 'adapter/api/main';
 import { acc } from 'adapter/api/acc';
 
 import style from './index.module.pcss';
-import InputMain from 'component/form/input-main';
-import Error from 'component/error';
 
 interface ISelect {
     value: string,
@@ -41,7 +43,7 @@ interface IProjectsRequestForm {
 const ModuleCreateForm = ({ formId, onSuccess, defaultValues }: IProjectsRequestForm) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const params = useParams<{ organizationId: string, projectId: string }>();
+    const params = useParams<IParams>();
 
     const [error, setError] = useState<string | null>(null);
 

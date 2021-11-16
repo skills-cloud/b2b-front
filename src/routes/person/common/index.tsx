@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import { differenceInCalendarYears, format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
+import { IParams } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 
 import IconApply from 'component/icons/apply';
@@ -29,7 +30,7 @@ export interface IProps {
 export const Common = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const context = useForm({
         mode: 'all'
     });

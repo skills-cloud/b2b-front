@@ -2,12 +2,13 @@ import React, { useState, useMemo, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import useClassnames, { IStyle } from 'hook/use-classnames';
+
 import IconPencil from 'component/icons/pencil';
+import VerifyIcon from 'component/verify-icon';
 
 import { project } from 'adapter/api/project';
-
-import VerifyIcon from 'component/verify-icon';
 
 import ProjectsEdit from './edit';
 import style from './index.module.pcss';
@@ -18,7 +19,7 @@ export interface IProps {
 }
 
 export const Projects = (props: IProps) => {
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const cn = useClassnames(style, props.className, true);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const { t } = useTranslation();

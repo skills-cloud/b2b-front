@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
-import { ORGANIZATION_PROJECT_CREATE, ORGANIZATION_PROJECT_ID } from 'helper/url-list';
+import { IParams, ORGANIZATION_PROJECT_CREATE, ORGANIZATION_PROJECT_ID } from 'helper/url-list';
 
 import Section from 'component/section';
 import IconChevronRight from 'component/icons/chevron-right';
@@ -32,7 +32,7 @@ enum EProjectInvariants {
 const ProjectList = () => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { organizationId } = useParams<{ organizationId: string }>();
+    const { organizationId } = useParams<IParams>();
     const { data, isLoading } = mainRequest.useGetMainOrganizationProjectListQuery({ organization_id: organizationId });
 
     const renderField = (field: EProjectInvariants, project: OrganizationProjectRead) => {
