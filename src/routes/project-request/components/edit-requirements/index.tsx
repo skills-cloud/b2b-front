@@ -8,6 +8,7 @@ import Tabs, { Tab } from 'component/tabs';
 import Input from 'component/form/input';
 import DotsAction from 'component/section/actions/dots';
 import DeadlineDates from 'component/form/deadline-dates';
+import SkillsTag from 'component/skills-tag';
 
 import EditLocation from 'route/project-request/components/edit-location';
 import EditPrice from 'route/project-request/components/edit-price';
@@ -128,15 +129,23 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
                 return (
                     <div className={cn('edit-requirements__position')}>
                         <H4>
-                            {t(
-                                'routes.project-request.requirements.edit-modal.people',
-                                {
-                                    people  : editRequirements.count,
-                                    position: editRequirements.position.name
-                                })}
+                            {t('routes.project-request.requirements.edit-modal.people', {
+                                people  : editRequirements.count,
+                                position: editRequirements.position.name
+                            })}
                         </H4>
-
                         <DotsAction onClick={onEditRole} />
+                        <div className={cn('edit-requirements__skills')}>
+                            {editRequirements.competencies?.map((comp) => (
+                                <SkillsTag
+                                    key={comp.competence_id}
+                                    tooltip={t('routes.project-request.requirements.edit-modal.experience.invariant', {
+                                        context: comp.experience_years
+                                    })}
+                                    children={comp.competence?.name}
+                                />
+                            ))}
+                        </div>
                     </div>
                 );
             }

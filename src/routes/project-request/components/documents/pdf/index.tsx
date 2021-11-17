@@ -3,6 +3,8 @@ import { useParams } from 'react-router';
 import { jsPDF } from 'jspdf';
 import { useTranslation } from 'react-i18next';
 
+import { IParams } from 'helper/url-list';
+
 import { mainRequest } from 'adapter/api/main';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -15,7 +17,7 @@ jsPDF.API.events.push(['addFonts', callAddFont]);
 const ProjectRequestPdf = () => {
     const { t } = useTranslation();
 
-    const params = useParams<{ subpage?: string, requestId: string }>();
+    const params = useParams<IParams>();
     const { data, refetch } = mainRequest.useGetMainRequestByIdQuery(
         { id: params.requestId },
         { refetchOnMountOrArgChange: true }

@@ -1,0 +1,72 @@
+.fun-points {
+
+    &__content {
+        display: grid;
+    }
+
+    &__item-title {
+        display: grid;
+        grid-template-columns: 1fr min-content;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    &__empty {
+        margin-top: 24px;
+    }
+
+    &__header {
+        padding: 0 32px;
+        font-family: Montserrat, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 22px;
+        color: var(--color-text-dark);
+        display: grid;
+        grid-auto-flow: column;
+        align-items: baseline;
+        justify-content: flex-start;
+        grid-gap: 20px;
+    }
+
+    &__icon-back {
+        fill: var(--color-gray-100);
+        width: 16px;
+        height: 16px;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__item-content {
+        display: grid;
+        grid-gap: 24px;
+        grid-auto-columns: max-content;
+        grid-auto-flow: column;
+    }
+
+    &__item-content-block-title {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 16px;
+        text-transform: uppercase;
+        color: var(--color-text-light);
+    }
+
+    &__item-content-block {
+        display: grid;
+        grid-gap: 4px;
+    }
+
+    &__item-content-block-text {
+        font-size: 14px;
+        line-height: 18px;
+        color: var(--color-text-dark);
+    }
+}

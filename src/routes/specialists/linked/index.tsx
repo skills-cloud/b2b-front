@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 
 import Modal from 'component/modal';
@@ -22,9 +23,9 @@ export interface IProps {
 const Linked = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { data, isLoading } = cv.useGetCvListQuery({ id: props.linkedIds });
+    const params = useParams<IParams>();
 
-    const params = useParams<{ requirementId: string, requestId: string, projectId: string }>();
+    const { data, isLoading } = cv.useGetCvListQuery({ id: props.linkedIds });
 
     const [addToRequest, setAddToRequest] = useState<number | null>();
 

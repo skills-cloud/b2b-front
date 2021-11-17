@@ -4,6 +4,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { parse, stringify } from 'query-string';
 import { useHistory } from 'react-router';
 
+import { REQUEST_CREATE } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
 
@@ -187,7 +188,7 @@ const ProjectRequestList = () => {
     return (
         <SidebarLayout sidebar={elSidebar()}>
             <Section>
-                <SectionHeader actions={<AddAction to="/requests/create" />}>
+                <SectionHeader actions={<AddAction to={REQUEST_CREATE} />}>
                     {t('routes.project-request-list.title')}
                 </SectionHeader>
                 {elRequests}

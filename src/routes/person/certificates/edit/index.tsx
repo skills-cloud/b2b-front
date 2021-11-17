@@ -2,7 +2,9 @@ import React, { Fragment, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import useClassnames, { IStyle } from 'hook/use-classnames';
+
 import Button from 'component/button';
 import Modal from 'component/modal';
 import { IconDelete } from 'component/icons/delete';
@@ -30,7 +32,7 @@ enum ESteps {
 export const CertificatesEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
 
     const [step, setStep] = useState<ESteps>(ESteps.List);
     const [certificateItem, setCertificateItem] = useState<CvCertificateRead | null>(null);

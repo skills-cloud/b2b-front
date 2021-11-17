@@ -14,7 +14,7 @@ interface IEditModal {
     fields: Organization
 }
 
-const FORM_MAIN_ID = 'FORM_MAIN_ID';
+const FORM_MAIN_ID = 'ORGANIZATION_EDIT_FORM_MAIN_ID';
 
 const EditModal = ({ setVisible, fields }: IEditModal) => {
     const { t } = useTranslation();

@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { utils, write } from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { IParams } from 'helper/url-list';
+
 import { mainRequest } from 'adapter/api/main';
 
 import Base from '../index';
@@ -16,7 +18,7 @@ const COL_SPAN_VALUE = 7;
 const ProjectRequestCsv = () => {
     const { t } = useTranslation();
 
-    const params = useParams<{ subpage?: string, requestId: string }>();
+    const params = useParams<IParams>();
     const { data, refetch } = mainRequest.useGetMainRequestByIdQuery(
         { id: params.requestId },
         { refetchOnMountOrArgChange: true }

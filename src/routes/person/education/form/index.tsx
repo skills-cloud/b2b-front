@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
+
 import FormInput from 'component/form/input';
 import FormDate from 'component/form/date';
 import InputDictionary from 'component/form/input-dictionary';
@@ -48,7 +50,7 @@ interface IEducationForm {
 const EducationForm = (props: IEducationForm) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const methods = useForm(props.defaultValues);
     const [postEducation] = education.usePostEducationMutation();
     const [patchEducation] = education.usePatchEducationMutation();

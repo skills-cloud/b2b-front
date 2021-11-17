@@ -36,11 +36,13 @@
 
     &__footer {
         border-top: solid 1px var(--color-form-border);
-        padding: 24px 32px;
         display: grid;
+        padding: 24px 32px;
         grid-auto-flow: column;
-        grid-column-gap: 12px;
+        grid-auto-columns: 1fr;
         align-items: center;
+        justify-content: flex-end;
+        column-gap: 12px;
     }
 
     &__button {

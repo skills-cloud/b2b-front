@@ -5,6 +5,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { parse, stringify } from 'query-string';
 import { Link } from 'react-router-dom';
 
+import { ORGANIZATION_CREATE, ORGANIZATION_ID } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
 
@@ -17,11 +18,11 @@ import Checkbox from 'component/form/checkbox';
 import SidebarLayout from 'component/layout/sidebar';
 import Section from 'component/section';
 import Wrapper from 'component/section/wrapper';
+import AddAction from 'component/section/actions/add';
 
 import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
-import AddAction from 'component/section/actions/add';
 
 export interface IFormValues {
     search?: string,
@@ -98,7 +99,7 @@ export const Organizations = () => {
                         return (
                             <div key={item.id} className={cn('organizations__list-item')}>
                                 <div className={cn('organizations__list-item-block')}>
-                                    <Link to={`/organizations/${item.id}`} className={cn('organizations__list-item-link')}>
+                                    <Link to={ORGANIZATION_ID(item.id)} className={cn('organizations__list-item-link')}>
                                         {item.name}
                                     </Link>
                                     {item.is_customer && t('routes.organizations.main.list.customer')}
@@ -153,7 +154,7 @@ export const Organizations = () => {
         <SidebarLayout sidebar={elSidebar()}>
             <Section>
                 <Wrapper>
-                    <SectionHeader actions={<AddAction to="/organizations/create" />}>
+                    <SectionHeader actions={<AddAction to={ORGANIZATION_CREATE} />}>
                         {t('routes.organizations.main.title')}
                     </SectionHeader>
                     {elOrganizations}

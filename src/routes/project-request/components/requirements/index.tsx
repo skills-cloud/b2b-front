@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { stringify } from 'query-string';
 import { useHistory, useLocation } from 'react-router';
 
+import { ORGANIZATION_PROJECT_MODULE_REQUEST_REQUIREMENT_SPECIALISTS } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
 
@@ -18,8 +19,8 @@ import SectionContentListItem from 'component/section/content-list-item';
 import Separator from 'component/separator';
 import Section from 'component/section';
 import Button from 'component/button';
-import Tooltip from 'component/tooltip';
 import Timeframe from 'component/timeframe';
+import SkillsTag from 'component/skills-tag';
 
 import ESectionInvariants from 'route/project-request/components/section-invariants';
 import AddRole from 'route/project-request/components/add-role';
@@ -68,7 +69,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     competencies_ids_any: req.competencies?.map((comp) => comp.competence_id)
                 };
 
-                history.push(`${pathname}/requirement/${requirementId}/specialists?${stringify(normalizeObject(params))}`);
+                history.push(`${ORGANIZATION_PROJECT_MODULE_REQUEST_REQUIREMENT_SPECIALISTS(pathname, requirementId)}?${stringify(normalizeObject(params))}`);
             }
         }
     };
@@ -129,7 +130,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
 
                 return (
                     <Section key={requirementId}>
-                        <div className={cn('gap-bottom')}>
+                        <div className={cn('requirements__gap-bottom')}>
                             <SectionHeader
                                 dropdownActions={[
                                     <EditAction
@@ -154,7 +155,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                         </div>
 
                         {position?.name && (
-                            <div className={cn('gap-bottom')}>
+                            <div className={cn('requirements__gap-bottom')}>
                                 <H4 {...ancor}>
                                     {position?.name} ({count} {t('routes.project-request.blocks.people', { count })})
                                 </H4>
@@ -164,27 +165,21 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                         {((competencies && competencies.length > 0) || experience_years !== null) && (
                             <SectionContentList>
                                 {competencies && competencies.length > 0 && (
-                                    <SectionContentListItem
-                                        title={
-                                            <div className={cn('skills-head')}>
-                                                {t('routes.project-request.blocks.competencies.name')}
-                                            </div>
-                                        }
-                                    >
-                                        {competencies.map(({ competence, id:competenceId, experience_years: experienceYears }) => (
-                                            <Tooltip
-                                                key={competenceId}
-                                                content={t(
-                                                    'components.checkbox-tree.experience.invariant',
-                                                    { context: experienceYears }
-                                                )}
-                                                theme="dark"
-                                            >
-                                                <div className={cn('skills-tag')} key={competenceId}>
+                                    <SectionContentListItem title={t('routes.project-request.blocks.competencies.name')}>
+                                        <div className={cn('requirements__skills')}>
+                                            {competencies.map(({ competence, id:competenceId, experience_years: experienceYears }) => (
+                                                <SkillsTag
+                                                    key={competenceId}
+                                                    tooltip={t(
+                                                        'components.checkbox-tree.experience.invariant',
+                                                        { context: experienceYears }
+                                                    )}
+                                                    theme="dark"
+                                                >
                                                     {competence?.name}
-                                                </div>
-                                            </Tooltip>
-                                        ))}
+                                                </SkillsTag>
+                                            ))}
+                                        </div>
                                     </SectionContentListItem>
                                 )}
                                 <SectionContentListItem title={t('routes.project-request.blocks.competencies.experience')}>
@@ -321,7 +316,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
             )}
             <Section>
                 <div
-                    className={cn('add-request')} onClick={() => {
+                    className={cn('requirements__add-request')} onClick={() => {
                         setEditID(undefined);
                         setModalStep(EModalSteps.NewRole);
                     }}

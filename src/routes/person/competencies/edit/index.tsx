@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useForm, useFieldArray, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import useClassnames, { IStyle } from 'hook/use-classnames';
+
 import Button from 'component/button';
 import Modal from 'component/modal';
-import Tooltip from 'component/tooltip';
 import IconArrowLeft from 'component/icons/arrow-left-full';
 import Error from 'component/error';
 import InputDictionary from 'component/form/input-dictionary';
@@ -17,6 +18,7 @@ import DeleteAction from 'component/section/actions/delete';
 import DropdownMenu from 'component/dropdown/menu';
 import DropdownMenuItem from 'component/dropdown/menu-item';
 import DotsAction from 'component/section/actions/dots';
+import SkillsTag from 'component/skills-tag';
 
 import { position } from 'adapter/api/position';
 import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
@@ -48,7 +50,7 @@ const EDIT_COMPETENCIES_FORM_ID = 'EDIT_COMPETENCIES_FORM_ID';
 export const CompetenciesEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const methods = useForm<IFormValues>({
         defaultValues: {
             competencies  : props.fields || [{}],
@@ -60,7 +62,11 @@ export const CompetenciesEdit = (props: IProps) => {
         control: methods.control,
         name   : 'competencies'
     });
-    const { data: positionData, refetch } = position.useGetPositionListQuery({ cv_id: parseInt(specialistId, 10) }, { refetchOnMountOrArgChange: true });
+    const { data: positionData, refetch } = position.useGetPositionListQuery({
+        cv_id: parseInt(specialistId, 10)
+    }, {
+        refetchOnMountOrArgChange: true
+    });
     const [patchPosition, { isLoading }] = position.usePatchPositionByIdMutation();
     const [postPosition, { isLoading: isLoadingPost }] = position.usePostPositionMutation();
     const [deletePosition, { isLoading: isLoadingDelete }] = position.useDeletePositionMutation();
@@ -78,9 +84,11 @@ export const CompetenciesEdit = (props: IProps) => {
         setPositionItem(undefined);
         setActiveWindow(null);
     };
+
     const requestUpdateCompetencies = useCallback((positionId: number) => {
         const dataComp = checked.map((item) => ({
-            competence_id: parseInt(item, 10)
+            competence_id: parseInt(item, 10),
+            years        : competenceExperienceMap[item]
         }));
 
         postPositionCompetencies({
@@ -92,7 +100,7 @@ export const CompetenciesEdit = (props: IProps) => {
                 onCancel();
             })
             .catch(console.error);
-    }, [checked]);
+    }, [checked, JSON.stringify(competenceExperienceMap)]);
 
     const onSubmit = useCallback((formData: IFormValues) => {
         if(activeWindow === 'checkbox') {
@@ -136,7 +144,7 @@ export const CompetenciesEdit = (props: IProps) => {
                     }
                 });
         }
-    }, [checked, activeWindow]);
+    }, [checked, activeWindow, JSON.stringify(competenceExperienceMap)]);
 
     const onClickSubmit = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -155,6 +163,13 @@ export const CompetenciesEdit = (props: IProps) => {
     const onClickEdit = (positionItemParam: CvPositionRead, onClose: () => void) => () => {
         const newChecked = positionItemParam.competencies?.map((item) => String(item.competence_id)) || [];
 
+        setCompetenceExperienceMap(positionItemParam.competencies?.reduce((acc, item) => {
+            if(item.years) {
+                acc[item.competence_id] = item.years;
+            }
+
+            return acc;
+        }, {}) || {});
         setPositionItem(positionItemParam);
         setChecked(newChecked);
         setActiveWindow('checkbox');
@@ -307,13 +322,15 @@ export const CompetenciesEdit = (props: IProps) => {
                                     <strong>{t('routes.person.blocks.competencies.skills')}</strong>
                                     <div className={cn('competencies-edit__skills')}>
                                         {pos.competencies?.map((comp) => (
-                                            <Tooltip
+                                            <SkillsTag
                                                 key={comp.competence_id}
-                                                content={comp.competence?.name}
+                                                tooltip={t('routes.person.blocks.competencies.experience.invariant', {
+                                                    context: comp.years
+                                                })}
                                                 theme="dark"
                                             >
-                                                <span className={cn('competencies-edit__skills-tag')}>{comp.competence?.name}</span>
-                                            </Tooltip>
+                                                {comp.competence?.name}
+                                            </SkillsTag>
                                         ))}
                                     </div>
                                 </div>
@@ -400,7 +417,7 @@ export const CompetenciesEdit = (props: IProps) => {
     };
 
     return (
-        <Modal className={cn('competencies-edit')} footer={elFooter()} header={elHeader()}>
+        <Modal onClose={props.onCancel} className={cn('competencies-edit')} footer={elFooter()} header={elHeader()}>
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)} id={EDIT_COMPETENCIES_FORM_ID}>
                     {elFormContent()}

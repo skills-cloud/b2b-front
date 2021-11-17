@@ -8,7 +8,7 @@ import Specialists from './specialists';
 import SpecialistsCreate from './specialists/create';
 import Person from './person';
 import Login from './login';
-import ProjectCreate from './project-request/create';
+import ProjectRequestCreate from './project-request/create';
 import ProjectRequest from './project-request';
 import NotFound from 'route/not-found';
 import ProjectRequestList from 'route/project-request/list';
@@ -18,6 +18,9 @@ import Timesheets from 'route/timesheet';
 import Organizations from 'route/organizations';
 import OrganizationProjectCreate from 'route/organization-projects/create';
 import OrganizationCreate from 'route/organizations/create';
+import ModuleCreate from 'route/module/create';
+import Module from 'route/module';
+import FunctionalPoints from 'route/fun-points';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -26,6 +29,41 @@ export interface IProps extends RouteProps {
 
 // Базовые роуты
 export const baseRoutes: Array<IProps> = [{
+    exact    : true,
+    layout   : Layout,
+    path     : '/',
+    component: Main
+}, {
+    isPublic : true,
+    exact    : true,
+    layout   : Layout,
+    path     : '/login',
+    component: Login
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/404',
+    component: NotFound
+}, {
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/specialists',
+        '/requests/:requestId/requirement/:requirementId/specialists',
+        '/organizations/:organizationId/projects/:projectId/modules/:moduleId/requests/:requestId/requirement/:requirementId/specialists'
+    ],
+    component: Specialists
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/specialists/create',
+    component: SpecialistsCreate
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/specialists/:specialistId',
+    component: Person
+}, {
     exact    : true,
     layout   : Layout,
     path     : '/organizations',
@@ -38,16 +76,8 @@ export const baseRoutes: Array<IProps> = [{
 }, {
     exact    : true,
     layout   : Layout,
-    path     : '/organizations/:organizationId/:subpage(projects|main-info|cards)?',
+    path     : '/organizations/:organizationId/:subpage(projects)?',
     component: Organization
-}, {
-    exact : true,
-    layout: Layout,
-    path  : [
-        '/organizations/:organizationId/projects/:projectId/requests/:requestId/timesheets',
-        '/requests/:requestId/timesheets'
-    ],
-    component: Timesheets
 }, {
     exact    : true,
     layout   : Layout,
@@ -56,49 +86,39 @@ export const baseRoutes: Array<IProps> = [{
 }, {
     exact    : true,
     layout   : Layout,
-    path     : '/organizations/:organizationId/projects/:projectId/:subpage(main-info|requests)?',
+    path     : '/organizations/:organizationId/projects/:projectId/:subpage(modules)?',
     component: OrganizationProjects
 }, {
-    isPublic : true,
     exact    : true,
     layout   : Layout,
-    path     : '/login',
-    component: Login
-}, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/',
-    component: Main
-}, {
-    exact : true,
-    layout: Layout,
-    path  : [
-        '/specialists',
-        '/requests/:requestId/requirement/:requirementId/specialists',
-        '/organizations/:organizationId/projects/:projectId/requests/:requestId/requirement/:requirementId/specialists'
-    ],
-    component: Specialists
+    path     : '/organizations/:organizationId/projects/:projectId/modules/create',
+    component: ModuleCreate
 }, {
     exact    : true,
     layout   : Layout,
-    path     : '/specialists/create',
-    component: SpecialistsCreate
+    path     : '/organizations/:organizationId/projects/:projectId/modules/:moduleId/:subpage(requests)?',
+    component: Module
 }, {
-    exact : true,
-    layout: Layout,
-    path  : [
-        '/specialists/:specialistId',
-        '/organizations/:organizationId/projects/:projectId/requests/specialists/:specialistId'
-    ],
-    component: Person
+    exact    : true,
+    layout   : Layout,
+    path     : '/organizations/:organizationId/projects/:projectId/modules/:moduleId/fun-points',
+    component: FunctionalPoints
 }, {
     exact : true,
     layout: Layout,
     path  : [
         '/requests/create',
-        '/organizations/:organizationId/projects/:projectId/requests/create'
+        '/organizations/:organizationId/projects/:projectId/modules/:moduleId/requests/create'
     ],
-    component: ProjectCreate
+    component: ProjectRequestCreate
+}, {
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/organizations/:organizationId/projects/:projectId/modules/:moduleId/requests/:requestId/timesheets',
+        '/requests/:requestId/timesheets'
+    ],
+    component: Timesheets
 }, {
     exact    : true,
     layout   : Layout,
@@ -110,12 +130,7 @@ export const baseRoutes: Array<IProps> = [{
     path  : [
         '/requests/:requestId',
         '/requests/:requestId/:subpage(edit|candidates)',
-        '/organizations/:organizationId/projects/:projectId/requests/:requestId/:subpage(edit|candidates|requirement)?'
+        '/organizations/:organizationId/projects/:projectId/modules/:moduleId/requests/:requestId/:subpage(candidates|requirement)?'
     ],
     component: ProjectRequest
-}, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/404',
-    component: NotFound
 }];

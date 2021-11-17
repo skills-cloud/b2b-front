@@ -2,6 +2,7 @@ import React, { useCallback, useState, ChangeEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import useClassnames, { IStyle } from 'hook/use-classnames';
 
 import IconPlus from 'component/icons/plus';
@@ -23,7 +24,7 @@ export interface IProps {
 }
 
 export const Files = (props: IProps) => {
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
 

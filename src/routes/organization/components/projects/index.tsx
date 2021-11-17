@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
+import { IParams, ORGANIZATION_PROJECT_CREATE, ORGANIZATION_PROJECT_ID } from 'helper/url-list';
 
 import Section from 'component/section';
 import IconChevronRight from 'component/icons/chevron-right';
@@ -14,12 +15,12 @@ import { H4 } from 'component/header';
 import Separator from 'component/separator';
 import Timeframe from 'component/timeframe';
 import Loader from 'component/loader';
+import AddAction from 'component/section/actions/add';
 
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
 import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
-import AddAction from 'component/section/actions/add';
 
 enum EProjectInvariants {
     Period = 'period',
@@ -31,7 +32,7 @@ enum EProjectInvariants {
 const ProjectList = () => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { organizationId } = useParams<{ organizationId: string }>();
+    const { organizationId } = useParams<IParams>();
     const { data, isLoading } = mainRequest.useGetMainOrganizationProjectListQuery({ organization_id: organizationId });
 
     const renderField = (field: EProjectInvariants, project: OrganizationProjectRead) => {
@@ -71,7 +72,7 @@ const ProjectList = () => {
                 <React.Fragment key={item.id}>
                     {index > 0 && <Separator />}
                     <SectionContentList>
-                        <Link to={`/organizations/${organizationId}/projects/${item.id}`} className={cn('projects__header')}>
+                        <Link to={ORGANIZATION_PROJECT_ID(organizationId, item.id)} className={cn('projects__header')}>
                             <H4>{item?.name}</H4>
                             <IconChevronRight />
                         </Link>
@@ -90,7 +91,7 @@ const ProjectList = () => {
 
     return (
         <Section>
-            <SectionHeader actions={<AddAction to={`/organizations/${organizationId}/projects/create`} />}>
+            <SectionHeader actions={<AddAction to={ORGANIZATION_PROJECT_CREATE(organizationId)} />}>
                 {t('routes.organization.blocks.sections.projects')}
             </SectionHeader>
             {elContent}

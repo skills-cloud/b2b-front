@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
+
 import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
 import Tag from 'component/tag';
@@ -41,7 +43,7 @@ const FORMAT_DATE = 'dd.MM.yyyy';
 
 const MainInfo = (data: RequestRead) => {
     const { module, priority, status, start_date, deadline_date, requirements, id } = data;
-    const params = useParams<{ subpage?: string, requestId: string }>();
+    const params = useParams<IParams>();
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const formatDistance = useFormatDistance();

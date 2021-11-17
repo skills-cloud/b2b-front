@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { parse, stringify } from 'query-string';
 
+import { IParams, SPECIALIST_CREATE } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
 
@@ -39,7 +40,7 @@ export const Specialists = () => {
     const cn = useClassnames(style);
     const history = useHistory();
     const { t } = useTranslation();
-    const params = useParams<{ requirementId: string, requestId: string, projectId: string }>();
+    const params = useParams<IParams>();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
     const defaultValues = {
@@ -90,6 +91,7 @@ export const Specialists = () => {
 
     const onSubmit = context.handleSubmit(
         (formData) => {
+            console.log('FORM DTA', formData)
             const objectToNormalize = {
                 search              : formData.search,
                 years               : formData.years,
@@ -139,6 +141,7 @@ export const Specialists = () => {
         }
 
         if(addToRequest) {
+            console.log('REQUEST', addToRequest)
             return (
                 <Request
                     projectId={params.projectId}
@@ -251,7 +254,7 @@ export const Specialists = () => {
         <SidebarLayout sidebar={elSidebar()}>
             <Section>
                 <Wrapper>
-                    <SectionHeader actions={<AddAction to="/specialists/create" />}>
+                    <SectionHeader actions={<AddAction to={SPECIALIST_CREATE} />}>
                         {t('routes.specialists.main.title')}
                     </SectionHeader>
                     {elUsers()}

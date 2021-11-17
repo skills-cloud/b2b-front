@@ -1,63 +1,30 @@
-.gap-bottom {
-    margin-bottom: 12px;
-}
+.requirements {
 
-.position-edit {
-
-    @media (hover: hover) and (pointer: fine) {
-        cursor: pointer;
+    &__gap-bottom {
+        margin-bottom: 12px;
     }
-}
 
-.add-role {
-    color: var(--color-button-secondary-text);
-    font-family: Roboto, sans-serif;
-    font-size: 14px;
+    &__add-request {
+        font-size: 14px;
+        line-height: 1.2;
+        text-decoration: underline dotted;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-blue-primary);
 
-    @media (hover: hover) and (pointer: fine) {
+        @media (hover: hover) and (pointer: fine) {
 
-        &:hover {
-            cursor: pointer;
+            &:hover {
+                cursor: pointer;
+                text-decoration: none;
+            }
         }
     }
-}
 
-.skills-head {
-    margin-top: 4px;
-}
-
-.skills-tag {
-    display: inline-block;
-    height: 26px;
-    line-height: 26px;
-    background-color: var(--color-gray-20);
-    font-size: 12px;
-    padding: 0 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border-radius: 35px;
-    text-align: center;
-    font-weight: 400;
-    margin-right: 4px;
-    margin-bottom: 4px;
-    box-sizing: border-box;
-}
-
-.add-request {
-    font-size: 14px;
-    line-height: 1.2;
-    text-decoration: underline dotted;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-blue-primary);
-
-    @media (hover: hover) and (pointer: fine) {
-
-        &:hover {
-            cursor: pointer;
-            text-decoration: none;
-        }
+    &__skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
     }
 }

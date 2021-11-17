@@ -5,7 +5,7 @@ import NavItem from './nav-item';
 import style from './index.module.pcss';
 
 interface INav {
-    children: ReactNode,
+    children?: ReactNode,
     header?: ReactNode,
     footer?: ReactNode
 }

@@ -5,6 +5,7 @@ import { format, isWithinInterval, parse } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 
 import DatePickerCalendar from 'component/calendar';
@@ -28,7 +29,7 @@ export interface IProps {
 const Access = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const { data: timeSlotData } = timeslot.useGetTimeSlotQuery({ cv_id: parseInt(specialistId, 10) });
     const { data: typeOfEmployment } = dictionary.useGetTypeOfEmploymentQuery(undefined);
     const [setTimeSlot, { isLoading }] = timeslot.useSetTimeSlotMutation();
@@ -109,8 +110,6 @@ const Access = (props: IProps) => {
 
     const onSubmit = methods.handleSubmit(
         (formData) => {
-            console.info('FORM DATA', formData);
-
             if(activeTimeSlotId) {
                 return patchTimeSlot({
                     id                   : activeTimeSlotId,

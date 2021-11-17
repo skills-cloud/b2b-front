@@ -18,6 +18,10 @@ import { TimeSheetRowRead } from 'adapter/types/main/time-sheet-row/get/code-200
 import { TimeSheetRowRead as ITimeSheetRowReadById } from 'adapter/types/main/time-sheet-row/id/get/code-200';
 import { OrganizationProjectCardItemTemplate } from 'adapter/types/main/organization-project-card-item-template/get/code-200';
 import { RequestRequirementCvOrganizationProjectCardItem } from 'adapter/types/main/request-requirement/id/cv-link/cv_id/post/code-200';
+import { ModuleRead } from 'adapter/types/main/module/get/code-200';
+import { ModuleRead as ModuleReadById } from 'adapter/types/main/module/id/get/code-200';
+import { ModuleWrite } from 'adapter/types/main/module/post/code-201';
+import { ModuleWrite as ModuleWritePatch } from 'adapter/types/main/module/id/patch/code-200';
 
 export interface IOrganizationProjectPost extends OrganizationProject {
     id: number
@@ -184,6 +188,20 @@ export interface IPostResponseOrganizationProjectCardItem extends OrganizationPr
 export interface IGetProjectCardParams {
     organization_project_id?: Array<number>,
     organization_id?: Array<number>
+}
+
+export interface IResponseGetModuleList extends IResponseBase {
+    results: Array<ModuleRead>
+}
+
+export interface IGetModuleParams {
+    organization_id?: Array<number>,
+    organization_project_id?: Array<number>,
+    manager_id?: Array<number>,
+    ordering?: Array<string>,
+    search?: string,
+    page?: number,
+    page_size?: number
 }
 
 export const mainRequest = createApi({
@@ -499,6 +517,44 @@ export const mainRequest = createApi({
             invalidatesTags: ['main'],
             query          : ({ id }) => ({
                 url   : `/time-sheet-row/${id}/`,
+                method: 'DELETE'
+            })
+        }),
+        getMainModule: build.query<IResponseGetModuleList, IGetModuleParams | undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/module/',
+                method: 'GET',
+                params
+            })
+        }),
+        postMainModule: build.mutation<ModuleWrite, ModuleWrite>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/module/',
+                method: 'POST',
+                body
+            })
+        }),
+        getMainModuleById: build.query<ModuleReadById, IBaseGetById>({
+            providesTags: ['main'],
+            query       : ({ id }) => ({
+                url   : `/module/${id}/`,
+                method: 'GET'
+            })
+        }),
+        patchMainModule: build.mutation<ModuleWritePatch, ModuleWrite>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...rest }) => ({
+                url   : `/module/${id}/`,
+                method: 'PATCH',
+                body  : rest
+            })
+        }),
+        deleteMainModuleById: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/module/${id}/`,
                 method: 'DELETE'
             })
         })

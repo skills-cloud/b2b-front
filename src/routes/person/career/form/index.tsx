@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
+import { IParams } from 'helper/url-list';
 
 import useClassnames from 'hook/use-classnames';
 import FormInput from 'component/form/input';
@@ -46,7 +47,7 @@ interface IProjectForm {
 const CareerForm = (props: IProjectForm) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const methods = useForm(props.defaultValues);
     const [postCareer, { isLoading: isPostLoading }] = career.usePostCareerMutation();
     const [patchCareer, { isLoading: isPatchLoading }] = career.usePatchCareerByIdMutation();

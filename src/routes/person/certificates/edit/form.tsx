@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import debounce from 'lodash.debounce';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import { IStyle, useClassnames } from 'hook/use-classnames';
 import { useDispatch } from 'component/core/store';
 
@@ -31,7 +32,7 @@ const EditForm = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
 
     const [postCertificate] = certificate.usePostCertificateMutation();
     const [patchCertificateById] = certificate.usePatchCertificateByIdMutation();
@@ -161,7 +162,6 @@ const EditForm = (props: IProps) => {
                         console.error(err);
                     });
             }
-            console.info('FORM DATA', formData);
         },
         (formError) => {
             console.info('FORM ERROR', formError);

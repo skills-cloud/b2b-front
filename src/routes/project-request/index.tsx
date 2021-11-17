@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useHistory, useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 
 import SidebarLayout from 'component/layout/sidebar';
@@ -26,11 +27,10 @@ import style from './index.module.pcss';
 
 const ProjectRequest = () => {
     const cn = useClassnames(style);
-    const { hash } = useLocation();
     const history = useHistory();
     const location = useLocation();
     const { t } = useTranslation();
-    const params = useParams<{ subpage?: string, requestId: string }>();
+    const params = useParams<IParams>();
     const { data } = mainRequest.useGetMainRequestByIdQuery(
         { id: params.requestId },
         { refetchOnMountOrArgChange: true }
@@ -77,12 +77,7 @@ const ProjectRequest = () => {
         let content = (
             <Fragment>
                 {Object.values(ESectionInvariants).map((nav) => (
-                    <NavItem
-                        replace={true}
-                        to={`#${nav}`}
-                        selected={nav === hash.slice(1)}
-                        key={nav}
-                    >
+                    <NavItem replace={true} to={`#${nav}`} key={nav}>
                         {t(`routes.project-request.blocks.sections.${nav}`)}
                     </NavItem>
                 ))}
@@ -98,20 +93,11 @@ const ProjectRequest = () => {
         if(params.subpage === 'candidates') {
             content = (
                 <Fragment>
-                    <NavItem
-                        to="#all"
-                        replace={true}
-                        selected={hash.slice(1) === 'all'}
-                    >
+                    <NavItem to="#all" replace={true}>
                         {t('routes.project-request.blocks.specialists-sections.all')}
                     </NavItem>
                     {data?.requirements?.map((req) => (
-                        <NavItem
-                            replace={true}
-                            to={`#${req.id}`}
-                            selected={String(req.id) === hash.slice(1)}
-                            key={req.id}
-                        >
+                        <NavItem replace={true} to={`#${req.id}`} key={req.id}>
                             {req.name || t('routes.project-request.blocks.specialists-sections.empty')}
                         </NavItem>
                     ))}

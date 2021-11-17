@@ -75,6 +75,8 @@ const MultiValueRemove: FC<MultiValueRemoveProps<Record<string, unknown>>> = (pr
     );
 };
 
+// TODO унифицировать селекты
+
 const InputSelect = (props: TProps & typeof defaultProps) => {
     const cn = useClassnames(style, props.className, true);
 

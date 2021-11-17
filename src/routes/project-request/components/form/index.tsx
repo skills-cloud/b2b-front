@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider, SubmitHandler, useFieldArray } from 'react-hook-form';
-import { useClassnames } from 'hook/use-classnames';
 import { useParams } from 'react-router';
+
+import { IParams } from 'helper/url-list';
+import { useClassnames } from 'hook/use-classnames';
 
 import Select, { IValue } from 'component/form/select';
 import Textarea from 'component/form/textarea';
@@ -12,6 +14,7 @@ import InputDictionary from 'component/form/input-dictionary';
 import InputMain from 'component/form/input-main';
 import InputProject from 'component/form/input-project';
 import Input from 'component/form/input';
+import InputModule from 'component/form/input-module';
 
 import { Request, NoName4, NoName2 } from 'adapter/types/main/request/id/patch/code-200';
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
@@ -26,22 +29,11 @@ interface ISelect {
 }
 
 interface IFormValues extends Request {
-    industry_sector: {
-        value: string,
-        label: string
-    },
-    customer: {
-        value: string,
-        label: string
-    },
-    project: {
-        value: string,
-        label: string
-    },
-    type: {
-        value: string,
-        label: string
-    },
+    industry_sector: ISelect,
+    customer: ISelect,
+    project: ISelect,
+    module: ISelect,
+    type: ISelect,
     prioritySelect: {
         value: NoName2,
         label: string
@@ -75,7 +67,7 @@ const priorityInvariants = ['10', '20', '30'];
 const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequestForm) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const params = useParams<{ organizationId: string, projectId: string }>();
+    const params = useParams<IParams>();
 
     const [post] = mainRequest.usePostMainRequestMutation();
     const [patch] = mainRequest.usePatchMainRequestMutation();
@@ -126,17 +118,21 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                 value: defaultValues?.module.organization_project?.id,
                 label: defaultValues?.module.organization_project?.name
             } : '',
+            module: defaultValues?.module ? {
+                value: defaultValues?.module?.id,
+                label: defaultValues?.module.name
+            } : '',
             type: defaultValues?.type ? {
                 value: defaultValues?.type?.id,
                 label: defaultValues?.type?.name
             } : '',
             prioritySelect: defaultValues?.priority ? {
                 value: defaultValues?.priority,
-                label: t(`routes.project-request.blocks.priority.${defaultValues?.priority}`)
+                label: t(`routes.project-request.create.priority.${defaultValues?.priority}`)
             } : '',
             statusSelect: defaultValues?.status ? {
                 value: defaultValues?.status,
-                label: t(`routes.project-request.blocks.status.${defaultValues?.status}`)
+                label: t(`routes.project-request.create.status.${defaultValues?.status}`)
             } : '',
             period: [defaultDates]
         }
@@ -155,6 +151,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
         period,
         industry_sector,
         project,
+        module,
         customer,
         prioritySelect,
         statusSelect,
@@ -170,6 +167,10 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
 
         if(industry_sector) {
             postData.industry_sector_id = parseInt(industry_sector.value, 10);
+        }
+
+        if(module) {
+            postData.module_id = parseInt(module.value, 10);
         }
 
         if(prioritySelect) {
@@ -226,7 +227,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                         setActiveTab(ETabs.Main);
                     }}
                 >
-                    {t('routes.project-request.blocks.tabs.main')}
+                    {t('routes.project-request.create.tabs.main')}
                 </Tab>
                 <Tab
                     active={activeTab === ETabs.ProjectTiming}
@@ -234,23 +235,16 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                         setActiveTab(ETabs.ProjectTiming);
                     }}
                 >
-                    {t('routes.project-request.blocks.tabs.project-timing')}
+                    {t('routes.project-request.create.tabs.project-timing')}
                 </Tab>
             </Tabs>
             <FormProvider {...form}>
                 <form method="POST" id={formId} onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className={cn('form', { 'hide': activeTab === ETabs.ProjectTiming })}>
+                    <div className={cn('project-request__form', { 'project-request__form_hide': activeTab === ETabs.ProjectTiming })}>
                         <Input
                             type="text"
                             name="title"
                             label={t('routes.project-request.create.form-title')}
-                        />
-                        <InputDictionary
-                            isMulti={false}
-                            requestType={InputDictionary.requestType.IndustrySector}
-                            name="industry_sector"
-                            direction="column"
-                            label={t('routes.project-request.create.industry_sector')}
                         />
                         <InputMain
                             defaultValue={[params.organizationId]}
@@ -269,13 +263,28 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                             label={t('routes.project-request.create.project')}
                             disabled={!!params.projectId}
                         />
+                        <InputModule
+                            isMulti={false}
+                            defaultValue={params.moduleId}
+                            name="module"
+                            direction="column"
+                            label={t('routes.project-request.create.project')}
+                            disabled={!!params.moduleId}
+                        />
+                        <InputDictionary
+                            isMulti={false}
+                            requestType={InputDictionary.requestType.IndustrySector}
+                            name="industry_sector"
+                            direction="column"
+                            label={t('routes.project-request.create.industry_sector')}
+                        />
                         <Select
                             name="recruiter"
                             direction="column"
                             label={t('routes.project-request.create.recruiter')}
                             options={options}
                         />
-                        <div className={cn('field-group')}>
+                        <div className={cn('project-request__field-group')}>
                             <Select
                                 name="resource_manager"
                                 direction="column"
@@ -290,22 +299,22 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                                 label={t('routes.project-request.create.type')}
                             />
                         </div>
-                        <div className={cn('field-group')}>
+                        <div className={cn('project-request__field-group')}>
                             <Select
                                 name="prioritySelect"
-                                label={t('routes.project-request.create.priority')}
+                                label={t('routes.project-request.create.priority.title')}
                                 direction="column"
                                 options={priorityInvariants.map((priority) => ({
-                                    label: t(`routes.project-request.blocks.priority.${priority}`),
+                                    label: t(`routes.project-request.create.priority.${priority}`),
                                     value: priority
                                 }))}
                             />
                             <Select
                                 name="statusSelect"
-                                label={t('routes.project-request.create.status')}
+                                label={t('routes.project-request.create.status.title')}
                                 direction="column"
                                 options={statusInvariants.map((status) => ({
-                                    label: t(`routes.project-request.blocks.status.${status}`),
+                                    label: t(`routes.project-request.create.status.${status}`),
                                     value: status
                                 }))}
                             />
@@ -313,18 +322,18 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                         <Textarea
                             name="description"
                             label={t('routes.project-request.create.description')}
-                            rows={2}
+                            rows={6}
                         />
                     </div>
-                    <div className={cn('form', { 'hide': activeTab === ETabs.Main })}>
+                    <div className={cn('project-request__form', { 'project-request__form_hide': activeTab === ETabs.Main })}>
                         {fields.map((field, index) => (
                             <DeadlineDates
                                 key={field.fieldId}
                                 nameDateFrom={`period.${index}.start_date`}
                                 nameDateTo={`period.${index}.deadline_date`}
                                 labels={{
-                                    dateFrom: t('routes.project-request.blocks.period-form.date_from'),
-                                    dateTo  : t('routes.project-request.blocks.period-form.date_to')
+                                    dateFrom: t('routes.project-request.create.period-form.date_from'),
+                                    dateTo  : t('routes.project-request.create.period-form.date_to')
                                 }}
                                 defaultValues={{
                                     dateFrom: field?.start_date || projectData?.date_from,
@@ -335,12 +344,12 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues }: IProjectsRequ
                         {/* TODO Добавить блок приостановки проекта, как будет готов бек */}
                         {/* <a
                             href="#append"
-                            className={cn('append')}
+                            className={cn('project-request__append')}
                             onClick={(event) => {
                                 event.preventDefault();
                                 append({});
                             }}
-                        >{t('routes.project-request.blocks.period-form.add')}
+                        >{t('routes.project-request.create.period-form.add')}
                         </a> */}
                     </div>
                 </form>
