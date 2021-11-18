@@ -10,6 +10,7 @@ import Loader from 'component/loader';
 import SectionContentList from 'component/section/content-list';
 import SectionContentListItem from 'component/section/content-list-item';
 import Button from 'component/button';
+import { mainRequest } from 'adapter/api/main';
 
 import { ModuleFunPointInline } from 'adapter/types/main/module/id/get/code-200';
 
@@ -30,6 +31,8 @@ const FunPoints = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const { organizationId, moduleId, projectId } = useParams<IParams>();
+    const [update] = mainRequest.useSetExpectedLaborEstimateAsSavedByModuleIdMutation();
+
 
     const [isRegenerate, setIsRegenerate] = useState<boolean>(false);
 
@@ -94,6 +97,13 @@ const FunPoints = (props: IProps) => {
                 <ConfirmModalRegenerate
                     setVisible={setIsRegenerate}
                     onClickCancel={onClickCancel}
+                    onClickOk={() => {
+                        setIsRegenerate(false);
+
+                        void update({
+                            id: moduleId
+                        });
+                    }}
                 />
             )}
         </Section>

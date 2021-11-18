@@ -206,7 +206,7 @@ export interface IGetModuleParams {
 
 export const mainRequest = createApi({
     reducerPath: 'api/main/request',
-    tagTypes   : ['main'],
+    tagTypes   : ['main', 'expected-labor-estimate'],
     baseQuery  : fetchBaseQuery({
         baseUrl: '/api/main'
     }),
@@ -537,10 +537,17 @@ export const mainRequest = createApi({
             })
         }),
         getMainModuleById: build.query<ModuleReadById, IBaseGetById>({
-            providesTags: ['main'],
+            providesTags: ['main', 'expected-labor-estimate'],
             query       : ({ id }) => ({
                 url   : `/module/${id}/`,
                 method: 'GET'
+            })
+        }),
+        setExpectedLaborEstimateAsSavedByModuleId: build.mutation<void, IBaseGetById>({
+            invalidatesTags: ['expected-labor-estimate'],
+            query          : ({ id }) => ({
+                url   : `/module/${id}/set-expected-labor-estimate-as-saved/`,
+                method: 'POST'
             })
         }),
         patchMainModule: build.mutation<ModuleWritePatch, ModuleWrite>({
