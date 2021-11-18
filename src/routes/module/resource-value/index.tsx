@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
 
@@ -9,6 +10,8 @@ import EditAction from 'component/section/actions/edit';
 import Loader from 'component/loader';
 import Resources from 'component/resources';
 import Button from 'component/button';
+import { mainRequest } from 'adapter/api/main';
+import { IParams } from 'helper/url-list';
 
 import { ModulePositionLaborEstimateInline } from 'adapter/types/main/module/id/get/code-200';
 
@@ -24,12 +27,9 @@ interface IProps {
 const ResourceValue = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-
     const [isEdit, setIsEdit] = useState<boolean>(false);
-
-    const onClickCreateRequests = () => {
-        console.log('CREATE')
-    };
+    const { moduleId } = useParams<IParams>();
+    const [create, { isLoading }] = mainRequest.useCreateRequestForSavedLaborEstimateByModuleIdMutation();
 
     const onEditResources = () => {
         setIsEdit(true);
@@ -49,9 +49,17 @@ const ResourceValue = (props: IProps) => {
                 <div className={cn('resource-value__content')}>
                     <Resources resources={props.resourceValue} />
                     <div className={cn('resource-value__button-wrapper')}>
-                        <Button isSecondary={true} onClick={onClickCreateRequests}>
-                            {t('routes.module.resource-value.create-requests')}
-                        </Button>
+                        <Button
+                            isSecondary={true}
+                            onClick={() => {
+                                void create({
+                                    id: moduleId
+                                });
+                            }}
+                            disabled={isLoading}
+                            isLoading={isLoading}
+                            children={t('routes.module.resource-value.create-requests')}
+                        />
                     </div>
                 </div>
             );
