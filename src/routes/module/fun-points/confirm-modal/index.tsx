@@ -8,17 +8,13 @@ import Error from 'component/error';
 
 interface IRegenerateModal {
     setVisible: (visible: boolean) => void,
-    onClickCancel?(): void
+    onClickCancel?(): void,
+    onClickOk?(): void
 }
 
-const ConfirmModalRegenerate = ({ setVisible, onClickCancel }: IRegenerateModal) => {
+const ConfirmModalRegenerate = ({ setVisible, onClickCancel, onClickOk }: IRegenerateModal) => {
     const { t } = useTranslation();
-    const [error, setError] = useState<string | null>(null);
-
-    const onClickOk = () => {
-        console.info('OK CLICKED');
-        setError('OK CLICKED');
-    };
+    const [error] = useState<string | null>(null);
 
     const elError = useMemo(() => {
         if(error) {
