@@ -34,6 +34,7 @@ export interface ICommon {
     tabIndex?: string,
     disabled?: boolean,
     elError?: boolean,
+    isLoading?: boolean,
     isMulti?: boolean,
     onChange?(value: IValue): void
 }
@@ -156,6 +157,7 @@ const InputSelect = (props: TProps & typeof defaultProps) => {
                 const selectProps = {
                     onChange,
                     onFocus,
+                    isLoading    : props.isLoading,
                     autoFocus    : props.autoFocus,
                     placeholder  : props.placeholder,
                     isMulti      : props.isMulti,

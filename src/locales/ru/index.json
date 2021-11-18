@@ -1170,6 +1170,33 @@
                 },
                 "difficulty": "Уровень сложности",
                 "coefficient": "Поправочный коэффециент"
+            },
+            "confirm-modal": {
+                "header": "Точно удалить?",
+                "text": "Будет удалена ФТ: {{name}}",
+                "empty-name": "Имя ФТ не указано",
+                "cancel": "Отмена",
+                "delete": "Удалить"
+            },
+            "create": {
+                "title_default": "Новая ФТ",
+                "title_edit": "Редактирование ФТ",
+                "title_diff": "Добавить уровень сложности",
+                "form-title": "Название ФТ",
+                "description": "Описание",
+                "save": "Сохранить",
+                "cancel": "Отмена",
+                "required-error": "Обязательно для заполнения",
+                "form": {
+                    "fun-point-type": {
+                        "label": "Тип ФТ",
+                        "placeholder": "Введите тип ФТ"
+                    },
+                    "difficulty": {
+                        "label": "Уровень сложности",
+                        "placeholder": "Выберите уровень сложности"
+                    }
+                }
             }
         }
     },

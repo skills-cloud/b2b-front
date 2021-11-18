@@ -1,0 +1,36 @@
+.fun-point {
+
+    &__form {
+        display: grid;
+        grid-gap: 24px;
+    }
+
+    &__fields {
+        display: grid;
+        grid-gap: 24px;
+        grid-auto-flow: column;
+        grid-auto-columns: 1fr 40px;
+        align-items: flex-end;
+
+        & > button {
+            margin-bottom: 2px;
+        }
+    }
+
+    &__icon-back {
+        fill: var(--color-gray-100);
+        width: 16px;
+        height: 16px;
+    }
+
+    &__modal-header {
+        display: grid;
+        grid-auto-flow: column;
+        grid-gap: 16px;
+        align-items: center;
+
+        &_back {
+            grid-auto-columns: 20px 1fr;
+        }
+    }
+}
