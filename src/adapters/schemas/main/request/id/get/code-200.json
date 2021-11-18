@@ -494,10 +494,10 @@
                     "title": "Описание",
                     "type": "string"
                 },
-                "difficulty": {
+                "difficulty_factor": {
                     "nullable": true,
                     "readOnly": true,
-                    "title": "Difficulty",
+                    "title": "Difficulty factor",
                     "type": "number"
                 },
                 "fun_points": {
@@ -566,6 +566,20 @@
                     "readOnly": true,
                     "title": "Обновлено",
                     "type": "string"
+                },
+                "work_days_count": {
+                    "description": "если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date",
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "nullable": true,
+                    "title": "Кол-во рабочих дней",
+                    "type": "integer"
+                },
+                "work_days_hours_count": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Кол-во рабочих часов в рабочем дне",
+                    "type": "integer"
                 }
             },
             "required": [

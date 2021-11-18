@@ -39,7 +39,7 @@ export type NoName23 = number;
 export type NoName24 = string;
 export type NoName25 = string;
 export type NoName26 = string;
-export type Difficulty = number;
+export type DifficultyFactor = number;
 export type NoName27 = string;
 export type NoName28 = string;
 export type NoName29 = string;
@@ -113,19 +113,24 @@ export type NoName82 = string;
 export type NoName83 = number;
 export type NoName84 = string;
 export type NoName85 = string;
+/**
+ * если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date
+ */
 export type NoName86 = number;
-export type NoName87 = 10 | 20 | 30;
+export type NoName87 = number;
 export type NoName88 = number;
-export type NoName89 = number;
-export type NoName90 = string;
-export type NoName91 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName89 = 10 | 20 | 30;
+export type NoName90 = number;
+export type NoName91 = number;
 export type NoName92 = string;
-export type NoName93 = number;
-export type NoName94 = number;
-export type NoName95 = string;
-export type NoName96 = string;
+export type NoName93 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName94 = string;
+export type NoName95 = number;
+export type NoName96 = number;
 export type NoName97 = string;
-export type NoName98 = number;
+export type NoName98 = string;
+export type NoName99 = string;
+export type NoName100 = number;
 
 export interface TimeSheetRowRead {
     created_at?: NoName;
@@ -135,11 +140,11 @@ export interface TimeSheetRowRead {
     date_to?: NoName17;
     id?: ID1;
     request: RequestInline;
-    request_id: NoName94;
-    task_description?: NoName95;
-    task_name: NoName96;
-    updated_at?: NoName97;
-    work_time: NoName98;
+    request_id: NoName96;
+    task_description?: NoName97;
+    task_name: NoName98;
+    updated_at?: NoName99;
+    work_time: NoName100;
 }
 export interface CvInlineShort {
     birth_date?: NoName1;
@@ -167,14 +172,14 @@ export interface RequestInline {
     manager?: UserInline;
     manager_id?: NoName23;
     module?: ModuleInline;
-    module_id: NoName86;
-    priority?: NoName87;
-    recruiter_id?: NoName88;
-    resource_manager_id?: NoName89;
-    start_date?: NoName90;
-    status?: NoName91;
-    title?: NoName92;
-    type_id?: NoName93;
+    module_id: NoName88;
+    priority?: NoName89;
+    recruiter_id?: NoName90;
+    resource_manager_id?: NoName91;
+    start_date?: NoName92;
+    status?: NoName93;
+    title?: NoName94;
+    type_id?: NoName95;
 }
 export interface UserInline {
     first_name: NoName21;
@@ -186,7 +191,7 @@ export interface ModuleInline {
     created_at?: NoName24;
     deadline_date?: NoName25;
     description?: NoName26;
-    difficulty?: Difficulty;
+    difficulty_factor?: DifficultyFactor;
     fun_points?: ModuleFunPointInline[];
     goals?: NoName58;
     id?: ID10;
@@ -199,6 +204,8 @@ export interface ModuleInline {
     sorting?: NoName83;
     start_date?: NoName84;
     updated_at?: NoName85;
+    work_days_count?: NoName86;
+    work_days_hours_count?: NoName87;
 }
 export interface ModuleFunPointInline {
     created_at?: NoName27;
