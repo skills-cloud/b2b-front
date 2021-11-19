@@ -129,8 +129,9 @@ const InputDifficulty = (props: IProps & typeof defaultProps) => {
 
     const options = useMemo(() => {
         return dataById?.difficulty_levels?.map((item) => ({
-            label: item.name,
-            value: String(item.id)
+            label  : item.name,
+            value  : String(item.id),
+            payload: item
         })) || [];
     }, [JSON.stringify(dataById)]);
 
@@ -160,11 +161,14 @@ const InputDifficulty = (props: IProps & typeof defaultProps) => {
         }
     }, [props.elError, props.name, errors[props.name]]);
 
-    const elInput = (renderValue: OptionTypeBase, onChange: () => void, onBlur: () => void): ReactNode => {
+    const elInput = (renderValue: OptionTypeBase, onChange: (value: IValue) => void, onBlur: () => void): ReactNode => {
         const selectProps = {
             onFocus,
             onBlur,
-            onChange,
+            onChange: (val: IValue) => {
+                onChange(val);
+                props.onChange?.(val);
+            },
             value         : renderValue,
             defaultValue  : renderValue,
             placeholder   : props.placeholder,

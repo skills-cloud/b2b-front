@@ -596,7 +596,7 @@ export const mainRequest = createApi({
         patchMainFunPointDifficultyLevel: build.mutation<FunPointTypeDifficultyLevelWrite, FunPointTypeDifficultyLevelWrite>({
             invalidatesTags: ['main'],
             query          : ({ id, ...body }) => ({
-                url   : `/fun-point-type-difficulty-level/${id}`,
+                url   : `/fun-point-type-difficulty-level/${id}/`,
                 method: 'PATCH',
                 body
             })
