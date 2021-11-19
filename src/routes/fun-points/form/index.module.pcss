@@ -8,29 +8,42 @@
     &__fields {
         display: grid;
         grid-gap: 24px;
-        grid-auto-flow: column;
-        grid-auto-columns: 1fr 40px;
-        align-items: flex-end;
+    }
 
-        & > button {
-            margin-bottom: 2px;
+    &__field-show {
+        font-size: 12px;
+        text-decoration: underline;
+        text-decoration-style: dotted;
+        text-underline-offset: 2px;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover:not(&_active) {
+                cursor: pointer;
+            }
         }
     }
 
-    &__icon-back {
-        fill: var(--color-gray-100);
-        width: 16px;
-        height: 16px;
-    }
-
-    &__modal-header {
+    &__labors {
+        padding: 16px;
+        background-color: var(--color-gray-20);
+        border-radius: 4px;
         display: grid;
-        grid-auto-flow: column;
-        grid-gap: 16px;
-        align-items: center;
+        grid-gap: 24px;
+    }
 
-        &_back {
-            grid-auto-columns: 20px 1fr;
-        }
+    &__labors-header {
+        display: grid;
+        grid-gap: 16px;
+        grid-auto-columns: 1fr 40px;
+        grid-auto-flow: column;
+        align-items: center;
+    }
+
+    &__labor {
+        display: grid;
+        grid-gap: 16px;
+        grid-auto-flow: column;
+        grid-auto-columns: 3fr 1fr 1fr 40px;
     }
 }

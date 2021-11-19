@@ -1,41 +1,43 @@
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm, FormProvider } from 'react-hook-form';
+import { FieldArrayWithId, FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 
 import { IParams } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 
-import Textarea from 'component/form/textarea';
-import Input from 'component/form/input';
-import InputMain from 'component/form/input-main';
-import InputSelect, { IValue } from 'component/form/select';
-import Error from 'component/error';
-import AddAction from 'component/section/actions/add';
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import Button from 'component/button';
+import { H2, H4 } from 'component/header';
+import Input from 'component/form/input';
+import InputType from 'component/form/input-type';
+import InputDifficulty from 'component/form/input-difficulty';
+import { IValue } from 'component/form/select';
+import Textarea from 'component/form/textarea';
+import Error from 'component/error';
+import InputDictionary from 'component/form/input-dictionary';
+import DeleteAction from 'component/section/actions/delete';
+import AddAction from 'component/section/actions/add';
 
+import { FunPointTypePositionLaborEstimateInline } from 'adapter/types/main/module/id/get/code-200';
 import { ModuleFunPointInline } from 'adapter/types/main/module/get/code-200';
 import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
-import { FunPointTypeWrite } from 'adapter/types/main/fun-point-type/post/code-201';
-import IconArrowLeftFull from 'component/icons/arrow-left-full';
-import { H2 } from 'component/header';
 
-const FORM_FUN_POINT_CREATE_ID = 'FORM_FUN_POINT_CREATE_ID';
-const FORM_DIFFICULTY_LEVEL = 'FORM_DIFFICULTY_LEVEL';
-
-interface IFormValues extends Omit<ModuleFunPointInline, 'difficulty_level' | 'fun_point_type'> {
-    fun_point_type?: IValue,
-    difficulty_level?: IValue
-}
+export const FORM_FUN_POINT_CREATE_ID = 'FORM_FUN_POINT_CREATE_ID';
 
 interface IProjectsRequestForm {
     onSuccess: (id: number) => void,
     defaultValues?: ModuleFunPointInline,
     setVisible: (visible: boolean) => void
+}
+
+interface IFormValues extends ModuleFunPointInline {
+    fun_point_type_select?: IValue,
+    difficulty_level_select?: IValue,
+    positions_labor_estimates?: Array<FunPointTypePositionLaborEstimateInline>
 }
 
 const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsRequestForm) => {
@@ -44,37 +46,66 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
     const params = useParams<IParams>();
 
     const [error, setError] = useState<string | null>(null);
-    const [typeId, setTypeId] = useState<string>('');
-    const [addDiffLevel, setAddDiffLevel] = useState<boolean>(false);
-    const [isRefetchTypes, setIsRefetchTypes] = useState<boolean>(false);
-    const [newFunPoint, setNewFunPoint] = useState<FunPointTypeWrite>();
+    const [typeId, setTypeId] = useState<string>(String(defaultValues?.fun_point_type_id));
+    const [showLabors, setShowLabors] = useState<boolean>(false);
+
+    const defaultValuesForm = () => {
+        if(defaultValues) {
+            const { fun_point_type } = defaultValues;
+
+            return {
+                ...defaultValues,
+                fun_point_type_select: {
+                    value: String(fun_point_type?.id),
+                    label: fun_point_type?.name
+                },
+                positions_labor_estimates: fun_point_type?.positions_labor_estimates || []
+            };
+        }
+    };
 
     const form = useForm<IFormValues>({
-        defaultValues: {
-            ...defaultValues,
-            fun_point_type: defaultValues?.fun_point_type ? {
-                value: String(defaultValues?.fun_point_type.id),
-                label: defaultValues?.fun_point_type.name
-            } : undefined,
-            difficulty_level: defaultValues?.difficulty_level ? {
-                value: String(defaultValues?.difficulty_level.id),
-                label: defaultValues?.difficulty_level.name
-            } : undefined
-        }
+        defaultValues: defaultValuesForm()
     });
     const values = form.watch();
 
-    const { data } = mainRequest.useGetMainFunPointTypeQuery(undefined);
+    const { fields, append } = useFieldArray({
+        keyName: 'fieldId',
+        control: form.control,
+        name   : 'positions_labor_estimates'
+    });
+
     const { data: typeById, isLoading: isLoadingType } = mainRequest.useGetMainFunPointTypeByIdQuery({
         id: typeId
     }, {
-        skip: !typeId
+        skip                     : !typeId,
+        refetchOnMountOrArgChange: true
     });
-    const [post] = mainRequest.usePostMainModuleFunPointMutation();
-    const [postFunPointType, { isLoading: isLoadingCreateFunPoint }] = mainRequest.usePostMainFunPointTypeMutation();
-    const [patch] = mainRequest.usePatchMainModuleFunPointMutation();
 
-    const onCreateOption = (createdOption: string) => {
+    const [post] = mainRequest.usePostMainModuleFunPointMutation();
+    const [patch] = mainRequest.usePatchMainModuleFunPointMutation();
+    const [postFunPointType] = mainRequest.usePostMainFunPointTypeMutation();
+    const [postDifficultyLevel] = mainRequest.usePostMainFunPointDifficultyLevelMutation();
+    const [postTypePositionLabor] = mainRequest.usePostMainFunPointTypePositionLaborEstimatesMutation();
+    const [patchTypePositionLabor] = mainRequest.usePatchMainFunPointTypePositionLaborEstimatesMutation();
+
+    const errorMessage = t('routes.fun-points.create.required-error');
+
+    useEffect(() => {
+        if(values.fun_point_type_select) {
+            setTypeId(values.fun_point_type_select.value);
+        }
+    }, [values.fun_point_type_select]);
+
+    useEffect(() => {
+        setShowLabors(false);
+
+        if(typeById?.positions_labor_estimates) {
+            form.setValue('positions_labor_estimates', typeById?.positions_labor_estimates);
+        }
+    }, [typeId]);
+
+    const onCreateOptionPoint = (createdOption: string) => {
         postFunPointType({
             name           : createdOption,
             organization_id: parseInt(params.organizationId, 10)
@@ -82,10 +113,7 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
             .unwrap()
             .then((resp) => {
                 if(resp) {
-                    setIsRefetchTypes(true);
-                    setNewFunPoint(resp);
-
-                    form.setValue('fun_point_type', {
+                    form.setValue('fun_point_type_select', {
                         value: String(resp.id),
                         label: resp.name
                     });
@@ -94,26 +122,36 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
             .catch(console.error);
     };
 
-    const onClickBack = () => {
-        setAddDiffLevel(false);
+    const onCreateOptionDiff = (createdOption: string) => {
+        postDifficultyLevel({
+            name             : createdOption,
+            fun_point_type_id: parseInt(typeId, 10)
+        })
+            .unwrap()
+            .then((resp) => {
+                if(resp) {
+                    form.setValue('difficulty_level_select', {
+                        value: String(resp.id),
+                        label: resp.name
+                    });
+                }
+            })
+            .catch(console.error);
     };
 
-    const onClickAdd = () => {
-        setAddDiffLevel(true);
+    const onClickShowLabors = () => {
+        setShowLabors((oldState) => !oldState);
     };
-
-    useEffect(() => {
-        if(values.fun_point_type) {
-            setTypeId(values.fun_point_type.value);
-        }
-    }, [JSON.stringify(values)]);
 
     const onSubmit = form.handleSubmit((formData) => {
         const method = defaultValues ? patch : post;
 
-        console.log('FORM DATA', formData)
-
-        const request = method({});
+        const request = method({
+            ...formData,
+            difficulty_level_id: parseInt(formData.difficulty_level_select?.value as string, 10),
+            fun_point_type_id  : parseInt(formData.fun_point_type_select?.value as string, 10),
+            module_id          : parseInt(params.moduleId, 10)
+        });
 
         request
             .unwrap()
@@ -125,18 +163,28 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                 }
             })
             .catch((err) => {
-                setError(err.data?.message);
+                setError(err.data?.message || err?.message);
                 console.error(err);
             });
     });
 
-    const onSubmitDiff = form.handleSubmit(
-        (formData) => {
-            console.log('FORM DATA', formData)
-        }
-    );
+    const onSubmitLabor = (labor: { position: IValue, position_id: number, hours?: number }) => () => {
+        void form.handleSubmit((formData) => {
+            const laborById = formData?.positions_labor_estimates?.find((item) => item.id === labor.position_id);
+            const method = laborById ? patchTypePositionLabor : postTypePositionLabor;
 
-    const errorMessage = t('routes.fun-points.create.required-error');
+            method({
+                fun_point_type_id: parseInt(formData.fun_point_type_select?.value as string, 10),
+                position_id      : laborById?.position_id || parseInt(labor.position?.value, 10),
+                hours            : laborById?.hours || labor.hours
+            })
+                .unwrap()
+                .then((resp) => {
+                    console.info('RESP', resp);
+                })
+                .catch(console.error);
+        })();
+    };
 
     const elError = useMemo(() => {
         if(error) {
@@ -145,21 +193,6 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
     }, [error]);
 
     const elContent = () => {
-        if(addDiffLevel) {
-            return (
-                <FormProvider {...form}>
-                    <form
-                        method="POST"
-                        id={FORM_DIFFICULTY_LEVEL}
-                        onSubmit={onSubmitDiff}
-                        className={cn('fun-point__form')}
-                    >
-                        <Input name="123" type="text" />
-                    </form>
-                </FormProvider>
-            );
-        }
-
         return (
             <FormProvider {...form}>
                 <form
@@ -174,41 +207,80 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                         name="name"
                         label={t('routes.fun-points.create.form-title')}
                     />
-                    <InputMain
-                        required={true}
-                        direction="column"
-                        name="fun_point_type"
-                        isRefetch={isRefetchTypes}
-                        onRefetchSuccess={setIsRefetchTypes}
-                        onCreateOption={onCreateOption}
-                        createable={true}
-                        requestType={InputMain.requestType.FunPointType}
-                        defaultValue={[defaultValues?.fun_point_type_id as number]}
-                        isMulti={false}
-                        label={t('routes.fun-points.create.form.fun-point-type.label')}
-                        placeholder={t('routes.fun-points.create.form.fun-point-type.placeholder')}
-                    />
                     <div className={cn('fun-point__fields')}>
-                        <InputSelect
-                            direction="column"
-                            required={true}
-                            disabled={!typeById || isLoadingType || isLoadingCreateFunPoint}
-                            isLoading={isLoadingType}
-                            name="difficulty_level"
-                            options={typeById?.difficulty_levels?.map((item) => ({
-                                value: String(item.id),
-                                label: item.name
-                            })) || []}
-                            label={t('routes.fun-points.create.form.difficulty.label')}
-                            placeholder={t('routes.fun-points.create.form.difficulty.placeholder')}
-                        />
-                        <AddAction onClick={onClickAdd} />
+                        <div className={cn('fun-point__field-wrapper')}>
+                            <InputType
+                                required={true}
+                                direction="column"
+                                name="fun_point_type_select"
+                                defaultValue={defaultValues?.fun_point_type_id as number}
+                                isMulti={false}
+                                createable={true}
+                                onCreateOption={onCreateOptionPoint}
+                                label={t('routes.fun-points.create.form.fun-point-type.label')}
+                                placeholder={t('routes.fun-points.create.form.fun-point-type.placeholder')}
+                            />
+                            {typeId && (
+                                <span className={cn('fun-point__field-show')} onClick={onClickShowLabors}>
+                                    {t('routes.fun-points.create.form.labors.button', {
+                                        context: showLabors ? 'hide' : 'show'
+                                    })}
+                                </span>
+                            )}
+                        </div>
+                        {showLabors && (
+                            <div className={cn('fun-point__labors')}>
+                                <div className={cn('fun-point__labors-header')}>
+                                    <H4>{t('routes.fun-points.create.form.labors.title')}</H4>
+                                    {/* @ts-ignore */}
+                                    <AddAction onClick={() => append({})} />
+                                </div>
+                                {fields.map((labor: FieldArrayWithId<IFormValues, 'positions_labor_estimates'>, index) => (
+                                    // @ts-ignore
+                                    <div key={labor.fieldId} className={cn('fun-point__labor')}>
+                                        <InputDictionary
+                                            isMulti={false}
+                                            name={`positions_labor_estimates.${index}.position`}
+                                            requestType={InputDictionary.requestType.Position}
+                                            // @ts-ignore
+                                            defaultValue={[labor.position_id as number]}
+                                        />
+                                        <Input name={`positions_labor_estimates.${index}.fun_point_type_id`} type="hidden" />
+                                        <Input name={`positions_labor_estimates.${index}.position_id`} type="hidden" />
+                                        <Input name={`positions_labor_estimates.${index}.hours`} type="text" />
+                                        <Button onClick={onSubmitLabor(labor)}>
+                                            {t('routes.fun-points.create.form.labors.submit')}
+                                        </Button>
+                                        <DeleteAction />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                    <Textarea
-                        name="description"
-                        label={t('routes.fun-points.create.description')}
-                        rows={6}
-                    />
+                    {typeId && (
+                        <Fragment>
+                            <div className={cn('fun-point__fields')}>
+                                <InputDifficulty
+                                    direction="column"
+                                    required={true}
+                                    disabled={!typeById || isLoadingType}
+                                    isLoading={isLoadingType}
+                                    createable={true}
+                                    onCreateOption={onCreateOptionDiff}
+                                    defaultValue={defaultValues?.difficulty_level_id}
+                                    funTypeId={parseInt(typeId, 10)}
+                                    name="difficulty_level_select"
+                                    label={t('routes.fun-points.create.form.difficulty.label')}
+                                    placeholder={t('routes.fun-points.create.form.difficulty.placeholder')}
+                                />
+                            </div>
+                            <Textarea
+                                name="description"
+                                label={t('routes.fun-points.create.description')}
+                                rows={6}
+                            />
+                        </Fragment>
+                    )}
                     {elError}
                 </form>
             </FormProvider>
@@ -222,26 +294,12 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
             contextValue = 'edit';
         }
 
-        if(addDiffLevel) {
-            contextValue = 'diff';
-        }
-
         return (
-            <div className={cn('fun-point__modal-header', { 'fun-point__modal-header_back': addDiffLevel })}>
-                {addDiffLevel && (
-                    <IconArrowLeftFull
-                        svg={{
-                            onClick  : onClickBack,
-                            className: cn('fun-point__icon-back')
-                        }}
-                    />
-                )}
-                <H2>
-                    {t('routes.fun-points.create.title', {
-                        context: contextValue
-                    })}
-                </H2>
-            </div>
+            <H2>
+                {t('routes.fun-points.create.title', {
+                    context: contextValue
+                })}
+            </H2>
         );
     };
 
@@ -259,7 +317,7 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                     >
                         {t('routes.fun-points.create.cancel')}
                     </Button>
-                    <Button type="submit" form={addDiffLevel ? FORM_DIFFICULTY_LEVEL : FORM_FUN_POINT_CREATE_ID}>
+                    <Button type="submit" form={FORM_FUN_POINT_CREATE_ID}>
                         {t('routes.fun-points.create.save')}
                     </Button>
                 </ModalFooterSubmit>
