@@ -1,0 +1,42 @@
+.resources {
+    display: grid;
+    grid-gap: 32px;
+
+    &__summary {
+        display: flex;
+        gap: 32px;
+    }
+
+    &__summary-item {
+        display: grid;
+        grid-gap: 6px;
+    }
+
+    &__content-header-text,
+    &__summary-label {
+        text-transform: uppercase;
+        color: var(--color-text-light);
+        font-size: 12px;
+    }
+
+    &__content-item-role,
+    &__summary-value {
+        font-weight: bold;
+        color: var(--color-text-dark);
+    }
+
+    &__content {
+        display: grid;
+        grid-gap: 16px;
+    }
+
+    &__content-item,
+    &__content-header {
+        display: grid;
+        grid-template-columns: 3fr 1fr 1fr;
+    }
+
+    &__button-wrap {
+        margin-left: auto;
+    }
+}

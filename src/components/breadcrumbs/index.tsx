@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LocationDescriptor } from 'history';
 import { useLocation, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
+import { IParams } from 'helper/url-list';
 import { useClassnames, IStyle } from 'hook/use-classnames';
 
 import { mainRequest } from 'adapter/api/main';
@@ -24,6 +25,7 @@ export interface IProps {
 }
 
 export enum EItems {
+    Module = 'modules',
     Requests = 'requests',
     Projects = 'projects',
     Specialists = 'specialists',
@@ -37,15 +39,8 @@ interface IPath {
     skipTranslate?: boolean
 }
 
-interface IParams {
-    requestId: string,
-    projectId: string,
-    specialistId: string,
-    organizationId: string,
-    timesheetId: string
-}
-
 const config = {
+    [EItems.Module]       : mainRequest.endpoints.getMainModuleById,
     [EItems.Projects]     : mainRequest.endpoints.getMainOrganizationProjectById,
     [EItems.Requests]     : mainRequest.endpoints.getMainRequestById,
     [EItems.Timesheets]   : mainRequest.endpoints.getMainTimeSheetRowById,
@@ -61,9 +56,16 @@ const Breadcrumbs = (props: IProps) => {
     const location = useLocation();
     const [path, setPath] = useState<Array<IPath>>([]);
 
+    // TODO подумать над оптимизацией крошек и отображения вида Организация Яндекс > Проект название
+    const ignoredPathNames = useMemo(() => ({
+        'resource-value': true,
+        'requirement'   : true
+    }), []);
+
     useEffect(() => {
         const newPath = location.pathname.split('/').filter((value) => !!value).reduce((acc, curr, index, array) => {
-            if(!parseInt(curr, 10)) {
+            // TODO костыль с игнором некоторыъ путей
+            if(!parseInt(curr, 10) && !ignoredPathNames[curr]) {
                 acc[curr] = {
                     id: array[index + 1] ? parseInt(array[index + 1], 10) : undefined
                 };
@@ -106,6 +108,13 @@ const Breadcrumbs = (props: IProps) => {
             requestList.push({
                 dispatch: dispatch(config[EItems.Timesheets].initiate({ id: params.timesheetId })),
                 id      : EItems.Timesheets
+            });
+        }
+
+        if(params.moduleId) {
+            requestList.push({
+                dispatch: dispatch(config[EItems.Module].initiate({ id: params.moduleId })),
+                id      : EItems.Module
             });
         }
 

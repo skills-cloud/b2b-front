@@ -111,6 +111,11 @@
                     "x-url-object-detail": "/api/acc/user/$id/",
                     "x-url-object-list": "/api/acc/user/"
                 },
+                "modules_count": {
+                    "readOnly": true,
+                    "title": "Modules count",
+                    "type": "integer"
+                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
@@ -143,11 +148,6 @@
                     },
                     "type": "array",
                     "uniqueItems": true
-                },
-                "requests_count": {
-                    "readOnly": true,
-                    "title": "Requests count",
-                    "type": "integer"
                 },
                 "resource_managers": {
                     "items": {

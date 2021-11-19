@@ -2,6 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
+
 import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
 import SidebarNav, { NavItem } from 'component/nav';
@@ -20,7 +22,7 @@ enum ESectionInvariants {
 
 const Organization = () => {
     const { t } = useTranslation();
-    const params = useParams<{ organizationId: string }>();
+    const params = useParams<IParams>();
     const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.organizationId });
 
     if(!data) {
@@ -33,7 +35,7 @@ const Organization = () => {
                 <SidebarNav>
                     {Object.values(ESectionInvariants).map((nav) => {
                         return (
-                            <NavItem key={nav} to={`/organizations/${params.organizationId}/${nav}`}>
+                            <NavItem key={nav} to={`#${nav}`}>
                                 {t(`routes.organization.blocks.sections.${nav}`)}
                             </NavItem>
                         );

@@ -19,7 +19,12 @@
                         "warning"
                     ],
                     "title": "Status",
-                    "type": "string"
+                    "type": "string",
+                    "x-enum-description": {
+                        "error": "error",
+                        "ok": "ok",
+                        "warning": "warning"
+                    }
                 }
             },
             "required": [

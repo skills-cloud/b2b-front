@@ -6,28 +6,28 @@
  */
 
 export type Code200 = CvTimeSlot;
-export type CityId = number;
-export type CountryId = number;
-export type CvId = number;
-export type NoName = string;
-export type NoName1 = string;
-export type NoName2 = string;
+export type NoName = number;
+export type NoName1 = number;
+export type NoName2 = number;
+export type NoName3 = string;
+export type NoName4 = string;
+export type NoName5 = string;
 export type ID = number;
-export type NoName3 = boolean;
-export type NoName4 = boolean;
-export type NoName5 = number;
-export type TypeOfEmploymentId = number;
+export type NoName6 = boolean;
+export type NoName7 = boolean;
+export type NoName8 = number;
+export type NoName9 = number;
 
 export interface CvTimeSlot {
-    city_id?: CityId;
-    country_id?: CountryId;
-    cv_id: CvId;
-    date_from?: NoName;
-    date_to?: NoName1;
-    description?: NoName2;
+    city_id?: NoName;
+    country_id?: NoName1;
+    cv_id: NoName2;
+    date_from?: NoName3;
+    date_to?: NoName4;
+    description?: NoName5;
     id?: ID;
-    is_free?: NoName3;
-    is_work_permit_required?: NoName4;
-    price?: NoName5;
-    type_of_employment_id: TypeOfEmploymentId;
+    is_free?: NoName6;
+    is_work_permit_required?: NoName7;
+    price?: NoName8;
+    type_of_employment_id: NoName9;
 }

@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 import { Organization } from 'adapter/types/main/organization/get/code-200';
+import { Organization as PostOrganization } from 'adapter/types/main/organization/post/code-201';
+import { Organization as PatchOrganization } from 'adapter/types/main/organization/id/patch/code-200';
 import { Organization as OrganizationById } from 'adapter/types/main/organization/id/get/code-200';
 import { ProjectRead } from 'adapter/types/main/project/get/code-200';
 import { ProjectRead as ProjectReadById } from 'adapter/types/main/project/id/get/code-200';
@@ -16,6 +18,19 @@ import { TimeSheetRowRead } from 'adapter/types/main/time-sheet-row/get/code-200
 import { TimeSheetRowRead as ITimeSheetRowReadById } from 'adapter/types/main/time-sheet-row/id/get/code-200';
 import { OrganizationProjectCardItemTemplate } from 'adapter/types/main/organization-project-card-item-template/get/code-200';
 import { RequestRequirementCvOrganizationProjectCardItem } from 'adapter/types/main/request-requirement/id/cv-link/cv_id/post/code-200';
+import { ModuleRead } from 'adapter/types/main/module/get/code-200';
+import { ModuleRead as ModuleReadById } from 'adapter/types/main/module/id/get/code-200';
+import { ModuleWrite } from 'adapter/types/main/module/post/code-201';
+import { ModuleWrite as ModuleWritePatch } from 'adapter/types/main/module/id/patch/code-200';
+import { FunPointTypeDifficultyLevelWrite } from 'adapter/types/main/fun-point-type-difficulty-level/post/code-201';
+import { FunPointTypeRead } from 'adapter/types/main/fun-point-type/get/code-200';
+import { FunPointTypeRead as FunPointTypeReadById } from 'adapter/types/main/fun-point-type/id/get/code-200';
+import { FunPointTypeWrite } from 'adapter/types/main/fun-point-type/post/code-201';
+import { FunPointTypeWrite as FunPointTypeWritePatch } from 'adapter/types/main/fun-point-type/id/patch/code-200';
+import { ModuleFunPointWrite } from 'adapter/types/main/module-fun-point/post/code-201';
+import { ModuleFunPointWrite as ModuleFunPointWritePatch } from 'adapter/types/main/module-fun-point/id/patch/code-200';
+import { FunPointTypePositionLaborEstimateWrite } from 'adapter/types/main/fun-point-type-position-labor-estimate/post/code-201';
+import { FunPointTypePositionLaborEstimateWrite as FunPointTypePositionLaborEstimateWritePatch } from 'adapter/types/main/fun-point-type-position-labor-estimate/id/patch/code-200';
 
 export interface IOrganizationProjectPost extends OrganizationProject {
     id: number
@@ -184,9 +199,27 @@ export interface IGetProjectCardParams {
     organization_id?: Array<number>
 }
 
+export interface IResponseGetModuleList extends IResponseBase {
+    results: Array<ModuleRead>
+}
+
+export interface IGetModuleParams {
+    organization_id?: Array<number>,
+    organization_project_id?: Array<number>,
+    manager_id?: Array<number>,
+    ordering?: Array<string>,
+    search?: string,
+    page?: number,
+    page_size?: number
+}
+
+export interface IResponseGetFunPointTypeList extends IResponseBase {
+    results: Array<FunPointTypeRead>
+}
+
 export const mainRequest = createApi({
     reducerPath: 'api/main/request',
-    tagTypes   : ['main'],
+    tagTypes   : ['main', 'expected-labor-estimate', 'create-request-for-saved-labor-estimate'],
     baseQuery  : fetchBaseQuery({
         baseUrl: '/api/main'
     }),
@@ -295,19 +328,35 @@ export const mainRequest = createApi({
                 method: 'GET'
             })
         }),
+        getMainOrganizationById: build.query<OrganizationById, IBaseGetById>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : `/organization/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        postMainOrganization: build.mutation<PostOrganization, PostOrganization>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/organization/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainOrganization: build.mutation<PatchOrganization, PatchOrganization>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...body }) => ({
+                url   : `/organization/${id}/`,
+                method: 'PATCH',
+                body
+            })
+        }),
         getMainOrganization: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization/',
                 method: 'GET',
                 params
-            })
-        }),
-        getMainOrganizationById: build.query<OrganizationById, IBaseGetById>({
-            providesTags: ['main'],
-            query       : (params) => ({
-                url   : `/organization/${params.id}/`,
-                method: 'GET'
             })
         }),
         getMainOrganizationCustomer: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
@@ -394,7 +443,7 @@ export const mainRequest = createApi({
             })
         }),
         getMainRequest: build.query<IResponseRequestList, IGetRequestListParams | undefined>({
-            providesTags: ['main'],
+            providesTags: ['main', 'create-request-for-saved-labor-estimate'],
             query       : (params) => ({
                 url   : '/request/',
                 method: 'GET',
@@ -482,6 +531,174 @@ export const mainRequest = createApi({
             query          : ({ id }) => ({
                 url   : `/time-sheet-row/${id}/`,
                 method: 'DELETE'
+            })
+        }),
+        getMainModule: build.query<IResponseGetModuleList, IGetModuleParams | undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/module/',
+                method: 'GET',
+                params
+            })
+        }),
+        postMainModule: build.mutation<ModuleWrite, ModuleWrite>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/module/',
+                method: 'POST',
+                body
+            })
+        }),
+        getMainModuleById: build.query<ModuleReadById, IBaseGetById>({
+            providesTags: ['main', 'expected-labor-estimate'],
+            query       : ({ id }) => ({
+                url   : `/module/${id}/`,
+                method: 'GET'
+            })
+        }),
+        setExpectedLaborEstimateAsSavedByModuleId: build.mutation<void, IBaseGetById>({
+            invalidatesTags: ['expected-labor-estimate'],
+            query          : ({ id }) => ({
+                url   : `/module/${id}/set-expected-labor-estimate-as-saved/`,
+                method: 'POST'
+            })
+        }),
+        createRequestForSavedLaborEstimateByModuleId: build.mutation<void, IBaseGetById>({
+            invalidatesTags: ['create-request-for-saved-labor-estimate'],
+            query          : ({ id }) => ({
+                url   : `/module/${id}/create-request-for-saved-labor-estimate/`,
+                method: 'POST'
+            })
+        }),
+        patchMainModule: build.mutation<ModuleWritePatch, ModuleWrite>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...rest }) => ({
+                url   : `/module/${id}/`,
+                method: 'PATCH',
+                body  : rest
+            })
+        }),
+        deleteMainModuleById: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/module/${id}/`,
+                method: 'DELETE'
+            })
+        }),
+        postMainFunPointDifficultyLevel: build.mutation<FunPointTypeDifficultyLevelWrite, FunPointTypeDifficultyLevelWrite>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/fun-point-type-difficulty-level/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainFunPointDifficultyLevel: build.mutation<FunPointTypeDifficultyLevelWrite, FunPointTypeDifficultyLevelWrite>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...body }) => ({
+                url   : `/fun-point-type-difficulty-level/${id}`,
+                method: 'PATCH',
+                body
+            })
+        }),
+        getMainFunPointType: build.query<IResponseGetFunPointTypeList, { search?: string } | undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/fun-point-type/',
+                method: 'GET',
+                params
+            })
+        }),
+        postMainFunPointType: build.mutation<FunPointTypeWrite, FunPointTypeWrite>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/fun-point-type/',
+                method: 'POST',
+                body
+            })
+        }),
+        getMainFunPointTypeById: build.query<FunPointTypeReadById, IBaseGetById>({
+            providesTags: ['main'],
+            query       : ({ id }) => ({
+                url   : `/fun-point-type/${id}/`,
+                method: 'GET'
+            })
+        }),
+        patchMainFunPointType: build.mutation<FunPointTypeWritePatch, FunPointTypeWritePatch>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...rest }) => ({
+                url   : `/fun-point-type/${id}/`,
+                method: 'PATCH',
+                body  : rest
+            })
+        }),
+        deleteMainFunPointTypeById: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/fun-point-type/${id}/`,
+                method: 'DELETE'
+            })
+        }),
+        postMainModuleFunPoint: build.mutation<ModuleFunPointWrite, ModuleFunPointWrite>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/module-fun-point/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainModuleFunPoint: build.mutation<ModuleFunPointWritePatch, ModuleFunPointWritePatch>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...rest }) => ({
+                url   : `/module-fun-point/${id}/`,
+                method: 'PATCH',
+                body  : rest
+            })
+        }),
+        deleteMainModuleFunPointById: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/module-fun-point/${id}/`,
+                method: 'DELETE'
+            })
+        }),
+        postMainModulePositionLaborEstimates: build.mutation<ModuleFunPointWrite, ModuleFunPointWrite>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/module-position-labor-estimates/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainModulePositionLaborEstimates: build.mutation<ModuleFunPointWritePatch, ModuleFunPointWritePatch>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...rest }) => ({
+                url   : `/module-position-labor-estimates/${id}/`,
+                method: 'PATCH',
+                body  : rest
+            })
+        }),
+        deleteMainModulePositionLaborEstimatesById: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/module-position-labor-estimates/${id}/`,
+                method: 'DELETE'
+            })
+        }),
+        postMainFunPointTypePositionLaborEstimates: build.mutation<FunPointTypePositionLaborEstimateWrite, FunPointTypePositionLaborEstimateWrite>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/fun-point-type-position-labor-estimate/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainFunPointTypePositionLaborEstimates: build.mutation<FunPointTypePositionLaborEstimateWritePatch, FunPointTypePositionLaborEstimateWritePatch>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...rest }) => ({
+                url   : `/fun-point-type-position-labor-estimate/${id}/`,
+                method: 'PATCH',
+                body  : rest
             })
         })
     })

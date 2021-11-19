@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, MouseEvent } from 'react';
+import React, { useEffect, useState, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 
@@ -6,19 +6,19 @@ import { IStyle, useClassnames } from 'hook/use-classnames';
 
 import Loader from 'component/loader';
 import { H2, H4 } from 'component/header';
+import Modal from 'component/modal';
 import IconPlus from 'component/icons/plus';
 import IconApply from 'component/icons/apply';
-import Modal from 'component/modal';
-import IconClose from 'component/icons/close';
+import IconChevronRight from 'component/icons/chevron-right';
+import IconWarning from 'component/icons/warning';
 import DateInput from 'component/form/date';
+import Tooltip from 'component/tooltip';
 
 import { EStatus, mainRequest } from 'adapter/api/main';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/get/code-200';
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 
 import style from './index.module.pcss';
-import IconChevronRight from 'component/icons/chevron-right';
-import IconWarning from 'component/icons/warning';
 
 export interface IProps {
     requestId?: string,
@@ -26,7 +26,8 @@ export interface IProps {
     requirementId?: string,
     className?: IStyle | string,
     specialistId?: number,
-    onClickClose?(): void
+    onClickClose?(): void,
+    onClickBack?(): void
 }
 
 const Request = (props: IProps) => {
@@ -46,7 +47,7 @@ const Request = (props: IProps) => {
     }, {
         skip: !props.requestId
     });
-    const { data: requirementData } = mainRequest.useGetMainRequestRequirementByIdQuery({ id: String(expandedId) }, { skip: !expandedId });
+    const { data: requirementData, isLoading: loadingReqData } = mainRequest.useGetMainRequestRequirementByIdQuery({ id: String(expandedId) }, { skip: !expandedId });
 
     const [addSpecialist, { isLoading: isLoadingAdd, isSuccess, isError }] = mainRequest.usePostRequestRequirementLinkCvMutation();
 
@@ -59,7 +60,7 @@ const Request = (props: IProps) => {
                     date_from : requirement.date_from,
                     date_to   : requirement.date_to,
                     id        : requirement.id,
-                    project_id: requestData.organization_project_id
+                    project_id: requestData.module?.organization_project_id
                 });
             }
         }
@@ -75,10 +76,6 @@ const Request = (props: IProps) => {
             });
         }
     }, [JSON.stringify(requirementData), expandedProjectId]);
-
-    const onClickClose = () => {
-        props.onClickClose?.();
-    };
 
     const onClickExpand = (projectId?: number, reqId?: number) => () => {
         if(projectId) {
@@ -124,8 +121,9 @@ const Request = (props: IProps) => {
     };
 
     const elIconStatus = (reqId?: number) => {
+        const alreadyAdded = requirementData?.cv_list_ids?.find((item) => String(item) === String(props.specialistId));
         const wrapperClass = cn('request__icon-wrapper', {
-            'request__icon-wrapper_success': isSuccess && currentReqId === reqId
+            'request__icon-wrapper_success': isSuccess && currentReqId === reqId || alreadyAdded
         });
         let content = (
             <button
@@ -141,7 +139,7 @@ const Request = (props: IProps) => {
             </button>
         );
 
-        if(isLoadingAdd && currentReqId === reqId) {
+        if(isLoadingAdd && currentReqId === reqId || loadingReqData) {
             content = <Loader />;
         }
 
@@ -155,15 +153,20 @@ const Request = (props: IProps) => {
             );
         }
 
-        if(isSuccess && currentReqId === reqId) {
+        if(isSuccess && currentReqId === reqId || alreadyAdded) {
             content = (
-                <div className={wrapperClass}>
+                <Tooltip
+                    className={wrapperClass}
+                    content={t('routes.specialists.main.projects.success', {
+                        context: isSuccess ? 'done' : 'already'
+                    })}
+                >
                     <IconApply
                         svg={{
                             className: cn('request__item-add-icon', 'request__item-add-icon_apply')
                         }}
                     />
-                </div>
+                </Tooltip>
             );
         }
 
@@ -229,14 +232,9 @@ const Request = (props: IProps) => {
 
     const elModalHeader = () => {
         return (
-            <Fragment>
-                <H2 className={cn('request__modal-header-text')}>
-                    {t('routes.specialists.main.projects.add')}
-                </H2>
-                <div className={cn('request__modal-header-close')} onClick={onClickClose}>
-                    <IconClose svg={{ className: cn('request__modal-header-close-icon') }} />
-                </div>
-            </Fragment>
+            <H2 className={cn('request__modal-header-text')}>
+                {t('routes.specialists.main.projects.add')}
+            </H2>
         );
     };
 
@@ -246,7 +244,7 @@ const Request = (props: IProps) => {
                 <div key={request.id} className={cn('request__item')}>
                     <H4>{request.title || t('routes.specialists.main.projects.empty-name')}</H4>
                     <ul className={cn('request__item-requirements')}>
-                        {elRequestRequirements(request.organization_project?.id, request.requirements)}
+                        {elRequestRequirements(request.module?.organization_project_id, request.requirements)}
                     </ul>
                 </div>
             );
@@ -265,10 +263,16 @@ const Request = (props: IProps) => {
         if(requestData) {
             return elRequestItem(requestData);
         }
+
+        return (
+            <div className={cn('request__empty-list')}>
+                {t('routes.specialists.main.projects.empty-list')}
+            </div>
+        );
     };
 
     return (
-        <Modal header={elModalHeader()}>
+        <Modal header={elModalHeader()} onClose={props.onClickClose} onBack={props.onClickBack}>
             <div className={cn('request')}>
                 {elContent()}
             </div>

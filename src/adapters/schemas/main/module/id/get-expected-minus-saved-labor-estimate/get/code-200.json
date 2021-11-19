@@ -1,0 +1,38 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/ModulePositionLaborEstimateWorkersAndHours"
+        }
+    ],
+    "definitions": {
+        "ModulePositionLaborEstimateWorkersAndHours": {
+            "properties": {
+                "hours_count": {
+                    "nullable": true,
+                    "title": "Hours count",
+                    "type": "number"
+                },
+                "position_id": {
+                    "title": "Должность",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
+                },
+                "position_name": {
+                    "minLength": 1,
+                    "title": "Position name",
+                    "type": "string"
+                },
+                "workers_count": {
+                    "title": "Workers count",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "position_id",
+                "position_name"
+            ],
+            "type": "object"
+        }
+    }
+}

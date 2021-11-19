@@ -2,12 +2,14 @@ import React, { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import { education } from 'adapter/api/education';
-
+import { IParams } from 'helper/url-list';
 import useClassnames, { IStyle } from 'hook/use-classnames';
+
 import IconPencil from 'component/icons/pencil';
 import Header, { H4 } from 'component/header';
 import VerifyIcon from 'component/verify-icon';
+
+import { education } from 'adapter/api/education';
 
 import ModalEdit from './edit';
 import style from './index.module.pcss';
@@ -20,7 +22,7 @@ export interface IProps {
 export const Education = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
     const { data } = education.useGetEducationQuery({ cv_id: parseInt(specialistId, 10) }, { refetchOnMountOrArgChange: true });
 

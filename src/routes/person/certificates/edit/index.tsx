@@ -1,13 +1,15 @@
-import React, { MouseEvent, useMemo, useState } from 'react';
+import React, { Fragment, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import useClassnames, { IStyle } from 'hook/use-classnames';
+
 import Button from 'component/button';
 import Modal from 'component/modal';
 import { IconDelete } from 'component/icons/delete';
 import IconPencil from 'component/icons/pencil';
-import EditForm from 'route/person/certificates/edit/form';
+import EditForm, { CERT_EDIT_FORM } from 'route/person/certificates/edit/form';
 
 import { certificate } from 'adapter/api/certificate';
 import { CvCertificateRead } from 'adapter/types/cv/certificate/get/code-200';
@@ -21,112 +23,86 @@ export interface IProps {
     onSubmit?(): void
 }
 
+enum ESteps {
+    List,
+    DetailForm,
+    DeleteForm,
+}
+
 export const CertificatesEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
 
-    const [itemToRemove, setItemToRemove] = useState<CvCertificateRead | null>(null);
-    const [itemToEdit, setItemToEdit] = useState<CvCertificateRead | Record<string, unknown> | null>(null);
+    const [step, setStep] = useState<ESteps>(ESteps.List);
+    const [certificateItem, setCertificateItem] = useState<CvCertificateRead | null>(null);
 
     const { data, refetch } = certificate.useGetCertificateListQuery({ cv_id: specialistId });
-    const [deleteCertificate] = certificate.useDeleteCertificateByIdMutation();
+    const [deleteCertificate, { isLoading }] = certificate.useDeleteCertificateByIdMutation();
+
+    const backToList = () => {
+        setCertificateItem(null);
+        setStep(ESteps.List);
+    };
 
     const onClickDelete = (result: CvCertificateRead) => () => {
-        setItemToRemove(result);
+        setStep(ESteps.DeleteForm);
+        setCertificateItem(result);
     };
 
     const onClickEdit = (result: CvCertificateRead) => () => {
-        setItemToEdit(result);
+        setStep(ESteps.DetailForm);
+        setCertificateItem(result);
     };
 
     const onClickAppend = (e: MouseEvent) => {
         e.preventDefault();
 
-        setItemToEdit({});
-    };
-
-    const onCancelEditDelete = () => {
-        setItemToEdit(null);
-        setItemToRemove(null);
+        setStep(ESteps.DetailForm);
+        setCertificateItem(null);
     };
 
     const onSubmitCertificates = () => {
         refetch();
-        onCancelEditDelete();
+        backToList();
     };
 
     const onDeleteItem = () => {
-        if(itemToRemove) {
-            const indexOfItemToRemove = props.fields?.findIndex((item) => item.id === itemToRemove.id);
+        if(certificateItem) {
+            const indexOfItemToRemove = props.fields?.findIndex((item) => item.id === certificateItem.id);
 
-            if(indexOfItemToRemove && itemToRemove.id) {
+            if(indexOfItemToRemove !== undefined && certificateItem.id) {
                 deleteCertificate({
-                    id: itemToRemove.id
+                    id: certificateItem.id
                 })
                     .unwrap()
                     .then(() => {
-                        setItemToRemove(null);
+                        setCertificateItem(null);
+                        setStep(ESteps.List);
                     })
                     .catch((err) => {
                         console.error(err);
                     });
             } else {
-                setItemToRemove(null);
+                setCertificateItem(null);
             }
         }
     };
 
-    const elControls = useMemo(() => {
-        return (
-            <div className={cn('certificate-edit__controls')}>
-                <Button
-                    type="button"
-                    onClick={onDeleteItem}
-                >
-                    {t('routes.person.certificates.confirm.confirm')}
-                </Button>
-                <Button
-                    type="button"
-                    isSecondary={true}
-                    className={cn('certificate-edit__modal-close')}
-                    onClick={onCancelEditDelete}
-                >
-                    {t('routes.person.certificates.confirm.cancel')}
-                </Button>
-            </div>
-        );
-    }, [itemToRemove]);
-
-    const elSubmitButton = useMemo(() => {
-        if(itemToRemove || itemToEdit) {
-            return <Button type="submit">{t('routes.person.certificates.edit.buttons.save')}</Button>;
-        }
-
-        return <Button type="button" onClick={props.onCancel}>{t('routes.person.certificates.edit.buttons.done')}</Button>;
-    }, [itemToRemove, itemToEdit]);
-
     const elContent = () => {
-        if(itemToRemove) {
+        if(step === ESteps.DetailForm) {
             return (
-                <Modal
-                    header={t('routes.person.certificates.confirm.title')}
-                    className={cn('certificate-edit__confirm')}
-                    footer={elControls}
-                >
-                    {null}
-                </Modal>
+                <EditForm
+                    field={certificateItem as CvCertificateRead}
+                    onCancel={backToList}
+                    onSubmit={onSubmitCertificates}
+                />
             );
         }
 
-        if(itemToEdit) {
-            return <EditForm field={itemToEdit as CvCertificateRead} onCancel={onCancelEditDelete} onSubmit={onSubmitCertificates} />;
-        }
-
-        return (
-            <div className={cn('certificate-edit__content')}>
+        if(step === ESteps.List) {
+            return (
                 <div className={cn('certificate-edit__content-body')}>
-                    <h2 className={cn('certificate-edit__header')}>{t('routes.person.certificates.header')}</h2>
                     {data?.results.map((result) => (
                         <div key={result.id} className={cn('certificate-edit__item')}>
                             <div className={cn('certificate-edit__item-description')}>
@@ -134,34 +110,112 @@ export const CertificatesEdit = (props: IProps) => {
                                 <p className={cn('certificate-edit__item-description-text')}>{result.education_place?.name}</p>
                             </div>
                             <div className={cn('certificate-edit__item-controls')}>
-                                <IconDelete svg={{ className: cn('certificate-edit__item-control'), onClick: onClickDelete(result) }} />
-                                <IconPencil svg={{ className: cn('certificate-edit__item-control'), onClick: onClickEdit(result) }} />
+                                <IconPencil
+                                    svg={{
+                                        className: cn('certificate-edit__item-control'),
+                                        onClick  : onClickEdit(result)
+                                    }}
+                                />
+                                <IconDelete
+                                    svg={{
+                                        className: cn('certificate-edit__item-control'),
+                                        onClick  : onClickDelete(result)
+                                    }}
+                                />
                             </div>
                         </div>
                     ))}
                 </div>
-                <div className={cn('certificate-edit__form-footer')}>
-                    <a
-                        href="#append"
-                        className={cn('certificate-edit__link-append')}
-                        children={t('routes.person.certificates.edit.buttons.append')}
-                        onClick={onClickAppend}
-                    />
-                    {itemToEdit || itemToRemove && (
-                        <Button isSecondary={true} onClick={props.onCancel}>
-                            {t('routes.person.certificates.edit.buttons.cancel')}
-                        </Button>
-                    )}
-                    {elSubmitButton}
-                </div>
+            );
+        }
+    };
+
+    const elFooter = () => {
+        let content = (
+            <Fragment>
+                <a
+                    href="#append"
+                    className={cn('certificate-edit__link-append')}
+                    children={t('routes.person.certificates.edit.buttons.append')}
+                    onClick={onClickAppend}
+                />
+                <Button onClick={props.onCancel}>
+                    {t('routes.person.certificates.edit.buttons.done')}
+                </Button>
+            </Fragment>
+        );
+
+        if(step === ESteps.DeleteForm) {
+            content = (
+                <Fragment>
+                    <Button
+                        type="button"
+                        onClick={onDeleteItem}
+                        isLoading={isLoading}
+                        disabled={isLoading}
+                    >
+                        {t('routes.person.certificates.confirm.confirm')}
+                    </Button>
+                    <Button
+                        type="button"
+                        isSecondary={true}
+                        disabled={isLoading}
+                        className={cn('certificate-edit__modal-close')}
+                        onClick={backToList}
+                    >
+                        {t('routes.person.certificates.confirm.cancel')}
+                    </Button>
+                </Fragment>
+            );
+        }
+
+        if(step === ESteps.DetailForm) {
+            content = (
+                <Fragment>
+                    <Button
+                        isSecondary={true}
+                        onClick={props.onCancel}
+                    >
+                        {t('routes.person.certificates.edit.buttons.cancel')}
+                    </Button>
+                    <Button type="submit" form={CERT_EDIT_FORM}>
+                        {t('routes.person.certificates.edit.buttons.save')}
+                    </Button>
+                </Fragment>
+            );
+        }
+
+        return (
+            <div
+                className={cn('certificate-edit__form-footer', {
+                    'certificate-edit__form-footer_short': step === ESteps.DeleteForm || step === ESteps.DetailForm
+                })}
+            >
+                {content}
             </div>
         );
     };
 
+    const elHeader = () => {
+        if(step === ESteps.DeleteForm) {
+            return t('routes.person.certificates.confirm.title');
+        }
+
+        if(step === ESteps.DetailForm && certificateItem) {
+            return certificateItem?.name;
+        }
+
+        return t('routes.person.certificates.header');
+    };
+
     return (
-        <div className={cn('certificate-edit')}>
+        <Modal
+            header={elHeader()}
+            footer={elFooter()}
+            onBack={step !== ESteps.List ? backToList : undefined}
+        >
             {elContent()}
-        </div>
+        </Modal>
     );
 };
 

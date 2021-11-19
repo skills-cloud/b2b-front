@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { utils, write } from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { IParams } from 'helper/url-list';
+
 import { mainRequest } from 'adapter/api/main';
 
 import Base from '../index';
@@ -16,7 +18,7 @@ const COL_SPAN_VALUE = 7;
 const ProjectRequestCsv = () => {
     const { t } = useTranslation();
 
-    const params = useParams<{ subpage?: string, requestId: string }>();
+    const params = useParams<IParams>();
     const { data, refetch } = mainRequest.useGetMainRequestByIdQuery(
         { id: params.requestId },
         { refetchOnMountOrArgChange: true }
@@ -40,7 +42,7 @@ const ProjectRequestCsv = () => {
                 <table>
                     <thead>
                         <tr>
-                            <th colSpan={COL_SPAN_FULL}>{data.project?.name || t('components.pdf.project.name')}</th>
+                            <th colSpan={COL_SPAN_FULL}>{data.module?.organization_project?.name || t('components.pdf.project.name')}</th>
                             <th colSpan={COL_SPAN_FULL} />
                         </tr>
                     </thead>
@@ -49,11 +51,11 @@ const ProjectRequestCsv = () => {
                         <tr><td colSpan={COL_SPAN_FULL}>{t('components.pdf.project.main-info')}</td></tr>
                         <tr><td colSpan={COL_SPAN_FULL} /></tr>
                         {elRow(t('components.pdf.project.sector'), data.industry_sector?.name)}
-                        {elRow(t('components.pdf.project.project'), data.project?.name)}
+                        {elRow(t('components.pdf.project.project'), data.module?.organization_project?.name)}
                         {elRow(t('components.pdf.project.manager'), manager)}
                         {elRow(t('components.pdf.project.recruiter'), recruiter)}
                         {elRow(t('components.pdf.project.type'), data.type?.name)}
-                        {elRow(t('components.pdf.project.customer'), data.organization_project?.organization?.name)}
+                        {elRow(t('components.pdf.project.customer'), data.module?.organization_project?.organization?.name)}
                         <tr><td colSpan={COL_SPAN_FULL} /></tr>
                         <tr><td colSpan={COL_SPAN_FULL}>{t('components.pdf.project.time')}</td></tr>
                         <tr><td colSpan={COL_SPAN_FULL} /></tr>
@@ -87,7 +89,7 @@ const ProjectRequestCsv = () => {
                         <tr><td colSpan={COL_SPAN_FULL} /></tr>
                         <tr><td colSpan={COL_SPAN_FULL}>{t('components.pdf.project.customer')}</td></tr>
                         <tr><td colSpan={COL_SPAN_FULL} /></tr>
-                        {elRow(t('components.pdf.project.customer'), data.organization_project?.organization?.name)}
+                        {elRow(t('components.pdf.project.customer'), data.module?.organization_project?.organization?.name)}
                     </tbody>
                 </table>
             );

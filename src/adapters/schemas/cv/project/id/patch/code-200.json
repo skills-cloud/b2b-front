@@ -10,6 +10,7 @@
                 "competencies_ids": {
                     "items": {
                         "nullable": true,
+                        "title": "Компетенция",
                         "type": "integer",
                         "x-url-object-detail": "/api/dictionary/competence/$id/",
                         "x-url-object-list": "/api/dictionary/competence/"
@@ -18,7 +19,7 @@
                     "uniqueItems": true
                 },
                 "cv_id": {
-                    "title": "Cv id",
+                    "title": "Анкета",
                     "type": "integer",
                     "x-url-object-detail": "/api/cv/cv/$id/",
                     "x-url-object-list": "/api/cv/cv/"
@@ -47,7 +48,7 @@
                 },
                 "industry_sector_id": {
                     "nullable": true,
-                    "title": "Industry sector id",
+                    "title": "Отрасль",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
                     "x-url-object-list": "/api/dictionary/industry-sector/"
@@ -63,13 +64,13 @@
                     "type": "string"
                 },
                 "organization_id": {
-                    "title": "Organization id",
+                    "title": "Организация",
                     "type": "integer",
                     "x-url-object-detail": "/api/main/organization/$id/",
                     "x-url-object-list": "/api/main/organization/"
                 },
                 "position_id": {
-                    "title": "Position id",
+                    "title": "Должность",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/position/$id/",
                     "x-url-object-list": "/api/dictionary/position/"

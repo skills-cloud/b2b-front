@@ -1,8 +1,11 @@
 import React, { useState, useMemo, Fragment, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 
+import { IParams, ORGANIZATION_PROJECT_ID } from 'helper/url-list';
 import useClassnames, { IStyle } from 'hook/use-classnames';
+
 import IconPencil from 'component/icons/pencil';
 import Button from 'component/button';
 import IconFileImage from 'component/icons/file-image';
@@ -22,7 +25,7 @@ export interface IProps {
 
 export const Career = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const { t } = useTranslation();
@@ -139,14 +142,25 @@ export const Career = (props: IProps) => {
                                 </li>
                                 {field.projects && (
                                     <li className={cn('career__list-item')}>
-                                        <strong>{t('routes.person.career.fields.projects')}</strong>
+                                        <strong>{t('routes.person.career.fields.projects.label')}</strong>
                                         <div className={cn('career__projects')}>
                                             {field.projects.map((project, i) => {
+                                                let content = `${project.name}, `;
+
                                                 if(i + 1 === field.projects?.length) {
-                                                    return project.name;
+                                                    content = project.name;
                                                 }
 
-                                                return `${project.name}, `;
+                                                return (
+                                                    <Link
+                                                        target="_blank"
+                                                        className={cn('career__project-link')}
+                                                        key={i}
+                                                        to={ORGANIZATION_PROJECT_ID(project.organization_id, project.id)}
+                                                    >
+                                                        {content}
+                                                    </Link>
+                                                );
                                             })}
                                         </div>
                                     </li>

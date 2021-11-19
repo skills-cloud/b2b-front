@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
 import { useHistory } from 'react-router';
 
-import { cv } from 'adapter/api/cv';
-import { contact } from 'adapter/api/contact';
+import { SPECIALIST_ID } from 'helper/url-list';
 import { useCancelTokens } from 'hook/cancel-token';
 import useClassnames from 'hook/use-classnames';
+
+import { cv } from 'adapter/api/cv';
+import { contact } from 'adapter/api/contact';
 import InputSelect from 'component/form/select';
 import InputDictionary from 'component/form/input-dictionary';
 import FormInput from 'component/form/input';
@@ -17,7 +19,7 @@ import Loader from 'component/loader';
 
 import { dictionary } from 'adapter/api/dictionary';
 import { CvCareerId } from 'adapter/types/cv/career/id/get/code-200';
-import { NoName3 as IGenderType } from 'adapter/types/cv/cv/post/code-201';
+import { NoName6 as IGenderType } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
 
@@ -117,7 +119,7 @@ export const SpecialistsCreate = () => {
                             return postContact(dataRequest).unwrap();
                         }))
                             .then(() => {
-                                history.push(`/specialists/${resp.id}`);
+                                history.push(SPECIALIST_ID(resp.id));
                             })
                             .catch((err) => {
                                 console.error(err);
@@ -150,7 +152,7 @@ export const SpecialistsCreate = () => {
                                 className={cn('specialists-create__user')}
                                 key={index}
                                 title={name}
-                                titleTo={`/specialists/${user.id}`}
+                                titleTo={SPECIALIST_ID(user.id)}
                                 avatar={{
                                     src: user.photo
                                 }}
@@ -277,7 +279,7 @@ export const SpecialistsCreate = () => {
                                 direction="column"
                                 placeholder={t('routes.specialists-create.main.form.gender.title')}
                                 options={[{
-                                    value: 'М',
+                                    value: 'M',
                                     label: t('routes.specialists-create.main.form.gender.M')
                                 }, {
                                     value: 'F',

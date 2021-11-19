@@ -4,14 +4,13 @@ import { useTranslation } from 'react-i18next';
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import Button from 'component/button';
 import Modal from 'component/modal';
-import IconArrowLeft from 'component/icons/arrow-left-full';
 import { H2 } from 'component/header';
 
 import { CvCareerRead } from 'adapter/types/cv/career/get/code-200';
+import { career } from 'adapter/api/career';
 
 import CareerList from '../list';
 import CareerForm from '../form';
-import RemoveModal from '../remove-modal';
 import style from './index.module.pcss';
 
 export interface IProps {
@@ -30,6 +29,8 @@ enum ESteps {
 export const CareerEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
+
+    const [deleteCareer] = career.useDeleteCareerByIdMutation();
 
     const [careerId, setCareerId] = useState<number | null>(null);
     const [step, setStep] = useState<ESteps>(ESteps.List);
@@ -53,6 +54,10 @@ export const CareerEdit = (props: IProps) => {
                         value: item.organization?.id,
                         label: item.organization?.name || ''
                     },
+                    projects: item.projects?.map((project) => ({
+                        value: project.id,
+                        label: project.name || ''
+                    })) || [],
                     files: item.files
                 }))[0]
         }
@@ -61,6 +66,19 @@ export const CareerEdit = (props: IProps) => {
     const backToList = () => {
         setCareerId(null);
         setStep(ESteps.List);
+    };
+
+    const onDeleteItem = () => {
+        if(careerId === null) {
+            return;
+        }
+
+        deleteCareer({ id: careerId })
+            .unwrap()
+            .then(backToList)
+            .catch((err) => {
+                console.error(err);
+            });
     };
 
     const elFooter = () => {
@@ -100,6 +118,21 @@ export const CareerEdit = (props: IProps) => {
                         </Button>
                     </div>
                 )}
+                {step === ESteps.DeleteForm && (
+                    <div className={cn('career-edit__controls')}>
+                        <Button type="button" onClick={onDeleteItem}>
+                            {t('routes.person.projects.confirm.confirm')}
+                        </Button>
+                        <Button
+                            type="button"
+                            isSecondary={true}
+                            className={cn('career-edit__modal-close')}
+                            onClick={backToList}
+                        >
+                            {t('routes.person.projects.confirm.cancel')}
+                        </Button>
+                    </div>
+                )}
             </Fragment>
         );
     };
@@ -109,16 +142,12 @@ export const CareerEdit = (props: IProps) => {
             return t('routes.person.career.header');
         }
 
+        if(step === ESteps.DeleteForm) {
+            return t('routes.person.projects.confirm.title');
+        }
+
         return (
             <H2 className={cn('career-edit__modal-header')}>
-                <button
-                    type="button"
-                    onClick={backToList}
-                >
-                    <IconArrowLeft
-                        svg={{ className: cn('career-edit__icon-back') }}
-                    />
-                </button>
                 {props.fields?.filter((field) => field.id === careerId)[0]?.organization?.name}
             </H2>
         );
@@ -130,7 +159,13 @@ export const CareerEdit = (props: IProps) => {
                 <CareerList
                     fields={props.fields}
                     setCareerId={setCareerId}
-                    nextStep={(isDeleteAction) => (isDeleteAction ? setStep(ESteps.DeleteForm) : setStep(ESteps.DetailForm))}
+                    nextStep={(isDeleteAction) => {
+                        if(isDeleteAction) {
+                            return setStep(ESteps.DeleteForm);
+                        }
+
+                        return setStep(ESteps.DetailForm);
+                    }}
                 />
             );
         }
@@ -143,6 +178,7 @@ export const CareerEdit = (props: IProps) => {
                     onSubmit={() => {
                         setLoading(false);
                         setStep(ESteps.List);
+                        props.onSubmit?.();
                     }}
                 />
             );
@@ -150,21 +186,17 @@ export const CareerEdit = (props: IProps) => {
     };
 
     return (
-        <Fragment>
-            <Modal
-                className={cn('career-edit')}
-                header={elHeader()}
-                footer={elFooter()}
-            >
-                {elContent()}
-            </Modal>
-            {step === ESteps.DeleteForm && (
-                <RemoveModal
-                    careerId={careerId}
-                    nextStepAfterDelete={backToList}
-                />
-            )}
-        </Fragment>
+        <Modal
+            className={cn('career-edit')}
+            header={elHeader()}
+            footer={elFooter()}
+            onClose={() => {
+                props.onCancel?.() || props.onSubmit?.();
+            }}
+            onBack={step !== ESteps.List ? backToList : undefined}
+        >
+            {elContent()}
+        </Modal>
     );
 };
 

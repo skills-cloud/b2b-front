@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
+
 import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
 import Tag from 'component/tag';
@@ -17,7 +19,6 @@ import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 
 import { useClassnames } from 'hook/use-classnames';
 import useFormatDistance from 'component/dates/format-distance';
-import useModalClose from 'component/modal/use-modal-close';
 
 import ESectionInvariants from '../section-invariants';
 import EditModal from '../edit-modal';
@@ -41,15 +42,13 @@ const PROJECT_TERM_FIELDS = ['project-term', 'duration'];
 const FORMAT_DATE = 'dd.MM.yyyy';
 
 const MainInfo = (data: RequestRead) => {
-    const { project, priority, status, start_date, deadline_date, requirements, id } = data;
-    const params = useParams<{ subpage?: string, requestId: string }>();
+    const { module, priority, status, start_date, deadline_date, requirements, id } = data;
+    const params = useParams<IParams>();
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const formatDistance = useFormatDistance();
     const [visible, setVisible] = useState(params?.subpage === 'edit');
     const [confirm, setConfirm] = useState<boolean>(false);
-
-    useModalClose(visible, setVisible);
 
     const onClickConfirmDelete = () => {
         setConfirm(true);
@@ -113,7 +112,7 @@ const MainInfo = (data: RequestRead) => {
                 content = requirements?.length;
                 break;
             case 'customer':
-                content = data?.organization_project?.organization?.name;
+                content = data?.module?.organization_project?.organization?.name;
                 break;
             default:
                 content = data[field]?.name;
@@ -185,11 +184,11 @@ const MainInfo = (data: RequestRead) => {
                 ))}
             </SectionContentList>
             {visible && <EditModal setVisible={onSetVisible} fields={data} />}
-            {confirm && project && (
+            {confirm && module?.organization_project && (
                 <ConfirmModal
                     setVisible={setConfirm}
                     requestId={String(id)}
-                    requestName={project.name}
+                    requestName={module.organization_project.name}
                 />
             )}
         </Section>

@@ -12,7 +12,6 @@ import IconCollapse from 'component/icons/collapse';
 import Input from 'component/form/input';
 import SectionHeader from 'component/section/header';
 import AddAction from 'component/section/actions/add';
-import useModalClose from 'component/modal/use-modal-close';
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import TreeList from 'component/tree-list';
@@ -82,13 +81,11 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
         methods.setValue('cardNameSub', '');
     }, [visibleAddCard]);
 
-    const setVisibleModal = useCallback((state) => {
-        if(!state) {
-            closeModal();
-        }
-    }, [closeModal]);
-
-    useModalClose(visibleModalId !== null || showAllTree, setVisibleModal);
+    // const setVisibleModal = useCallback((state) => {
+    //     if(!state) {
+    //         closeModal();
+    //     }
+    // }, [closeModal]);
 
     useEffect(() => {
         if(cards && positionMap) {
@@ -139,6 +136,8 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
             .then(() => setVisibleAddCard(false))
             .catch(console.error);
     };
+
+    // TODO error catch
 
     const createCardFromTemplateRequest = (values: { card_id: { value: string }}) => {
         if(!projectId) {
@@ -197,8 +196,7 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
 
     return (
         <React.Fragment>
-            <Section>
-                <span id="cards" />
+            <Section id="cards">
                 <SectionHeader actions={addAction}>
                     {t('routes.organization.blocks.sections.cards')}
                 </SectionHeader>

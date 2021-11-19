@@ -1,0 +1,96 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/ModuleWrite"
+        }
+    ],
+    "definitions": {
+        "ModuleWrite": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "deadline_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Срок",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "goals": {
+                    "nullable": true,
+                    "title": "Цели",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "organization_project_id": {
+                    "title": "проект",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-project/$id/",
+                    "x-url-object-list": "/api/main/organization-project/"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                },
+                "start_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата начала",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                },
+                "work_days_count": {
+                    "description": "если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date",
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "nullable": true,
+                    "title": "Кол-во рабочих дней",
+                    "type": "integer"
+                },
+                "work_days_hours_count": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Кол-во рабочих часов в рабочем дне",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name",
+                "organization_project_id"
+            ],
+            "type": "object"
+        }
+    }
+}

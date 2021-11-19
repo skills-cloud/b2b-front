@@ -37,11 +37,11 @@
                     "x-url-object-detail": "/api/acc/user/$id/",
                     "x-url-object-list": "/api/acc/user/"
                 },
-                "organization_project_id": {
-                    "title": "проект заказчика",
+                "module_id": {
+                    "title": "модуль",
                     "type": "integer",
-                    "x-url-object-detail": "/api/main/organization-project/$id/",
-                    "x-url-object-list": "/api/main/organization-project/"
+                    "x-url-object-detail": "/api/main/module/$id/",
+                    "x-url-object-list": "/api/main/module/"
                 },
                 "priority": {
                     "enum": [
@@ -50,15 +50,12 @@
                         30
                     ],
                     "title": "Приоритет",
-                    "type": "integer"
-                },
-                "project_id": {
-                    "description": "На текущий момент не используется.<br>Надо задавать связку с проектом заказчика",
-                    "nullable": true,
-                    "title": "внутренний проект",
                     "type": "integer",
-                    "x-url-object-detail": "/api/main/project/$id/",
-                    "x-url-object-list": "/api/main/project/"
+                    "x-enum-description": {
+                        "10": "Высокий",
+                        "20": "Обычный",
+                        "30": "Низкий"
+                    }
                 },
                 "recruiter_id": {
                     "nullable": true,
@@ -88,7 +85,13 @@
                         "in_progress"
                     ],
                     "title": "Статус",
-                    "type": "string"
+                    "type": "string",
+                    "x-enum-description": {
+                        "closed": "Закрыт",
+                        "done": "Успешно завершен",
+                        "draft": "Черновик",
+                        "in_progress": "В работе"
+                    }
                 },
                 "title": {
                     "nullable": true,
@@ -104,7 +107,7 @@
                 }
             },
             "required": [
-                "organization_project_id"
+                "module_id"
             ],
             "type": "object"
         }

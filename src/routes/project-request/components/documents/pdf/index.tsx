@@ -3,6 +3,8 @@ import { useParams } from 'react-router';
 import { jsPDF } from 'jspdf';
 import { useTranslation } from 'react-i18next';
 
+import { IParams } from 'helper/url-list';
+
 import { mainRequest } from 'adapter/api/main';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -15,7 +17,7 @@ jsPDF.API.events.push(['addFonts', callAddFont]);
 const ProjectRequestPdf = () => {
     const { t } = useTranslation();
 
-    const params = useParams<{ subpage?: string, requestId: string }>();
+    const params = useParams<IParams>();
     const { data, refetch } = mainRequest.useGetMainRequestByIdQuery(
         { id: params.requestId },
         { refetchOnMountOrArgChange: true }
@@ -32,7 +34,7 @@ const ProjectRequestPdf = () => {
             doc.setFont('Roboto-Medium', 'normal');
 
             doc.setFontSize(20);
-            doc.text(data.project?.name || t('components.pdf.project.name'), startX, startY, { align: 'left' });
+            doc.text(data.module?.organization_project?.name || t('components.pdf.project.name'), startX, startY, { align: 'left' });
 
             startY += 30;
 
@@ -48,7 +50,7 @@ const ProjectRequestPdf = () => {
             startY += 16;
 
             doc.text(t('components.pdf.project.project'), startX, startY, { align: 'left' });
-            doc.text(data.project?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+            doc.text(data.module?.organization_project?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             const manager = `${data.resource_manager?.last_name || ''} ${(data.resource_manager?.first_name || '').slice(0, 1)}`;
 
@@ -72,7 +74,7 @@ const ProjectRequestPdf = () => {
             startY += 16;
 
             doc.text(t('components.pdf.project.customer'), startX, startY, { align: 'left' });
-            doc.text(data.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+            doc.text(data.module?.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             startY += 30;
 
@@ -145,7 +147,7 @@ const ProjectRequestPdf = () => {
 
             doc.setFontSize(10);
             doc.text(t('components.pdf.project.customer'), startX, startY, { align: 'left' });
-            doc.text(data.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+            doc.text(data.module?.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             return doc;
         }

@@ -2,11 +2,12 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
+import { IParams } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 
 import IconPencil from 'component/icons/pencil';
-import Tooltip from 'component/tooltip';
 import Loader from 'component/loader';
+import SkillsTag from 'component/skills-tag';
 
 import { position } from 'adapter/api/position';
 
@@ -19,7 +20,7 @@ export interface IProps {
 
 const Competencies = (props: IProps) => {
     const cn = useClassnames(style);
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const { t } = useTranslation();
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
@@ -57,13 +58,15 @@ const Competencies = (props: IProps) => {
                                         <strong>{t('routes.person.blocks.competencies.skills')}</strong>
                                         <div className={cn('competencies__skills')}>
                                             {pos.competencies?.map((comp) => (
-                                                <Tooltip
+                                                <SkillsTag
                                                     key={comp.competence_id}
-                                                    content={comp.competence?.name}
+                                                    tooltip={t('routes.person.blocks.competencies.experience.invariant', {
+                                                        context: comp.years
+                                                    })}
                                                     theme="dark"
                                                 >
-                                                    <span className={cn('competencies__skills-tag')}>{comp.competence?.name}</span>
-                                                </Tooltip>
+                                                    {comp.competence?.name}
+                                                </SkillsTag>
                                             ))}
                                         </div>
                                     </div>

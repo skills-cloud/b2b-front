@@ -101,21 +101,21 @@
                 },
                 "citizenship_id": {
                     "nullable": true,
-                    "title": "Citizenship id",
+                    "title": "Гражданство",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/citizenship/$id/",
                     "x-url-object-list": "/api/dictionary/citizenship/"
                 },
                 "city_id": {
                     "nullable": true,
-                    "title": "City id",
+                    "title": "Город",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/city/$id/",
                     "x-url-object-list": "/api/dictionary/city/"
                 },
                 "country_id": {
                     "nullable": true,
-                    "title": "Country id",
+                    "title": "Страна",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/country/$id/",
                     "x-url-object-list": "/api/dictionary/country/"
@@ -132,7 +132,12 @@
                                 "workdays"
                             ],
                             "title": "Дни для связи",
-                            "type": "string"
+                            "type": "string",
+                            "x-enum-description": {
+                                "all": "Все дни",
+                                "weekends": "Выходные дни",
+                                "workdays": "Будние дни"
+                            }
                         }
                     ]
                 },
@@ -153,7 +158,11 @@
                                 "M"
                             ],
                             "title": "Пол",
-                            "type": "string"
+                            "type": "string",
+                            "x-enum-description": {
+                                "F": "Женский",
+                                "M": "Мужской"
+                            }
                         }
                     ]
                 },
@@ -202,12 +211,171 @@
                 },
                 "user_id": {
                     "nullable": true,
-                    "title": "User id",
+                    "title": "Пользователь",
                     "type": "integer",
                     "x-url-object-detail": "/api/acc/user/$id/",
                     "x-url-object-list": "/api/acc/user/"
                 }
             },
+            "type": "object"
+        },
+        "FunPointTypeDifficultyLevelInline": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "factor": {
+                    "title": "Коэффициент",
+                    "type": "number"
+                },
+                "fun_point_type_id": {
+                    "title": "Модули / тип функциональной точки",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/fun-point-type/$id/",
+                    "x-url-object-list": "/api/main/fun-point-type/"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "fun_point_type_id",
+                "name"
+            ],
+            "type": "object"
+        },
+        "FunPointTypeInline": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "difficulty_levels": {
+                    "items": {
+                        "$ref": "#/definitions/FunPointTypeDifficultyLevelInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "organization": {
+                    "$ref": "#/definitions/Organization"
+                },
+                "organization_id": {
+                    "title": "заказчик",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization/$id/",
+                    "x-url-object-list": "/api/main/organization/"
+                },
+                "positions_labor_estimates": {
+                    "items": {
+                        "$ref": "#/definitions/FunPointTypePositionLaborEstimateInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "FunPointTypePositionLaborEstimateInline": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "fun_point_type_id": {
+                    "title": "Модули / тип функциональной точки",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/fun-point-type/$id/",
+                    "x-url-object-list": "/api/main/fun-point-type/"
+                },
+                "hours": {
+                    "description": "в часах",
+                    "title": "Норматив",
+                    "type": "number"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "position": {
+                    "$ref": "#/definitions/Position"
+                },
+                "position_id": {
+                    "title": "Должность",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "fun_point_type_id",
+                "position_id"
+            ],
             "type": "object"
         },
         "IndustrySector": {
@@ -235,6 +403,245 @@
             },
             "required": [
                 "name"
+            ],
+            "type": "object"
+        },
+        "ModuleFunPointInline": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "difficulty_level": {
+                    "$ref": "#/definitions/FunPointTypeDifficultyLevelInline"
+                },
+                "difficulty_level_id": {
+                    "title": "Уровень сложности",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/fun-point-type-difficulty-level/$id/",
+                    "x-url-object-list": "/api/main/fun-point-type-difficulty-level/"
+                },
+                "fun_point_type": {
+                    "$ref": "#/definitions/FunPointTypeInline"
+                },
+                "fun_point_type_id": {
+                    "title": "Модули / тип функциональной точки",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/fun-point-type/$id/",
+                    "x-url-object-list": "/api/main/fun-point-type/"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "module_id": {
+                    "title": "Модуль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/module/$id/",
+                    "x-url-object-list": "/api/main/module/"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "difficulty_level_id",
+                "fun_point_type_id",
+                "module_id",
+                "name"
+            ],
+            "type": "object"
+        },
+        "ModuleInline": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "deadline_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Срок",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "difficulty_factor": {
+                    "nullable": true,
+                    "readOnly": true,
+                    "title": "Difficulty factor",
+                    "type": "number"
+                },
+                "fun_points": {
+                    "items": {
+                        "$ref": "#/definitions/ModuleFunPointInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "goals": {
+                    "nullable": true,
+                    "title": "Цели",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "manager": {
+                    "$ref": "#/definitions/UserInline"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "organization_project": {
+                    "$ref": "#/definitions/OrganizationProjectInline"
+                },
+                "organization_project_id": {
+                    "title": "проект",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-project/$id/",
+                    "x-url-object-list": "/api/main/organization-project/"
+                },
+                "positions_labor_estimates": {
+                    "items": {
+                        "$ref": "#/definitions/ModulePositionLaborEstimateInline"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                },
+                "start_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата начала",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                },
+                "work_days_count": {
+                    "description": "если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date",
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "nullable": true,
+                    "title": "Кол-во рабочих дней",
+                    "type": "integer"
+                },
+                "work_days_hours_count": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Кол-во рабочих часов в рабочем дне",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name",
+                "organization_project_id"
+            ],
+            "type": "object"
+        },
+        "ModulePositionLaborEstimateInline": {
+            "properties": {
+                "count": {
+                    "maximum": 2147483647,
+                    "minimum": 0,
+                    "title": "Кол-во",
+                    "type": "integer"
+                },
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "hours": {
+                    "title": "Чел/часов",
+                    "type": "number"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "module_id": {
+                    "title": "Модуль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/module/$id/",
+                    "x-url-object-list": "/api/main/module/"
+                },
+                "position": {
+                    "$ref": "#/definitions/Position"
+                },
+                "position_id": {
+                    "title": "Должность",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/position/$id/",
+                    "x-url-object-list": "/api/dictionary/position/"
+                },
+                "sorting": {
+                    "maximum": 2147483647,
+                    "minimum": -2147483648,
+                    "title": "Сортировка",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "module_id",
+                "position_id"
             ],
             "type": "object"
         },
@@ -316,6 +723,11 @@
                     "x-url-object-detail": "/api/acc/user/$id/",
                     "x-url-object-list": "/api/acc/user/"
                 },
+                "modules_count": {
+                    "readOnly": true,
+                    "title": "Modules count",
+                    "type": "integer"
+                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
@@ -348,11 +760,6 @@
                     },
                     "type": "array",
                     "uniqueItems": true
-                },
-                "requests_count": {
-                    "readOnly": true,
-                    "title": "Requests count",
-                    "type": "integer"
                 },
                 "resource_managers": {
                     "items": {
@@ -413,77 +820,6 @@
             ],
             "type": "object"
         },
-        "ProjectInline": {
-            "nullable": true,
-            "properties": {
-                "created_at": {
-                    "format": "date-time",
-                    "readOnly": true,
-                    "title": "Создано",
-                    "type": "string"
-                },
-                "description": {
-                    "nullable": true,
-                    "title": "Описание",
-                    "type": "string"
-                },
-                "id": {
-                    "readOnly": true,
-                    "title": "ID",
-                    "type": "integer"
-                },
-                "name": {
-                    "maxLength": 500,
-                    "minLength": 1,
-                    "title": "Название",
-                    "type": "string"
-                },
-                "recruiters": {
-                    "items": {
-                        "$ref": "#/definitions/UserInline"
-                    },
-                    "readOnly": true,
-                    "type": "array"
-                },
-                "recruiters_ids": {
-                    "items": {
-                        "nullable": true,
-                        "type": "integer",
-                        "x-url-object-detail": "/api/acc/user/$id/",
-                        "x-url-object-list": "/api/acc/user/"
-                    },
-                    "type": "array",
-                    "uniqueItems": true
-                },
-                "resource_managers": {
-                    "items": {
-                        "$ref": "#/definitions/UserInline"
-                    },
-                    "readOnly": true,
-                    "type": "array"
-                },
-                "resource_managers_ids": {
-                    "items": {
-                        "nullable": true,
-                        "type": "integer",
-                        "x-url-object-detail": "/api/acc/user/$id/",
-                        "x-url-object-list": "/api/acc/user/"
-                    },
-                    "type": "array",
-                    "uniqueItems": true
-                },
-                "updated_at": {
-                    "format": "date-time",
-                    "readOnly": true,
-                    "title": "Обновлено",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "name"
-            ],
-            "type": "object"
-        },
         "RequestRead": {
             "properties": {
                 "deadline_date": {
@@ -512,6 +848,9 @@
                     "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
                     "x-url-object-list": "/api/dictionary/industry-sector/"
                 },
+                "manager": {
+                    "$ref": "#/definitions/UserInline"
+                },
                 "manager_id": {
                     "nullable": true,
                     "title": "руководитель проекта",
@@ -519,14 +858,14 @@
                     "x-url-object-detail": "/api/acc/user/$id/",
                     "x-url-object-list": "/api/acc/user/"
                 },
-                "organization_project": {
-                    "$ref": "#/definitions/OrganizationProjectInline"
+                "module": {
+                    "$ref": "#/definitions/ModuleInline"
                 },
-                "organization_project_id": {
-                    "title": "проект заказчика",
+                "module_id": {
+                    "title": "модуль",
                     "type": "integer",
-                    "x-url-object-detail": "/api/main/organization-project/$id/",
-                    "x-url-object-list": "/api/main/organization-project/"
+                    "x-url-object-detail": "/api/main/module/$id/",
+                    "x-url-object-list": "/api/main/module/"
                 },
                 "priority": {
                     "enum": [
@@ -535,18 +874,12 @@
                         30
                     ],
                     "title": "Приоритет",
-                    "type": "integer"
-                },
-                "project": {
-                    "$ref": "#/definitions/ProjectInline"
-                },
-                "project_id": {
-                    "description": "На текущий момент не используется.<br>Надо задавать связку с проектом заказчика",
-                    "nullable": true,
-                    "title": "внутренний проект",
                     "type": "integer",
-                    "x-url-object-detail": "/api/main/project/$id/",
-                    "x-url-object-list": "/api/main/project/"
+                    "x-enum-description": {
+                        "10": "Высокий",
+                        "20": "Обычный",
+                        "30": "Низкий"
+                    }
                 },
                 "recruiter": {
                     "$ref": "#/definitions/UserInline"
@@ -594,7 +927,13 @@
                         "in_progress"
                     ],
                     "title": "Статус",
-                    "type": "string"
+                    "type": "string",
+                    "x-enum-description": {
+                        "closed": "Закрыт",
+                        "done": "Успешно завершен",
+                        "draft": "Черновик",
+                        "in_progress": "В работе"
+                    }
                 },
                 "title": {
                     "nullable": true,
@@ -613,7 +952,7 @@
                 }
             },
             "required": [
-                "organization_project_id"
+                "module_id"
             ],
             "type": "object"
         },
@@ -623,7 +962,7 @@
                     "$ref": "#/definitions/Competence"
                 },
                 "competence_id": {
-                    "title": "Competence id",
+                    "title": "Компетенция",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/competence/$id/",
                     "x-url-object-list": "/api/dictionary/competence/"
@@ -638,7 +977,13 @@
                     ],
                     "nullable": true,
                     "title": "Опыт лет",
-                    "type": "integer"
+                    "type": "integer",
+                    "x-enum-description": {
+                        "1": "Менее года",
+                        "3": "1 – 3 года",
+                        "5": "3 - 5 лет",
+                        "100": "Более 5 лет"
+                    }
                 },
                 "id": {
                     "readOnly": true,
@@ -671,7 +1016,7 @@
                     "type": "string"
                 },
                 "id": {
-                    "title": "Id",
+                    "title": "Организации / карточка проекта организации",
                     "type": "integer",
                     "x-url-object-detail": "/api/main/organization-project-card-item/$id/",
                     "x-url-object-list": "/api/main/organization-project-card-item/"
@@ -741,7 +1086,13 @@
                         "worker"
                     ],
                     "title": "Статус",
-                    "type": "string"
+                    "type": "string",
+                    "x-enum-description": {
+                        "canceled": "Canceled",
+                        "candidate": "Candidate",
+                        "pre-candidate": "Pre Candidate",
+                        "worker": "Worker"
+                    }
                 },
                 "updated_at": {
                     "format": "date-time",
@@ -827,13 +1178,13 @@
                 },
                 "position_id": {
                     "nullable": true,
-                    "title": "Position id",
+                    "title": "Должность",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/position/$id/",
                     "x-url-object-list": "/api/dictionary/position/"
                 },
                 "request_id": {
-                    "title": "Request id",
+                    "title": "Запрос",
                     "type": "integer",
                     "x-url-object-detail": "/api/main/request/$id/",
                     "x-url-object-list": "/api/main/request/"
@@ -849,7 +1200,7 @@
                 },
                 "type_of_employment_id": {
                     "nullable": true,
-                    "title": "Type of employment id",
+                    "title": "Тип занятости",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/type-of-employment/$id/",
                     "x-url-object-list": "/api/dictionary/type-of-employment/"
@@ -865,7 +1216,7 @@
                 },
                 "work_location_city_id": {
                     "nullable": true,
-                    "title": "Work location city id",
+                    "title": "Город",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/city/$id/",
                     "x-url-object-list": "/api/dictionary/city/"

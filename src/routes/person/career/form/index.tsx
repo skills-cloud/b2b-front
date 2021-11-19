@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
+import { IParams } from 'helper/url-list';
 
 import useClassnames from 'hook/use-classnames';
 import FormInput from 'component/form/input';
@@ -10,13 +11,14 @@ import Error from 'component/error';
 import InputFile from 'component/form/file';
 import InputDictionary from 'component/form/input-dictionary';
 import InputMain from 'component/form/input-main';
+import InputProject from 'component/form/input-project';
 
 import { career } from 'adapter/api/career';
 import { CvCareerRead, CvCareerFileRead } from 'adapter/types/cv/career/get/code-200';
 
 import style from './index.module.pcss';
 
-export interface IResultForm extends Omit<CvCareerRead, 'competencies_select' | 'organization' | 'position'> {
+export interface IResultForm extends Omit<CvCareerRead, 'competencies_select' | 'organization' | 'position' | 'projects'> {
     competencies_select: Array<{
         value?: number,
         label: string
@@ -25,6 +27,10 @@ export interface IResultForm extends Omit<CvCareerRead, 'competencies_select' | 
         value?: number,
         label: string
     },
+    projects: Array<{
+        value?: number,
+        label: string
+    }>,
     position: {
         value?: number,
         label: string
@@ -41,7 +47,7 @@ interface IProjectForm {
 const CareerForm = (props: IProjectForm) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const { specialistId } = useParams<{ specialistId: string }>();
+    const { specialistId } = useParams<IParams>();
     const methods = useForm(props.defaultValues);
     const [postCareer, { isLoading: isPostLoading }] = career.usePostCareerMutation();
     const [patchCareer, { isLoading: isPatchLoading }] = career.usePatchCareerByIdMutation();
@@ -73,7 +79,8 @@ const CareerForm = (props: IProjectForm) => {
             cv_id           : parseInt(specialistId, 10),
             competencies_ids: formData.career?.competencies_select?.map(({ value }) => value) as Array<number>,
             organization_id : formData.career?.organization?.value as number,
-            position_id     : formData.career?.position?.value
+            position_id     : formData.career?.position?.value,
+            projects_ids    : formData.career?.projects?.map((item) => item.value as number)
         };
         const request = formData.career?.id ? patchCareer(data) : postCareer(data);
 
@@ -153,6 +160,16 @@ const CareerForm = (props: IProjectForm) => {
                         requestType={InputDictionary.requestType.Position}
                         placeholder={t('routes.person.career.fields.placeholder.position')}
                         required={true}
+                    />
+                </div>
+                <div className={cn('career-form__item')}>
+                    <label className={cn('career-form__label')}>
+                        {t('routes.person.career.fields.projects.label')}
+                    </label>
+                    <InputProject
+                        isMulti={true}
+                        name="career.projects"
+                        placeholder={t('routes.person.career.fields.projects.placeholder')}
                     />
                 </div>
                 <div className={cn('career-form__item', 'career-form__item_dates')}>

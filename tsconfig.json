@@ -32,7 +32,8 @@
             "component/*": ["src/components/*"],
             "route/*": ["src/routes/*"],
             "src/*": ["src/*"],
-            "adapter/*": ["src/adapters/*"]
+            "adapter/*": ["src/adapters/*"],
+            "helper/*": ["src/helper/*"],
         }
     },
     "exclude": [

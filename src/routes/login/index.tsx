@@ -6,6 +6,7 @@ import { useHistory, Redirect } from 'react-router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
+import { SPECIALISTS } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 import { useCancelTokens } from 'hook/cancel-token';
 
@@ -93,7 +94,7 @@ const Login = () => {
             return <Redirect to={qs.from} />;
         }
 
-        return <Redirect to="/specialists" />;
+        return <Redirect to={SPECIALISTS} />;
     }
 
     return (

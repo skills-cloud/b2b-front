@@ -10,6 +10,7 @@
                 "competencies_ids": {
                     "items": {
                         "nullable": true,
+                        "title": "Компетенция",
                         "type": "integer",
                         "x-url-object-detail": "/api/dictionary/competence/$id/",
                         "x-url-object-list": "/api/dictionary/competence/"
@@ -18,7 +19,7 @@
                     "uniqueItems": true
                 },
                 "cv_id": {
-                    "title": "Cv id",
+                    "title": "Анкета",
                     "type": "integer",
                     "x-url-object-detail": "/api/cv/cv/$id/",
                     "x-url-object-list": "/api/cv/cv/"
@@ -50,14 +51,14 @@
                     "type": "boolean"
                 },
                 "organization_id": {
-                    "title": "Organization id",
+                    "title": "Организация",
                     "type": "integer",
                     "x-url-object-detail": "/api/main/organization/$id/",
                     "x-url-object-list": "/api/main/organization/"
                 },
                 "position_id": {
                     "nullable": true,
-                    "title": "Position id",
+                    "title": "Должность",
                     "type": "integer",
                     "x-url-object-detail": "/api/dictionary/position/$id/",
                     "x-url-object-list": "/api/dictionary/position/"
@@ -65,6 +66,7 @@
                 "projects_ids": {
                     "items": {
                         "nullable": true,
+                        "title": "Проект",
                         "type": "integer",
                         "x-url-object-detail": "/api/main/organization-project/$id/",
                         "x-url-object-list": "/api/main/organization-project/"

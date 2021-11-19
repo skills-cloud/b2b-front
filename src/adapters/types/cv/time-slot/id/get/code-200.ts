@@ -14,51 +14,51 @@ export type NoName3 = string;
 export type ID1 = number;
 export type NoName4 = boolean;
 export type NoName5 = string;
-export type CityId = number;
-export type CountryId = number;
-export type CvId = number;
-export type NoName6 = string;
-export type NoName7 = string;
-export type NoName8 = string;
+export type NoName6 = number;
+export type NoName7 = number;
+export type NoName8 = number;
+export type NoName9 = string;
+export type NoName10 = string;
+export type NoName11 = string;
 export type ID2 = number;
-export type NoName9 = boolean;
-export type NoName10 = boolean;
-export type NoName11 = 'manual' | 'request_requirement';
+export type NoName12 = boolean;
+export type NoName13 = boolean;
+export type NoName14 = 'manual' | 'request_requirement';
 export type OrganizationProjectId = number;
 export type OrganizationProjectName = string;
-export type NoName12 = number;
+export type NoName15 = number;
 export type RequestId = number;
 export type RequestRequirementId = number;
 export type RequestRequirementName = string;
 export type RequestTitle = string;
-export type NoName13 = string;
+export type NoName16 = string;
 export type ID3 = number;
-export type NoName14 = boolean;
-export type NoName15 = string;
-export type TypeOfEmploymentId = number;
+export type NoName17 = boolean;
+export type NoName18 = string;
+export type NoName19 = number;
 
 export interface CvTimeSlotRead {
     city?: City;
-    city_id?: CityId;
+    city_id?: NoName6;
     country?: Country;
-    country_id?: CountryId;
-    cv_id: CvId;
-    date_from?: NoName6;
-    date_to?: NoName7;
-    description?: NoName8;
+    country_id?: NoName7;
+    cv_id: NoName8;
+    date_from?: NoName9;
+    date_to?: NoName10;
+    description?: NoName11;
     id?: ID2;
-    is_free?: NoName9;
-    is_work_permit_required?: NoName10;
-    kind?: NoName11;
+    is_free?: NoName12;
+    is_work_permit_required?: NoName13;
+    kind?: NoName14;
     organization_project_id?: OrganizationProjectId;
     organization_project_name?: OrganizationProjectName;
-    price?: NoName12;
+    price?: NoName15;
     request_id?: RequestId;
     request_requirement_id?: RequestRequirementId;
     request_requirement_name?: RequestRequirementName;
     request_title?: RequestTitle;
     type_of_employment?: TypeOfEmployment;
-    type_of_employment_id: TypeOfEmploymentId;
+    type_of_employment_id: NoName19;
 }
 export interface City {
     country: Country;
@@ -74,8 +74,8 @@ export interface Country {
     name: NoName2;
 }
 export interface TypeOfEmployment {
-    description?: NoName13;
+    description?: NoName16;
     id?: ID3;
-    is_verified?: NoName14;
-    name: NoName15;
+    is_verified?: NoName17;
+    name: NoName18;
 }

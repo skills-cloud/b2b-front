@@ -2,23 +2,25 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router';
 
+import { IParams, ORGANIZATION_PROJECT_MODULE_REQUEST_ID } from 'helper/url-list';
+import { useClassnames } from 'hook/use-classnames';
+
 import PageCentred from 'component/layout/page-centered';
 import Section from 'component/section';
 import Button from 'component/button';
 
-import ProjectRequestForm from 'route/project-request/components/form';
-
-import { useClassnames } from 'hook/use-classnames';
+import ProjectRequestForm from '../components/form';
 import style from './index.module.pcss';
 
-const FORM_ID = 'PROJECT_CREATE_FORM_ID';
+const FORM_ID = 'PROJECT_REQUEST_CREATE_FORM_ID';
 
-const ProjectsCreateForm = () => {
+const ProjectRequestCreateForm = () => {
     const cn = useClassnames(style);
     const history = useHistory();
     const { t } = useTranslation();
-    const params = useParams<{ organizationId: string, projectId: string }>();
+    const params = useParams<IParams>();
 
+    // TODO обработка ошибок и лоадер
     return (
         <PageCentred>
             <Section title={t('routes.project-request.create.title')}>
@@ -27,9 +29,7 @@ const ProjectsCreateForm = () => {
                         formId={FORM_ID}
                         onSuccess={(id) => {
                             if(params.projectId && params.organizationId) {
-                                history.push(`/organizations/${params.organizationId}/projects/${params.projectId}/requests/${id}#main-info`);
-                            } else {
-                                history.push(`/requests/${id}#main-info`);
+                                history.push(ORGANIZATION_PROJECT_MODULE_REQUEST_ID(params.organizationId, params.projectId, params.moduleId, id));
                             }
                         }}
                     />
@@ -43,4 +43,4 @@ const ProjectsCreateForm = () => {
     );
 };
 
-export default ProjectsCreateForm;
+export default ProjectRequestCreateForm;

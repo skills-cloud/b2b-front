@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 
+import { ORGANIZATION_PROJECT_MODULE_REQUEST_ID, REQUEST_EDIT, REQUEST_ID } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 
 import { RequestRead } from 'adapter/types/main/request/get/code-200';
@@ -10,12 +11,12 @@ import { RequestRead } from 'adapter/types/main/request/get/code-200';
 import EditAction from 'component/section/actions/edit';
 import DeleteAction from 'component/section/actions/delete';
 import Dropdown from 'component/dropdown';
-
-import ConfirmModal from './confirm-modal';
-import style from './index.module.pcss';
 import DropdownMenu from 'component/dropdown/menu';
 import DropdownMenuItem from 'component/dropdown/menu-item';
 import DotsAction from 'component/section/actions/dots';
+
+import ConfirmModal from './confirm-modal';
+import style from './index.module.pcss';
 
 interface IRequestList {
     requestList: Array<RequestRead>,
@@ -44,12 +45,13 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
         <React.Fragment>
             <div className={cn('request-list')}>
                 {requestList.map((requestItem) => {
-                    const organizationId = requestItem.organization_project?.organization_id;
-                    const projectId = requestItem.organization_project?.id;
-                    let requestUrl = `/requests/${requestItem.id}#main-info`;
+                    const organizationId = requestItem.module?.organization_project?.organization_id;
+                    const projectId = requestItem.module?.organization_project?.id;
+                    const moduleId = requestItem.module_id;
+                    let requestUrl = REQUEST_ID(requestItem.id);
 
                     if(fromOrganization) {
-                        requestUrl = `/organizations/${organizationId}/projects/${projectId}/requests/${requestItem.id}#main-info`;
+                        requestUrl = ORGANIZATION_PROJECT_MODULE_REQUEST_ID(organizationId, projectId, moduleId, requestItem.id);
                     }
 
                     return (
@@ -80,7 +82,7 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
                                             <DropdownMenu>
                                                 <DropdownMenuItem selected={false}>
                                                     <EditAction
-                                                        to={`/requests/${requestItem.id}/edit`}
+                                                        to={REQUEST_EDIT(requestItem.id)}
                                                         label={t('routes.project-request-list.requests.actions.edit')}
                                                     />
                                                 </DropdownMenuItem>

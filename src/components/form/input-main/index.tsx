@@ -1,9 +1,7 @@
 import React, { useState, FC, ReactNode, MouseEvent, useEffect, useMemo } from 'react';
 import { MultiValueRemoveProps } from 'react-select/src/components/MultiValue';
 import ReactSelect, { components, OptionTypeBase } from 'react-select';
-import AsyncSelect from 'react-select/async';
-import AsyncCreatableSelect from 'react-select/async-creatable';
-import debounce from 'lodash.debounce';
+import CreatableSelect from 'react-select/creatable';
 import { ErrorMessage } from '@hookform/error-message';
 import { Controller, Message, useFormContext } from 'react-hook-form';
 import { ValidationRule } from 'react-hook-form/dist/types/validator';
@@ -30,7 +28,8 @@ export enum ERequestType {
     Organization,
     Customer,
     Project,
-    RequestType
+    RequestType,
+    FunPointType
 }
 
 const methods = {
@@ -49,6 +48,10 @@ const methods = {
     [ERequestType.RequestType]: {
         single: mainRequest.endpoints.getMainRequestTypeById,
         list  : mainRequest.endpoints.getMainRequestType
+    },
+    [ERequestType.FunPointType]: {
+        single: mainRequest.endpoints.getMainFunPointTypeById,
+        list  : mainRequest.endpoints.getMainFunPointType
     }
 };
 
@@ -59,7 +62,6 @@ export interface IProps {
     required?: Message | ValidationRule<boolean>,
     label?: ReactNode,
     createable?: boolean,
-    isLoadingOptions?: boolean,
     autoFocus?: boolean,
     clearable?: boolean,
     placeholder?: string,
@@ -72,7 +74,10 @@ export interface IProps {
     elError?: boolean,
     isMulti?: boolean,
     requestType: ERequestType,
-    onChange?(value: IValue): void
+    onChange?(value: IValue): void,
+    onCreateOption?(value: string): void,
+    isRefetch?: boolean,
+    onRefetchSuccess?(value: boolean): void
 }
 
 const MultiValueRemove: FC<MultiValueRemoveProps<Record<string, unknown>>> = (props) => {
@@ -95,9 +100,8 @@ const MultiValueRemove: FC<MultiValueRemoveProps<Record<string, unknown>>> = (pr
 };
 
 const defaultProps = {
-    direction       : 'row',
-    isLoadingOptions: false,
-    isMulti         : true
+    direction: 'row',
+    isMulti  : true
 };
 
 const InputMain = (props: IProps & typeof defaultProps) => {
@@ -137,25 +141,27 @@ const InputMain = (props: IProps & typeof defaultProps) => {
     }, []);
 
     useEffect(() => {
-        if(!props.isLoadingOptions) {
-            const method = methods[props.requestType].list.initiate(undefined);
+        const method = methods[props.requestType].list.initiate(undefined);
 
-            dispatch(method)
-                .then(({ data: loadData }) => {
-                    if(loadData?.results?.length) {
-                        const res = loadData.results.map((item) => ({
-                            label: item.name,
-                            value: String(item.id)
-                        }));
+        dispatch(method)
+            .then(({ data: loadData }) => {
+                if(loadData?.results?.length) {
+                    const res = loadData.results.map((item) => ({
+                        label: item.name,
+                        value: String(item.id)
+                    }));
 
-                        setOptions(res);
+                    setOptions(res);
+
+                    if(props.isRefetch) {
+                        props.onRefetchSuccess?.(false);
                     }
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        }
-    }, []);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }, [props.isRefetch]);
 
     useEffect((): void => {
         const initValue = props.defaultValue;
@@ -197,6 +203,10 @@ const InputMain = (props: IProps & typeof defaultProps) => {
                     }))
                         .then((resp: Array<IValue>) => {
                             setValue(props.name, resp, { shouldDirty: true });
+
+                            if(props.isRefetch) {
+                                props.onRefetchSuccess?.(false);
+                            }
                         })
                         .catch((err) => {
                             console.error(err);
@@ -213,29 +223,6 @@ const InputMain = (props: IProps & typeof defaultProps) => {
             setIsFocus(true);
         }
     };
-
-    const onLoadOptions = debounce((search_string: string, callback) => {
-        const method = methods[props.requestType].list.initiate({
-            search: search_string
-        });
-
-        dispatch(method)
-            .then(({ data: loadData }) => {
-                if(loadData?.results?.length) {
-                    const res = loadData.results.map((item) => ({
-                        label: item.name,
-                        value: String(item.id)
-                    }));
-
-                    callback(res);
-                } else {
-                    callback(null);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, 150);
 
     const elLabel = (): ReactNode => {
         if(props.label) {
@@ -279,12 +266,8 @@ const InputMain = (props: IProps & typeof defaultProps) => {
             })
         };
 
-        if(props.isLoadingOptions) {
-            if(props.createable) {
-                return <AsyncCreatableSelect {...selectProps} loadOptions={onLoadOptions} />;
-            }
-
-            return <AsyncSelect {...selectProps} loadOptions={onLoadOptions} />;
+        if(props.createable) {
+            return <CreatableSelect onCreateOption={props.onCreateOption} {...selectProps} options={options} />;
         }
 
         return <ReactSelect {...selectProps} options={options} />;

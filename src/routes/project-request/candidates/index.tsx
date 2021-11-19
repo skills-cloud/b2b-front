@@ -1,12 +1,12 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { differenceInCalendarYears } from 'date-fns';
 import { useForm, FormProvider } from 'react-hook-form';
 
+import { IParams, SPECIALIST_ID } from 'src/helper/url-list';
 import useClassnames from 'hook/use-classnames';
-import { useDispatch } from 'component/core/store';
 
 import IconStar from 'component/icons/star';
 import UserAvatar from 'component/user/avatar';
@@ -16,6 +16,7 @@ import ModalFooterSubmit from 'component/modal/footer-submit';
 import Button from 'component/button';
 import InputDate from 'component/form/date';
 import Checkbox from 'component/form/checkbox';
+import StarRating from 'component/star-rating';
 
 import { cv } from 'adapter/api/cv';
 import { mainRequest } from 'adapter/api/main';
@@ -24,7 +25,6 @@ import { OrganizationProjectCardItemReadTree } from 'adapter/types/main/organiza
 import { RequestRequirementCvRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 
 import style from './index.module.pcss';
-import StarRating from 'component/star-rating';
 
 interface ICard extends OrganizationProjectCardItemReadTree{
     count: number
@@ -117,25 +117,22 @@ const CardWrapper = ({ level, children }: {level?: number, children: ReactNode})
 
 export const Candidates = () => {
     const cn = useClassnames(style);
-    const dispatch = useDispatch();
     const { hash } = useLocation();
-    const { requestId } = useParams<{ requestId: string }>();
+    const { projectId, requestId } = useParams<IParams>();
     const { t } = useTranslation();
     const methods = useForm();
 
-    const { data, isLoading, refetch } = mainRequest.useGetMainRequestByIdQuery({ id: requestId }, { refetchOnMountOrArgChange: true });
-    const [post] = mainRequest.usePostRequestRequirementCvSetDetailsMutation();
-    const [unLinkCard] = mainRequest.useDeleteMainRequestCvUnlinkByIdMutation();
-    const [cvList, setCvList] = useState<Array<TCvList>>([]);
-    const [cards, setCards] = useState<TCardMap>({});
-    const [cardTree, setCardTree] = useState<TCardList>([]);
-    const [visibleModal, setVisibleModal] = useState<number | null>(null);
-    const [ratingCvItem, setRatingCvItem] = useState<TCvList | null>(null);
-    const [activeStar, setActiveStar] = useState<number>(0);
-    const [hoveredStar, setHoveredStar] = useState<number>(0);
+    const { data, isLoading } = mainRequest.useGetMainRequestByIdQuery({
+        id: requestId
+    }, {
+        refetchOnMountOrArgChange: true
+    });
+    const { data: projectCardData } = mainRequest.useGetOrganizationProjectCardItemQuery({
+        organization_project_id: [projectId]
+    });
 
-    useEffect(() => {
-        const reqsList = data?.requirements?.reduce((acc, current) => {
+    const reqsList = useMemo(() => {
+        return data?.requirements?.reduce((acc, current) => {
             if(current.cv_list_ids) {
                 current.cv_list_ids.forEach((cvId) => {
                     if(!acc.includes(parseInt(cvId, 10))) {
@@ -146,7 +143,10 @@ export const Candidates = () => {
 
             return acc;
         }, [] as Array<number>);
-        const reqsCvList = data?.requirements?.reduce((acc, current) => {
+    }, [JSON.stringify(data)]);
+
+    const reqsCvList = useMemo(() => (
+        data?.requirements?.reduce((acc, current) => {
             if(current.cv_list) {
                 current.cv_list.forEach((cvItem) => {
                     if(!acc.find((findItem) => findItem.id === cvItem.cv_id)) {
@@ -160,38 +160,40 @@ export const Candidates = () => {
             }
 
             return acc;
-        }, [] as Array<RequestRequirementCvRead>);
+        }, [] as Array<RequestRequirementCvRead>)
+    ), [JSON.stringify(data)]);
 
-        if(reqsList && reqsCvList) {
-            dispatch(cv.endpoints.getCvList.initiate({
-                id: reqsList
-            }))
-                .then(({ data: respData }) => {
-                    if(respData) {
-                        const results = respData.results.map((result) => ({
-                            ...reqsCvList.find((reqResult) => (reqResult.id === result.id) && reqResult),
-                            ...result
-                        }));
+    const { data: cvListData, isLoading: cvListLoading, refetch: cvListRefetch } = cv.useGetCvListQuery({
+        id: reqsList
+    }, {
+        skip: !reqsList?.length && !reqsCvList?.length
+    });
 
-                        setCvList(results);
-                    }
-                })
-                .catch(console.error);
+    const [post] = mainRequest.usePostRequestRequirementCvSetDetailsMutation();
+    const [unLinkCard] = mainRequest.useDeleteMainRequestCvUnlinkByIdMutation();
+    const [cvList, setCvList] = useState<Array<TCvList>>([]);
+    const [cards, setCards] = useState<TCardMap>({});
+    const [visibleModal, setVisibleModal] = useState<number | null>(null);
+    const [ratingCvItem, setRatingCvItem] = useState<TCvList | null>(null);
+    const [activeStar, setActiveStar] = useState<number>(0);
+    const [hoveredStar, setHoveredStar] = useState<number>(0);
+
+    useEffect(() => {
+        if(cvListData) {
+            const results = cvListData.results.map((result) => ({
+                ...reqsCvList?.find((reqResult) => (reqResult.id === result.id) && reqResult),
+                ...result
+            }));
+
+            setCvList(results);
         }
+    }, [JSON.stringify(cvListData)]);
 
-        if(data?.organization_project_id) {
-            dispatch(mainRequest
-                .endpoints
-                .getOrganizationProjectCardItem
-                .initiate({ organization_project_id: [String(data.organization_project_id)] })
-            ).then(({ data: cardItems }) => {
-                if(cardItems) {
-                    setCardTree(cardItems);
-                    setCards(getMapFromTree(cardItems));
-                }
-            }).catch(console.error);
+    useEffect(() => {
+        if(projectCardData) {
+            setCards(getMapFromTree(projectCardData));
         }
-    }, [JSON.stringify(data)]);
+    }, [JSON.stringify(projectCardData)]);
 
     const onSetRating = (cvItemForRating?: TCvList) => () => {
         if(cvItemForRating) {
@@ -205,6 +207,69 @@ export const Candidates = () => {
         methods.setValue('rating', rating);
         methods.setValue('cv_id', cvItemRating.id);
         methods.setValue('id', cvItemRating.request_requirement_id);
+    };
+
+    const setUserRating = (formValues: Record<string, number>) => {
+        post({
+            id    : String(formValues.id),
+            cv_id : String(formValues.cv_id),
+            rating: formValues.rating
+        })
+            .unwrap()
+            .then(() => {
+                setRatingCvItem(null);
+                setActiveStar(0);
+                methods.reset();
+                cvListRefetch();
+            })
+            .catch(console.error);
+    };
+
+    const applyCardForm = (formValues: Record<string, string | boolean>) => {
+        const { cv_id, requestRequirementId, ...values } = formValues;
+        const falsyRootIds = Object.keys(values)
+            .filter((item) => !values[item])
+            .filter((item) => !item.includes('card-date-'))
+            .map((item) => item.slice('card-'.length))
+            .filter((item) => cards[item].parent_id === null);
+        const falsyIds = getTreeIds(falsyRootIds, cards);
+        const cardIds = Object.keys(values)
+            .filter((item) => values[item])
+            .filter((item) => !item.includes('card-date-'))
+            .map((item) => item.slice('card-'.length))
+            .filter((id) => !falsyIds.includes(id));
+
+        let request;
+
+        if(cardIds.length === 0) {
+            request = unLinkCard({
+                id   : String(requestRequirementId),
+                cv_id: String(cv_id)
+            });
+        } else {
+            request = post({
+                id                             : String(requestRequirementId),
+                cv_id                          : String(cv_id),
+                organization_project_card_items: cardIds.map((id) => {
+                    const result: { id: number, date?: string } = {
+                        id: parseInt(id, 10)
+                    };
+
+                    if(values[`card-date-${id}`]) {
+                        result.date = String(values[`card-date-${id}`]);
+                    }
+
+                    return result;
+                })
+            });
+        }
+
+        request.unwrap()
+            .then(() => {
+                setVisibleModal(null);
+                methods.reset();
+            })
+            .catch(console.error);
     };
 
     const elAdditionalBlock = (cvItem?: TCvList) => {
@@ -302,7 +367,7 @@ export const Candidates = () => {
                         className={cn('candidates__user-info-avatar')}
                         title={title}
                         subTitle={subTitle}
-                        titleTo={`/specialists/${cvItem.id}`}
+                        titleTo={SPECIALIST_ID(cvItem.id)}
                         avatar={{
                             src: cvItem.photo
                         }}
@@ -370,7 +435,7 @@ export const Candidates = () => {
     };
 
     const elUsers = () => {
-        if(isLoading) {
+        if(isLoading || cvListLoading) {
             return <Loader />;
         }
 
@@ -429,70 +494,7 @@ export const Candidates = () => {
         ));
     };
 
-    const renderCard = cardTree.filter((item) => item.id === visibleModal);
-
-    const setUserRating = (formValues: Record<string, number>) => {
-        post({
-            id    : String(formValues.id),
-            cv_id : String(formValues.cv_id),
-            rating: formValues.rating
-        })
-            .unwrap()
-            .then(() => {
-                setRatingCvItem(null);
-                setActiveStar(0);
-                methods.reset();
-                refetch();
-            })
-            .catch(console.error);
-    };
-
-    const applyCardForm = (formValues: Record<string, string | boolean>) => {
-        const { cv_id, requestRequirementId, ...values } = formValues;
-        const falsyRootIds = Object.keys(values)
-            .filter((item) => !values[item])
-            .filter((item) => !item.includes('card-date-'))
-            .map((item) => item.slice('card-'.length))
-            .filter((item) => cards[item].parent_id === null);
-        const falsyIds = getTreeIds(falsyRootIds, cards);
-        const cardIds = Object.keys(values)
-            .filter((item) => values[item])
-            .filter((item) => !item.includes('card-date-'))
-            .map((item) => item.slice('card-'.length))
-            .filter((id) => !falsyIds.includes(id));
-
-        let request;
-
-        if(cardIds.length === 0) {
-            request = unLinkCard({
-                id   : String(requestRequirementId),
-                cv_id: String(cv_id)
-            });
-        } else {
-            request = post({
-                id                             : String(requestRequirementId),
-                cv_id                          : String(cv_id),
-                organization_project_card_items: cardIds.map((id) => {
-                    const result: { id: number, date?: string } = {
-                        id: parseInt(id, 10)
-                    };
-
-                    if(values[`card-date-${id}`]) {
-                        result.date = String(values[`card-date-${id}`]);
-                    }
-
-                    return result;
-                })
-            });
-        }
-
-        request.unwrap()
-            .then(() => {
-                setVisibleModal(null);
-                methods.reset();
-            })
-            .catch(console.error);
-    };
+    const renderCard = projectCardData?.filter((item) => item.id === visibleModal) || [];
 
     const elCardsModal = () => {
         if(visibleModal !== null) {
@@ -521,7 +523,7 @@ export const Candidates = () => {
                     <FormProvider {...methods}>
                         <form method="POST" onSubmit={methods.handleSubmit(applyCardForm)} id={APPLY_CARD_FORM_ID}>
                             {renderCard.length === 1 && renderTree(renderCard[0].children)}
-                            {renderCard.length === 0 && cardTree.map((item) => (
+                            {renderCard.length === 0 && projectCardData?.map((item) => (
                                 <Checkbox
                                     key={item.id}
                                     name={`card-${item.id}`}
