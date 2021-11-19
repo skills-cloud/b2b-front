@@ -15,6 +15,7 @@ export interface IProps {
     placeholder?: string,
     className?: string | IStyle,
     label?: string,
+    disabled?: boolean,
     required?: Message | ValidationRule<boolean>,
     maxLength?: ValidationRule<number | string>,
     minLength?: ValidationRule<number | string>,
@@ -39,6 +40,7 @@ export const InputRaw = (props: IInputRaw) => {
         type       : props.type,
         placeholder: props.placeholder,
         onChange   : props.onChange,
+        disabled   : props.disabled,
         ...(props?.attributes ? props?.attributes : {})
     };
 

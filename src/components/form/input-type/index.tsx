@@ -106,7 +106,7 @@ const InputType = (props: IProps & typeof defaultProps) => {
     const { data } = mainRequest.useGetMainFunPointTypeQuery(undefined);
 
     const { data: dataById } = mainRequest.useGetMainFunPointTypeByIdQuery({
-        id: String(props.defaultValue)
+        id: props.defaultValue as string
     }, {
         skip: !props.defaultValue
     });
