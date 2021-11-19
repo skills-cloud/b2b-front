@@ -9,7 +9,7 @@ export type Code200 = ModuleRead;
 export type NoName = string;
 export type NoName1 = string;
 export type NoName2 = string;
-export type Difficulty = number;
+export type DifficultyFactor = number;
 export type NoName3 = string;
 export type NoName4 = string;
 export type NoName5 = string;
@@ -87,12 +87,17 @@ export type NoName60 = string;
 export type NoName61 = number;
 export type NoName62 = string;
 export type NoName63 = string;
+/**
+ * если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date
+ */
+export type NoName64 = number;
+export type NoName65 = number;
 
 export interface ModuleRead {
     created_at?: NoName;
     deadline_date?: NoName1;
     description?: NoName2;
-    difficulty?: Difficulty;
+    difficulty_factor?: DifficultyFactor;
     fun_points?: ModuleFunPointInline[];
     goals?: NoName34;
     id?: ID6;
@@ -105,6 +110,8 @@ export interface ModuleRead {
     sorting?: NoName61;
     start_date?: NoName62;
     updated_at?: NoName63;
+    work_days_count?: NoName64;
+    work_days_hours_count?: NoName65;
 }
 export interface ModuleFunPointInline {
     created_at?: NoName3;

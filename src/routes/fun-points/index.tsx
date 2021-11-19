@@ -2,26 +2,19 @@ import React, { Fragment, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router';
 
-import { IParams, ORGANIZATION_PROJECT_MODULE_ID } from 'helper/url-list';
+import { IParams } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 
 import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
-import SidebarNav, { NavItem } from 'component/nav';
+import SidebarNav from 'component/nav';
 import SectionHeader from 'component/section/header';
-import Wrapper from 'component/section/wrapper';
 import EditAction from 'component/section/actions/edit';
-
-import { mainRequest } from 'adapter/api/main';
-
-import style from './index.module.pcss';
 import AddAction from 'component/section/actions/add';
 import Loader from 'component/loader';
 import Separator from 'component/separator';
 import SectionContentList from 'component/section/content-list';
-import { Link } from 'react-router-dom';
 import { H4 } from 'component/header';
-import IconChevronRight from 'component/icons/chevron-right';
 import IconArrowLeftFull from 'component/icons/arrow-left-full';
 import Dropdown from 'component/dropdown';
 import DotsAction from 'component/section/actions/dots';
@@ -29,8 +22,20 @@ import DropdownMenu from 'component/dropdown/menu';
 import DropdownMenuItem from 'component/dropdown/menu-item';
 import DeleteAction from 'component/section/actions/delete';
 
+import { mainRequest } from 'adapter/api/main';
+
+import FunPointCreateForm from './form';
+import ConfirmModalDeleteFunPoint from './confirm-modal';
+import style from './index.module.pcss';
+
 enum ESectionInvariants {
     FunPoints = 'fun-points'
+}
+
+enum ESteps {
+    List,
+    DetailForm,
+    DeleteForm,
 }
 
 const FunctionalPoints = () => {
@@ -39,20 +44,43 @@ const FunctionalPoints = () => {
     const history = useHistory();
     const { moduleId } = useParams<IParams>();
 
-    const [visible, setVisible] = useState<boolean>(false);
+    const [step, setStep] = useState<ESteps>(ESteps.List);
+    const [funPointId, setFunPointId] = useState<number | null>(null);
+    const [funPointName, setFunPointName] = useState<string>();
 
     const { data, isLoading } = mainRequest.useGetMainModuleByIdQuery({ id: moduleId });
 
+    const formValues = useMemo(() => {
+        if(funPointId !== null) {
+            return data?.fun_points?.find((item) => item.id === funPointId);
+        }
+    }, [JSON.stringify(data?.fun_points), funPointId]);
+
     const onClickAdd = () => {
-        setVisible(true);
+        setStep(ESteps.DetailForm);
+        setFunPointId(null);
+        setFunPointName(undefined);
     };
 
-    const onClickEdit = () => {
-        console.info('EDIT');
+    const backToList = () => {
+        setFunPointId(null);
+        setFunPointName(undefined);
+        setStep(ESteps.List);
     };
 
-    const onClickDelete = () => {
-        console.info('DELETE');
+    const onClickEdit = (id?: number) => () => {
+        if(id) {
+            setStep(ESteps.DetailForm);
+            setFunPointId(id);
+        }
+    };
+
+    const onClickDelete = (id?: number, name?: string) => () => {
+        if(id && name) {
+            setStep(ESteps.DeleteForm);
+            setFunPointId(id);
+            setFunPointName(name);
+        }
     };
 
     const onClickBack = () => {
@@ -79,6 +107,17 @@ const FunctionalPoints = () => {
             </Section>
         );
     };
+    const elCreateEditModal = () => {
+        if(step === ESteps.DetailForm) {
+            return (
+                <FunPointCreateForm
+                    setVisible={backToList}
+                    defaultValues={formValues}
+                    onSuccess={backToList}
+                />
+            );
+        }
+    };
 
     const elContent = () => {
         if(isLoading) {
@@ -99,10 +138,10 @@ const FunctionalPoints = () => {
                                     render={({ onClose }) => (
                                         <DropdownMenu>
                                             <DropdownMenuItem selected={false} onClick={onClose}>
-                                                <EditAction onClick={onClickEdit} label={t('routes.fun-points.actions.edit')} />
+                                                <EditAction onClick={onClickEdit(funPoint.id as number)} label={t('routes.fun-points.actions.edit')} />
                                             </DropdownMenuItem>
                                             <DropdownMenuItem selected={false} onClick={onClose}>
-                                                <DeleteAction onClick={onClickDelete} label={t('routes.fun-points.actions.delete')} />
+                                                <DeleteAction onClick={onClickDelete(funPoint.id as number, funPoint.name)} label={t('routes.fun-points.actions.delete')} />
                                             </DropdownMenuItem>
                                         </DropdownMenu>
                                     )}
@@ -153,14 +192,25 @@ const FunctionalPoints = () => {
     };
 
     return (
-        <SidebarLayout sidebar={elSidebar()}>
-            <Section id={ESectionInvariants.FunPoints}>
-                <SectionHeader actions={elAddAction()}>
-                    {t('routes.fun-points.title')}
-                </SectionHeader>
-                {elContent()}
-            </Section>
-        </SidebarLayout>
+        <Fragment>
+            <SidebarLayout sidebar={elSidebar()}>
+                <Section id={ESectionInvariants.FunPoints}>
+                    <SectionHeader actions={elAddAction()}>
+                        {t('routes.fun-points.title')}
+                    </SectionHeader>
+                    {elContent()}
+                </Section>
+            </SidebarLayout>
+            {step === ESteps.DeleteForm && funPointId && (
+                <ConfirmModalDeleteFunPoint
+                    setVisible={backToList}
+                    onSuccess={backToList}
+                    funPointId={String(funPointId)}
+                    funPointName={funPointName}
+                />
+            )}
+            {elCreateEditModal()}
+        </Fragment>
     );
 };
 

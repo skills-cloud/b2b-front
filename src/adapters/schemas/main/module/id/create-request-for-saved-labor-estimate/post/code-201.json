@@ -1,0 +1,115 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/Request"
+        }
+    ],
+    "definitions": {
+        "Request": {
+            "properties": {
+                "deadline_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Срок",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "industry_sector_id": {
+                    "nullable": true,
+                    "title": "отрасль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
+                    "x-url-object-list": "/api/dictionary/industry-sector/"
+                },
+                "manager_id": {
+                    "nullable": true,
+                    "title": "руководитель проекта",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "module_id": {
+                    "title": "модуль",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/module/$id/",
+                    "x-url-object-list": "/api/main/module/"
+                },
+                "priority": {
+                    "enum": [
+                        10,
+                        20,
+                        30
+                    ],
+                    "title": "Приоритет",
+                    "type": "integer",
+                    "x-enum-description": {
+                        "10": "Высокий",
+                        "20": "Обычный",
+                        "30": "Низкий"
+                    }
+                },
+                "recruiter_id": {
+                    "nullable": true,
+                    "title": "отв. рекрутер",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "resource_manager_id": {
+                    "nullable": true,
+                    "title": "рес. менеджер",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user/$id/",
+                    "x-url-object-list": "/api/acc/user/"
+                },
+                "start_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата начала",
+                    "type": "string"
+                },
+                "status": {
+                    "enum": [
+                        "closed",
+                        "done",
+                        "draft",
+                        "in_progress"
+                    ],
+                    "title": "Статус",
+                    "type": "string",
+                    "x-enum-description": {
+                        "closed": "Закрыт",
+                        "done": "Успешно завершен",
+                        "draft": "Черновик",
+                        "in_progress": "В работе"
+                    }
+                },
+                "title": {
+                    "nullable": true,
+                    "title": "Заголовок (название или номер)",
+                    "type": "string"
+                },
+                "type_id": {
+                    "nullable": true,
+                    "title": "тип запроса",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/request-type/$id/",
+                    "x-url-object-list": "/api/main/request-type/"
+                }
+            },
+            "required": [
+                "module_id"
+            ],
+            "type": "object"
+        }
+    }
+}

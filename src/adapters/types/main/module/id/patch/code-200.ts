@@ -17,6 +17,11 @@ export type NoName6 = number;
 export type NoName7 = number;
 export type NoName8 = string;
 export type NoName9 = string;
+/**
+ * если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date
+ */
+export type NoName10 = number;
+export type NoName11 = number;
 
 export interface ModuleWrite {
     created_at?: NoName;
@@ -30,4 +35,6 @@ export interface ModuleWrite {
     sorting?: NoName7;
     start_date?: NoName8;
     updated_at?: NoName9;
+    work_days_count?: NoName10;
+    work_days_hours_count?: NoName11;
 }

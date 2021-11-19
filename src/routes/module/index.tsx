@@ -145,7 +145,7 @@ const Module = () => {
                 <FunPointsComponent
                     id={ESectionInvariants.FunPoints}
                     funPoints={data?.fun_points}
-                    difficulty={data?.difficulty}
+                    difficulty={data?.difficulty_factor}
                     isLoading={isLoading}
                 />
                 <ResourceValueComponent
