@@ -63,7 +63,7 @@ const ModulesList = (props: IProps) => {
                 }).join('');
                 break;
             case EModuleInvariants.Difficulty:
-                content = module?.difficulty?.toFixed(2);
+                content = module?.difficulty_factor?.toFixed(2);
                 break;
             case EModuleInvariants.Estimate:
                 content = module?.positions_labor_estimates?.map((estimate, index, arr) => {
