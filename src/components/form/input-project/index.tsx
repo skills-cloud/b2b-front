@@ -10,7 +10,7 @@ import { useClassnames, IStyle } from 'hook/use-classnames';
 import Error from 'component/error';
 import IconClose from 'component/icons/close';
 
-import { mainRequest } from 'adapter/api/main';
+import { IGetOrganizationProjectListQueryParams, mainRequest } from 'adapter/api/main';
 
 import getStyles from './style';
 import style from './index.module.pcss';
@@ -34,6 +34,7 @@ export interface IProps {
     tabIndex?: string,
     disabled?: boolean,
     defaultValue?: IValue | number | string,
+    filters?: IGetOrganizationProjectListQueryParams,
     error?: TError,
     requestLimit?: number,
     requestOffset?: number,
@@ -74,7 +75,7 @@ const InputProject = (props: IProps & typeof defaultProps) => {
     const value = watch(props.name);
 
     const { data: singleData } = mainRequest.useGetMainOrganizationProjectByIdQuery({ id: String(props.defaultValue) }, { skip: !props.defaultValue });
-    const { data: optionsData } = mainRequest.useGetMainOrganizationProjectListQuery(undefined);
+    const { data: optionsData } = mainRequest.useGetMainOrganizationProjectListQuery(props.filters);
 
     useEffect(() => {
         if(optionsData?.results) {

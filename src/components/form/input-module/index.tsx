@@ -10,7 +10,7 @@ import { useClassnames, IStyle } from 'hook/use-classnames';
 import Error from 'component/error';
 import IconClose from 'component/icons/close';
 
-import { mainRequest } from 'adapter/api/main';
+import { IGetModuleParams, mainRequest } from 'adapter/api/main';
 
 import getStyles from './style';
 import style from './index.module.pcss';
@@ -36,6 +36,7 @@ export interface IProps {
     tabIndex?: string,
     disabled?: boolean,
     defaultValue?: IValue | number | string,
+    filters?: IGetModuleParams,
     error?: TError,
     requestLimit?: number,
     requestOffset?: number,
@@ -78,7 +79,7 @@ const InputModule = (props: IProps & typeof defaultProps) => {
     const value = watch(props.name);
 
     const { data: singleData } = mainRequest.useGetMainModuleByIdQuery({ id: String(props.defaultValue) }, { skip: !props.defaultValue });
-    const { data: optionsData } = mainRequest.useGetMainModuleQuery(undefined);
+    const { data: optionsData } = mainRequest.useGetMainModuleQuery(props.filters);
 
     useEffect(() => {
         if(optionsData?.results) {

@@ -150,7 +150,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                     />
                                 ]}
                             >
-                                {name || t('routes.project-request.blocks.empty-title')}
+                                {name || t('routes.project-request.blocks.empty-title-requirement')}
                             </SectionHeader>
                         </div>
 
