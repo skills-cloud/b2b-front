@@ -97,7 +97,7 @@
                 },
                 "1": {
                     "title": "Трудозатраты",
-                    "count": "{{count}} чел./дней"
+                    "count": "{{count}} чел./часов"
                 }
             },
             "content": {
@@ -750,7 +750,7 @@
                 "difficulty": "Сложность",
                 "estimate": "Оценка",
                 "estimate-count": "{{count}} специалистов",
-                "estimate-hours": "{{count}} чел/дней"
+                "estimate-hours": "{{count}} чел/часов"
             }
         },
         "module": {
@@ -762,7 +762,7 @@
                 "project": "Проект",
                 "description": "Описание результата",
                 "goals": "Цели",
-                "submit": "Создать запрос",
+                "submit": "Создать модуль",
                 "required-error": "Обязательно для заполнения",
                 "period-form": {
                     "date_from": "Срок старта",
@@ -1036,7 +1036,8 @@
                     "20": "Средний",
                     "10": "Высокий"
                 },
-                "empty-title": "Название проектного запроса не\u00A0указано",
+                "empty-title": "Название проектного запроса не указано",
+                "empty-title-requirement": "Требование",
                 "empty-field": "Не\u00A0указано",
                 "people_0": "человек",
                 "people_1": "человека",
@@ -1166,7 +1167,7 @@
             "content": {
                 "norma": {
                     "title": "Норматив трудозатрат",
-                    "value": "{{count}} чел./дня"
+                    "value": "{{count}} чел./часов"
                 },
                 "difficulty": "Уровень сложности",
                 "coefficient": "Поправочный коэффециент"

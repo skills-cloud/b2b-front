@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Modal from 'component/modal';
 import Button from 'component/button';
+import FooterSubmit from 'component/modal/footer-submit';
 import ProjectRequestForm from '../form';
 
 import { ModuleRead } from 'adapter/types/main/module/get/code-200';
@@ -22,7 +23,7 @@ const EditModal = ({ setVisible, fields }: IEditModal) => {
             onClose={() => setVisible(false)}
             header={t('routes.module.edit.header')}
             footer={
-                <Fragment>
+                <FooterSubmit>
                     <Button
                         isSecondary={true} onClick={() => {
                             setVisible(false);
@@ -33,7 +34,7 @@ const EditModal = ({ setVisible, fields }: IEditModal) => {
                     <Button type="submit" form={FORM_MAIN_ID}>
                         {t('routes.module.edit.save')}
                     </Button>
-                </Fragment>
+                </FooterSubmit>
             }
         >
             <ProjectRequestForm
