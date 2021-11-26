@@ -7,6 +7,7 @@ import useClassnames, { IStyle } from 'hook/use-classnames';
 
 import Error from 'component/error';
 
+import { EDirection } from '../types';
 import style from './index.module.pcss';
 
 export interface IProps {
@@ -15,12 +16,15 @@ export interface IProps {
     className?: string | IStyle,
     label?: string,
     required?: Message | ValidationRule<boolean>,
-    rows?: number
+    rows?: number,
+    direction?: EDirection
 }
 
 export const Textarea = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { formState: { errors, touchedFields, isSubmitted }, register } = useFormContext();
+    const direction = useMemo(() => props.direction || 'row', [props.direction]);
+    const rows = useMemo(() => props.rows || 6, [props.rows]);
 
     const [isWatch, setIsWatch] = useState<boolean>(touchedFields[props.name]);
 
@@ -31,13 +35,13 @@ export const Textarea = (props: IProps) => {
     const attrs = {
         className: cn('input', {
             'input_invalid'   : errors?.[props.name]?.message && isWatch,
-            'input_sized-rows': !!props.rows
+            'input_sized-rows': !!rows
         }),
         placeholder: props.placeholder,
         ...register(props.name, {
             required: props.required
         }),
-        rows: props.rows
+        rows
     };
 
     const elError = useMemo(() => {
@@ -68,17 +72,15 @@ export const Textarea = (props: IProps) => {
         }
     }, [props.label]);
 
-    if(props.label) {
-        return (
-            <label className={cn('input__label')}>
-                {elLabel}
-                <textarea {...attrs} />
-                {elError}
-            </label>
-        );
-    }
-
-    return <textarea {...attrs} />;
+    return (
+        <label className={cn('input__label', `input__label_${direction}`)}>
+            {elLabel}
+            <textarea {...attrs} />
+            {elError}
+        </label>
+    );
 };
+
+Textarea.direction = EDirection;
 
 export default Textarea;

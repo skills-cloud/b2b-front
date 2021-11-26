@@ -12,6 +12,7 @@ import FormDate from 'component/form/date';
 import FormInput from 'component/form/input';
 import InputSelect from 'component/form/select';
 import InputDictionary from 'component/form/input-dictionary';
+import Textarea from 'component/form/textarea';
 
 import { certificate } from 'adapter/api/certificate';
 import { dictionary } from 'adapter/api/dictionary';
@@ -220,10 +221,11 @@ const EditForm = (props: IProps) => {
                             placeholder={t('routes.person.certificates.fields.competencies')}
                         />
                     </div>
-                    <div className={cn('edit-form__field')}>
-                        <strong>{t('routes.person.certificates.fields.description')}</strong>
-                        <FormInput name="certificate.description" type="text" />
-                    </div>
+                    <Textarea
+                        direction={Textarea.direction.Column}
+                        name="certificate.description"
+                        label={t('routes.person.certificates.fields.description')}
+                    />
                 </div>
             </FormProvider>
         </form>
