@@ -173,7 +173,6 @@ const ModuleCreateForm = ({ formId, onSuccess, defaultValues }: IProjectsRequest
                 <Textarea
                     name="goals"
                     label={t('routes.module.create.goals')}
-                    rows={6}
                 />
                 <DeadlineDates
                     nameDateFrom="start_date"
@@ -186,7 +185,6 @@ const ModuleCreateForm = ({ formId, onSuccess, defaultValues }: IProjectsRequest
                 <Textarea
                     name="description"
                     label={t('routes.module.create.description')}
-                    rows={6}
                 />
                 {elError}
             </form>

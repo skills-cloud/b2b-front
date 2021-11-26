@@ -28,6 +28,13 @@
         grid-row-gap: 8px;
         font-weight: 500;
         font-size: 14px;
+
+        &_column {
+            grid-auto-flow: column;
+            align-items: baseline;
+            grid-auto-columns: 130px 1fr;
+            grid-gap: 32px;
+        }
     }
 
     &__label-text {

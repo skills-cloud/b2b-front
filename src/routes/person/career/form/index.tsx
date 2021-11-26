@@ -17,6 +17,7 @@ import { career } from 'adapter/api/career';
 import { CvCareerRead, CvCareerFileRead } from 'adapter/types/cv/career/get/code-200';
 
 import style from './index.module.pcss';
+import Textarea from 'component/form/textarea';
 
 export interface IResultForm extends Omit<CvCareerRead, 'competencies_select' | 'organization' | 'position' | 'projects'> {
     competencies_select: Array<{
@@ -190,12 +191,11 @@ const CareerForm = (props: IProjectForm) => {
                         placeholder={t('routes.person.career.fields.placeholder.competencies')}
                     />
                 </div>
-                <div className={cn('career-form__item')}>
-                    <label className={cn('career-form__label')}>
-                        {t('routes.person.career.fields.description')}
-                    </label>
-                    <FormInput name="career.description" type="text" />
-                </div>
+                <Textarea
+                    direction={Textarea.direction.Column}
+                    name="career.description"
+                    label={t('routes.person.career.fields.description')}
+                />
                 <div className={cn('career-form__item')}>
                     <label className={cn('career-form__label')}>
                         {t('routes.person.career.fields.files')}

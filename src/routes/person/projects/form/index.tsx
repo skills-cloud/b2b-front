@@ -12,6 +12,7 @@ import FormDate from 'component/form/date';
 import InputSelect from 'component/form/select';
 import Error from 'component/error';
 import InputDictionary from 'component/form/input-dictionary';
+import Textarea from 'component/form/textarea';
 
 import { useDispatch } from 'component/core/store';
 import { dictionary } from 'adapter/api/dictionary';
@@ -177,12 +178,11 @@ const CareerForm = (props: IProjectForm) => {
                             placeholder={t('routes.person.projects.fields.placeholder.competencies')}
                         />
                     </div>
-                    <div className={cn('projects-form__item')}>
-                        <label className={cn('projects-form__label')}>
-                            {t('routes.person.projects.fields.description')}
-                        </label>
-                        <FormInput name="project.description" type="text" />
-                    </div>
+                    <Textarea
+                        direction={Textarea.direction.Column}
+                        name="project.description"
+                        label={t('routes.person.projects.fields.description')}
+                    />
                 </div>
             </form>
             {elError}

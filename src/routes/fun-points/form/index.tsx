@@ -344,7 +344,6 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                             <Textarea
                                 name="description"
                                 label={t('routes.fun-points.create.description')}
-                                rows={6}
                             />
                         </Fragment>
                     )}
