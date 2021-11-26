@@ -339,7 +339,6 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                         <Textarea
                             name="description"
                             label={t('routes.project-request.create.description')}
-                            rows={6}
                         />
                     </div>
                     <div className={cn('project-request__form', { 'project-request__form_hide': activeTab === ETabs.Main })}>

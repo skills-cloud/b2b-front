@@ -169,7 +169,6 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     loadOptions={onLoadAccUsers}
                 />
                 <Textarea
-                    rows={6}
                     name="description"
                     label={t('routes.project.create.description')}
                 />

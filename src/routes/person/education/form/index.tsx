@@ -9,6 +9,7 @@ import useClassnames from 'hook/use-classnames';
 import FormInput from 'component/form/input';
 import FormDate from 'component/form/date';
 import InputDictionary from 'component/form/input-dictionary';
+import Textarea from 'component/form/textarea';
 
 import { education } from 'adapter/api/education';
 import { CvEducationRead } from 'adapter/types/cv/education/get/code-200';
@@ -146,13 +147,11 @@ const EducationForm = (props: IEducationForm) => {
                             name="education.competencies_select"
                         />
                     </div>
-
-                    <div className={cn('education-form__item')}>
-                        <label className={cn('education-form__label')}>
-                            {t('routes.person.education.label.description')}
-                        </label>
-                        <FormInput name="education.description" type="text" />
-                    </div>
+                    <Textarea
+                        direction={Textarea.direction.Column}
+                        name="education.description"
+                        label={t('routes.person.education.label.description')}
+                    />
                 </div>
             </form>
         </FormProvider>
