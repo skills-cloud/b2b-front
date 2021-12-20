@@ -1,0 +1,37 @@
+.organization {
+
+    &__list-item-block {
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-between;
+        grid-gap: 8px;
+        font-size: 14px;
+        color: var(--color-text-light);
+
+        &_row {
+            grid-auto-flow: row;
+        }
+    }
+
+    &__list-item-link {
+        color: var(--color-text-dark);
+        font-weight: bold;
+        text-decoration: none;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__list-item-span {
+        text-transform: uppercase;
+    }
+
+    &__list-item-text {
+        color: var(--color-text-dark);
+        white-space: pre-wrap;
+    }
+}

@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 
-import { ORGANIZATION_PROJECT_MODULE_REQUEST_ID, REQUEST_EDIT, REQUEST_ID } from 'helper/url-list';
+import {
+    ORGANIZATION_PROJECT_MODULE_REQUEST_EDIT,
+    ORGANIZATION_PROJECT_MODULE_REQUEST_ID,
+    REQUEST_EDIT,
+    REQUEST_ID
+} from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 
 import { RequestRead } from 'adapter/types/main/request/get/code-200';
@@ -54,6 +59,16 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
                         requestUrl = ORGANIZATION_PROJECT_MODULE_REQUEST_ID(organizationId, projectId, moduleId, requestItem.id);
                     }
 
+                    const candidatesCount = requestItem.requirements?.reduce((acc, curr) => {
+                        let newAcc = 0;
+
+                        if(curr?.cv_list) {
+                            newAcc = acc + curr.cv_list.length;
+                        }
+
+                        return newAcc;
+                    }, 0);
+
                     return (
                         <div key={requestItem.id} className={cn('request-list__item')}>
                             <div className={cn('request-list__item-top')}>
@@ -82,7 +97,7 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
                                             <DropdownMenu>
                                                 <DropdownMenuItem selected={false}>
                                                     <EditAction
-                                                        to={REQUEST_EDIT(requestItem.id)}
+                                                        to={organizationId ? ORGANIZATION_PROJECT_MODULE_REQUEST_EDIT(organizationId, projectId, moduleId, requestItem.id) : REQUEST_EDIT(requestItem.id)}
                                                         label={t('routes.project-request-list.requests.actions.edit')}
                                                     />
                                                 </DropdownMenuItem>
@@ -134,19 +149,42 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
                                 </div>
                                 <div className={cn('request-list__item-content-block')}>
                                     <h5 className={cn('request-list__item-content-block-title')}>
-                                        {t('routes.project-request-list.requests.content.rate.title')}
+                                        {t('routes.project-request-list.requests.content.candidates.title')}
                                     </h5>
                                     <p className={cn('request-list__item-content-block-text')}>
-                                        {requestItem.requirements?.[0]?.max_price ? t('routes.project-request-list.requests.content.rate.value', { count: requestItem.requirements?.[0]?.max_price }) : t('routes.project-request-list.requests.content.empty')}
+                                        {candidatesCount || t('routes.project-request-list.requests.content.empty')}
                                     </p>
                                 </div>
                                 <div className={cn('request-list__item-content-block')}>
                                     <h5 className={cn('request-list__item-content-block-title')}>
-                                        {t('routes.project-request-list.requests.content.candidates.title')}
+                                        {t('routes.project-request-list.requests.content.status.title')}
                                     </h5>
                                     <p className={cn('request-list__item-content-block-text')}>
-                                        {t('routes.project-request-list.requests.content.empty')}
+                                        {t(`routes.project-request-list.requests.content.status.value.${requestItem.status}`)}
                                     </p>
+                                </div>
+                                <div className={cn('request-list__item-content-block', 'request-list__item-content-block_specs')}>
+                                    <h5 className={cn('request-list__item-content-block-title')}>
+                                        {t('routes.project-request-list.requests.content.rate.title')}
+                                    </h5>
+                                    <div className={cn('request-list__item-content-list')}>
+                                        <div className={cn('request-list__item-content-table-head')}>
+                                            <div>{t('routes.project-request-list.requests.content.rate.head.specialist')}</div>
+                                            <div>{t('routes.project-request-list.requests.content.rate.head.rate')}</div>
+                                        </div>
+                                        {requestItem.requirements?.map((item) => {
+                                            return (
+                                                <div key={item.id} className={cn('request-list__item-content-list-item')}>
+                                                    <p className={cn('request-list__item-content-block-text')}>
+                                                        {item.position?.name || t('routes.project-request-list.requests.content.rate.value')}
+                                                    </p>
+                                                    <p className={cn('request-list__item-content-block-text')}>
+                                                        {item.max_price ? t('routes.project-request-list.requests.content.rate.value', { count: item.max_price }) : t('routes.project-request-list.requests.content.empty')}
+                                                    </p>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                         </div>

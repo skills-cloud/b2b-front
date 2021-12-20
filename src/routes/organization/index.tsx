@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
 import { IParams } from 'helper/url-list';
+import useClassnames from 'hook/use-classnames';
 
 import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
@@ -14,6 +15,8 @@ import ProjectCards from 'component/project-cards';
 
 import { mainRequest } from 'adapter/api/main';
 
+import style from './index.module.pcss';
+
 enum ESectionInvariants {
     MainInfo = 'main-info',
     Projects = 'projects',
@@ -22,6 +25,7 @@ enum ESectionInvariants {
 
 const Organization = () => {
     const { t } = useTranslation();
+    const cn = useClassnames(style);
     const params = useParams<IParams>();
     const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.organizationId });
 
@@ -46,7 +50,15 @@ const Organization = () => {
         >
             <Wrapper>
                 <Section>
-                    <SectionHeader>{data?.name}</SectionHeader>
+                    <Wrapper>
+                        <SectionHeader>{data?.name}</SectionHeader>
+                        <div className={cn('organization__list-item-block', 'organization__list-item-block_row')}>
+                            <span className={cn('organization__list-item-span')}>{t('routes.organization.description.title')}</span>
+                            <p className={cn('organization__list-item-text')}>
+                                {data?.description || t('routes.organization.description.empty')}
+                            </p>
+                        </div>
+                    </Wrapper>
                 </Section>
                 <ProjectList />
                 <ProjectCards organizationId={params.organizationId} />

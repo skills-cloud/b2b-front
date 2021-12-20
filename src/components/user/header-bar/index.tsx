@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
-import { useSelector } from 'component/core/store';
 import Button from 'component/button';
 import UserAvatar from 'component/user/avatar';
 
-import { key as keyUser } from './../reducer';
+import { acc } from 'adapter/api/acc';
+
 import style from './index.module.pcss';
 
 export interface IProps {
@@ -18,10 +18,10 @@ export const UserHeaderBar = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t, i18n } = useTranslation();
     const history = useHistory();
-    const user = useSelector((store) => store[keyUser]);
+    const { data } = acc.useGetAccWhoAmIQuery({});
 
     const elButtonLogin = useMemo(() => {
-        if(!user.id) {
+        if(!data?.id) {
             return (
                 <Button
                     children={t('components.user.header-bar.buttons.login')}
@@ -33,22 +33,22 @@ export const UserHeaderBar = (props: IProps) => {
                 />
             );
         }
-    }, [user.id, i18n.language]);
+    }, [data?.id, i18n.language]);
 
     const elProfile = useMemo(() => {
-        if(user.id) {
+        if(data?.id) {
             return (
                 <div className={cn('user-header-bar__profile')}>
                     <UserAvatar
-                        title={`${user.first_name || ''} ${user.last_name || ''}`.trim()}
+                        title={`${data.first_name || ''} ${data.last_name || ''}`.trim()}
                         titleTo="/"
                         className={cn('user-header-bar__avatar')}
-                        avatar={{ src: user.photo, preset: 'small' }}
+                        avatar={{ src: data.photo, preset: 'small' }}
                     />
                 </div>
             );
         }
-    }, [user.id, user.photo, user.first_name, user.last_name]);
+    }, [data?.id, data?.photo, data?.first_name, data?.last_name]);
 
     return (
         <div className={cn('user-header-bar')}>
