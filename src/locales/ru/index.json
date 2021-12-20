@@ -217,6 +217,10 @@
             }
         },
         "organization": {
+            "description": {
+                "title": "Описание компании",
+                "empty": "Описание не указано"
+            },
             "blocks": {
                 "cards-create-by-template": "Создать по шаблону",
                 "cards-create": "Создать карточку",
@@ -879,12 +883,25 @@
                         "value": "{{count}} чел."
                     },
                     "rate": {
-                        "title": "Ставка",
-                        "value": "{{count}} руб."
+                        "title": "Ставки",
+                        "value": "{{count}} руб.",
+                        "head": {
+                            "specialist": "Специалист",
+                            "rate": "Ставка"
+                        }
                     },
                     "candidates": {
                         "title": "Кол-во кандидатов",
                         "value": "{{total}} / {{chose}} / {{ready}}"
+                    },
+                    "status": {
+                        "title": "Статус",
+                        "value": {
+                            "draft": "Черновик",
+                            "in_progress": "В работе",
+                            "done": "Завершён",
+                            "closed": "Закрыт"
+                        }
                     }
                 }
             },

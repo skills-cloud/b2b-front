@@ -59,7 +59,8 @@ const Breadcrumbs = (props: IProps) => {
     // TODO подумать над оптимизацией крошек и отображения вида Организация Яндекс > Проект название
     const ignoredPathNames = useMemo(() => ({
         'resource-value': true,
-        'requirement'   : true
+        'requirement'   : true,
+        'login'         : true
     }), []);
 
     useEffect(() => {

@@ -98,6 +98,21 @@ export const ORGANIZATION_PROJECT_MODULE_REQUEST_ID = (
 
     return path.join('');
 };
+export const ORGANIZATION_PROJECT_MODULE_REQUEST_EDIT = (
+    organizationId?: string | number,
+    projectId?: string | number,
+    moduleId?: string | number,
+    requestId?: string | number
+) => {
+    const path = [
+        `/organizations/${organizationId}`,
+        `/projects/${projectId}`,
+        `/modules/${moduleId}`,
+        `/requests/${requestId}/edit`
+    ];
+
+    return path.join('');
+};
 export const ORGANIZATION_PROJECT_MODULE_REQUEST_REQUIREMENT_SPECIALISTS = (
     pathname: string,
     requirementId?: string | number

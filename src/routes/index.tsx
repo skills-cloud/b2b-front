@@ -5,17 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { parse, stringify } from 'query-string';
 import { createBrowserHistory } from 'history';
 
-import { useSelector } from 'component/core/store';
-import { key as userReducerName } from 'component/user/reducer';
-
 import { baseRoutes, IProps } from './config';
+import { acc } from 'adapter/api/acc';
 
 const history = createBrowserHistory();
 
 export const Routes = () => {
     const location = useLocation();
     const { t, i18n } = useTranslation();
-    const isAuth = useSelector((store) => !!store[userReducerName].id);
+    const { data } = acc.useGetAccWhoAmIQuery({});
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
     const elRoutes = (routes: Array<IProps>) => {
@@ -29,7 +27,7 @@ export const Routes = () => {
                 },
                 index
             ) => {
-                if(!isPublic && !isAuth) {
+                if(!isPublic && !data?.id) {
                     return (
                         <Route
                             key={index}

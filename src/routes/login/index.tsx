@@ -1,53 +1,34 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { parse } from 'query-string';
 import axios from 'axios';
 import { useHistory, Redirect } from 'react-router';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 
 import { SPECIALISTS } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
-import { useCancelTokens } from 'hook/cancel-token';
 
 import Button from 'component/button';
 import Error from 'component/error';
 import Input from 'component/form/input';
 
-import { useSelector } from 'component/core/store';
 import { acc } from 'adapter/api/acc';
-import { key as keyUser } from 'component/user/reducer';
-import { set } from 'component/user/actions';
 
 import style from './style.pcss';
+import Loader from 'component/loader';
 
 const Login = () => {
     const history = useHistory();
     const cn = useClassnames(style);
     const { t, i18n } = useTranslation();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
-    const [cancelTokenLogin, cancelTokenUserSelfInfo] = useCancelTokens(2);
-    const dispatch = useDispatch();
     const [postAccLogin] = acc.usePostAccLoginMutation();
-    const { data } = acc.useGetAccWhoAmIQuery({}, {
-        refetchOnMountOrArgChange: true
-    });
-
-    const { isAuth } = useSelector((store) => ({
-        isAuth: !!store[keyUser].id
-    }));
+    const { data, isLoading } = acc.useGetAccWhoAmIQuery({});
 
     const methods = useForm();
 
     const [pending, setPending] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        return () => {
-            cancelTokenLogin.remove();
-            cancelTokenUserSelfInfo.remove();
-        };
-    }, []);
 
     const onSubmit = methods.handleSubmit(
         (formData) => {
@@ -60,10 +41,7 @@ const Login = () => {
                 .unwrap()
                 .then(() => {
                     setPending(false);
-
-                    if(data) {
-                        dispatch(set({ id: data.id }));
-                    }
+                    history.push('/specialists');
                 })
                 .catch((err) => {
                     if(!axios.isCancel(err)) {
@@ -89,7 +67,11 @@ const Login = () => {
         }
     }, [error, i18n.language]);
 
-    if(isAuth) {
+    if(isLoading) {
+        return <Loader />;
+    }
+
+    if(!isLoading && data?.id) {
         if(typeof qs.from === 'string') {
             return <Redirect to={qs.from} />;
         }
