@@ -130,7 +130,7 @@ export const baseRoutes: Array<IProps> = [{
     path  : [
         '/requests/:requestId',
         '/requests/:requestId/:subpage(edit|candidates)',
-        '/organizations/:organizationId/projects/:projectId/modules/:moduleId/requests/:requestId/:subpage(candidates|requirement)?'
+        '/organizations/:organizationId/projects/:projectId/modules/:moduleId/requests/:requestId/:subpage(edit|candidates|requirement)?'
     ],
     component: ProjectRequest
 }];

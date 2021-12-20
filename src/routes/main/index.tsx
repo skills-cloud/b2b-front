@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import useClassnames from 'hook/use-classnames';
 
 import Typography from 'component/typography';
 import Button from 'component/button';
-import { set } from 'component/user/actions';
+import { useDispatch } from 'component/core/store';
 
 import { acc } from 'adapter/api/acc';
 
@@ -24,7 +23,7 @@ export const Main = () => {
     const onLogout = () => {
         void postAccLogout({})
             .then(() => {
-                dispatch(set({ id: undefined }));
+                dispatch(acc.util.resetApiState());
                 history.push('/login');
             });
     };

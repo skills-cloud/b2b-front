@@ -31,6 +31,7 @@ import { ModuleFunPointWrite } from 'adapter/types/main/module-fun-point/post/co
 import { ModuleFunPointWrite as ModuleFunPointWritePatch } from 'adapter/types/main/module-fun-point/id/patch/code-200';
 import { FunPointTypePositionLaborEstimateWrite } from 'adapter/types/main/fun-point-type-position-labor-estimate/post/code-201';
 import { FunPointTypePositionLaborEstimateWrite as FunPointTypePositionLaborEstimateWritePatch } from 'adapter/types/main/fun-point-type-position-labor-estimate/id/patch/code-200';
+import { ModulePositionLaborEstimateWrite } from 'adapter/types/main/module-position-labor-estimate/post/code-201';
 
 export interface IOrganizationProjectPost extends OrganizationProject {
     id: number
@@ -668,6 +669,29 @@ export const mainRequest = createApi({
                 url   : '/module-position-labor-estimates/',
                 method: 'POST',
                 body
+            })
+        }),
+        postMainModulePositionLaborEstimate: build.mutation<ModulePositionLaborEstimateWrite, ModulePositionLaborEstimateWrite>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/module-position-labor-estimate/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainModulePositionLaborEstimate: build.mutation<ModulePositionLaborEstimateWrite, ModulePositionLaborEstimateWrite>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...rest }) => ({
+                url   : `/module-position-labor-estimate/${id}`,
+                method: 'PATCH',
+                body  : rest
+            })
+        }),
+        deleteMainModulePositionLaborEstimate: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/module-position-labor-estimate/${id}`,
+                method: 'DELETE'
             })
         }),
         patchMainModulePositionLaborEstimates: build.mutation<ModuleFunPointWritePatch, ModuleFunPointWritePatch>({

@@ -1,7 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AxiosRequestConfig } from 'axios';
-
-import { request } from 'adapter/request';
 
 export interface IUserData {
     id?: number,
@@ -15,13 +12,6 @@ export interface IUserData {
     last_name: string,
     photo?: string
 }
-
-export const getAccWhoAmI = (config?: AxiosRequestConfig) => {
-    return request<IUserData>({
-        url: '/api/acc/whoami/',
-        ...config
-    });
-};
 
 interface IQueryParams {
     ordering?: Array<string>,

@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
-import debounce from 'lodash.debounce';
 
 import { IParams } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
-import { useDispatch } from 'component/core/store';
 
 import Input from 'component/form/input';
 import InputDictionary from 'component/form/input-dictionary';
@@ -40,7 +38,6 @@ interface IFormValues extends Omit<OrganizationProjectRead, 'industry_sector'> {
 const OrganizationProjectCreateForm = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const dispatch = useDispatch();
     const params = useParams<IParams>();
     const context = useForm({
         mode         : 'onChange',
@@ -61,20 +58,19 @@ const OrganizationProjectCreateForm = (props: IProps) => {
         }
     });
 
-    const onLoadAccUsers = debounce((search: string, callback) => {
-        dispatch(acc.endpoints.getAccUser.initiate({ search: search || undefined }))
-            .then(({ data }) => {
-                if(data?.results?.length) {
-                    callback(data.results.map((item) => ({
-                        label: `${item.last_name} ${item.first_name}`,
-                        value: String(item.id)
-                    })));
-                } else {
-                    callback(null);
-                }
-            })
-            .catch(console.error);
-    }, 150);
+    const { data: userData } = acc.useGetAccUserQuery({});
+
+    const users = useMemo(() => {
+        if(userData?.results) {
+            return userData.results.map((item) => ({
+                label: `${item.last_name} ${item.first_name}`,
+                value: String(item.id)
+            }));
+        }
+
+        return [];
+    }, [JSON.stringify(userData?.results)]);
+
 
     const [post] = mainRequest.usePostMainOrganizationProjectMutation();
     const [patch] = mainRequest.usePatchMainOrganizationProjectMutation();
@@ -159,14 +155,14 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     direction="column"
                     label={t('routes.project.create.resource_manager.title')}
                     placeholder={t('routes.project.create.resource_manager.placeholder')}
-                    loadOptions={onLoadAccUsers}
+                    options={users}
                 />
                 <Select
                     name="recruiter"
                     direction="column"
                     label={t('routes.project.create.recruiter.title')}
                     placeholder={t('routes.project.create.recruiter.placeholder')}
-                    loadOptions={onLoadAccUsers}
+                    options={users}
                 />
                 <Textarea
                     name="description"
