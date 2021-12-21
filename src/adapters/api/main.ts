@@ -724,6 +724,13 @@ export const mainRequest = createApi({
                 method: 'PATCH',
                 body  : rest
             })
+        }),
+        deleteMainFunPointTypePositionLaborEstimates: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/fun-point-type-position-labor-estimate/${id}/`,
+                method: 'DELETE'
+            })
         })
     })
 });
