@@ -20,12 +20,14 @@ import InputDictionary from 'component/form/input-dictionary';
 // @ts-ignore
 import DeleteAction from 'component/section/actions/delete';
 import AddAction from 'component/section/actions/add';
+import IconApply from 'component/icons/apply';
 
 import { FunPointTypePositionLaborEstimateInline } from 'adapter/types/main/module/id/get/code-200';
 import { ModuleFunPointInline } from 'adapter/types/main/module/get/code-200';
 import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
+import Loader from 'component/loader';
 
 export const FORM_FUN_POINT_CREATE_ID = 'FORM_FUN_POINT_CREATE_ID';
 
@@ -45,6 +47,8 @@ interface IFormValues extends ModuleFunPointInline {
     positions_labor_estimates?: Array<IFunPointPositionLaborFormValue>
 }
 
+const TIMEOUT = 1000;
+
 const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsRequestForm) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
@@ -53,6 +57,50 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
     const [error, setError] = useState<string | null>(null);
     const [typeId, setTypeId] = useState<string>('');
     const [showLabors, setShowLabors] = useState<boolean>(false);
+    const [isSuccessDiff, setIsSuccessDiff] = useState<boolean>();
+    const [isSuccessLabor, setIsSuccessLabor] = useState<Array<number>>([]);
+    const [isLoadingPostLabor, setIsLoadingPostLabor] = useState<Array<number>>([]);
+
+    useEffect(() => {
+        let id = 0;
+
+        if(isSuccessDiff) {
+            id = window.setTimeout(() => {
+                setIsSuccessDiff(false);
+            }, TIMEOUT);
+        }
+
+        return () => {
+            window.clearTimeout(id);
+        };
+    }, [isSuccessDiff]);
+
+    useEffect(() => {
+        let ids: Array<number> = [];
+
+        if(isSuccessLabor) {
+            isSuccessLabor.forEach((successId) => {
+                ids.push(window.setTimeout(() => {
+                    setIsSuccessLabor((oldState) => {
+                        const newState = [...oldState];
+
+                        if(newState.includes(successId)) {
+                            const indexOfItem = newState.findIndex((item) => item === successId);
+
+                            newState.splice(indexOfItem, 1);
+                        }
+
+                        return newState;
+                    });
+                }, TIMEOUT));
+            });
+        }
+
+        return () => {
+            ids.forEach((id) => window.clearTimeout(id));
+            ids = [];
+        };
+    }, [isSuccessLabor]);
 
     const defaultValuesForm = () => {
         if(defaultValues) {
@@ -80,7 +128,7 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
     });
     const values = form.watch();
 
-    const { fields, append } = useFieldArray({
+    const { fields, append, remove } = useFieldArray({
         keyName: 'fieldId',
         control: form.control,
         name   : 'positions_labor_estimates'
@@ -98,8 +146,9 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
     const [postFunPointType] = mainRequest.usePostMainFunPointTypeMutation();
     const [postDifficultyLevel] = mainRequest.usePostMainFunPointDifficultyLevelMutation();
     const [patchTypeDifficultyLevel, { isLoading: isLoadingPatchDiffLevel }] = mainRequest.usePatchMainFunPointDifficultyLevelMutation();
-    const [postTypePositionLabor, { isLoading: isLoadingPostLabor }] = mainRequest.usePostMainFunPointTypePositionLaborEstimatesMutation();
-    const [patchTypePositionLabor, { isLoading: isLoadingPatchLabor }] = mainRequest.usePatchMainFunPointTypePositionLaborEstimatesMutation();
+    const [postTypePositionLabor] = mainRequest.usePostMainFunPointTypePositionLaborEstimatesMutation();
+    const [deleteTypePositionLabor] = mainRequest.useDeleteMainFunPointTypePositionLaborEstimatesMutation();
+    const [patchTypePositionLabor] = mainRequest.usePatchMainFunPointTypePositionLaborEstimatesMutation();
 
     const errorMessage = t('routes.fun-points.create.required-error');
 
@@ -209,13 +258,55 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                 hours            : lastElement?.hours
             };
 
+            setIsLoadingPostLabor((oldState) => {
+                const newState = [...oldState];
+
+                if(!newState.includes(labor.id)) {
+                    newState.push(labor.id);
+                }
+
+                return newState;
+            });
+
             method(data)
                 .unwrap()
-                .then((resp) => {
-                    console.info('RESP', resp);
+                .then(() => {
+                    setIsSuccessLabor((oldState) => {
+                        const newState = [...oldState];
+
+                        if(!newState.includes(labor.id)) {
+                            newState.push(labor.id);
+                        }
+
+                        return newState;
+                    });
+
+                    setIsLoadingPostLabor((oldState) => {
+                        const newState = [...oldState];
+
+                        if(newState.includes(labor.id)) {
+                            const findItemIndex = newState.findIndex((item) => item === labor.id);
+
+                            newState.splice(findItemIndex, 1);
+                        }
+
+                        return newState;
+                    });
                 })
                 .catch(console.error);
         })();
+    };
+
+    const onClickDelete = (id: string, index: number) => () => {
+        deleteTypePositionLabor({
+            id
+        })
+            .unwrap()
+            .then(() => {
+                // TODO конфирм
+                remove(index);
+            })
+            .catch(console.error);
     };
 
     const onSubmitDifficulty = form.handleSubmit((formData) => {
@@ -228,8 +319,8 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
 
         patchTypeDifficultyLevel(data)
             .unwrap()
-            .then((resp) => {
-                console.info('RESP', resp);
+            .then(() => {
+                setIsSuccessDiff(true);
             })
             .catch(console.error);
     });
@@ -239,6 +330,16 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
             return <Error elIcon={true}>{error}</Error>;
         }
     }, [error]);
+
+    const elStatus = (isLoading?: boolean, isSuccess?: boolean) => {
+        if(isLoading) {
+            return <Loader />;
+        }
+
+        if(isSuccess) {
+            return <IconApply svg={{ className: cn('fun-point__icon-success') }} />;
+        }
+    };
 
     const elContent = () => {
         return (
@@ -296,14 +397,21 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                                         <Input name={`positions_labor_estimates.${index}.fun_point_type_id`} type="hidden" />
                                         <Input name={`positions_labor_estimates.${index}.position_id`} type="hidden" />
                                         <Input name={`positions_labor_estimates.${index}.hours`} type="text" />
+                                        <div className={cn('fun-point__status')}>
+                                            {/* @ts-ignore */}
+                                            {elStatus(isLoadingPostLabor.includes(labor.id), isSuccessLabor.includes(labor.id))}
+                                        </div>
                                         <Button
                                             onClick={onSubmitLabor(labor)}
-                                            disabled={isLoadingPatchLabor || isLoadingPostLabor}
-                                            isLoading={isLoadingPatchLabor || isLoadingPostLabor}
+                                            // @ts-ignore
+                                            disabled={isLoadingPostLabor.includes(labor.id) || isSuccessLabor.includes(labor.id)}
+                                            // @ts-ignore
+                                            isLoading={isLoadingPostLabor.includes(labor.id)}
                                         >
                                             {t('routes.fun-points.create.form.labors.submit')}
                                         </Button>
-                                        {/* <DeleteAction onClick={onClick} />*/}
+                                        {/* @ts-ignore */}
+                                        <DeleteAction onClick={onClickDelete(labor.id, index)} />
                                     </div>
                                 ))}
                             </div>
@@ -332,10 +440,14 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                                         name="difficulty_level.factor" type="text"
                                         label={t('routes.fun-points.create.form.difficulty.coefficient')}
                                     />
+                                    <div className={cn('fun-point__status')}>
+                                        {elStatus(isLoadingPatchDiffLevel, isSuccessDiff)}
+                                    </div>
                                     <Button
-                                        disabled={!typeById || isLoadingPatchDiffLevel}
+                                        disabled={!typeById || isLoadingPatchDiffLevel || isSuccessDiff}
                                         isLoading={isLoadingPatchDiffLevel}
-                                        type="button" onClick={onSubmitDifficulty}
+                                        type="button"
+                                        onClick={onSubmitDifficulty}
                                     >
                                         {t('routes.fun-points.create.form.difficulty.save')}
                                     </Button>

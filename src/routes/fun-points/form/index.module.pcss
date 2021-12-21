@@ -44,14 +44,30 @@
         display: grid;
         grid-gap: 16px;
         grid-auto-flow: column;
-        grid-auto-columns: 3fr 1fr 1fr 40px;
+        grid-auto-columns: 3fr 1fr 40px 1fr 40px;
     }
 
     &__field-controls {
         display: grid;
         grid-gap: 16px;
         grid-auto-flow: column;
-        grid-auto-columns: 1fr 120px;
+        grid-auto-columns: 1fr 40px 120px;
         align-items: flex-end;
+    }
+
+    &__status {
+        width: 40px;
+        height: 40px;
+        max-height: 40px;
+    }
+
+    &__icon-success {
+        fill: var(--color-dark-green);
+        width: 100%;
+        height: 100%;
+
+        & > g {
+            fill: var(--color-white);
+        }
     }
 }
