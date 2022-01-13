@@ -112,7 +112,7 @@ const MainInfo = (data: RequestRead) => {
                 content = requirements?.length;
                 break;
             case 'customer':
-                content = data?.module?.organization_project?.organization?.name;
+                content = data?.module?.organization_project?.organization_customer?.name;
                 break;
             default:
                 content = data[field]?.name;

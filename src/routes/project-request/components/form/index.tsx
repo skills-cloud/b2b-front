@@ -119,8 +119,8 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                 label: defaultValues?.industry_sector?.name
             } : undefined,
             customer: defaultValues?.module?.organization_project ? {
-                value: String(defaultValues?.module.organization_project.organization_id),
-                label: defaultValues?.module.organization_project.organization?.name
+                value: String(defaultValues?.module.organization_project.organization_customer_id),
+                label: defaultValues?.module.organization_project.organization_customer?.name
             } : undefined,
             project: defaultValues?.module?.organization_project ? {
                 value: String(defaultValues?.module.organization_project?.id),
@@ -271,7 +271,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                         />
                         <InputMain
                             isMulti={false}
-                            requestType={InputMain.requestType.Customer}
+                            requestType={InputMain.requestType.IsCustomer}
                             name="customer"
                             direction="column"
                             label={t('routes.project-request.create.customer')}
@@ -280,7 +280,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                         />
                         <InputProject
                             filters={{
-                                organization_id: values.customer?.value ?? undefined
+                                organization_customer_id: values.customer?.value ? [parseInt(values.customer?.value, 10)] : undefined
                             }}
                             name="project"
                             direction="column"

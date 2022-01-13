@@ -1,0 +1,49 @@
+.dashboard {
+    position: relative;
+
+    &__wrapper {
+        display: grid;
+        grid-gap: 32px;
+    }
+
+    &__counters {
+        display: grid;
+        grid-gap: 32px;
+        grid-template-columns: repeat(3, 200px);
+    }
+
+    &__counter {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        border-radius: 6px;
+        border: 1px solid var(--color-border);
+        padding: 16px;
+    }
+
+    &__counter-text {
+        font-size: 12px;
+        line-height: 14px;
+        color: var(--color-text-light);
+    }
+
+    &__counter-value {
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 32px;
+        color: var(--color-text-dark);
+    }
+
+    &__link {
+        color: var(--color-blue-primary);
+        text-decoration: none;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}

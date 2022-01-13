@@ -60,7 +60,7 @@ const EditCustomer = ({ customer, requestId, onEditCustomer }: IEditRequirements
                     placeholder={t('routes.project-request.customer.form.name.placeholder')}
                     name="customer"
                     direction="column"
-                    requestType={InputMain.requestType.Customer}
+                    requestType={InputMain.requestType.IsCustomer}
                     className={cn('edit-customer__name')}
                 />
                 {/* <Input */}

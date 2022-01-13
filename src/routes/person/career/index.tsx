@@ -156,7 +156,7 @@ export const Career = (props: IProps) => {
                                                         target="_blank"
                                                         className={cn('career__project-link')}
                                                         key={i}
-                                                        to={ORGANIZATION_PROJECT_ID(project.organization_id, project.id)}
+                                                        to={ORGANIZATION_PROJECT_ID(project.organization_customer_id, project.id)}
                                                     >
                                                         {content}
                                                     </Link>

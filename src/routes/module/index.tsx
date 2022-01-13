@@ -123,7 +123,7 @@ const Module = () => {
                     <SectionHeader actions={elActions()}>{data?.name}</SectionHeader>
                     <SectionContentList>
                         <SectionContentListItem title={t('routes.module.blocks.customer')}>
-                            {data?.organization_project?.organization?.name}
+                            {data?.organization_project?.organization_customer?.name}
                         </SectionContentListItem>
                         <SectionContentListItem title={t('routes.module.blocks.manager')}>
                             <ShortName lastName={data?.manager?.last_name} firstName={data?.manager?.first_name} />

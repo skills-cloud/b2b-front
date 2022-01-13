@@ -63,6 +63,17 @@ module.exports = (env = {}) => {
                     }
                 }]
             }, {
+                test   : /\.css/,
+                include: [/node_modules/],
+                use    : [{
+                    loader: MiniCssExtractPlugin.loader
+                }, {
+                    loader : 'css-loader',
+                    options: {
+                        modules: false
+                    }
+                }]
+            }, {
                 test   : /\.p?css$/,
                 include: DIR_SRC,
                 use    : [{

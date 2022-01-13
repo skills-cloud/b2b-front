@@ -21,7 +21,7 @@ const EditModal = ({ setVisible, fields }: IEditModal) => {
     return (
         <Modal
             onClose={() => setVisible(false)}
-            header={t('routes.project-request.blocks.edit-modal.header')}
+            header={t('routes.organization-project.edit-modal.header')}
             footer={
                 <ModalFooterSubmit>
                     <Button
@@ -29,10 +29,10 @@ const EditModal = ({ setVisible, fields }: IEditModal) => {
                             setVisible(false);
                         }}
                     >
-                        {t('routes.project-request.blocks.edit-modal.cancel')}
+                        {t('routes.organization-project.edit-modal.cancel')}
                     </Button>
                     <Button type="submit" form={FORM_MAIN_ID}>
-                        {t('routes.project-request.blocks.edit-modal.save')}
+                        {t('routes.organization-project.edit-modal.save')}
                     </Button>
                 </ModalFooterSubmit>
             }
