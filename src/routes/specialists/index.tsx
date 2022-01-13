@@ -91,7 +91,6 @@ export const Specialists = () => {
 
     const onSubmit = context.handleSubmit(
         (formData) => {
-            console.log('FORM DTA', formData)
             const objectToNormalize = {
                 search              : formData.search,
                 years               : formData.years,
@@ -141,7 +140,6 @@ export const Specialists = () => {
         }
 
         if(addToRequest) {
-            console.log('REQUEST', addToRequest)
             return (
                 <Request
                     projectId={params.projectId}

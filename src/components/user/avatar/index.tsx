@@ -57,14 +57,6 @@ const UserAvatar = (props: IProps) => {
         );
     }, [props.title, JSON.stringify(props.avatar), props.subTitle]);
 
-    if(props.titleTo) {
-        return (
-            <div className={cn('user-avatar')}>
-                {elContent}
-            </div>
-        );
-    }
-
     return (
         <div className={cn('user-avatar')}>
             {elContent}

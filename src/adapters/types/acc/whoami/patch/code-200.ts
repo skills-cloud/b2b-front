@@ -37,4 +37,5 @@ export interface WhoAmI {
     last_login?: NoName6;
     last_name: NoName7;
     photo?: Photo;
+    roles?: string[];
 }

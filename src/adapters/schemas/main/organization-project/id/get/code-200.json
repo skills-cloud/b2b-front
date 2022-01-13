@@ -35,6 +35,17 @@
         },
         "Organization": {
             "properties": {
+                "contractor_id": {
+                    "readOnly": true,
+                    "title": "Contractor id",
+                    "type": "string"
+                },
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -45,14 +56,24 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "is_contractor": {
+                    "title": "Это исполнитель?",
+                    "type": "boolean"
+                },
                 "is_customer": {
-                    "title": "Заказчик?",
+                    "title": "Это заказчик?",
                     "type": "boolean"
                 },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
                     "title": "Название",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
                     "type": "string"
                 }
             },
@@ -67,6 +88,11 @@
                     "format": "date-time",
                     "readOnly": true,
                     "title": "Создано",
+                    "type": "string"
+                },
+                "current_user_role": {
+                    "readOnly": true,
+                    "title": "Current user role",
                     "type": "string"
                 },
                 "date_from": {
@@ -84,6 +110,11 @@
                 "description": {
                     "nullable": true,
                     "title": "Описание",
+                    "type": "string"
+                },
+                "goals": {
+                    "nullable": true,
+                    "title": "Цели",
                     "type": "string"
                 },
                 "id": {
@@ -108,8 +139,8 @@
                     "nullable": true,
                     "title": "руководитель проекта",
                     "type": "integer",
-                    "x-url-object-detail": "/api/acc/user/$id/",
-                    "x-url-object-list": "/api/acc/user/"
+                    "x-url-object-detail": "/api/acc/user-manage/$id/",
+                    "x-url-object-list": "/api/acc/user-manage/"
                 },
                 "modules_count": {
                     "readOnly": true,
@@ -122,50 +153,19 @@
                     "title": "Название",
                     "type": "string"
                 },
-                "organization": {
+                "organization_customer": {
                     "$ref": "#/definitions/Organization"
                 },
-                "organization_id": {
-                    "title": "организация",
+                "organization_customer_id": {
+                    "title": "заказчик",
                     "type": "integer",
-                    "x-url-object-detail": "/api/main/organization/$id/",
-                    "x-url-object-list": "/api/main/organization/"
+                    "x-url-object-detail": "/api/main/organization-customer/$id/",
+                    "x-url-object-list": "/api/main/organization-customer/"
                 },
-                "recruiters": {
-                    "items": {
-                        "$ref": "#/definitions/UserInline"
-                    },
-                    "readOnly": true,
-                    "type": "array"
-                },
-                "recruiters_ids": {
-                    "items": {
-                        "nullable": true,
-                        "title": "рекрутеры",
-                        "type": "integer",
-                        "x-url-object-detail": "/api/acc/user/$id/",
-                        "x-url-object-list": "/api/acc/user/"
-                    },
-                    "type": "array",
-                    "uniqueItems": true
-                },
-                "resource_managers": {
-                    "items": {
-                        "$ref": "#/definitions/UserInline"
-                    },
-                    "readOnly": true,
-                    "type": "array"
-                },
-                "resource_managers_ids": {
-                    "items": {
-                        "nullable": true,
-                        "title": "ресурсные менеджеры",
-                        "type": "integer",
-                        "x-url-object-detail": "/api/acc/user/$id/",
-                        "x-url-object-list": "/api/acc/user/"
-                    },
-                    "type": "array",
-                    "uniqueItems": true
+                "plan_description": {
+                    "nullable": true,
+                    "title": "Ресурсный план",
+                    "type": "string"
                 },
                 "updated_at": {
                     "format": "date-time",
@@ -176,7 +176,7 @@
             },
             "required": [
                 "name",
-                "organization_id"
+                "organization_customer_id"
             ],
             "type": "object"
         },

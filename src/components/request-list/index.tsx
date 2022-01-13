@@ -50,7 +50,7 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
         <React.Fragment>
             <div className={cn('request-list')}>
                 {requestList.map((requestItem) => {
-                    const organizationId = requestItem.module?.organization_project?.organization_id;
+                    const organizationId = requestItem.module?.organization_project?.organization_customer_id;
                     const projectId = requestItem.module?.organization_project?.id;
                     const moduleId = requestItem.module_id;
                     let requestUrl = REQUEST_ID(requestItem.id);

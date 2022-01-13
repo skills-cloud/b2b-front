@@ -51,6 +51,7 @@
                 },
                 "last_login": {
                     "format": "date-time",
+                    "nullable": true,
                     "readOnly": true,
                     "title": "Последний вход",
                     "type": "string"
@@ -67,6 +68,14 @@
                     "readOnly": true,
                     "title": "Photo",
                     "type": "string"
+                },
+                "roles": {
+                    "items": {
+                        "minLength": 1,
+                        "type": "string"
+                    },
+                    "readOnly": true,
+                    "type": "array"
                 }
             },
             "required": [

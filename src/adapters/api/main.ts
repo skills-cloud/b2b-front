@@ -63,7 +63,8 @@ export interface IResponseGetOrganizationProject extends IResponseBase {
 }
 
 export interface IGetOrganizationProjectListQueryParams extends IQueryParams {
-    organization_id?: string
+    organization_customer_id?: Array<number>,
+    organization_contractor_id?: Array<number>
 }
 
 interface IResponseGetOrganization extends IResponseBase {
@@ -360,7 +361,38 @@ export const mainRequest = createApi({
                 params
             })
         }),
-        getMainOrganizationCustomer: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
+        getMainOrganizationContractorById: build.query<OrganizationById, IBaseGetById>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : `/organization-contractor/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        postMainOrganizationContractor: build.mutation<PostOrganization, PostOrganization>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/organization-contractor/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainOrganizationContractor: build.mutation<PatchOrganization, PatchOrganization>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...body }) => ({
+                url   : `/organization-contractor/${id}/`,
+                method: 'PATCH',
+                body
+            })
+        }),
+        getMainOrganizationContractor: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/organization-contractor/',
+                method: 'GET',
+                params
+            })
+        }),
+        getMainOrganizationIsCustomer: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
             providesTags     : ['main'],
             transformResponse: (resp: IResponseGetOrganization) => ({
                 ...resp,
@@ -372,7 +404,7 @@ export const mainRequest = createApi({
                 params
             })
         }),
-        getMainOrganizationCustomerById: build.query<OrganizationById, IBaseGetById>({
+        getMainOrganizationIsCustomerById: build.query<OrganizationById, IBaseGetById>({
             providesTags     : ['main'],
             transformResponse: (resp: OrganizationById) => {
                 if(resp?.is_customer) {
@@ -384,6 +416,37 @@ export const mainRequest = createApi({
             query: (params) => ({
                 url   : `/organization/${params.id}/`,
                 method: 'GET'
+            })
+        }),
+        getMainOrganizationCustomerById: build.query<OrganizationById, IBaseGetById>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : `/organization-customer/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        postMainOrganizationCustomer: build.mutation<PostOrganization, PostOrganization>({
+            invalidatesTags: ['main'],
+            query          : (body) => ({
+                url   : '/organization-customer/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchMainOrganizationCustomer: build.mutation<PatchOrganization, PatchOrganization>({
+            invalidatesTags: ['main'],
+            query          : ({ id, ...body }) => ({
+                url   : `/organization-customer/${id}/`,
+                method: 'PATCH',
+                body
+            })
+        }),
+        getMainOrganizationCustomer: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/organization-customer/',
+                method: 'GET',
+                params
             })
         }),
         getMainOrganizationProjectList: build.query<IResponseGetOrganizationProject, IGetOrganizationProjectListQueryParams | undefined>({
