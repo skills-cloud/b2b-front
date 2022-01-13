@@ -22,6 +22,7 @@ import ModuleCreate from 'route/module/create';
 import Module from 'route/module';
 import FunctionalPoints from 'route/fun-points';
 import { SystemUsers } from 'route/system-users';
+import { SystemUsersCreate } from 'route/system-users/create';
 import Dashboard from 'route/dashboard';
 
 export interface IProps extends RouteProps {
@@ -145,4 +146,9 @@ export const baseRoutes: Array<IProps> = [{
     layout   : Layout,
     path     : '/system-users',
     component: SystemUsers
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/system-users/create',
+    component: SystemUsersCreate
 }];

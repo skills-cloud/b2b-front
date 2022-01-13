@@ -109,6 +109,9 @@ export const SystemUsers = () => {
                                     />
                                     <FormSelect
                                         name="organization_contractor_id"
+                                        label={t('routes.system-users.sidebar.filters.form.organization_contractor_id.label')}
+                                        direction="column"
+                                        placeholder={t('routes.system-users.sidebar.filters.form.organization_contractor_id.placeholder')}
                                         isSearchable={true}
                                         clearable={true}
                                         loadOptions={(value, cb) => {

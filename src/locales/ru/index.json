@@ -145,6 +145,10 @@
                     "form": {
                         "search": {
                             "placeholder": "Введите имя..."
+                        },
+                        "organization_contractor_id": {
+                            "label": "Организация исполнитель",
+                            "placeholder": "Название организации"
                         }
                     },
                     "buttons": {
@@ -158,6 +162,27 @@
             "role_pfm": "Руководитель портфеля проектов",
             "role_pm": "Руководитель проекта",
             "role_rm": "Ресурсный менеджер"
+        },
+        "system-create": {
+            "title": "Создание пользователя системы",
+            "form": {
+                "name": {
+                    "label": "Фамилия, имя, отчество",
+                    "placeholder_first": "Имя",
+                    "placeholder_middle": "Отчество",
+                    "placeholder_last": "Фамилия"
+                },
+                "organization_contractor_id": {
+                    "label": "Организация исполнитель",
+                    "placeholder": "Выбор"
+                },
+                "buttons": {
+                    "create": "Создать"
+                }
+            },
+            "links": {
+                "add-organization": "Добавить организацию"
+            }
         },
         "not-found": {
             "header": "Запрашиваемая страница не найдена",
