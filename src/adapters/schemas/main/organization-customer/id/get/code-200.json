@@ -1,0 +1,52 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/OrganizationCustomerRead"
+        }
+    ],
+    "definitions": {
+        "OrganizationCustomerRead": {
+            "properties": {
+                "contractor_id": {
+                    "title": "исполнитель для этого заказчика",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-contractor/$id/",
+                    "x-url-object-list": "/api/main/organization-contractor/"
+                },
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "contractor_id",
+                "name"
+            ],
+            "type": "object"
+        }
+    }
+}

@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+import { Code200 as Code200UserManageGet } from 'adapter/types/acc/user-manage/get/code-200';
+
 export interface IUserData {
     id?: number,
     last_login?: string,
@@ -69,6 +71,22 @@ export const acc = createApi({
                 url   : 'whoami/',
                 method: 'GET',
                 params
+            })
+        }),
+        getUserManage: build.query<{
+            results: Array<Code200UserManageGet>
+        }, {
+            search?: string,
+            organization_contractor_id?: Array<string>,
+            organization_project_id?: Array<string>,
+            ordering?: string,
+            page?: number,
+            page_size?: number
+        } | void>({
+            query: (params) => ({
+                url   : 'user-manage/',
+                method: 'GET',
+                params: { ...params }
             })
         }),
         postAccWhoAmISetPhoto: build.mutation({

@@ -17,26 +17,30 @@ export type NoName6 = number;
 export type NoName7 = string;
 export type ID1 = number;
 export type NoName8 = string;
+export type ContractorId = string;
 export type NoName9 = string;
+export type NoName10 = string;
 export type ID2 = number;
-export type NoName10 = boolean;
-export type NoName11 = string;
-export type NoName12 = number;
+export type NoName11 = boolean;
+export type NoName12 = boolean;
 export type NoName13 = string;
-export type NoName14 = number;
+export type NoName14 = string;
+export type NoName15 = number;
+export type NoName16 = string;
+export type NoName17 = number;
 /**
  * в часах
  */
-export type NoName15 = number;
+export type NoName18 = number;
 export type ID3 = number;
-export type NoName16 = string;
+export type NoName19 = string;
 export type ID4 = number;
-export type NoName17 = boolean;
-export type NoName18 = string;
-export type NoName19 = number;
-export type NoName20 = number;
+export type NoName20 = boolean;
 export type NoName21 = string;
-export type NoName22 = string;
+export type NoName22 = number;
+export type NoName23 = number;
+export type NoName24 = string;
+export type NoName25 = string;
 
 export interface FunPointTypeRead {
     created_at?: NoName;
@@ -44,10 +48,10 @@ export interface FunPointTypeRead {
     difficulty_levels?: FunPointTypeDifficultyLevelInline[];
     id?: ID1;
     name: NoName8;
-    organization?: Organization;
-    organization_id?: NoName12;
+    organization_customer?: Organization;
+    organization_customer_id?: NoName15;
     positions_labor_estimates?: FunPointTypePositionLaborEstimateInline[];
-    updated_at?: NoName22;
+    updated_at?: NoName25;
 }
 export interface FunPointTypeDifficultyLevelInline {
     created_at?: NoName2;
@@ -59,24 +63,28 @@ export interface FunPointTypeDifficultyLevelInline {
     updated_at?: NoName7;
 }
 export interface Organization {
-    description?: NoName9;
+    contractor_id?: ContractorId;
+    created_at?: NoName9;
+    description?: NoName10;
     id?: ID2;
-    is_customer?: NoName10;
-    name: NoName11;
+    is_contractor?: NoName11;
+    is_customer?: NoName12;
+    name: NoName13;
+    updated_at?: NoName14;
 }
 export interface FunPointTypePositionLaborEstimateInline {
-    created_at?: NoName13;
-    fun_point_type_id: NoName14;
-    hours?: NoName15;
+    created_at?: NoName16;
+    fun_point_type_id: NoName17;
+    hours?: NoName18;
     id?: ID3;
     position?: Position;
-    position_id: NoName19;
-    sorting?: NoName20;
-    updated_at?: NoName21;
+    position_id: NoName22;
+    sorting?: NoName23;
+    updated_at?: NoName24;
 }
 export interface Position {
-    description?: NoName16;
+    description?: NoName19;
     id?: ID4;
-    is_verified?: NoName17;
-    name: NoName18;
+    is_verified?: NoName20;
+    name: NoName21;
 }

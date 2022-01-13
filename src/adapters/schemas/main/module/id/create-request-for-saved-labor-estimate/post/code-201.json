@@ -34,8 +34,8 @@
                     "nullable": true,
                     "title": "руководитель проекта",
                     "type": "integer",
-                    "x-url-object-detail": "/api/acc/user/$id/",
-                    "x-url-object-list": "/api/acc/user/"
+                    "x-url-object-detail": "/api/acc/user-manage/$id/",
+                    "x-url-object-list": "/api/acc/user-manage/"
                 },
                 "module_id": {
                     "title": "модуль",
@@ -61,15 +61,15 @@
                     "nullable": true,
                     "title": "отв. рекрутер",
                     "type": "integer",
-                    "x-url-object-detail": "/api/acc/user/$id/",
-                    "x-url-object-list": "/api/acc/user/"
+                    "x-url-object-detail": "/api/acc/user-manage/$id/",
+                    "x-url-object-list": "/api/acc/user-manage/"
                 },
                 "resource_manager_id": {
                     "nullable": true,
                     "title": "рес. менеджер",
                     "type": "integer",
-                    "x-url-object-detail": "/api/acc/user/$id/",
-                    "x-url-object-list": "/api/acc/user/"
+                    "x-url-object-detail": "/api/acc/user-manage/$id/",
+                    "x-url-object-list": "/api/acc/user-manage/"
                 },
                 "start_date": {
                     "format": "date",

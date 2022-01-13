@@ -60,7 +60,7 @@
     },
     "dependencies": {
         "@hookform/error-message": "2.x.x",
-        "@reduxjs/toolkit": "1.x.x",
+        "@reduxjs/toolkit": "1.7.1",
         "axios": "0.x.x",
         "classnames": "2.x.x",
         "docx": "6.x.x",

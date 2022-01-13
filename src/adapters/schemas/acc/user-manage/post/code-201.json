@@ -1,0 +1,144 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/UserManage"
+        }
+    ],
+    "definitions": {
+        "UserManage": {
+            "properties": {
+                "email": {
+                    "format": "email",
+                    "maxLength": 254,
+                    "minLength": 1,
+                    "title": "Адрес электронной почты",
+                    "type": "string"
+                },
+                "first_name": {
+                    "maxLength": 150,
+                    "minLength": 1,
+                    "title": "Имя",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "last_name": {
+                    "maxLength": 150,
+                    "minLength": 1,
+                    "title": "Фамилия",
+                    "type": "string"
+                },
+                "organization_contractors_roles": {
+                    "items": {
+                        "$ref": "#/definitions/UserOrganizationContractorRole"
+                    },
+                    "nullable": true,
+                    "type": "array"
+                },
+                "organization_projects_roles": {
+                    "items": {
+                        "$ref": "#/definitions/UserOrganizationProjectRole"
+                    },
+                    "nullable": true,
+                    "type": "array"
+                }
+            },
+            "required": [
+                "email",
+                "first_name",
+                "last_name"
+            ],
+            "type": "object"
+        },
+        "UserOrganizationContractorRole": {
+            "nullable": true,
+            "properties": {
+                "organization_contractor_id": {
+                    "title": "Организация исполнитель",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-contractor/$id/",
+                    "x-url-object-list": "/api/main/organization-contractor/"
+                },
+                "organization_contractor_name": {
+                    "minLength": 1,
+                    "readOnly": true,
+                    "title": "Organization contractor name",
+                    "type": "string"
+                },
+                "role": {
+                    "enum": [
+                        "admin",
+                        "pfm",
+                        "pm",
+                        "rm"
+                    ],
+                    "title": "Роль",
+                    "type": "string",
+                    "x-enum-description": {
+                        "admin": "Администратор",
+                        "pfm": "Руководитель портфеля проектов",
+                        "pm": "Руководитель проекта",
+                        "rm": "Ресурсный менеджер"
+                    }
+                }
+            },
+            "required": [
+                "organization_contractor_id",
+                "role"
+            ],
+            "type": "object"
+        },
+        "UserOrganizationProjectRole": {
+            "nullable": true,
+            "properties": {
+                "organization_contractor_id": {
+                    "readOnly": true,
+                    "title": "Organization contractor id",
+                    "type": "integer"
+                },
+                "organization_contractor_name": {
+                    "minLength": 1,
+                    "readOnly": true,
+                    "title": "Organization contractor name",
+                    "type": "string"
+                },
+                "organization_project_id": {
+                    "title": "Проект",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-project/$id/",
+                    "x-url-object-list": "/api/main/organization-project/"
+                },
+                "organization_project_name": {
+                    "minLength": 1,
+                    "readOnly": true,
+                    "title": "Organization project name",
+                    "type": "string"
+                },
+                "role": {
+                    "enum": [
+                        "admin",
+                        "pfm",
+                        "pm",
+                        "rm"
+                    ],
+                    "title": "Роль",
+                    "type": "string",
+                    "x-enum-description": {
+                        "admin": "Администратор",
+                        "pfm": "Руководитель портфеля проектов",
+                        "pm": "Руководитель проекта",
+                        "rm": "Ресурсный менеджер"
+                    }
+                }
+            },
+            "required": [
+                "organization_project_id",
+                "role"
+            ],
+            "type": "object"
+        }
+    }
+}

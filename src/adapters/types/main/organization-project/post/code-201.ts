@@ -10,13 +10,13 @@ export type NoName = string;
 export type NoName1 = string;
 export type NoName2 = string;
 export type NoName3 = string;
+export type NoName4 = string;
 export type ID = number;
-export type NoName4 = number;
 export type NoName5 = number;
-export type NoName6 = string;
-export type NoName7 = number;
+export type NoName6 = number;
+export type NoName7 = string;
 export type NoName8 = number;
-export type NoName9 = number;
+export type NoName9 = string;
 export type NoName10 = string;
 
 export interface OrganizationProject {
@@ -24,12 +24,12 @@ export interface OrganizationProject {
     date_from?: NoName1;
     date_to?: NoName2;
     description?: NoName3;
+    goals?: NoName4;
     id?: ID;
-    industry_sector_id?: NoName4;
-    manager_id?: NoName5;
-    name: NoName6;
-    organization_id: NoName7;
-    recruiters_ids?: NoName8[];
-    resource_managers_ids?: NoName9[];
+    industry_sector_id?: NoName5;
+    manager_id?: NoName6;
+    name: NoName7;
+    organization_customer_id: NoName8;
+    plan_description?: NoName9;
     updated_at?: NoName10;
 }
