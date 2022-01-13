@@ -353,12 +353,12 @@ export const mainRequest = createApi({
                 body
             })
         }),
-        getMainOrganization: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
+        getMainOrganization: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined | void>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization/',
                 method: 'GET',
-                params
+                params: { ...params }
             })
         }),
         getMainOrganizationContractorById: build.query<OrganizationById, IBaseGetById>({

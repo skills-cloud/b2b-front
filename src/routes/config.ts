@@ -21,6 +21,7 @@ import OrganizationCreate from 'route/organizations/create';
 import ModuleCreate from 'route/module/create';
 import Module from 'route/module';
 import FunctionalPoints from 'route/fun-points';
+import { SystemUsers } from 'route/system-users';
 import Dashboard from 'route/dashboard';
 
 export interface IProps extends RouteProps {
@@ -139,4 +140,9 @@ export const baseRoutes: Array<IProps> = [{
         '/organizations/:organizationId/projects/:projectId/modules/:moduleId/requests/:requestId/:subpage(edit|candidates|requirement)?'
     ],
     component: ProjectRequest
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/system-users',
+    component: SystemUsers
 }];

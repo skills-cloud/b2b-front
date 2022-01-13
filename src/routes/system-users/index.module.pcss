@@ -1,0 +1,68 @@
+.system-users {
+
+    &__sidebar {
+        display: grid;
+        grid-auto-flow: row;
+        grid-row-gap: 16px;
+    }
+
+    &__users {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    &__user {
+        display: grid;
+        grid-auto-flow: column;
+        grid-column-gap: 16px;
+        justify-content: flex-start;
+        grid-template-columns: 48px 1fr;
+
+        & > img {
+            margin: 16px 0;
+        }
+
+        & > div {
+            padding: 16px 0;
+            border-top: 1px solid #E6E8EB;
+        }
+
+        &:first-child {
+
+            & > div {
+                border-top: none;
+            }
+        }
+    }
+
+    &__user-info {
+        display: grid;
+        grid-row-gap: 6px;
+        padding: 5px 0;
+    }
+
+    &__name,
+    &__project {
+        display: block;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 16px;
+        color: #282C33;
+    }
+
+    &__project {
+        font-weight: normal;
+
+        & > span {
+            color: #E6E8EB;
+        }
+    }
+
+    &__form {
+        display: grid;
+        grid-row-gap: 24px;
+    }
+}
