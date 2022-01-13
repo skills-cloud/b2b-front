@@ -29,11 +29,11 @@
                     "title": "Название",
                     "type": "string"
                 },
-                "organization_id": {
+                "organization_customer_id": {
                     "title": "заказчик",
                     "type": "integer",
-                    "x-url-object-detail": "/api/main/organization/$id/",
-                    "x-url-object-list": "/api/main/organization/"
+                    "x-url-object-detail": "/api/main/organization-customer/$id/",
+                    "x-url-object-list": "/api/main/organization-customer/"
                 },
                 "updated_at": {
                     "format": "date-time",

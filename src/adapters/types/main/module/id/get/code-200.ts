@@ -24,74 +24,79 @@ export type NoName12 = string;
 export type NoName13 = string;
 export type ID1 = number;
 export type NoName14 = string;
+export type ContractorId = string;
 export type NoName15 = string;
+export type NoName16 = string;
 export type ID2 = number;
-export type NoName16 = boolean;
-export type NoName17 = string;
-export type NoName18 = number;
+export type NoName17 = boolean;
+export type NoName18 = boolean;
 export type NoName19 = string;
-export type NoName20 = number;
+export type NoName20 = string;
+export type NoName21 = number;
+export type NoName22 = string;
+export type NoName23 = number;
 /**
  * в часах
  */
-export type NoName21 = number;
+export type NoName24 = number;
 export type ID3 = number;
-export type NoName22 = string;
+export type NoName25 = string;
 export type ID4 = number;
-export type NoName23 = boolean;
-export type NoName24 = string;
-export type NoName25 = number;
-export type NoName26 = number;
+export type NoName26 = boolean;
 export type NoName27 = string;
-export type NoName28 = string;
+export type NoName28 = number;
 export type NoName29 = number;
-export type ID5 = number;
-export type NoName30 = number;
+export type NoName30 = string;
 export type NoName31 = string;
 export type NoName32 = number;
-export type NoName33 = string;
+export type ID5 = number;
+export type NoName33 = number;
 export type NoName34 = string;
-export type ID6 = number;
-export type NoName35 = string;
-export type ID7 = number;
+export type NoName35 = number;
 export type NoName36 = string;
-export type Photo = string;
-export type NoName37 = number;
+export type NoName37 = string;
+export type ID6 = number;
 export type NoName38 = string;
+export type ID7 = number;
 export type NoName39 = string;
-export type NoName40 = string;
+export type Photo = string;
+export type NoName40 = number;
 export type NoName41 = string;
 export type NoName42 = string;
-export type ID8 = number;
+export type CurrentUserRole = string;
 export type NoName43 = string;
-export type ID9 = number;
-export type NoName44 = boolean;
+export type NoName44 = string;
 export type NoName45 = string;
-export type NoName46 = number;
-export type NoName47 = number;
-export type ModulesCount = number;
-export type NoName48 = string;
-export type NoName49 = number;
+export type NoName46 = string;
+export type ID8 = number;
+export type NoName47 = string;
+export type ID9 = number;
+export type NoName48 = boolean;
+export type NoName49 = string;
 export type NoName50 = number;
 export type NoName51 = number;
+export type ModulesCount = number;
 export type NoName52 = string;
 export type NoName53 = number;
-export type NoName54 = number;
+export type NoName54 = string;
 export type NoName55 = string;
 export type NoName56 = number;
-export type ID10 = number;
 export type NoName57 = number;
-export type NoName58 = number;
+export type NoName58 = string;
 export type NoName59 = number;
-export type NoName60 = string;
+export type ID10 = number;
+export type NoName60 = number;
 export type NoName61 = number;
-export type NoName62 = string;
+export type NoName62 = number;
 export type NoName63 = string;
+export type NoName64 = number;
+export type NoName65 = string;
+export type NoName66 = string;
 /**
  * если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date
  */
-export type NoName64 = number;
-export type NoName65 = number;
+export type NoName67 = number;
+export type NoName68 = number;
 
 export interface ModuleRead {
     created_at?: NoName;
@@ -99,19 +104,19 @@ export interface ModuleRead {
     description?: NoName2;
     difficulty_factor?: DifficultyFactor;
     fun_points?: ModuleFunPointInline[];
-    goals?: NoName34;
+    goals?: NoName37;
     id?: ID6;
     manager?: UserInline;
-    manager_id?: NoName37;
-    name: NoName38;
+    manager_id?: NoName40;
+    name: NoName41;
     organization_project?: OrganizationProjectInline;
-    organization_project_id: NoName53;
+    organization_project_id: NoName56;
     positions_labor_estimates?: ModulePositionLaborEstimateInline[];
-    sorting?: NoName61;
-    start_date?: NoName62;
-    updated_at?: NoName63;
-    work_days_count?: NoName64;
-    work_days_hours_count?: NoName65;
+    sorting?: NoName64;
+    start_date?: NoName65;
+    updated_at?: NoName66;
+    work_days_count?: NoName67;
+    work_days_hours_count?: NoName68;
 }
 export interface ModuleFunPointInline {
     created_at?: NoName3;
@@ -119,12 +124,12 @@ export interface ModuleFunPointInline {
     difficulty_level?: FunPointTypeDifficultyLevelInline;
     difficulty_level_id: NoName11;
     fun_point_type?: FunPointTypeInline;
-    fun_point_type_id: NoName29;
+    fun_point_type_id: NoName32;
     id?: ID5;
-    module_id: NoName30;
-    name: NoName31;
-    sorting?: NoName32;
-    updated_at?: NoName33;
+    module_id: NoName33;
+    name: NoName34;
+    sorting?: NoName35;
+    updated_at?: NoName36;
 }
 export interface FunPointTypeDifficultyLevelInline {
     created_at?: NoName5;
@@ -141,73 +146,76 @@ export interface FunPointTypeInline {
     difficulty_levels?: FunPointTypeDifficultyLevelInline[];
     id?: ID1;
     name: NoName14;
-    organization?: Organization;
-    organization_id?: NoName18;
+    organization_customer?: Organization;
+    organization_customer_id?: NoName21;
     positions_labor_estimates?: FunPointTypePositionLaborEstimateInline[];
-    updated_at?: NoName28;
+    updated_at?: NoName31;
 }
 export interface Organization {
-    description?: NoName15;
+    contractor_id?: ContractorId;
+    created_at?: NoName15;
+    description?: NoName16;
     id?: ID2;
-    is_customer?: NoName16;
-    name: NoName17;
+    is_contractor?: NoName17;
+    is_customer?: NoName18;
+    name: NoName19;
+    updated_at?: NoName20;
 }
 export interface FunPointTypePositionLaborEstimateInline {
-    created_at?: NoName19;
-    fun_point_type_id: NoName20;
-    hours?: NoName21;
+    created_at?: NoName22;
+    fun_point_type_id: NoName23;
+    hours?: NoName24;
     id?: ID3;
     position?: Position;
-    position_id: NoName25;
-    sorting?: NoName26;
-    updated_at?: NoName27;
+    position_id: NoName28;
+    sorting?: NoName29;
+    updated_at?: NoName30;
 }
 export interface Position {
-    description?: NoName22;
+    description?: NoName25;
     id?: ID4;
-    is_verified?: NoName23;
-    name: NoName24;
+    is_verified?: NoName26;
+    name: NoName27;
 }
 export interface UserInline {
-    first_name: NoName35;
+    first_name: NoName38;
     id?: ID7;
-    last_name: NoName36;
+    last_name: NoName39;
     photo?: Photo;
 }
 export interface OrganizationProjectInline {
-    created_at?: NoName39;
-    date_from?: NoName40;
-    date_to?: NoName41;
-    description?: NoName42;
+    created_at?: NoName42;
+    current_user_role?: CurrentUserRole;
+    date_from?: NoName43;
+    date_to?: NoName44;
+    description?: NoName45;
+    goals?: NoName46;
     id?: ID8;
     industry_sector?: IndustrySector;
-    industry_sector_id?: NoName46;
+    industry_sector_id?: NoName50;
     manager?: UserInline;
-    manager_id?: NoName47;
+    manager_id?: NoName51;
     modules_count?: ModulesCount;
-    name: NoName48;
-    organization?: Organization;
-    organization_id: NoName49;
-    recruiters?: UserInline[];
-    recruiters_ids?: NoName50[];
-    resource_managers?: UserInline[];
-    resource_managers_ids?: NoName51[];
-    updated_at?: NoName52;
+    name: NoName52;
+    organization_customer?: Organization;
+    organization_customer_id: NoName53;
+    plan_description?: NoName54;
+    updated_at?: NoName55;
 }
 export interface IndustrySector {
-    description?: NoName43;
+    description?: NoName47;
     id?: ID9;
-    is_verified?: NoName44;
-    name: NoName45;
+    is_verified?: NoName48;
+    name: NoName49;
 }
 export interface ModulePositionLaborEstimateInline {
-    count?: NoName54;
-    created_at?: NoName55;
-    hours?: NoName56;
+    count?: NoName57;
+    created_at?: NoName58;
+    hours?: NoName59;
     id?: ID10;
-    module_id: NoName57;
+    module_id: NoName60;
     position?: Position;
-    position_id: NoName58;
-    sorting?: NoName59;
-    updated_at?: NoName60;
+    position_id: NoName61;
+    sorting?: NoName62;
+    updated_at?: NoName63;
 }

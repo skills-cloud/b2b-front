@@ -1,19 +1,19 @@
 import React, { ReactNode } from 'react';
-import style from './index.module.pcss';
 import { useClassnames } from 'hook/use-classnames';
+import style from './index.module.pcss';
 
 interface ISidebarLayout {
     children: ReactNode,
-    sidebar: ReactNode
+    sidebar?: ReactNode
 }
 
 const SidebarLayout = ({ children, sidebar }: ISidebarLayout) => {
     const cn = useClassnames(style);
 
     return (
-        <div className={cn('page')}>
-            <main className={cn('main')}>{children}</main>
-            <aside className={cn('aside')}>{sidebar}</aside>
+        <div className={cn('sidebar-layout', { 'sidebar-layout_alone': !sidebar })}>
+            <main className={cn('sidebar-layout__main')}>{children}</main>
+            {sidebar && <aside className={cn('sidebar-layout__aside')}>{sidebar}</aside>}
         </div>
     );
 };

@@ -11,7 +11,7 @@ import { mainRequest } from 'adapter/api/main';
 import { useDispatch } from 'component/core/store';
 import { cv } from 'adapter/api/cv';
 
-import style from './index.pcss';
+import style from './index.module.pcss';
 
 export interface IBreadcrumb {
     label?: string,

@@ -74,6 +74,7 @@
             "download": "Скачать xlsx"
         },
         "breadcrumbs": {
+            "dashboard": "Дашборд",
             "candidates": "Кандидаты",
             "specialists": "Специалисты",
             "modules": "Модули",
@@ -110,6 +111,27 @@
         }
     },
     "routes": {
+        "dashboard": {
+            "title": "Дашборд {{val}}",
+            "counters": {
+                "projects": "Всего действующих проектов",
+                "requests": "Всего выполненных запросов",
+                "work": "Всего запросов в работе"
+            },
+            "table": {
+                "head": {
+                    "project": "Проект",
+                    "customer": "Заказчик",
+                    "time": "Сроки",
+                    "rp": "Ответственный РП",
+                    "requests": "Всего проектных запросов",
+                    "done": "Выполненных запросов"
+                },
+                "values": {
+                    "empty": "Не указано"
+                }
+            }
+        },
         "not-found": {
             "header": "Запрашиваемая страница не найдена",
             "desc": "Ошибка #404"
@@ -292,11 +314,53 @@
                 "customer": "Заказчик",
                 "manager": "РП",
                 "timeframe": "Таймфрейм",
-                "description": "Описание проекта"
+                "industry_sector": "Отрасль",
+                "description": "Описание проекта",
+                "goals": "Цели",
+                "value": "Оценка проекта",
+                "resource_plan": "Ресурсный план"
             },
             "resources": {
                 "title": "Ресурсный план",
                 "action": "Пересчитать"
+            }
+        },
+        "organization-project": {
+            "create": {
+                "title": "Новый проект",
+                "required-error": "Обязательно для заполнения",
+                "name": {
+                    "title": "Название проекта",
+                    "placeholder": "Введите название проекта"
+                },
+                "industry_sector": {
+                    "title": "Отрасль",
+                    "placeholder": "Введите отрасль"
+                },
+                "manager": {
+                    "title": "Менеджер",
+                    "placeholder": "Введите имя менеджера"
+                },
+                "date-from": "Дата начала",
+                "date-to": "Дата окончания",
+                "resource_manager": {
+                    "title": "РП",
+                    "placeholder": "Введите имя руководителя проекта"
+                },
+                "organization_customer": {
+                    "title": "Организация исполнителя",
+                    "placeholder": "Введите организацию исполнителя"
+                },
+                "goals": "Цели",
+                "value": "Оценка проекта",
+                "description": "Описание проекта",
+                "plan_description": "Ресурсный план",
+                "submit": "Создать проект"
+            },
+            "edit-modal": {
+                "header": "Редактирование профиля проекта",
+                "cancel": "Отмена",
+                "save": "Сохранить"
             }
         },
         "person": {
@@ -1139,36 +1203,6 @@
             },
             "sidebar": {
                 "documents": "Документы"
-            }
-        },
-        "project": {
-            "create": {
-                "title": "Новый проект",
-                "required-error": "Обязательно для заполнения",
-                "name": {
-                    "title": "Название проекта",
-                    "placeholder": "Введите название проекта"
-                },
-                "industry_sector": {
-                    "title": "Отрасль",
-                    "placeholder": "Введите отрасль"
-                },
-                "manager": {
-                    "title": "Менеджер",
-                    "placeholder": "Введите имя менеджера"
-                },
-                "date-from": "Дата начала",
-                "date-to": "Дата окончания",
-                "resource_manager": {
-                    "title": "Ресурсный менеджер",
-                    "placeholder": "Введите имя ресурсного менеджера"
-                },
-                "recruiter": {
-                    "title": "Ответственный рекрутер",
-                    "placeholder": "Введите имя ответственного рекрутера"
-                },
-                "description": "Описание проекта",
-                "submit": "Создать проект"
             }
         },
         "fun-points": {

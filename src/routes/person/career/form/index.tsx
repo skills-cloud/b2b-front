@@ -5,7 +5,6 @@ import { useParams } from 'react-router';
 import { IParams } from 'helper/url-list';
 
 import useClassnames from 'hook/use-classnames';
-import FormInput from 'component/form/input';
 import FormDate from 'component/form/date';
 import Error from 'component/error';
 import InputFile from 'component/form/file';

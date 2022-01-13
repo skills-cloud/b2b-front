@@ -17,6 +17,7 @@ import { acc } from 'adapter/api/acc';
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
 
 import style from './index.module.pcss';
+import InputMain from 'component/form/input-main';
 
 export interface IProps {
     formId: string,
@@ -29,8 +30,8 @@ interface ISelect {
     label: string
 }
 
-interface IFormValues extends Omit<OrganizationProjectRead, 'industry_sector'> {
-    resource_manager: ISelect,
+interface IFormValues extends Omit<OrganizationProjectRead, 'industry_sector' | 'manager'> {
+    manager: ISelect,
     recruiter: ISelect,
     industry_sector: ISelect
 }
@@ -43,13 +44,9 @@ const OrganizationProjectCreateForm = (props: IProps) => {
         mode         : 'onChange',
         defaultValues: {
             ...props.defaultValues,
-            recruiter: props.defaultValues?.recruiters ? {
-                value: props.defaultValues?.recruiters[0]?.id,
-                label: `${props.defaultValues?.recruiters[0]?.last_name} ${props.defaultValues?.recruiters[0]?.first_name}`
-            } : '',
-            resource_manager: props.defaultValues?.resource_managers ? {
-                value: props.defaultValues?.resource_managers[0]?.id,
-                label: `${props.defaultValues?.resource_managers[0]?.last_name} ${props.defaultValues?.resource_managers[0]?.first_name}`
+            manager: props.defaultValues?.manager ? {
+                value: props.defaultValues?.manager_id,
+                label: `${props.defaultValues?.manager.last_name} ${props.defaultValues?.manager.first_name}`
             } : '',
             industry_sector: props.defaultValues?.industry_sector ? {
                 value: props.defaultValues?.industry_sector?.id,
@@ -63,7 +60,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
     const users = useMemo(() => {
         if(userData?.results) {
             return userData.results.map((item) => ({
-                label: `${item.last_name} ${item.first_name}`,
+                label: item.last_name || item.first_name ? `${item.last_name} ${item.first_name}` : item.email,
                 value: String(item.id)
             }));
         }
@@ -76,19 +73,15 @@ const OrganizationProjectCreateForm = (props: IProps) => {
     const [patch] = mainRequest.usePatchMainOrganizationProjectMutation();
 
     const onSubmit = context.handleSubmit(
-        ({ industry_sector, resource_manager, recruiter, ...data }: IFormValues) => {
+        ({ industry_sector, manager, ...data }: IFormValues) => {
             const postData = { ...data };
 
             if(industry_sector) {
                 postData.industry_sector_id = parseInt(industry_sector.value, 10);
             }
 
-            if(resource_manager) {
-                postData.resource_managers_ids = [parseInt(resource_manager.value, 10)];
-            }
-
-            if(recruiter) {
-                postData.recruiters_ids = [parseInt(recruiter.value, 10)];
+            if(manager) {
+                postData.manager_id = parseInt(manager.value, 10);
             }
 
             const method = props.defaultValues ? patch : post;
@@ -96,8 +89,8 @@ const OrganizationProjectCreateForm = (props: IProps) => {
 
             const request = method({
                 ...rest,
-                organization_id: parseInt(params.organizationId, 10),
-                id             : requestId as number
+                organization_customer_id: parseInt(params.organizationId, 10),
+                id                      : requestId as number
             });
 
             request
@@ -118,7 +111,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
         }
     );
 
-    const errorMessage = t('routes.project.create.required-error');
+    const errorMessage = t('routes.organization-project.create.required-error');
 
     return (
         <FormProvider {...context}>
@@ -127,46 +120,62 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     required={errorMessage}
                     type="text"
                     name="name"
-                    label={t('routes.project.create.name.title')}
-                    placeholder={t('routes.project.create.name.placeholder')}
+                    label={t('routes.organization-project.create.name.title')}
+                    placeholder={t('routes.organization-project.create.name.placeholder')}
+                />
+                <InputMain
+                    defaultValue={[props.defaultValues?.organization_customer?.id as number]}
+                    name="organization_customer"
+                    direction="column"
+                    requestType={InputMain.requestType.Customer}
+                    label={t('routes.organization-project.create.organization_customer.title')}
+                    placeholder={t('routes.organization-project.create.organization_customer.placeholder')}
+                    isMulti={false}
                 />
                 <InputDictionary
                     requestType={InputDictionary.requestType.IndustrySector}
                     name="industry_sector"
                     direction="column"
-                    label={t('routes.project.create.industry_sector.title')}
-                    placeholder={t('routes.project.create.industry_sector.placeholder')}
+                    label={t('routes.organization-project.create.industry_sector.title')}
+                    placeholder={t('routes.organization-project.create.industry_sector.placeholder')}
+                    isMulti={false}
+                />
+                <Select
+                    name="manager"
+                    direction="column"
+                    label={t('routes.organization-project.create.resource_manager.title')}
+                    placeholder={t('routes.organization-project.create.resource_manager.placeholder')}
+                    options={users}
                     isMulti={false}
                 />
                 <div className={cn('form__fields')}>
                     <DateInput
                         name="date_from"
                         direction="column"
-                        label={t('routes.project.create.date-from')}
+                        label={t('routes.organization-project.create.date-from')}
                     />
                     <DateInput
                         name="date_to"
                         direction="column"
-                        label={t('routes.project.create.date-to')}
+                        label={t('routes.organization-project.create.date-to')}
                     />
                 </div>
-                <Select
-                    name="resource_manager"
-                    direction="column"
-                    label={t('routes.project.create.resource_manager.title')}
-                    placeholder={t('routes.project.create.resource_manager.placeholder')}
-                    options={users}
-                />
-                <Select
-                    name="recruiter"
-                    direction="column"
-                    label={t('routes.project.create.recruiter.title')}
-                    placeholder={t('routes.project.create.recruiter.placeholder')}
-                    options={users}
+                <Textarea
+                    name="goals"
+                    label={t('routes.organization-project.create.goals')}
                 />
                 <Textarea
                     name="description"
-                    label={t('routes.project.create.description')}
+                    label={t('routes.organization-project.create.description')}
+                />
+                <Input
+                    type="text"
+                    name="value"
+                    label={t('routes.organization-project.create.value')}
+                />
+                <Textarea
+                    name="plan_description"
+                    label={t('routes.organization-project.create.plan_description')}
                 />
             </form>
         </FormProvider>

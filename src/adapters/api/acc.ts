@@ -34,7 +34,7 @@ export const acc = createApi({
         getAccUser: build.query<IResponseGetAccUser, IQueryParams | undefined>({
             providesTags: ['acc'],
             query       : (params) => ({
-                url   : 'user/',
+                url   : 'user-manage/',
                 method: 'GET',
                 params
             })

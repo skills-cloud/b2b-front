@@ -27,6 +27,7 @@ export interface IValue {
 export enum ERequestType {
     Organization,
     Customer,
+    IsCustomer,
     Project,
     RequestType,
     FunPointType
@@ -40,6 +41,10 @@ const methods = {
     [ERequestType.Customer]: {
         single: mainRequest.endpoints.getMainOrganizationCustomerById,
         list  : mainRequest.endpoints.getMainOrganizationCustomer
+    },
+    [ERequestType.IsCustomer]: {
+        single: mainRequest.endpoints.getMainOrganizationIsCustomerById,
+        list  : mainRequest.endpoints.getMainOrganizationIsCustomer
     },
     [ERequestType.Project]: {
         single: mainRequest.endpoints.getMainOrganizationProjectById,

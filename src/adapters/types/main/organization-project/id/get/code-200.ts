@@ -7,66 +7,74 @@
 
 export type Code200 = OrganizationProjectRead;
 export type NoName = string;
+export type CurrentUserRole = string;
 export type NoName1 = string;
 export type NoName2 = string;
 export type NoName3 = string;
-export type ID = number;
 export type NoName4 = string;
+export type ID = number;
+export type NoName5 = string;
 export type ID1 = number;
-export type NoName5 = boolean;
-export type NoName6 = string;
-export type NoName7 = number;
-export type NoName8 = string;
-export type ID2 = number;
+export type NoName6 = boolean;
+export type NoName7 = string;
+export type NoName8 = number;
 export type NoName9 = string;
+export type ID2 = number;
+export type NoName10 = string;
 export type Photo = string;
-export type NoName10 = number;
+export type NoName11 = number;
 export type ModulesCount = number;
-export type NoName11 = string;
 export type NoName12 = string;
-export type ID3 = number;
-export type NoName13 = boolean;
+export type ContractorId = string;
+export type NoName13 = string;
 export type NoName14 = string;
-export type NoName15 = number;
-export type NoName16 = number;
-export type NoName17 = number;
+export type ID3 = number;
+export type NoName15 = boolean;
+export type NoName16 = boolean;
+export type NoName17 = string;
 export type NoName18 = string;
+export type NoName19 = number;
+export type NoName20 = string;
+export type NoName21 = string;
 
 export interface OrganizationProjectRead {
     created_at?: NoName;
+    current_user_role?: CurrentUserRole;
     date_from?: NoName1;
     date_to?: NoName2;
     description?: NoName3;
+    goals?: NoName4;
     id?: ID;
     industry_sector?: IndustrySector;
-    industry_sector_id?: NoName7;
+    industry_sector_id?: NoName8;
     manager?: UserInline;
-    manager_id?: NoName10;
+    manager_id?: NoName11;
     modules_count?: ModulesCount;
-    name: NoName11;
-    organization?: Organization;
-    organization_id: NoName15;
-    recruiters?: UserInline[];
-    recruiters_ids?: NoName16[];
-    resource_managers?: UserInline[];
-    resource_managers_ids?: NoName17[];
-    updated_at?: NoName18;
+    name: NoName12;
+    organization_customer?: Organization;
+    organization_customer_id: NoName19;
+    plan_description?: NoName20;
+    updated_at?: NoName21;
 }
 export interface IndustrySector {
-    description?: NoName4;
+    description?: NoName5;
     id?: ID1;
-    is_verified?: NoName5;
-    name: NoName6;
+    is_verified?: NoName6;
+    name: NoName7;
 }
 export interface UserInline {
-    first_name: NoName8;
+    first_name: NoName9;
     id?: ID2;
-    last_name: NoName9;
+    last_name: NoName10;
     photo?: Photo;
 }
 export interface Organization {
-    description?: NoName12;
+    contractor_id?: ContractorId;
+    created_at?: NoName13;
+    description?: NoName14;
     id?: ID3;
-    is_customer?: NoName13;
-    name: NoName14;
+    is_contractor?: NoName15;
+    is_customer?: NoName16;
+    name: NoName17;
+    updated_at?: NoName18;
 }

@@ -79,9 +79,9 @@ const ModuleCreateForm = ({ formId, onSuccess, defaultValues }: IProjectsRequest
     const form = useForm<IFormValues>({
         defaultValues: {
             ...defaultValues,
-            customer: defaultValues?.organization_project?.organization ? {
-                value: String(defaultValues?.organization_project.organization.id),
-                label: defaultValues?.organization_project.organization.name
+            customer: defaultValues?.organization_project?.organization_customer ? {
+                value: String(defaultValues?.organization_project.organization_customer.id),
+                label: defaultValues?.organization_project.organization_customer.name
             } : undefined,
             manager: defaultValues?.manager ? {
                 value: String(defaultValues?.manager?.id),
@@ -153,7 +153,7 @@ const ModuleCreateForm = ({ formId, onSuccess, defaultValues }: IProjectsRequest
                     isMulti={false}
                     disabled={!!params.organizationId}
                     defaultValue={[params.organizationId]}
-                    requestType={InputMain.requestType.Customer}
+                    requestType={InputMain.requestType.IsCustomer}
                     label={t('routes.module.create.customer')}
                     direction="column"
                 />

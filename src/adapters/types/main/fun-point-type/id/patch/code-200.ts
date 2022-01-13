@@ -18,6 +18,6 @@ export interface FunPointTypeWrite {
     description?: NoName1;
     id?: ID;
     name: NoName2;
-    organization_id?: NoName3;
+    organization_customer_id?: NoName3;
     updated_at?: NoName4;
 }

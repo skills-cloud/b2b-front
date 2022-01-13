@@ -181,8 +181,8 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
 
     const onCreateOptionPoint = (createdOption: string) => {
         postFunPointType({
-            name           : createdOption,
-            organization_id: parseInt(params.organizationId, 10)
+            name                    : createdOption,
+            organization_customer_id: parseInt(params.organizationId, 10)
         })
             .unwrap()
             .then((resp) => {
