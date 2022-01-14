@@ -50,7 +50,7 @@ export const Specialists = () => {
     });
     const values = context.watch();
 
-    const { data, isLoading, refetch } = cv.useGetCvListQuery(normalizeObject(qs));
+    const { data, isLoading, isFetching, refetch } = cv.useGetCvListQuery(normalizeObject(qs));
     const { data: requirementData, refetch: reqsRefetch } = mainRequest.useGetMainRequestRequirementByIdQuery(
         { id: params.requirementId },
         { refetchOnMountOrArgChange: true, skip: !params.requirementId }
@@ -109,6 +109,14 @@ export const Specialists = () => {
     const onCloseLinked = () => {
         setShowModalById(null);
     };
+
+    // Хз зачем тут сабмит
+    const onSubmit = context.handleSubmit(
+        () => void(0),
+        (formError) => {
+            console.error(formError);
+        }
+    );
 
     const elModal = useMemo(() => {
         if(showModalById) {
@@ -171,7 +179,7 @@ export const Specialists = () => {
                 <Wrapper>
                     <H3>{t('routes.specialists.sidebar.filters.title')}</H3>
                     <FormProvider {...context}>
-                        <form className={cn('specialists__form')} onSubmit={(e) => e.preventDefault}>
+                        <form className={cn('specialists__form')} onSubmit={onSubmit}>
                             <FormInput
                                 name="search"
                                 type="search"
@@ -220,10 +228,10 @@ export const Specialists = () => {
                                 label={t('routes.specialists.sidebar.filters.form.years.label')}
                                 placeholder={t('routes.specialists.sidebar.filters.form.years.placeholder')}
                             />
-                            <Button type="submit">
+                            <Button disabled={isFetching} isLoading={isFetching} type="submit">
                                 {t('routes.specialists.sidebar.filters.buttons.submit')}
                             </Button>
-                            <Button type="button" onClick={onClearFilter} isSecondary={true}>
+                            <Button disabled={isFetching} type="button" onClick={onClearFilter} isSecondary={true}>
                                 {t('routes.specialists.sidebar.filters.buttons.clear')}
                             </Button>
                         </form>
