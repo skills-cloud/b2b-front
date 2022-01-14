@@ -172,12 +172,26 @@
                     "placeholder_middle": "Отчество",
                     "placeholder_last": "Фамилия"
                 },
+                "email": {
+                    "label": "E-Mail",
+                    "placeholder": "example@example.com"
+                },
+                "phone": {
+                    "label": "Телефон",
+                    "placeholder": "+70000000000"
+                },
                 "organization_contractor_id": {
                     "label": "Организация исполнитель",
                     "placeholder": "Выбор"
                 },
                 "buttons": {
                     "create": "Создать"
+                },
+                "roles": {
+                    "admin": "Администратор",
+                    "pfm": "Руководитель портфеля проектов",
+                    "pm": "Руководитель проекта",
+                    "rm": "Ресурсный менеджер"
                 }
             },
             "links": {

@@ -163,11 +163,6 @@
         },
         "Organization": {
             "properties": {
-                "contractor_id": {
-                    "readOnly": true,
-                    "title": "Contractor id",
-                    "type": "string"
-                },
                 "created_at": {
                     "format": "date-time",
                     "readOnly": true,

@@ -60,6 +60,12 @@
                     "title": "Название",
                     "type": "string"
                 },
+                "organization_contractor_id": {
+                    "title": "исполнитель",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-contractor/$id/",
+                    "x-url-object-list": "/api/main/organization-contractor/"
+                },
                 "organization_customer_id": {
                     "title": "заказчик",
                     "type": "integer",
@@ -80,6 +86,7 @@
             },
             "required": [
                 "name",
+                "organization_contractor_id",
                 "organization_customer_id"
             ],
             "type": "object"

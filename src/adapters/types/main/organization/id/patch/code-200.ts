@@ -6,7 +6,6 @@
  */
 
 export type Code200 = Organization;
-export type ContractorId = string;
 export type NoName = string;
 export type NoName1 = string;
 export type ID = number;
@@ -16,7 +15,6 @@ export type NoName4 = string;
 export type NoName5 = string;
 
 export interface Organization {
-    contractor_id?: ContractorId;
     created_at?: NoName;
     description?: NoName1;
     id?: ID;

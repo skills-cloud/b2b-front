@@ -7,6 +7,12 @@
     "definitions": {
         "UserManage": {
             "properties": {
+                "birth_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата рождения",
+                    "type": "string"
+                },
                 "email": {
                     "format": "email",
                     "maxLength": 254,
@@ -16,9 +22,30 @@
                 },
                 "first_name": {
                     "maxLength": 150,
-                    "minLength": 1,
+                    "nullable": true,
                     "title": "Имя",
                     "type": "string"
+                },
+                "gender": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "-",
+                                "F",
+                                "M"
+                            ],
+                            "title": "Пол",
+                            "type": "string",
+                            "x-enum-description": {
+                                "-": "Другой",
+                                "F": "Женский",
+                                "M": "Мужской"
+                            }
+                        }
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -27,8 +54,14 @@
                 },
                 "last_name": {
                     "maxLength": 150,
-                    "minLength": 1,
+                    "nullable": true,
                     "title": "Фамилия",
+                    "type": "string"
+                },
+                "middle_name": {
+                    "maxLength": 150,
+                    "nullable": true,
+                    "title": "Отчество",
                     "type": "string"
                 },
                 "organization_contractors_roles": {
@@ -44,12 +77,16 @@
                     },
                     "nullable": true,
                     "type": "array"
+                },
+                "phone": {
+                    "maxLength": 100,
+                    "nullable": true,
+                    "title": "Телефон",
+                    "type": "string"
                 }
             },
             "required": [
-                "email",
-                "first_name",
-                "last_name"
+                "email"
             ],
             "type": "object"
         },

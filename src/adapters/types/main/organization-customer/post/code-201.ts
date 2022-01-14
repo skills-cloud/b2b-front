@@ -6,18 +6,16 @@
  */
 
 export type Code201 = OrganizationCustomer;
-export type NoName = number;
+export type NoName = string;
 export type NoName1 = string;
-export type NoName2 = string;
 export type ID = number;
+export type NoName2 = string;
 export type NoName3 = string;
-export type NoName4 = string;
 
 export interface OrganizationCustomer {
-    contractor_id: NoName;
-    created_at?: NoName1;
-    description?: NoName2;
+    created_at?: NoName;
+    description?: NoName1;
     id?: ID;
-    name: NoName3;
-    updated_at?: NoName4;
+    name: NoName2;
+    updated_at?: NoName3;
 }
