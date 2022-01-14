@@ -17,7 +17,6 @@ export type NoName6 = number;
 export type NoName7 = string;
 export type ID1 = number;
 export type NoName8 = string;
-export type ContractorId = string;
 export type NoName9 = string;
 export type NoName10 = string;
 export type ID2 = number;
@@ -63,7 +62,6 @@ export interface FunPointTypeDifficultyLevelInline {
     updated_at?: NoName7;
 }
 export interface Organization {
-    contractor_id?: ContractorId;
     created_at?: NoName9;
     description?: NoName10;
     id?: ID2;

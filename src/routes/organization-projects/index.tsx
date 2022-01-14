@@ -94,6 +94,9 @@ const OrganizationProjects = () => {
                         <SectionContentListItem title={t('routes.organization-projects.blocks.customer')}>
                             {data?.organization_customer?.name}
                         </SectionContentListItem>
+                        <SectionContentListItem title={t('routes.organization-projects.blocks.contractor')}>
+                            {data?.organization_contractor?.name}
+                        </SectionContentListItem>
                         <SectionContentListItem title={t('routes.organization-projects.blocks.manager')}>
                             <ShortName lastName={data?.manager?.last_name} firstName={data?.manager?.first_name} />
                         </SectionContentListItem>

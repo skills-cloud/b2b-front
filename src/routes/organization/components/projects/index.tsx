@@ -21,6 +21,7 @@ import { OrganizationProjectRead } from 'adapter/types/main/organization-project
 import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
+import Empty from 'component/empty';
 
 enum EProjectInvariants {
     Period = 'period',
@@ -33,7 +34,11 @@ const ProjectList = () => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const { organizationId } = useParams<IParams>();
-    const { data, isLoading } = mainRequest.useGetMainOrganizationProjectListQuery({ organization_id: organizationId });
+    const { data, isLoading } = mainRequest.useGetMainOrganizationProjectListQuery({
+        organization_customer_id: organizationId ? [parseInt(organizationId, 10)] : undefined
+    }, {
+        skip: !organizationId
+    });
 
     const renderField = (field: EProjectInvariants, project: OrganizationProjectRead) => {
         let content = null;
@@ -67,7 +72,7 @@ const ProjectList = () => {
             return <Loader />;
         }
 
-        if(data?.results) {
+        if(data?.results?.length) {
             return data.results.map((item, index) => (
                 <React.Fragment key={item.id}>
                     {index > 0 && <Separator />}
@@ -82,11 +87,7 @@ const ProjectList = () => {
             ));
         }
 
-        return (
-            <div className={cn('projects__empty')}>
-                {t('routes.organization.blocks.empty.title')}
-            </div>
-        );
+        return <Empty>{t('routes.organization.blocks.empty.title')}</Empty>;
     }, [JSON.stringify(data?.results)]);
 
     return (

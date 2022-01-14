@@ -15,6 +15,7 @@ import IconChevronRight from 'component/icons/chevron-right';
 import Separator from 'component/separator';
 import SectionContentList from 'component/section/content-list';
 import Loader from 'component/loader';
+import Empty from 'component/empty';
 
 import { ModuleRead } from 'adapter/types/main/module/get/code-200';
 
@@ -121,11 +122,7 @@ const ModulesList = (props: IProps) => {
             });
         }
 
-        return (
-            <div className={cn('modules-list__empty')}>
-                {t('routes.modules-list.empty')}
-            </div>
-        );
+        return <Empty>{t('routes.modules-list.empty')}</Empty>;
     };
 
     return (

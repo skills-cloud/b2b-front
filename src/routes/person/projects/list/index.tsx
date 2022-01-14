@@ -7,6 +7,7 @@ import Separator from 'component/separator';
 import IconPencil from 'component/icons/pencil';
 import IconDelete from 'component/icons/delete';
 import useFormatDistance from 'component/dates/format-distance';
+import Empty from 'component/empty';
 
 import { CvProjectRead } from 'adapter/types/cv/project/get/code-200';
 
@@ -24,11 +25,7 @@ const ProjectsList = ({ fields, setProjectId, nextStep }: IProjectsList) => {
     const formatDistance = useFormatDistance();
 
     if(!fields?.length) {
-        return (
-            <p className={cn('projects-list__empty')}>
-                {t('routes.person.projects.empty')}
-            </p>
-        );
+        return <Empty>{t('routes.person.projects.empty')}</Empty>;
     }
 
     return (

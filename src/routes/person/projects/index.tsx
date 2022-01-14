@@ -7,6 +7,7 @@ import useClassnames, { IStyle } from 'hook/use-classnames';
 
 import IconPencil from 'component/icons/pencil';
 import VerifyIcon from 'component/verify-icon';
+import Empty from 'component/empty';
 
 import { project } from 'adapter/api/project';
 
@@ -57,11 +58,7 @@ export const Projects = (props: IProps) => {
 
     const elEmpty = useMemo(() => {
         if(!data?.results?.length) {
-            return (
-                <div className={cn('projects__empty')}>
-                    {t('routes.person.projects.empty')}
-                </div>
-            );
+            return <Empty>{t('routes.person.projects.empty')}</Empty>;
         }
     }, [data?.results?.length]);
 

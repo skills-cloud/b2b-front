@@ -19,6 +19,7 @@ import SidebarLayout from 'component/layout/sidebar';
 import Section from 'component/section';
 import Wrapper from 'component/section/wrapper';
 import AddAction from 'component/section/actions/add';
+import Empty from 'component/empty';
 
 import { mainRequest } from 'adapter/api/main';
 
@@ -45,7 +46,7 @@ export const Organizations = () => {
         defaultValues
     });
 
-    const { data, isLoading, refetch } = mainRequest.useGetMainOrganizationQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
+    const { data, isLoading, refetch } = mainRequest.useGetMainOrganizationCustomerQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
 
     useEffect(() => {
         if(Object.values(qs).length) {
@@ -117,7 +118,7 @@ export const Organizations = () => {
             );
         }
 
-        return <span className={cn('organizations__organizations-empty')}>{t('routes.organizations.main.list.empty')}</span>;
+        return <Empty>{t('routes.organizations.main.list.empty')}</Empty>;
     }, [JSON.stringify(data?.results), i18n.language, isLoading]);
 
     const elSidebar = () => {

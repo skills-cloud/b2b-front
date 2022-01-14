@@ -16,8 +16,9 @@ export type NoName5 = number;
 export type NoName6 = number;
 export type NoName7 = string;
 export type NoName8 = number;
-export type NoName9 = string;
+export type NoName9 = number;
 export type NoName10 = string;
+export type NoName11 = string;
 
 export interface OrganizationProject {
     created_at?: NoName;
@@ -29,7 +30,8 @@ export interface OrganizationProject {
     industry_sector_id?: NoName5;
     manager_id?: NoName6;
     name: NoName7;
-    organization_customer_id: NoName8;
-    plan_description?: NoName9;
-    updated_at?: NoName10;
+    organization_contractor_id: NoName8;
+    organization_customer_id: NoName9;
+    plan_description?: NoName10;
+    updated_at?: NoName11;
 }

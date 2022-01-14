@@ -24,7 +24,6 @@ export type FileSize = string;
 export type ID1 = number;
 export type ID2 = number;
 export type NoName10 = boolean;
-export type ContractorId = string;
 export type NoName11 = string;
 export type NoName12 = string;
 export type ID3 = number;
@@ -48,9 +47,10 @@ export type NoName27 = number;
 export type NoName28 = number;
 export type NoName29 = string;
 export type NoName30 = number;
-export type NoName31 = string;
+export type NoName31 = number;
 export type NoName32 = string;
-export type NoName33 = number;
+export type NoName33 = string;
+export type NoName34 = number;
 
 export interface CvCareerRead {
     competencies?: CompetenceInline[];
@@ -67,7 +67,7 @@ export interface CvCareerRead {
     position?: Position;
     position_id?: NoName21;
     projects?: OrganizationProject[];
-    projects_ids?: NoName33[];
+    projects_ids?: NoName34[];
 }
 export interface CompetenceInline {
     description?: NoName;
@@ -85,7 +85,6 @@ export interface CvCareerFileRead {
     id?: ID1;
 }
 export interface Organization {
-    contractor_id?: ContractorId;
     created_at?: NoName11;
     description?: NoName12;
     id?: ID3;
@@ -110,7 +109,8 @@ export interface OrganizationProject {
     industry_sector_id?: NoName27;
     manager_id?: NoName28;
     name: NoName29;
-    organization_customer_id: NoName30;
-    plan_description?: NoName31;
-    updated_at?: NoName32;
+    organization_contractor_id: NoName30;
+    organization_customer_id: NoName31;
+    plan_description?: NoName32;
+    updated_at?: NoName33;
 }

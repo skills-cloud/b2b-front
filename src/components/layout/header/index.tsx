@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
 import UserHeaderBar from 'component/user/header-bar';
-import { HELP, ORGANIZATIONS, REQUESTS, SPECIALISTS, TEAMS } from 'helper/url-list';
+import { ORGANIZATIONS, REQUESTS, SPECIALISTS, SYSTEM_USERS } from 'helper/url-list';
 
 import style from './index.module.pcss';
 
@@ -68,16 +68,10 @@ export const Header = (props: IProps) => {
                         children={t('components.header.nav.requests')}
                     />
                     <NavLink
-                        to={TEAMS}
+                        to={SYSTEM_USERS}
                         className={cn('header__nav-link')}
                         activeClassName={cn('header__nav-link_active')}
-                        children={t('components.header.nav.teams')}
-                    />
-                    <NavLink
-                        to={HELP}
-                        className={cn('header__nav-link')}
-                        activeClassName={cn('header__nav-link_active')}
-                        children={t('components.header.nav.help')}
+                        children={t('components.header.nav.system-users')}
                     />
                 </nav>
                 <UserHeaderBar />

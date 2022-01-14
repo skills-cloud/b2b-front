@@ -8,34 +8,42 @@
 export type Code200 = UserManageRead;
 export type NoName = string;
 export type NoName1 = string;
-export type ID = number;
 export type NoName2 = string;
-export type NoName3 = number;
+export type NoName3 = '-' | 'F' | 'M';
+export type ID = number;
+export type NoName4 = string;
+export type NoName5 = string;
+export type NoName6 = number;
 export type OrganizationContractorName = string;
-export type NoName4 = 'admin' | 'pfm' | 'pm' | 'rm';
+export type NoName7 = 'admin' | 'pfm' | 'pm' | 'rm';
 export type OrganizationContractorId = number;
 export type OrganizationContractorName1 = string;
-export type NoName5 = number;
+export type NoName8 = number;
 export type OrganizationProjectName = string;
-export type NoName6 = 'admin' | 'pfm' | 'pm' | 'rm';
+export type NoName9 = 'admin' | 'pfm' | 'pm' | 'rm';
+export type NoName10 = string;
 
 export interface UserManageRead {
-    email: NoName;
-    first_name: NoName1;
+    birth_date?: NoName;
+    email: NoName1;
+    first_name?: NoName2;
+    gender?: null | NoName3;
     id?: ID;
-    last_name: NoName2;
+    last_name?: NoName4;
+    middle_name?: NoName5;
     organization_contractors_roles?: UserOrganizationContractorRole[];
     organization_projects_roles?: UserOrganizationProjectRole[];
+    phone?: NoName10;
 }
 export interface UserOrganizationContractorRole {
-    organization_contractor_id: NoName3;
+    organization_contractor_id: NoName6;
     organization_contractor_name?: OrganizationContractorName;
-    role: NoName4;
+    role: NoName7;
 }
 export interface UserOrganizationProjectRole {
     organization_contractor_id?: OrganizationContractorId;
     organization_contractor_name?: OrganizationContractorName1;
-    organization_project_id: NoName5;
+    organization_project_id: NoName8;
     organization_project_name?: OrganizationProjectName;
-    role: NoName6;
+    role: NoName9;
 }

@@ -6,8 +6,7 @@
                 "specialists": "Специалисты",
                 "organizations": "Организации",
                 "requests": "Запросы",
-                "teams": "Команды",
-                "help": "Помощь"
+                "system-users": "Пользователи системы"
             }
         },
         "calendar": {
@@ -20,6 +19,10 @@
                 "buttons": {
                     "login": "Войти",
                     "logout": "Выйти"
+                },
+                "dropdown": {
+                    "logout": "Выйти из аккаунта",
+                    "dashboard": "Дашборд"
                 }
             }
         },
@@ -36,7 +39,7 @@
             "search": "Поиск",
             "experience": {
                 "invariant_title": "Указать опыт",
-                "invariant": "Опыт не\u00A0указан",
+                "invariant": "Опыт не указан",
                 "invariant_1": "Менее года",
                 "invariant_3": "1-3 года",
                 "invariant_5": "3-5 лет",
@@ -301,7 +304,8 @@
                 "sections": {
                     "main-info":"Основная информация",
                     "projects": "Проекты",
-                    "cards": "Карточки прав и доступа"
+                    "cards": "Карточки прав и доступа",
+                    "empty": "Не добавлено ни одной карточки прав и доступа"
                 },
                 "project": {
                     "period": "Период",
@@ -328,7 +332,7 @@
                     "card-sub": "Подпункт карточки",
                     "card-title": "Название карточки",
                     "cards-count_empty": "",
-                    "cards-count_full": "\u00A0({{value }})",
+                    "cards-count_full": " ({{value }})",
                     "subdirectory": "Добавить подпункт",
                     "edit": "Редактировать",
                     "delete": "Удалить",
@@ -364,6 +368,7 @@
                     "cards":"Карточки прав и доступа"
                 },
                 "customer": "Заказчик",
+                "contractor": "Исполнитель",
                 "manager": "РП",
                 "timeframe": "Таймфрейм",
                 "industry_sector": "Отрасль",
@@ -374,7 +379,8 @@
             },
             "resources": {
                 "title": "Ресурсный план",
-                "action": "Пересчитать"
+                "action": "Пересчитать",
+                "empty": "Ресурсный план не заполнен"
             }
         },
         "organization-project": {
@@ -400,6 +406,10 @@
                     "placeholder": "Введите имя руководителя проекта"
                 },
                 "organization_customer": {
+                    "title": "Организация исполнителя",
+                    "placeholder": "Введите организацию исполнителя"
+                },
+                "organization_contractor": {
                     "title": "Организация исполнителя",
                     "placeholder": "Введите организацию исполнителя"
                 },
@@ -561,6 +571,7 @@
             },
             "education": {
                 "header": "Образование",
+                "empty": "Не добавлено сведений об образовании",
                 "label": {
                     "education-place": "ВУЗ",
                     "period": "Период",
@@ -1171,7 +1182,7 @@
                 },
                 "empty-title": "Название проектного запроса не указано",
                 "empty-title-requirement": "Требование",
-                "empty-field": "Не\u00A0указано",
+                "empty-field": "Не указано",
                 "people_0": "человек",
                 "people_1": "человека",
                 "people_2": "человек",
@@ -1192,8 +1203,8 @@
                 "project-term": "Сроки проекта",
                 "competencies": {
                     "name": "Навыки",
-                    "experience-content": "{{experience}}\u00A0{{experienceTrl}}",
-                    "experience-empty": "Опыт не\u00A0указан",
+                    "experience-content": "{{experience}} {{experienceTrl}}",
+                    "experience-empty": "Опыт не указан",
                     "experience": "Опыт",
                     "experience-years_0": "год",
                     "experience-years_1": "года",
@@ -1208,14 +1219,14 @@
                     "point-content_country_city": "{{country}}, {{city}}",
                     "point-content_country": "{{country}}",
                     "point-content_city": "{{city}}",
-                    "point-content_empty": "Адрес не\u00A0указан",
+                    "point-content_empty": "Адрес не указан",
                     "address": "Адрес",
                     "type-of-employment": "Формат работы"
                 },
                 "price": {
                     "title": "Ставка",
-                    "per-hour": "В\u00A0час",
-                    "value": "{{value}}\u00A0руб.",
+                    "per-hour": "В час",
+                    "value": "{{value}} руб.",
                     "field": "Часовая ставка (руб.)"
                 },
                 "other": {

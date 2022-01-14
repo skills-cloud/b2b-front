@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
 import { IParams, ORGANIZATION_PROJECT_MODULE_REQUEST_CREATE } from 'helper/url-list';
-import useClassnames from 'hook/use-classnames';
 
 import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
@@ -22,6 +21,7 @@ import DropdownMenu from 'component/dropdown/menu';
 import DotsAction from 'component/section/actions/dots';
 import DropdownMenuItem from 'component/dropdown/menu-item';
 import DeleteAction from 'component/section/actions/delete';
+import Empty from 'component/empty';
 
 import { mainRequest } from 'adapter/api/main';
 
@@ -29,7 +29,6 @@ import ConfirmModal from './confirm-modal';
 import EditModal from './edit';
 import FunPointsComponent from './fun-points';
 import ResourceValueComponent from './resource-value';
-import style from './index.module.pcss';
 
 enum ESectionInvariants {
     MainInfo = 'main-info',
@@ -40,7 +39,6 @@ enum ESectionInvariants {
 
 const Module = () => {
     const { t } = useTranslation();
-    const cn = useClassnames(style);
     const { organizationId, moduleId, projectId } = useParams<IParams>();
 
     const [visible, setVisible] = useState<boolean>(false);
@@ -60,11 +58,7 @@ const Module = () => {
             return <RequestList fromOrganization={true} requestList={requests.results} />;
         }
 
-        return (
-            <div className={cn('module__empty')}>
-                {t('routes.module.blocks.empty')}
-            </div>
-        );
+        return <Empty>{t('routes.module.blocks.empty')}</Empty>;
     };
 
     const onClickEdit = () => {

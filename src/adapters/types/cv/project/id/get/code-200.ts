@@ -24,7 +24,6 @@ export type NoName10 = string;
 export type NoName11 = number;
 export type NoName12 = boolean;
 export type NoName13 = string;
-export type ContractorId = string;
 export type NoName14 = string;
 export type NoName15 = string;
 export type ID3 = number;
@@ -70,7 +69,6 @@ export interface IndustrySector {
     name: NoName10;
 }
 export interface Organization {
-    contractor_id?: ContractorId;
     created_at?: NoName14;
     description?: NoName15;
     id?: ID3;

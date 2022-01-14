@@ -9,33 +9,41 @@ export type Code200 = WhoAmI;
 export type NoName = string;
 export type NoName1 = string;
 export type NoName2 = string;
+export type NoName3 = string;
+export type NoName4 = '-' | 'F' | 'M';
 export type ID = number;
 /**
  * Отметьте, если пользователь должен считаться активным. Уберите эту отметку вместо удаления учётной записи.
  */
-export type NoName3 = boolean;
+export type NoName5 = boolean;
 /**
  * Отметьте, если пользователь может входить в административную часть сайта.
  */
-export type NoName4 = boolean;
+export type NoName6 = boolean;
 /**
  * Указывает, что пользователь имеет все права без явного их назначения.
  */
-export type NoName5 = boolean;
-export type NoName6 = string;
-export type NoName7 = string;
+export type NoName7 = boolean;
+export type NoName8 = string;
+export type NoName9 = string;
+export type NoName10 = string;
+export type NoName11 = string;
 export type Photo = string;
 
 export interface WhoAmI {
-    date_joined?: NoName;
-    email: NoName1;
-    first_name: NoName2;
+    birth_date?: NoName;
+    date_joined?: NoName1;
+    email: NoName2;
+    first_name?: NoName3;
+    gender?: null | NoName4;
     id?: ID;
-    is_active?: NoName3;
-    is_staff?: NoName4;
-    is_superuser?: NoName5;
-    last_login?: NoName6;
-    last_name: NoName7;
+    is_active?: NoName5;
+    is_staff?: NoName6;
+    is_superuser?: NoName7;
+    last_login?: NoName8;
+    last_name?: NoName9;
+    middle_name?: NoName10;
+    phone?: NoName11;
     photo?: Photo;
     roles?: string[];
 }

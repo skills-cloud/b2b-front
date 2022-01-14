@@ -32,6 +32,8 @@ import { ModuleFunPointWrite as ModuleFunPointWritePatch } from 'adapter/types/m
 import { FunPointTypePositionLaborEstimateWrite } from 'adapter/types/main/fun-point-type-position-labor-estimate/post/code-201';
 import { FunPointTypePositionLaborEstimateWrite as FunPointTypePositionLaborEstimateWritePatch } from 'adapter/types/main/fun-point-type-position-labor-estimate/id/patch/code-200';
 import { ModulePositionLaborEstimateWrite } from 'adapter/types/main/module-position-labor-estimate/post/code-201';
+import { OrganizationContractorRead } from 'adapter/types/main/organization-contractor/get/code-200';
+import { OrganizationContractorRead as OrganizationContractorReadById } from 'adapter/types/main/organization-contractor/id/get/code-200';
 
 export interface IOrganizationProjectPost extends OrganizationProject {
     id: number
@@ -69,6 +71,10 @@ export interface IGetOrganizationProjectListQueryParams extends IQueryParams {
 
 interface IResponseGetOrganization extends IResponseBase {
     results: Array<Organization>
+}
+
+interface IResponseGetOrganizationContractor extends IResponseBase {
+    results: Array<OrganizationContractorRead>
 }
 
 interface IResponseRequestList extends IResponseBase {
@@ -198,7 +204,7 @@ export interface IPostResponseOrganizationProjectCardItem extends OrganizationPr
 
 export interface IGetProjectCardParams {
     organization_project_id?: Array<number>,
-    organization_id?: Array<number>
+    organization_customer_id?: Array<number>
 }
 
 export interface IResponseGetModuleList extends IResponseBase {
@@ -247,11 +253,13 @@ export const mainRequest = createApi({
                 method: 'GET'
             })
         }),
-        postBaseProjectCard: build.mutation<OrganizationProjectCardItemReadTree, { project_id: string, root_card_item_id: string }>({
-            invalidatesTags: ['main'],
-            query          : ({ project_id, root_card_item_id }) => ({
-                url   : `/organization-project-card-item/create-tree-by-template/${project_id}/${root_card_item_id}/`,
-                method: 'POST'
+        getOrganizationProjectCardItem: build.query<Array<OrganizationProjectCardItemReadTree>,
+        { organization_id?: Array<string>, organization_project_id?: Array<string>}>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/organization-project-card-item/',
+                method: 'GET',
+                params
             })
         }),
         postMainOrganizationProjectCard: build.mutation<IPostResponseOrganizationProjectCardItem, OrganizationProjectCardItem>({
@@ -260,6 +268,13 @@ export const mainRequest = createApi({
                 url   : '/organization-project-card-item/',
                 method: 'POST',
                 body
+            })
+        }),
+        postBaseProjectCard: build.mutation<OrganizationProjectCardItemReadTree, { project_id: string, root_card_item_id: string }>({
+            invalidatesTags: ['main'],
+            query          : ({ project_id, root_card_item_id }) => ({
+                url   : `/organization-project-card-item/create-tree-by-template/${project_id}/${root_card_item_id}/`,
+                method: 'POST'
             })
         }),
         patchMainOrganizationProjectCard: build.mutation<IPostResponseOrganizationProjectCardItem, IPostResponseOrganizationProjectCardItem>({
@@ -361,7 +376,7 @@ export const mainRequest = createApi({
                 params: { ...params }
             })
         }),
-        getMainOrganizationContractorById: build.query<OrganizationById, IBaseGetById>({
+        getMainOrganizationContractorById: build.query<OrganizationContractorReadById, IBaseGetById>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : `/organization-contractor/${params.id}/`,
@@ -384,7 +399,7 @@ export const mainRequest = createApi({
                 body
             })
         }),
-        getMainOrganizationContractor: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
+        getMainOrganizationContractor: build.query<IResponseGetOrganizationContractor, undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization-contractor/',
@@ -473,15 +488,6 @@ export const mainRequest = createApi({
                 body  : rest
             })
         }),
-        getOrganizationProjectCardItem: build.query<Array<OrganizationProjectCardItemReadTree>,
-        { organization_id?: Array<string>, organization_project_id?: Array<string>}>({
-            providesTags: ['main'],
-            query       : (params) => ({
-                url   : '/organization-project-card-item/',
-                method: 'GET',
-                params
-            })
-        }),
         getMainOrganizationProjectById: build.query<OrganizationProjectRead, IBaseGetById>({
             providesTags: ['main'],
             query       : ({ id, ...params }) => ({
@@ -514,7 +520,7 @@ export const mainRequest = createApi({
                 params
             })
         }),
-        postMainRequest: build.mutation<IPostBaseResponse, IPostRequestData>({
+        postMainRequest: build.mutation<IPostBaseResponse, IParamsPatchRequest>({
             invalidatesTags: ['main'],
             query          : (body) => ({
                 url   : '/request/',

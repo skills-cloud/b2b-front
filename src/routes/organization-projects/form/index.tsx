@@ -30,8 +30,10 @@ interface ISelect {
     label: string
 }
 
-interface IFormValues extends Omit<OrganizationProjectRead, 'industry_sector' | 'manager'> {
+interface IFormValues extends Omit<OrganizationProjectRead, 'industry_sector' | 'manager' | 'organization_customer' | 'organization_contractor'> {
     manager: ISelect,
+    organization_contractor: ISelect,
+    organization_customer: ISelect,
     recruiter: ISelect,
     industry_sector: ISelect
 }
@@ -47,6 +49,14 @@ const OrganizationProjectCreateForm = (props: IProps) => {
             manager: props.defaultValues?.manager ? {
                 value: props.defaultValues?.manager_id,
                 label: `${props.defaultValues?.manager.last_name} ${props.defaultValues?.manager.first_name}`
+            } : '',
+            organization_contractor: props.defaultValues?.organization_contractor ? {
+                value: props.defaultValues?.organization_contractor?.id,
+                label: props.defaultValues?.organization_contractor?.name
+            } : '',
+            organization_customer: props.defaultValues?.organization_customer ? {
+                value: props.defaultValues?.organization_customer?.id,
+                label: props.defaultValues?.organization_customer?.name
             } : '',
             industry_sector: props.defaultValues?.industry_sector ? {
                 value: props.defaultValues?.industry_sector?.id,
@@ -73,7 +83,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
     const [patch] = mainRequest.usePatchMainOrganizationProjectMutation();
 
     const onSubmit = context.handleSubmit(
-        ({ industry_sector, manager, ...data }: IFormValues) => {
+        ({ industry_sector, manager, organization_customer, organization_contractor, ...data }: IFormValues) => {
             const postData = { ...data };
 
             if(industry_sector) {
@@ -82,6 +92,14 @@ const OrganizationProjectCreateForm = (props: IProps) => {
 
             if(manager) {
                 postData.manager_id = parseInt(manager.value, 10);
+            }
+
+            if(organization_customer) {
+                postData.organization_customer_id = parseInt(organization_customer.value, 10);
+            }
+
+            if(organization_contractor) {
+                postData.organization_contractor_id = parseInt(organization_contractor.value, 10);
             }
 
             const method = props.defaultValues ? patch : post;
@@ -124,12 +142,22 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     placeholder={t('routes.organization-project.create.name.placeholder')}
                 />
                 <InputMain
+                    disabled={true}
                     defaultValue={[props.defaultValues?.organization_customer?.id as number]}
                     name="organization_customer"
                     direction="column"
                     requestType={InputMain.requestType.Customer}
                     label={t('routes.organization-project.create.organization_customer.title')}
                     placeholder={t('routes.organization-project.create.organization_customer.placeholder')}
+                    isMulti={false}
+                />
+                <InputMain
+                    defaultValue={[props.defaultValues?.organization_contractor?.id as number]}
+                    name="organization_contractor"
+                    direction="column"
+                    requestType={InputMain.requestType.Contractor}
+                    label={t('routes.organization-project.create.organization_contractor.title')}
+                    placeholder={t('routes.organization-project.create.organization_contractor.placeholder')}
                     isMulti={false}
                 />
                 <InputDictionary

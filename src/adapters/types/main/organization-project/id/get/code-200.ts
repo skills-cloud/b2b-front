@@ -19,23 +19,27 @@ export type NoName6 = boolean;
 export type NoName7 = string;
 export type NoName8 = number;
 export type NoName9 = string;
-export type ID2 = number;
 export type NoName10 = string;
-export type Photo = string;
-export type NoName11 = number;
-export type ModulesCount = number;
+export type NoName11 = '-' | 'F' | 'M';
+export type ID2 = number;
 export type NoName12 = string;
-export type ContractorId = string;
 export type NoName13 = string;
 export type NoName14 = string;
-export type ID3 = number;
-export type NoName15 = boolean;
-export type NoName16 = boolean;
+export type Photo = string;
+export type NoName15 = number;
+export type ModulesCount = number;
+export type NoName16 = string;
 export type NoName17 = string;
 export type NoName18 = string;
-export type NoName19 = number;
-export type NoName20 = string;
+export type ID3 = number;
+export type NoName19 = boolean;
+export type NoName20 = boolean;
 export type NoName21 = string;
+export type NoName22 = string;
+export type NoName23 = number;
+export type NoName24 = number;
+export type NoName25 = string;
+export type NoName26 = string;
 
 export interface OrganizationProjectRead {
     created_at?: NoName;
@@ -48,13 +52,15 @@ export interface OrganizationProjectRead {
     industry_sector?: IndustrySector;
     industry_sector_id?: NoName8;
     manager?: UserInline;
-    manager_id?: NoName11;
+    manager_id?: NoName15;
     modules_count?: ModulesCount;
-    name: NoName12;
+    name: NoName16;
+    organization_contractor?: Organization;
+    organization_contractor_id: NoName23;
     organization_customer?: Organization;
-    organization_customer_id: NoName19;
-    plan_description?: NoName20;
-    updated_at?: NoName21;
+    organization_customer_id: NoName24;
+    plan_description?: NoName25;
+    updated_at?: NoName26;
 }
 export interface IndustrySector {
     description?: NoName5;
@@ -63,18 +69,21 @@ export interface IndustrySector {
     name: NoName7;
 }
 export interface UserInline {
-    first_name: NoName9;
+    birth_date?: NoName9;
+    first_name?: NoName10;
+    gender?: null | NoName11;
     id?: ID2;
-    last_name: NoName10;
+    last_name?: NoName12;
+    middle_name?: NoName13;
+    phone?: NoName14;
     photo?: Photo;
 }
 export interface Organization {
-    contractor_id?: ContractorId;
-    created_at?: NoName13;
-    description?: NoName14;
+    created_at?: NoName17;
+    description?: NoName18;
     id?: ID3;
-    is_contractor?: NoName15;
-    is_customer?: NoName16;
-    name: NoName17;
-    updated_at?: NoName18;
+    is_contractor?: NoName19;
+    is_customer?: NoName20;
+    name: NoName21;
+    updated_at?: NoName22;
 }

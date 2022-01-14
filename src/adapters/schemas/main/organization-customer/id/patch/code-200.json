@@ -7,12 +7,6 @@
     "definitions": {
         "OrganizationCustomer": {
             "properties": {
-                "contractor_id": {
-                    "title": "исполнитель для этого заказчика",
-                    "type": "integer",
-                    "x-url-object-detail": "/api/main/organization-contractor/$id/",
-                    "x-url-object-list": "/api/main/organization-contractor/"
-                },
                 "created_at": {
                     "format": "date-time",
                     "readOnly": true,
@@ -43,7 +37,6 @@
                 }
             },
             "required": [
-                "contractor_id",
                 "name"
             ],
             "type": "object"

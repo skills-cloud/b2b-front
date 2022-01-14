@@ -8,6 +8,7 @@ import useClassnames from 'hook/use-classnames';
 import IconPencil from 'component/icons/pencil';
 import Loader from 'component/loader';
 import SkillsTag from 'component/skills-tag';
+import Empty from 'component/empty';
 
 import { position } from 'adapter/api/position';
 
@@ -80,11 +81,7 @@ const Competencies = (props: IProps) => {
             );
         }
 
-        return (
-            <div className={cn('competencies__empty')}>
-                {t('routes.person.blocks.competencies.empty')}
-            </div>
-        );
+        return <Empty>{t('routes.person.blocks.competencies.empty')}</Empty>;
     };
 
     return (

@@ -19,6 +19,7 @@ import { RequestRequirementRead } from 'adapter/types/main/request-requirement/i
 import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 
 import style from './index.module.pcss';
+import Empty from 'component/empty';
 
 export const MAIN_REQUIREMENTS_FORM_ID = 'MAIN_REQUIREMENTS_FORM_ID';
 
@@ -150,11 +151,7 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
                 );
             }
 
-            return (
-                <span className={cn('edit-requirements__empty')}>
-                    {t('routes.project-request.requirements.edit-modal.empty')}
-                </span>
-            );
+            return <Empty>{t('routes.project-request.requirements.edit-modal.empty')}</Empty>;
         }
     };
 

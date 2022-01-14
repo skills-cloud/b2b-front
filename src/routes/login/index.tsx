@@ -6,6 +6,8 @@ import { useHistory, Redirect } from 'react-router';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import { useClassnames } from 'hook/use-classnames';
+import { DASHBOARD } from 'helper/url-list';
+
 
 import Button from 'component/button';
 import Error from 'component/error';
@@ -74,7 +76,7 @@ const Login = () => {
             return <Redirect to={qs.from} />;
         }
 
-        return <Redirect to="/dashboard" />;
+        return <Redirect to={DASHBOARD} />;
     }
 
     return (

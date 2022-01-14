@@ -123,8 +123,8 @@ export const REQUEST_CREATE = '/requests/create';
 export const REQUEST_ID = (requestId?: string | number) => `/requests/${requestId}`;
 export const REQUEST_EDIT = (requestId?: string | number) => `/requests/${requestId}/edit`;
 
-export const TEAMS = '/teams';
-export const HELP = '/help';
+export const SYSTEM_USERS = '/system-users';
+export const DASHBOARD = '/dashboard';
 
 
 /* eslint-enable @typescript-eslint/naming-convention */
