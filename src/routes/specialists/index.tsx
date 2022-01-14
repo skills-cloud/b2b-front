@@ -171,7 +171,7 @@ export const Specialists = () => {
                 <Wrapper>
                     <H3>{t('routes.specialists.sidebar.filters.title')}</H3>
                     <FormProvider {...context}>
-                        <form className={cn('specialists__form')}>
+                        <form className={cn('specialists__form')} onSubmit={(e) => e.preventDefault}>
                             <FormInput
                                 name="search"
                                 type="search"

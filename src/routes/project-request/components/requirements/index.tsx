@@ -5,7 +5,6 @@ import { useHistory, useLocation } from 'react-router';
 
 import { ORGANIZATION_PROJECT_MODULE_REQUEST_REQUIREMENT_SPECIALISTS } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
-import { normalizeObject } from 'src/helper/normalize-object';
 
 import SectionHeader from 'component/section/header';
 import EditAction from 'component/section/actions/edit';
