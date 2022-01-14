@@ -33,6 +33,7 @@ export interface IFormValues {
     years?: string,
     country?: Array<IValue> | null,
     city?: Array<IValue> | null,
+    position?: Array<IValue> | null,
     competencies?: Array<IValue>
 }
 
@@ -43,19 +44,13 @@ export const Specialists = () => {
     const params = useParams<IParams>();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
-    const defaultValues = {
-        country     : [],
-        city        : [],
-        competencies: [],
-        position    : []
-    };
-
     const context = useForm<IFormValues>({
-        mode: 'all',
-        defaultValues
+        mode         : 'all',
+        defaultValues: qs
     });
+    const values = context.watch();
 
-    const { data, isLoading, refetch } = cv.useGetCvListQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
+    const { data, isLoading, refetch } = cv.useGetCvListQuery(normalizeObject(qs));
     const { data: requirementData, refetch: reqsRefetch } = mainRequest.useGetMainRequestRequirementByIdQuery(
         { id: params.requirementId },
         { refetchOnMountOrArgChange: true, skip: !params.requirementId }
@@ -65,15 +60,20 @@ export const Specialists = () => {
     const [showModalById, setShowModalById] = useState<number | null>(null);
 
     useEffect(() => {
-        if(Object.values(qs).length) {
-            const newDefaultValues = {
-                ...defaultValues,
-                ...qs
-            };
+        const { country, position, city, competencies, ...otherValues } = values;
 
-            context.reset(newDefaultValues);
-        }
-    }, []);
+        history.push({
+            search: stringify({
+                ...otherValues,
+                ...(country ? { country_id: country?.map((item) => item?.value) } : {}),
+                ...(position ? { position_id: position?.map((item) => item?.value) } : {}),
+                ...(city ? { city_id: city.map((item) => item?.value) } : {}),
+                ...(competencies ? { competencies_ids_any: competencies.map((item) => item?.value) } : {})
+            }, {
+                skipEmptyString: true
+            })
+        });
+    }, [JSON.stringify(values)]);
 
     useEffect(() => {
         refetch();
@@ -89,30 +89,15 @@ export const Specialists = () => {
         setAddToRequest(null);
     };
 
-    const onSubmit = context.handleSubmit(
-        (formData) => {
-            const objectToNormalize = {
-                search              : formData.search,
-                years               : formData.years,
-                country_id          : formData.country?.map((item) => item?.value),
-                city_id             : formData.city?.map((item) => item?.value),
-                competencies_ids_any: formData.competencies?.map((comp: IValue) => comp.value)
-            };
-
-            history.replace({
-                search: stringify(normalizeObject(objectToNormalize))
-            });
-        },
-        (formError) => {
-            console.error(formError);
-        }
-    );
-
     const onClearFilter = () => {
-        history.replace({
-            search: ''
+        context.reset({
+            search      : '',
+            years       : '',
+            country     : [],
+            city        : [],
+            competencies: [],
+            position    : []
         });
-        context.reset(defaultValues);
     };
 
     const onClickLinked = (cvId?: number) => {
@@ -186,7 +171,7 @@ export const Specialists = () => {
                 <Wrapper>
                     <H3>{t('routes.specialists.sidebar.filters.title')}</H3>
                     <FormProvider {...context}>
-                        <form className={cn('specialists__form')} onSubmit={onSubmit}>
+                        <form className={cn('specialists__form')}>
                             <FormInput
                                 name="search"
                                 type="search"

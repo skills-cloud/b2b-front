@@ -69,7 +69,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     competencies_ids_any: req.competencies?.map((comp) => comp.competence_id)
                 };
 
-                history.push(`${ORGANIZATION_PROJECT_MODULE_REQUEST_REQUIREMENT_SPECIALISTS(pathname, requirementId)}?${stringify(normalizeObject(params))}`);
+                history.push(`${ORGANIZATION_PROJECT_MODULE_REQUEST_REQUIREMENT_SPECIALISTS(pathname, requirementId)}?${stringify(params, { skipEmptyString: true, skipNull: true })}`);
             }
         }
     };
