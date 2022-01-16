@@ -32,7 +32,8 @@ export const SystemUsers = () => {
 
     const { data, requestId, isFetching } = acc.useGetUserManageQuery({
         search                    : query.get('search') || undefined,
-        organization_contractor_id: query.get('organization_contractor_id') ? [query.get('organization_contractor_id') as string] : undefined
+        organization_contractor_id: query.get('organization_contractor_id') ? [query.get('organization_contractor_id') as string] : undefined,
+        role                      : query.get('role') ? [query.get('role') as string] : undefined
     });
     const [trigger] = mainRequest.useLazyGetMainOrganizationQuery();
 
@@ -96,6 +97,7 @@ export const SystemUsers = () => {
 
                                         payload.search && qs.append('search', payload.search);
                                         payload.organization_contractor_id?.value && qs.append('organization_contractor_id', payload.organization_contractor_id.value);
+                                        payload.role?.value && qs.append('role', payload.role.value);
 
                                         history.replace({
                                             search: qs.toString()
@@ -127,6 +129,26 @@ export const SystemUsers = () => {
                                                 })
                                                 .catch(console.error);
                                         }}
+                                    />
+                                    <FormSelect
+                                        name="role"
+                                        label={t('routes.system-users.sidebar.filters.form.role.label')}
+                                        direction="column"
+                                        placeholder={t('routes.system-users.sidebar.filters.form.role.placeholder')}
+                                        clearable={true}
+                                        options={[{
+                                            label: t('routes.system-create.form.roles.admin'),
+                                            value: 'admin'
+                                        }, {
+                                            label: t('routes.system-create.form.roles.pfm'),
+                                            value: 'pfm'
+                                        }, {
+                                            label: t('routes.system-create.form.roles.pm'),
+                                            value: 'pm'
+                                        }, {
+                                            label: t('routes.system-create.form.roles.rm'),
+                                            value: 'rm'
+                                        }]}
                                     />
                                     <Button
                                         type="submit"

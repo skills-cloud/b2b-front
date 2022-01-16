@@ -175,8 +175,8 @@ export const SystemUsersCreate = () => {
                                     <InputSelect
                                         name={`organizations.${index}.role`}
                                         direction="column"
-                                        label={!index && t('routes.system-create.form.organization_contractor_id.label')}
-                                        placeholder={t('routes.system-create.form.organization_contractor_id.placeholder')}
+                                        label={!index && t('routes.system-create.form.organization_role.label')}
+                                        placeholder={t('routes.system-create.form.organization_role.placeholder')}
                                         options={[{
                                             label: t('routes.system-create.form.roles.admin'),
                                             value: 'admin'

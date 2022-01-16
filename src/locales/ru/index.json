@@ -149,6 +149,10 @@
                         "organization_contractor_id": {
                             "label": "Организация исполнитель",
                             "placeholder": "Название организации"
+                        },
+                        "role": {
+                            "label": "Роль в организации",
+                            "placeholder": "Выбрать"
                         }
                     },
                     "buttons": {
@@ -182,6 +186,10 @@
                 },
                 "organization_contractor_id": {
                     "label": "Организация исполнитель",
+                    "placeholder": "Выбор"
+                },
+                "organization_role": {
+                    "label": "Роль в организации",
                     "placeholder": "Выбор"
                 },
                 "buttons": {

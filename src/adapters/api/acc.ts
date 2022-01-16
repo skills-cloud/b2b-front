@@ -78,6 +78,7 @@ export const acc = createApi({
             results: Array<Code200UserManageGet>
         }, {
             search?: string,
+            role?: Array<string>,
             organization_contractor_id?: Array<string>,
             organization_project_id?: Array<string>,
             ordering?: string,
