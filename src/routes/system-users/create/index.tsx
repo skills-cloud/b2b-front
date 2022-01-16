@@ -53,7 +53,7 @@ export const SystemUsersCreate = () => {
                         className={cn('system-users-create__form')}
                         onSubmit={context.handleSubmit(
                             (payload) => {
-                                console.log('payload', payload);
+                                console.info('payload', payload);
                             },
                             console.error
                         )}

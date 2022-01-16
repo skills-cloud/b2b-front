@@ -399,7 +399,7 @@ export const mainRequest = createApi({
                 body
             })
         }),
-        getMainOrganizationContractor: build.query<IResponseGetOrganizationContractor, undefined>({
+        getMainOrganizationContractor: build.query<IResponseGetOrganizationContractor, { search?: string } | undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization-contractor/',
@@ -456,7 +456,7 @@ export const mainRequest = createApi({
                 body
             })
         }),
-        getMainOrganizationCustomer: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
+        getMainOrganizationCustomer: build.query<IResponseGetOrganization, IQueryParams | undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization-customer/',
@@ -671,7 +671,7 @@ export const mainRequest = createApi({
                 body
             })
         }),
-        getMainFunPointType: build.query<IResponseGetFunPointTypeList, { search?: string } | undefined>({
+        getMainFunPointType: build.query<IResponseGetFunPointTypeList, IQueryParams | undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/fun-point-type/',

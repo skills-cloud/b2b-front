@@ -9,7 +9,6 @@ import FormDate from 'component/form/date';
 import Error from 'component/error';
 import InputFile from 'component/form/file';
 import InputDictionary from 'component/form/input-dictionary';
-import InputMain from 'component/form/input-main';
 import InputProject from 'component/form/input-project';
 
 import { career } from 'adapter/api/career';
@@ -17,6 +16,8 @@ import { CvCareerRead, CvCareerFileRead } from 'adapter/types/cv/career/get/code
 
 import style from './index.module.pcss';
 import Textarea from 'component/form/textarea';
+import InputSelect from 'component/form/select';
+import { mainRequest } from 'adapter/api/main';
 
 export interface IResultForm extends Omit<CvCareerRead, 'competencies_select' | 'organization' | 'position' | 'projects'> {
     competencies_select: Array<{
@@ -56,6 +57,19 @@ const CareerForm = (props: IProjectForm) => {
 
     const [error, setError] = useState<Array<string> | string | null>(null);
 
+    const { data, isLoading } = mainRequest.useGetMainOrganizationQuery(undefined);
+
+    const organizations = useMemo(() => {
+        if(data?.results) {
+            return data.results.map((item) => ({
+                value: String(item.id),
+                label: item.name
+            }));
+        }
+
+        return [];
+    }, [data?.results]);
+
     useEffect(() => {
         props.onSetLoading?.(isPatchLoading || isPostLoading);
     }, [isPostLoading, isPatchLoading]);
@@ -74,7 +88,7 @@ const CareerForm = (props: IProjectForm) => {
     };
 
     const onSubmit = methods.handleSubmit((formData) => {
-        const data = {
+        const submitData = {
             ...formData.career,
             cv_id           : parseInt(specialistId, 10),
             competencies_ids: formData.career?.competencies_select?.map(({ value }) => value) as Array<number>,
@@ -82,7 +96,7 @@ const CareerForm = (props: IProjectForm) => {
             position_id     : formData.career?.position?.value,
             projects_ids    : formData.career?.projects?.map((item) => item.value as number)
         };
-        const request = formData.career?.id ? patchCareer(data) : postCareer(data);
+        const request = formData.career?.id ? patchCareer(submitData) : postCareer(submitData);
 
         request
             .unwrap()
@@ -142,12 +156,13 @@ const CareerForm = (props: IProjectForm) => {
                     <label className={cn('career-form__label')}>
                         {t('routes.person.career.fields.organization')}
                     </label>
-                    <InputMain
+                    <InputSelect
+                        options={organizations}
                         isMulti={false}
-                        requestType={InputMain.requestType.Organization}
                         name="career.organization"
                         placeholder={t('routes.person.career.fields.placeholder.organization')}
                         required={true}
+                        isLoading={isLoading}
                     />
                 </div>
                 <div className={cn('career-form__item')}>
