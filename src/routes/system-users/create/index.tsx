@@ -1,6 +1,7 @@
-import React, { MouseEvent } from 'react';
+import React, { MouseEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
+import { useHistory } from 'react-router';
 
 import useClassnames from 'hook/use-classnames';
 
@@ -8,21 +9,42 @@ import InputSelect from 'component/form/select';
 import FormInput from 'component/form/input';
 import DateInput from 'component/form/date';
 import Button from 'component/button';
+import Error from 'component/error';
 
-import { dictionary } from 'adapter/api/dictionary';
 import { mainRequest } from 'adapter/api/main';
+import { acc } from 'adapter/api/acc';
 
 import style from './index.module.pcss';
-
 
 export const SystemUsersCreate = () => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
+    const history = useHistory();
 
-    const context = useForm({
+    const context = useForm<{
+        email: string,
+        first_name?: string,
+        middle_name?: string,
+        last_name?: string,
+        gender?: {
+            label: string,
+            value: 'M' | 'F' | '-'
+        },
+        birth_date?: string,
+        phone?: string,
+        organizations?: Array<{
+            role: {
+                label: string,
+                value: string
+            },
+            organization_contractor_id: {
+                label: string,
+                value: number
+            }
+        }>
+    }>({
         mode         : 'onSubmit',
         defaultValues: {
-            common       : [{}],
             organizations: [{}]
         }
     });
@@ -32,14 +54,30 @@ export const SystemUsersCreate = () => {
         control: context.control
     });
 
-    const { fields, append, remove } = useFieldArray({
-        keyName: 'fieldId',
-        control: context.control,
-        name   : 'common'
-    });
-
-    const [getContact] = dictionary.useLazyGetContactTypeQuery();
     const [getOrganizationContractor] = mainRequest.useLazyGetMainOrganizationContractorQuery();
+    const [setUserManage, { error, isError, isLoading }] = acc.useSetUserManageMutation();
+
+    const elErrors = useMemo(() => {
+        if(!isLoading && isError) {
+            const errors = error as {
+                data: {
+                    details: Record<string, Array<string>>
+                }
+            };
+
+            const keys = Object.keys(errors.data.details);
+
+            return (
+                <div>
+                    {keys.map((key) => {
+                        return errors.data.details[key].map((message, index) => (
+                            <Error key={`${key}-${index}}`}>{message}</Error>
+                        ));
+                    })}
+                </div>
+            );
+        }
+    }, [isError, isLoading]);
 
     return (
         <div className={cn('system-users-create')}>
@@ -53,7 +91,19 @@ export const SystemUsersCreate = () => {
                         className={cn('system-users-create__form')}
                         onSubmit={context.handleSubmit(
                             (payload) => {
-                                console.log('payload', payload);
+                                setUserManage({
+                                    ...payload,
+                                    gender                        : payload.gender?.value || '-',
+                                    organization_contractors_roles: payload.organizations?.filter((item) => item.role && item.organization_contractor_id).map((item) => ({
+                                        role                      : item?.role?.value,
+                                        organization_contractor_id: item?.organization_contractor_id?.value
+                                    }))
+                                })
+                                    .unwrap()
+                                    .then(() => {
+                                        history.push('/system-users');
+                                    })
+                                    .catch(console.error);
                             },
                             console.error
                         )}
@@ -81,8 +131,22 @@ export const SystemUsersCreate = () => {
                                 />
                             </div>
                         </div>
+                        <FormInput
+                            type="text"
+                            name="email"
+                            required={true}
+                            label={t('routes.system-create.form.email.label')}
+                            placeholder={t('routes.system-create.form.email.placeholder')}
+                        />
+                        <FormInput
+                            type="text"
+                            name="phone"
+                            label={t('routes.system-create.form.phone.label')}
+                            placeholder={t('routes.system-create.form.phone.placeholder')}
+                        />
                         {organizations.fields.map((field, index) => (
                             <div
+                                // @ts-ignore
                                 key={field.id}
                                 className={cn('system-users-create__organization')}
                             >
@@ -104,28 +168,26 @@ export const SystemUsersCreate = () => {
                                                             label: organization.name
                                                         }))
                                                     );
-                                                });
+                                                })
+                                                .catch(console.error);
                                         }}
                                     />
                                     <InputSelect
                                         name={`organizations.${index}.role`}
                                         direction="column"
-                                        label={!index && t('routes.system-create.form.organization_contractor_id.label')}
-                                        placeholder={t('routes.system-create.form.organization_contractor_id.placeholder')}
+                                        label={!index && t('routes.system-create.form.organization_role.label')}
+                                        placeholder={t('routes.system-create.form.organization_role.placeholder')}
                                         options={[{
-                                            label: 'Специалист',
-                                            value: 'employee'
-                                        }, {
-                                            label: 'Администратор',
+                                            label: t('routes.system-create.form.roles.admin'),
                                             value: 'admin'
                                         }, {
-                                            label: 'Руководитель портфеля проектов',
+                                            label: t('routes.system-create.form.roles.pfm'),
                                             value: 'pfm'
                                         }, {
-                                            label: 'Руководитель проекта',
+                                            label: t('routes.system-create.form.roles.pm'),
                                             value: 'pm'
                                         }, {
-                                            label: 'Ресурсный менеджер',
+                                            label: t('routes.system-create.form.roles.rm'),
                                             value: 'rm'
                                         }]}
                                     />
@@ -147,6 +209,7 @@ export const SystemUsersCreate = () => {
                             onClick={(e: MouseEvent) => {
                                 e.preventDefault();
 
+                                // @ts-ignore
                                 organizations.append({});
                             }}
                         />
@@ -172,64 +235,13 @@ export const SystemUsersCreate = () => {
                                 placeholder={t('routes.specialists-create.main.form.birth_date')}
                             />
                         </div>
-                        <div className={cn('system-users-create__contacts-wrapper')}>
-                            {fields.map((field, index) => (
-                                <div
-                                    key={field.fieldId}
-                                    className={cn('system-users-create__contacts')}
-                                >
-                                    <div className={cn('system-users-create__field')}>
-                                        <strong>
-                                            {t('routes.person.common.fields.contact.title', {
-                                                number: index + 1
-                                            })}
-                                        </strong>
-                                        <div className={cn('system-users-create__field-content', 'system-users-create__field-content_ext')}>
-                                            <InputSelect
-                                                name={`common.${index}.contact_type`}
-                                                loadOptions={(value, cb) => {
-                                                    getContact({ search: value })
-                                                        .unwrap()
-                                                        .then(({ results }) => {
-                                                            cb(
-                                                                results.map((contactItem) => ({
-                                                                    value: String(contactItem.id),
-                                                                    label: contactItem.name
-                                                                }))
-                                                            );
-                                                        });
-                                                }}
-                                            />
-                                            <FormInput name={`common.${index}.value`} type="text" />
-                                        </div>
-                                    </div>
-                                    <div className={cn('system-users-create__contact-controls')}>
-                                        {fields.length > 1 && (
-                                            <span
-                                                onClick={() => remove(index)}
-                                                className={cn('system-users-create__contact-control')}
-                                            >
-                                                {t('routes.person.common.fields.contact.controls.remove')}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                            <a
-                                href="#append"
-                                className={cn('system-users-create__link-append')}
-                                children={t('routes.person.common.edit.buttons.append')}
-                                onClick={(e: MouseEvent) => {
-                                    e.preventDefault();
-
-                                    append({});
-                                }}
-                            />
-                        </div>
+                        {elErrors}
                         <Button
                             className={cn('system-users-create__button')}
                             type="submit"
                             children={t('routes.system-create.form.buttons.create')}
+                            disabled={isLoading}
+                            isLoading={isLoading}
                         />
                     </form>
                 </FormProvider>
