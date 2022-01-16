@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { Code200 as Code200UserManageGet } from 'adapter/types/acc/user-manage/get/code-200';
+import { Code201 as Code201UserManagePost } from 'adapter/types/acc/user-manage/post/code-201';
 
 export interface IUserData {
     id?: number,
@@ -77,6 +78,7 @@ export const acc = createApi({
             results: Array<Code200UserManageGet>
         }, {
             search?: string,
+            role?: Array<string>,
             organization_contractor_id?: Array<string>,
             organization_project_id?: Array<string>,
             ordering?: string,
@@ -87,6 +89,29 @@ export const acc = createApi({
                 url   : 'user-manage/',
                 method: 'GET',
                 params: { ...params }
+            })
+        }),
+        setUserManage: build.mutation<Code201UserManagePost, {
+            email: string,
+            first_name?: string,
+            middle_name?: string,
+            last_name?: string,
+            gender?: 'M' | 'F' | '-',
+            birth_date?: string,
+            phone?: string,
+            organization_contractors_roles?: Array<{
+                role: string,
+                organization_contractor_id: number
+            }>,
+            organization_projects_roles?: Array<{
+                role: string,
+                organization_project_id?: number
+            }>
+        }>({
+            query: (body) => ({
+                url   : 'user-manage/',
+                method: 'POST',
+                body
             })
         }),
         postAccWhoAmISetPhoto: build.mutation({
