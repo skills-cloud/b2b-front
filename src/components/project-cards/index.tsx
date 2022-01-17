@@ -21,12 +21,17 @@ import DropdownMenuItem from 'component/dropdown/menu-item';
 import DropdownMenu from 'component/dropdown/menu';
 import Select, { IValue } from 'component/form/select';
 import InputDictionary from 'component/form/input-dictionary';
+import Loader from 'component/loader';
+import Empty from 'component/empty';
 
 import { mainRequest } from 'adapter/api/main';
 import { dictionary } from 'adapter/api/dictionary';
 
 import CardItem from './card-item';
 import style from './index.module.pcss';
+import Wrapper from 'component/section/wrapper';
+import { useParams } from 'react-router';
+import { IParams } from 'helper/url-list';
 
 const FORM_ORGANIZATION_CARD_ID = 'FORM_ORGANIZATION_CARD_ID';
 const FORM_CREATE_CARD_FROM_TEMPLATE = 'FORM_CREATE_CARD_FROM_TEMPLATE';
@@ -37,13 +42,10 @@ interface IForm {
     position: Array<IValue>
 }
 
-interface IProjectCards{
-    projectId?: string,
-    organizationId: string
-}
-
-const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
+const ProjectCards = () => {
     const cn = useClassnames(style);
+    const { organizationId, projectId } = useParams<IParams>();
+
     const [visibleModalId, setVisibleModalId] = useState<number | null>(null);
     const [showAllTree, setShowAllTree] = useState(false);
     const [showCreateByTemplateModal, setShowCreateByTemplateModal] = useState(false);
@@ -52,7 +54,7 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
     const { t } = useTranslation();
     const methods = useForm();
     const formCreateByTemplate = useForm();
-    const cardGetParams = projectId ? { organization_project_id: [projectId] } : { organization_id: [organizationId] };
+    const cardGetParams = projectId ? { organization_project_id: [projectId] } : { organization_customer_id: [organizationId] };
     const { data: cards, isLoading } = mainRequest.useGetOrganizationProjectCardItemQuery(cardGetParams);
     const { data: baseProjectCards } = mainRequest.useGetBaseProjectCardTemplateQuery(undefined);
     const { data: positions } = dictionary.useGetPositionListQuery(undefined);
@@ -153,53 +155,54 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
             .catch(console.error);
     };
 
-    if(!cards) {
-        return null;
-    }
+    const addAction = () => {
+        if(projectId) {
+            return (
+                <Dropdown
+                    render={({ onClose }) => (
+                        <DropdownMenu>
+                            <DropdownMenuItem
+                                selected={false}
+                                onClick={() => {
+                                    const defaultValue = baseProjectCards?.[0]?.id ? {
+                                        value: baseProjectCards[0].id.toString(),
+                                        label: baseProjectCards[0].name
+                                    } : undefined;
 
-    const addAction = projectId && (
-        <Dropdown
-            render={({ onClose }) => (
-                <DropdownMenu>
-                    <DropdownMenuItem
-                        selected={false}
-                        onClick={() => {
-                            const defaultValue = baseProjectCards?.[0]?.id ? {
-                                value: baseProjectCards[0].id.toString(),
-                                label: baseProjectCards[0].name
-                            } : undefined;
+                                    if(defaultValue) {
+                                        formCreateByTemplate.setValue('card_id', defaultValue);
+                                    }
+                                    setShowCreateByTemplateModal(true);
+                                    onClose();
+                                }}
+                            >
+                                {t('routes.organization.blocks.cards-create-by-template')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                selected={false}
+                                onClick={() => {
+                                    setShowAllTree(true);
+                                    onClose();
+                                }}
+                            >
+                                {t('routes.organization.blocks.cards-create')}
+                            </DropdownMenuItem>
+                        </DropdownMenu>
+                    )}
+                >
+                    <AddAction />
+                </Dropdown>
+            );
+        }
+    };
 
-                            if(defaultValue) {
-                                formCreateByTemplate.setValue('card_id', defaultValue);
-                            }
-                            setShowCreateByTemplateModal(true);
-                            onClose();
-                        }}
-                    >
-                        {t('routes.organization.blocks.cards-create-by-template')}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        selected={false}
-                        onClick={() => {
-                            setShowAllTree(true);
-                            onClose();
-                        }}
-                    >
-                        {t('routes.organization.blocks.cards-create')}
-                    </DropdownMenuItem>
-                </DropdownMenu>
-            )}
-        >
-            <AddAction />
-        </Dropdown>
-    );
+    const elContent = () => {
+        if(isLoading) {
+            return <Loader />;
+        }
 
-    return (
-        <React.Fragment>
-            <Section id="cards">
-                <SectionHeader actions={addAction}>
-                    {t('routes.organization.blocks.sections.cards')}
-                </SectionHeader>
+        if(cards?.length) {
+            return (
                 <div className={cn('organization__cards')}>
                     {cards.map(({ id, name, children }, index) => (
                         <div className={cn('organization__card')} key={id}>
@@ -257,6 +260,21 @@ const ProjectCards = ({ projectId, organizationId }: IProjectCards) => {
                         </div>
                     ))}
                 </div>
+            );
+        }
+
+        return <Empty>{t('routes.organization.blocks.sections.empty')}</Empty>;
+    };
+
+    return (
+        <React.Fragment>
+            <Section id="cards">
+                <Wrapper>
+                    <SectionHeader actions={addAction()}>
+                        {t('routes.organization.blocks.sections.cards')}
+                    </SectionHeader>
+                    {elContent()}
+                </Wrapper>
             </Section>
             {(visibleModalId !== null || showAllTree) && cards !== undefined && (
                 <Modal

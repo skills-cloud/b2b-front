@@ -7,13 +7,19 @@
 
 export type Code201 = Organization;
 export type NoName = string;
+export type NoName1 = string;
 export type ID = number;
-export type NoName1 = boolean;
-export type NoName2 = string;
+export type NoName2 = boolean;
+export type NoName3 = boolean;
+export type NoName4 = string;
+export type NoName5 = string;
 
 export interface Organization {
-    description?: NoName;
+    created_at?: NoName;
+    description?: NoName1;
     id?: ID;
-    is_customer?: NoName1;
-    name: NoName2;
+    is_contractor?: NoName2;
+    is_customer?: NoName3;
+    name: NoName4;
+    updated_at?: NoName5;
 }

@@ -27,6 +27,7 @@ import { mainRequest } from 'adapter/api/main';
 import FunPointCreateForm from './form';
 import ConfirmModalDeleteFunPoint from './confirm-modal';
 import style from './index.module.pcss';
+import Empty from 'component/empty';
 
 enum ESectionInvariants {
     FunPoints = 'fun-points'
@@ -184,11 +185,7 @@ const FunctionalPoints = () => {
             });
         }
 
-        return (
-            <div className={cn('fun-points__empty')}>
-                {t('routes.fun-points.empty')}
-            </div>
-        );
+        return <Empty>{t('routes.fun-points.empty')}</Empty>;
     };
 
     return (

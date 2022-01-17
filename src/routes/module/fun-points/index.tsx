@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
+import { IParams, ORGANIZATION_PROJECT_MODULE_FUN_POINTS } from 'helper/url-list';
 
 import Section from 'component/section';
 import SectionHeader from 'component/section/header';
@@ -10,15 +12,13 @@ import Loader from 'component/loader';
 import SectionContentList from 'component/section/content-list';
 import SectionContentListItem from 'component/section/content-list-item';
 import Button from 'component/button';
-import { mainRequest } from 'adapter/api/main';
+import Empty from 'component/empty';
 
+import { mainRequest } from 'adapter/api/main';
 import { ModuleFunPointInline } from 'adapter/types/main/module/id/get/code-200';
 
 import ConfirmModalRegenerate from './confirm-modal';
 import style from './index.module.pcss';
-import { IParams, ORGANIZATION_PROJECT_MODULE_FUN_POINTS } from 'helper/url-list';
-import { useParams } from 'react-router';
-
 
 interface IProps {
     isLoading?: boolean,
@@ -76,11 +76,7 @@ const FunPoints = (props: IProps) => {
             );
         }
 
-        return (
-            <div className={cn('fun-points__empty')}>
-                {t('routes.module.fun-points.empty')}
-            </div>
-        );
+        return <Empty>{t('routes.module.fun-points.empty')}</Empty>;
     };
 
     const elEditFunPoints = () => {

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
+import { IParams } from 'helper/url-list';
 
 import Section from 'component/section';
 import SectionHeader from 'component/section/header';
@@ -11,12 +12,12 @@ import Loader from 'component/loader';
 import Resources from 'component/resources';
 import Button from 'component/button';
 import { mainRequest } from 'adapter/api/main';
-import { IParams } from 'helper/url-list';
+import Empty from 'component/empty';
 
 import { ModulePositionLaborEstimateInline } from 'adapter/types/main/module/id/get/code-200';
 
+import ResourceEdit from '../resource-edit';
 import style from './index.module.pcss';
-import ResourceEdit from 'route/module/resource-edit';
 
 interface IProps {
     id: string,
@@ -65,11 +66,7 @@ const ResourceValue = (props: IProps) => {
             );
         }
 
-        return (
-            <div className={cn('resource-value__empty')}>
-                {t('routes.module.resource-value.empty')}
-            </div>
-        );
+        return <Empty>{t('routes.module.resource-value.empty')}</Empty>;
     };
 
     const elEditResources = () => {

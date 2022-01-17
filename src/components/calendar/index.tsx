@@ -97,8 +97,8 @@ export const DatePickerCalendar = (props: IProps & typeof defaultProps) => {
                     const newOrganizationsNames = resp.map((item) => {
                         let name = item?.name;
 
-                        if(item?.organization?.name) {
-                            name = `${item.organization.name} - ${name}`;
+                        if(item?.organization_customer?.name) {
+                            name = `${item.organization_customer.name} - ${name}`;
                         }
 
                         return {

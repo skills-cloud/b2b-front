@@ -18,13 +18,14 @@ export type NoName7 = boolean;
 export type NoName8 = string;
 export type NoName9 = number;
 export type NoName10 = string;
-export type Photo = string;
 export type NoName11 = number;
+export type Photo = string;
 export type NoName12 = number;
-export type NoName13 = string;
+export type NoName13 = number;
 export type NoName14 = string;
-export type NoName15 = number;
+export type NoName15 = string;
 export type NoName16 = number;
+export type NoName17 = number;
 
 export interface CvDetailWrite {
     birth_date?: NoName;
@@ -39,11 +40,12 @@ export interface CvDetailWrite {
     last_name?: NoName8;
     linked_ids?: NoName9[];
     middle_name?: NoName10;
+    organization_contractor_id: NoName11;
     photo?: Photo;
-    physical_limitations_ids?: NoName11[];
-    price?: NoName12;
-    time_to_contact_from?: NoName13;
-    time_to_contact_to?: NoName14;
-    types_of_employment_ids?: NoName15[];
-    user_id?: NoName16;
+    physical_limitations_ids?: NoName12[];
+    price?: NoName13;
+    time_to_contact_from?: NoName14;
+    time_to_contact_to?: NoName15;
+    types_of_employment_ids?: NoName16[];
+    user_id?: NoName17;
 }

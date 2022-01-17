@@ -112,6 +112,12 @@
                     "title": "Отчество",
                     "type": "string"
                 },
+                "organization_contractor_id": {
+                    "title": "Организация исполнитель",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/main/organization-contractor/$id/",
+                    "x-url-object-list": "/api/main/organization-contractor/"
+                },
                 "photo": {
                     "format": "uri",
                     "nullable": true,
@@ -160,10 +166,13 @@
                     "nullable": true,
                     "title": "Пользователь",
                     "type": "integer",
-                    "x-url-object-detail": "/api/acc/user/$id/",
-                    "x-url-object-list": "/api/acc/user/"
+                    "x-url-object-detail": "/api/acc/user-manage/$id/",
+                    "x-url-object-list": "/api/acc/user-manage/"
                 }
             },
+            "required": [
+                "organization_contractor_id"
+            ],
             "type": "object"
         }
     }

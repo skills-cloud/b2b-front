@@ -24,6 +24,7 @@ import { position } from 'adapter/api/position';
 import { CvPositionRead } from 'adapter/types/cv/position/get/code-200';
 
 import style from './index.module.pcss';
+import Empty from 'component/empty';
 
 export interface IField {
     role?: string
@@ -341,11 +342,7 @@ export const CompetenciesEdit = (props: IProps) => {
             );
         }
 
-        return (
-            <div className={cn('competencies-edit__empty')}>
-                {t('routes.person.blocks.competencies.empty')}
-            </div>
-        );
+        return <Empty>{t('routes.person.blocks.competencies.empty')}</Empty>;
     };
 
     const elAddRole = () => {

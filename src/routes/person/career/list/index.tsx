@@ -11,6 +11,7 @@ import useFormatDistance from 'component/dates/format-distance';
 import { CvCareerRead } from 'adapter/types/cv/career/get/code-200';
 
 import style from './index.module.pcss';
+import Empty from 'component/empty';
 
 interface ICareerList {
     fields?: Array<CvCareerRead>,
@@ -24,11 +25,7 @@ const CareerList = ({ fields, setCareerId, nextStep }: ICareerList) => {
     const formatDistance = useFormatDistance();
 
     if(!fields?.length) {
-        return (
-            <p className={cn('career-list__empty')}>
-                {t('routes.person.career.empty')}
-            </p>
-        );
+        return <Empty>{t('routes.person.career.empty')}</Empty>;
     }
 
     return (

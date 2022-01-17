@@ -13,6 +13,7 @@ import IconFileImage from 'component/icons/file-image';
 import Modal from 'component/modal';
 import IconDelete from 'component/icons/delete';
 import Button from 'component/button';
+import Empty from 'component/empty';
 
 import { cv } from 'adapter/api/cv';
 
@@ -83,11 +84,7 @@ export const Files = (props: IProps) => {
             );
         }
 
-        return (
-            <div className={cn('files__empty')}>
-                {t('routes.person.files.empty')}
-            </div>
-        );
+        return <Empty>{t('routes.person.files.empty')}</Empty>;
     }, [data?.files]);
 
     const onClickCancel = () => {

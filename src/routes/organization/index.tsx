@@ -60,8 +60,8 @@ const Organization = () => {
                         </div>
                     </Wrapper>
                 </Section>
-                <ProjectList />
-                <ProjectCards organizationId={params.organizationId} />
+                <ProjectList isContractor={data?.is_contractor} />
+                <ProjectCards />
             </Wrapper>
         </SidebarLayout>
     );

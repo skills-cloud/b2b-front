@@ -13,6 +13,7 @@ import IconChevronRight from 'component/icons/chevron-right';
 import IconWarning from 'component/icons/warning';
 import DateInput from 'component/form/date';
 import Tooltip from 'component/tooltip';
+import Empty from 'component/empty';
 
 import { EStatus, mainRequest } from 'adapter/api/main';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/get/code-200';
@@ -264,11 +265,7 @@ const Request = (props: IProps) => {
             return elRequestItem(requestData);
         }
 
-        return (
-            <div className={cn('request__empty-list')}>
-                {t('routes.specialists.main.projects.empty-list')}
-            </div>
-        );
+        return <Empty>{t('routes.specialists.main.projects.empty-list')}</Empty>;
     };
 
     return (

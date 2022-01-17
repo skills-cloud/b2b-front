@@ -5,17 +5,18 @@ import axios from 'axios';
 import { useHistory, Redirect } from 'react-router';
 import { useForm, FormProvider } from 'react-hook-form';
 
-import { SPECIALISTS } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
+import { DASHBOARD } from 'helper/url-list';
+
 
 import Button from 'component/button';
 import Error from 'component/error';
 import Input from 'component/form/input';
+import Loader from 'component/loader';
 
 import { acc } from 'adapter/api/acc';
 
-import style from './style.pcss';
-import Loader from 'component/loader';
+import style from './index.module.pcss';
 
 const Login = () => {
     const history = useHistory();
@@ -41,7 +42,6 @@ const Login = () => {
                 .unwrap()
                 .then(() => {
                     setPending(false);
-                    history.push('/specialists');
                 })
                 .catch((err) => {
                     if(!axios.isCancel(err)) {
@@ -76,7 +76,7 @@ const Login = () => {
             return <Redirect to={qs.from} />;
         }
 
-        return <Redirect to={SPECIALISTS} />;
+        return <Redirect to={DASHBOARD} />;
     }
 
     return (

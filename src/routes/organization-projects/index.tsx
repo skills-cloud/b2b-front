@@ -92,7 +92,10 @@ const OrganizationProjects = () => {
                     <SectionHeader actions={elEditAction()}>{data?.name}</SectionHeader>
                     <SectionContentList>
                         <SectionContentListItem title={t('routes.organization-projects.blocks.customer')}>
-                            {data?.organization?.name}
+                            {data?.organization_customer?.name}
+                        </SectionContentListItem>
+                        <SectionContentListItem title={t('routes.organization-projects.blocks.contractor')}>
+                            {data?.organization_contractor?.name}
                         </SectionContentListItem>
                         <SectionContentListItem title={t('routes.organization-projects.blocks.manager')}>
                             <ShortName lastName={data?.manager?.last_name} firstName={data?.manager?.first_name} />
@@ -100,8 +103,20 @@ const OrganizationProjects = () => {
                         <SectionContentListItem title={t('routes.organization-projects.blocks.timeframe')}>
                             <Timeframe startDate={data?.date_from} endDate={data?.date_to} />
                         </SectionContentListItem>
+                        <SectionContentListItem title={t('routes.organization-projects.blocks.goals')}>
+                            {data?.goals}
+                        </SectionContentListItem>
+                        <SectionContentListItem title={t('routes.organization-projects.blocks.industry_sector')}>
+                            {data?.industry_sector?.name}
+                        </SectionContentListItem>
                         <SectionContentListItem title={t('routes.organization-projects.blocks.description')}>
                             {data?.description}
+                        </SectionContentListItem>
+                        <SectionContentListItem title={t('routes.organization-projects.blocks.value')}>
+                            {data?.id}
+                        </SectionContentListItem>
+                        <SectionContentListItem title={t('routes.organization-projects.blocks.resource_plan')}>
+                            {data?.plan_description}
                         </SectionContentListItem>
                     </SectionContentList>
                 </Section>

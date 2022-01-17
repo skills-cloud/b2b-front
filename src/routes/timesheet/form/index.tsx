@@ -55,8 +55,6 @@ const TimesheetForm = ({ formId, onSuccess, defaultValues, cvFilters, requestId 
         }
     });
 
-    useEffect(() => {}, []);
-
     const onSubmit = form.handleSubmit(
         (formData: SubmitHandler<IFormValues>) => {
             const postData = Object.fromEntries(Object.entries(formData).filter(([, value]) => (!!value)));

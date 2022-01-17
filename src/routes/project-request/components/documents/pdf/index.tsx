@@ -74,7 +74,7 @@ const ProjectRequestPdf = () => {
             startY += 16;
 
             doc.text(t('components.pdf.project.customer'), startX, startY, { align: 'left' });
-            doc.text(data.module?.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+            doc.text(data.module?.organization_project?.organization_customer?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             startY += 30;
 
@@ -147,7 +147,7 @@ const ProjectRequestPdf = () => {
 
             doc.setFontSize(10);
             doc.text(t('components.pdf.project.customer'), startX, startY, { align: 'left' });
-            doc.text(data.module?.organization_project?.organization?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
+            doc.text(data.module?.organization_project?.organization_customer?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             return doc;
         }

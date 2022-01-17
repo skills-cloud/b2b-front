@@ -21,6 +21,9 @@ import { OrganizationProjectRead } from 'adapter/types/main/organization-project
 import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
+import Empty from 'component/empty';
+import Error from 'component/error';
+import Wrapper from 'component/section/wrapper';
 
 enum EProjectInvariants {
     Period = 'period',
@@ -29,11 +32,19 @@ enum EProjectInvariants {
     Module = 'module'
 }
 
-const ProjectList = () => {
+interface IProps {
+    isContractor?: boolean
+}
+
+const ProjectList = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const { organizationId } = useParams<IParams>();
-    const { data, isLoading } = mainRequest.useGetMainOrganizationProjectListQuery({ organization_id: organizationId });
+    const { data, isLoading, isError, error } = mainRequest.useGetMainOrganizationProjectListQuery({
+        organization_customer_id: organizationId ? [parseInt(organizationId, 10)] : undefined
+    }, {
+        skip: !organizationId || props.isContractor
+    });
 
     const renderField = (field: EProjectInvariants, project: OrganizationProjectRead) => {
         let content = null;
@@ -62,12 +73,44 @@ const ProjectList = () => {
         );
     };
 
+    const elErrors = useMemo(() => {
+        const errors = error as {
+            data: {
+                details: Record<string, Array<string>> | string
+            }
+        };
+
+        if(errors?.data?.details && typeof errors?.data?.details !== 'string') {
+            const keys = Object.keys(errors.data.details);
+
+            return (
+                <div>
+                    {keys.map((key) => {
+                        if(typeof errors?.data?.details?.[key] === 'string') {
+                            return <Error key={key}>{`${key}: ${errors?.data?.details?.[key]}`}</Error>;
+                        }
+
+                        return (errors?.data?.details as Record<string, Array<string>>)?.[key]?.map((message, index) => (
+                            <Error key={`${key}-${index}}`}>{message}</Error>
+                        ));
+                    })}
+                </div>
+            );
+        }
+
+        return <Error>{errors?.data?.details}</Error>;
+    }, [isError, isLoading, error]);
+
     const elContent = useMemo(() => {
         if(isLoading) {
             return <Loader />;
         }
 
-        if(data?.results) {
+        if(!isLoading && isError && error) {
+            return elErrors;
+        }
+
+        if(data?.results?.length) {
             return data.results.map((item, index) => (
                 <React.Fragment key={item.id}>
                     {index > 0 && <Separator />}
@@ -82,19 +125,17 @@ const ProjectList = () => {
             ));
         }
 
-        return (
-            <div className={cn('projects__empty')}>
-                {t('routes.organization.blocks.empty.title')}
-            </div>
-        );
-    }, [JSON.stringify(data?.results)]);
+        return <Empty>{t('routes.organization.blocks.empty.title')}</Empty>;
+    }, [JSON.stringify(data?.results), isLoading]);
 
     return (
         <Section>
-            <SectionHeader actions={<AddAction to={ORGANIZATION_PROJECT_CREATE(organizationId)} />}>
-                {t('routes.organization.blocks.sections.projects')}
-            </SectionHeader>
-            {elContent}
+            <Wrapper>
+                <SectionHeader actions={<AddAction to={ORGANIZATION_PROJECT_CREATE(organizationId)} />}>
+                    {t('routes.organization.blocks.sections.projects')}
+                </SectionHeader>
+                {elContent}
+            </Wrapper>
         </Section>
     );
 };

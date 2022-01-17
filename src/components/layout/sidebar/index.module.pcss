@@ -1,12 +1,16 @@
-.main {
-    padding-bottom: 32px;
-}
-
-.page {
+.sidebar-layout {
     display: grid;
     grid-auto-flow: column;
     grid-column-gap: 16px;
     grid-template-columns: 1fr 320px;
     width: 100%;
     max-width: 992px;
+
+    &_alone {
+        grid-template-columns: 1fr;
+    }
+
+    &__main {
+        padding-bottom: 32px;
+    }
 }

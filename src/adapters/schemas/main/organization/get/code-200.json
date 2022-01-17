@@ -7,6 +7,12 @@
     "definitions": {
         "Organization": {
             "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -17,14 +23,24 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "is_contractor": {
+                    "title": "Это исполнитель?",
+                    "type": "boolean"
+                },
                 "is_customer": {
-                    "title": "Заказчик?",
+                    "title": "Это заказчик?",
                     "type": "boolean"
                 },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
                     "title": "Название",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
                     "type": "string"
                 }
             },

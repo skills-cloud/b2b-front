@@ -26,12 +26,12 @@ const OrganizationProjectCreate = () => {
 
     return (
         <PageCentred>
-            <Section title={t('routes.project.create.title')}>
+            <Section title={t('routes.organization-project.create.title')}>
                 <div className={cn('project-create__form-wrapper')}>
                     <OrganizationProjectCreateForm formId={FORM_ID} onSuccess={onSuccess} />
                     <div className={cn('project-create__separator')} />
                     <div className={cn('project-create__submit-wrapper')}>
-                        <Button type="submit" form={FORM_ID}>{t('routes.project.create.submit')}</Button>
+                        <Button type="submit" form={FORM_ID}>{t('routes.organization-project.create.submit')}</Button>
                     </div>
                 </div>
             </Section>

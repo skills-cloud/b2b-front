@@ -9,29 +9,26 @@ import useClassnames from 'hook/use-classnames';
 
 import { cv } from 'adapter/api/cv';
 import { contact } from 'adapter/api/contact';
-import InputSelect from 'component/form/select';
+import InputSelect, { IValue } from 'component/form/select';
 import InputDictionary from 'component/form/input-dictionary';
 import FormInput from 'component/form/input';
 import DateInput from 'component/form/date';
 import Button from 'component/button';
 import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
+import InputMain from 'component/form/input-main';
 
 import { dictionary } from 'adapter/api/dictionary';
-import { CvCareerId } from 'adapter/types/cv/career/id/get/code-200';
+import { CvCareerRead } from 'adapter/types/cv/career/id/get/code-200';
 import { NoName6 as IGenderType } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
 
-export interface IBasicType {
-    label: string,
-    value: string
-}
-
-export interface ICvForm extends Omit<CvCareerId, 'gender' | 'country' | 'city' | 'citizenship'> {
-    country: IBasicType,
-    city: IBasicType,
-    citizenship: IBasicType,
+export interface ICvForm extends Omit<CvCareerRead, 'gender' | 'country' | 'city' | 'citizenship'> {
+    country: IValue,
+    city: IValue,
+    citizenship: IValue,
+    organization_contractor: IValue,
     gender: {
         label: string,
         value: IGenderType
@@ -100,10 +97,11 @@ export const SpecialistsCreate = () => {
 
             postCv({
                 ...rest,
-                gender        : formData.gender?.value,
-                city_id       : parseInt(formData.city?.value, 10),
-                citizenship_id: parseInt(formData.citizenship?.value, 10),
-                country_id    : parseInt(formData.country?.value, 10)
+                organization_contractor_id: parseInt(formData.organization_contractor?.value, 10),
+                gender                    : formData.gender?.value,
+                city_id                   : parseInt(formData.city?.value, 10),
+                citizenship_id            : parseInt(formData.citizenship?.value, 10),
+                country_id                : parseInt(formData.country?.value, 10)
             })
                 .unwrap()
                 .then((resp) => {
@@ -257,6 +255,7 @@ export const SpecialistsCreate = () => {
                             label={t('routes.specialists-create.main.form.citizenship')}
                             placeholder={t('routes.specialists-create.main.form.citizenship')}
                             direction="column"
+                            isMulti={false}
                         />
                         <div className={cn('specialists-create__last-block')}>
                             <InputDictionary
@@ -265,6 +264,7 @@ export const SpecialistsCreate = () => {
                                 name="country"
                                 label={t('routes.specialists-create.main.form.country')}
                                 placeholder={t('routes.specialists-create.main.form.country')}
+                                isMulti={false}
                             />
                             <InputDictionary
                                 requestType={InputDictionary.requestType.City}
@@ -272,6 +272,7 @@ export const SpecialistsCreate = () => {
                                 label={t('routes.specialists-create.main.form.city')}
                                 placeholder={t('routes.specialists-create.main.form.city')}
                                 direction="column"
+                                isMulti={false}
                             />
                             <InputSelect
                                 name="gender"
@@ -293,6 +294,15 @@ export const SpecialistsCreate = () => {
                                 placeholder={t('routes.specialists-create.main.form.birth_date')}
                             />
                         </div>
+                        <InputMain
+                            required={true}
+                            name="organization_contractor"
+                            direction="column"
+                            requestType={InputMain.requestType.Contractor}
+                            label={t('routes.organization-project.create.organization_contractor.title')}
+                            placeholder={t('routes.organization-project.create.organization_contractor.placeholder')}
+                            isMulti={false}
+                        />
                         <Button
                             className={cn('specialists-create__button')}
                             type="submit"

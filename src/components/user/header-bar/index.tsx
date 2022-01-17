@@ -3,8 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 
 import useClassnames, { IStyle } from 'hook/use-classnames';
+import { useDispatch } from 'component/core/store';
+import { DASHBOARD } from 'helper/url-list';
+
 import Button from 'component/button';
 import UserAvatar from 'component/user/avatar';
+import Dropdown from 'component/dropdown';
+import DropdownMenu from 'component/dropdown/menu';
+import DropdownMenuItem from 'component/dropdown/menu-item';
 
 import { acc } from 'adapter/api/acc';
 
@@ -18,7 +24,18 @@ export const UserHeaderBar = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t, i18n } = useTranslation();
     const history = useHistory();
+    const dispatch = useDispatch();
+
     const { data } = acc.useGetAccWhoAmIQuery({});
+    const [postAccLogout] = acc.usePostAccLogoutMutation();
+
+    const onLogout = () => {
+        void postAccLogout({})
+            .then(() => {
+                dispatch(acc.util.resetApiState());
+                history.push('/login');
+            });
+    };
 
     const elButtonLogin = useMemo(() => {
         if(!data?.id) {
@@ -39,12 +56,37 @@ export const UserHeaderBar = (props: IProps) => {
         if(data?.id) {
             return (
                 <div className={cn('user-header-bar__profile')}>
-                    <UserAvatar
-                        title={`${data.first_name || ''} ${data.last_name || ''}`.trim()}
-                        titleTo="/"
-                        className={cn('user-header-bar__avatar')}
-                        avatar={{ src: data.photo, preset: 'small' }}
-                    />
+                    <Dropdown
+                        render={({ onClose }) => (
+                            <DropdownMenu>
+                                <DropdownMenuItem
+                                    selected={false}
+                                    onClick={() => {
+                                        onClose();
+
+                                        history.push(DASHBOARD);
+                                    }}
+                                >
+                                    {t('components.user.header-bar.dropdown.dashboard')}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    selected={false}
+                                    onClick={() => {
+                                        onClose();
+                                        onLogout();
+                                    }}
+                                >
+                                    {t('components.user.header-bar.dropdown.logout')}
+                                </DropdownMenuItem>
+                            </DropdownMenu>
+                        )}
+                    >
+                        <UserAvatar
+                            title={`${data.first_name || ''} ${data.last_name || ''}`.trim()}
+                            className={cn('user-header-bar__avatar')}
+                            avatar={{ src: data.photo, preset: 'small' }}
+                        />
+                    </Dropdown>
                 </div>
             );
         }

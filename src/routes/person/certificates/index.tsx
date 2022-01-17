@@ -7,6 +7,7 @@ import useClassnames, { IStyle } from 'hook/use-classnames';
 
 import IconPencil from 'component/icons/pencil';
 import VerifyIcon from 'component/verify-icon';
+import Empty from 'component/empty';
 
 import { certificate } from 'adapter/api/certificate';
 
@@ -111,11 +112,7 @@ export const Certificates = (props: IProps) => {
             );
         }
 
-        return (
-            <div className={cn('certificates__empty')}>
-                {t('routes.person.certificates.empty')}
-            </div>
-        );
+        return <Empty>{t('routes.person.certificates.empty')}</Empty>;
     };
 
     return (

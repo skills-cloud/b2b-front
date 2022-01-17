@@ -55,7 +55,7 @@ const ProjectRequestCsv = () => {
                         {elRow(t('components.pdf.project.manager'), manager)}
                         {elRow(t('components.pdf.project.recruiter'), recruiter)}
                         {elRow(t('components.pdf.project.type'), data.type?.name)}
-                        {elRow(t('components.pdf.project.customer'), data.module?.organization_project?.organization?.name)}
+                        {elRow(t('components.pdf.project.customer'), data.module?.organization_project?.organization_customer?.name)}
                         <tr><td colSpan={COL_SPAN_FULL} /></tr>
                         <tr><td colSpan={COL_SPAN_FULL}>{t('components.pdf.project.time')}</td></tr>
                         <tr><td colSpan={COL_SPAN_FULL} /></tr>
@@ -89,7 +89,7 @@ const ProjectRequestCsv = () => {
                         <tr><td colSpan={COL_SPAN_FULL} /></tr>
                         <tr><td colSpan={COL_SPAN_FULL}>{t('components.pdf.project.customer')}</td></tr>
                         <tr><td colSpan={COL_SPAN_FULL} /></tr>
-                        {elRow(t('components.pdf.project.customer'), data.module?.organization_project?.organization?.name)}
+                        {elRow(t('components.pdf.project.customer'), data.module?.organization_project?.organization_customer?.name)}
                     </tbody>
                 </table>
             );

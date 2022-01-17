@@ -25,28 +25,32 @@ export type ID1 = number;
 export type ID2 = number;
 export type NoName10 = boolean;
 export type NoName11 = string;
+export type NoName12 = string;
 export type ID3 = number;
-export type NoName12 = boolean;
-export type NoName13 = string;
-export type NoName14 = number;
+export type NoName13 = boolean;
+export type NoName14 = boolean;
 export type NoName15 = string;
+export type NoName16 = string;
+export type NoName17 = number;
+export type NoName18 = string;
 export type ID4 = number;
-export type NoName16 = boolean;
-export type NoName17 = string;
-export type NoName18 = number;
-export type NoName19 = string;
+export type NoName19 = boolean;
 export type NoName20 = string;
-export type NoName21 = string;
+export type NoName21 = number;
 export type NoName22 = string;
-export type ID5 = number;
-export type NoName23 = number;
-export type NoName24 = number;
+export type NoName23 = string;
+export type NoName24 = string;
 export type NoName25 = string;
-export type NoName26 = number;
+export type NoName26 = string;
+export type ID5 = number;
 export type NoName27 = number;
 export type NoName28 = number;
 export type NoName29 = string;
 export type NoName30 = number;
+export type NoName31 = number;
+export type NoName32 = string;
+export type NoName33 = string;
+export type NoName34 = number;
 
 export interface CvCareerRead {
     competencies?: CompetenceInline[];
@@ -59,11 +63,11 @@ export interface CvCareerRead {
     id?: ID2;
     is_verified?: NoName10;
     organization?: Organization;
-    organization_id: NoName14;
+    organization_id: NoName17;
     position?: Position;
-    position_id?: NoName18;
+    position_id?: NoName21;
     projects?: OrganizationProject[];
-    projects_ids?: NoName30[];
+    projects_ids?: NoName34[];
 }
 export interface CompetenceInline {
     description?: NoName;
@@ -81,28 +85,32 @@ export interface CvCareerFileRead {
     id?: ID1;
 }
 export interface Organization {
-    description?: NoName11;
+    created_at?: NoName11;
+    description?: NoName12;
     id?: ID3;
-    is_customer?: NoName12;
-    name: NoName13;
+    is_contractor?: NoName13;
+    is_customer?: NoName14;
+    name: NoName15;
+    updated_at?: NoName16;
 }
 export interface Position {
-    description?: NoName15;
+    description?: NoName18;
     id?: ID4;
-    is_verified?: NoName16;
-    name: NoName17;
+    is_verified?: NoName19;
+    name: NoName20;
 }
 export interface OrganizationProject {
-    created_at?: NoName19;
-    date_from?: NoName20;
-    date_to?: NoName21;
-    description?: NoName22;
+    created_at?: NoName22;
+    date_from?: NoName23;
+    date_to?: NoName24;
+    description?: NoName25;
+    goals?: NoName26;
     id?: ID5;
-    industry_sector_id?: NoName23;
-    manager_id?: NoName24;
-    name: NoName25;
-    organization_id: NoName26;
-    recruiters_ids?: NoName27[];
-    resource_managers_ids?: NoName28[];
-    updated_at?: NoName29;
+    industry_sector_id?: NoName27;
+    manager_id?: NoName28;
+    name: NoName29;
+    organization_contractor_id: NoName30;
+    organization_customer_id: NoName31;
+    plan_description?: NoName32;
+    updated_at?: NoName33;
 }

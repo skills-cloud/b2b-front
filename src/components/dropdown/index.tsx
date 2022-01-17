@@ -30,7 +30,7 @@ const Dropdown = ({ render, className, align = 'bottom', children, onOutsideClic
             switch (align) {
                 case 'bottom':
                     setStyles({
-                        top: activatorRef.current.clientHeight
+                        top: activatorRef.current.clientHeight + 20
                     });
                     break;
             }

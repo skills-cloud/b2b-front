@@ -7,6 +7,12 @@
     "definitions": {
         "WhoAmI": {
             "properties": {
+                "birth_date": {
+                    "format": "date",
+                    "nullable": true,
+                    "title": "Дата рождения",
+                    "type": "string"
+                },
                 "date_joined": {
                     "format": "date-time",
                     "readOnly": true,
@@ -22,9 +28,30 @@
                 },
                 "first_name": {
                     "maxLength": 150,
-                    "minLength": 1,
+                    "nullable": true,
                     "title": "Имя",
                     "type": "string"
+                },
+                "gender": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "enum": [
+                                "-",
+                                "F",
+                                "M"
+                            ],
+                            "title": "Пол",
+                            "type": "string",
+                            "x-enum-description": {
+                                "-": "Другой",
+                                "F": "Женский",
+                                "M": "Мужской"
+                            }
+                        }
+                    ]
                 },
                 "id": {
                     "readOnly": true,
@@ -51,14 +78,27 @@
                 },
                 "last_login": {
                     "format": "date-time",
+                    "nullable": true,
                     "readOnly": true,
                     "title": "Последний вход",
                     "type": "string"
                 },
                 "last_name": {
                     "maxLength": 150,
-                    "minLength": 1,
+                    "nullable": true,
                     "title": "Фамилия",
+                    "type": "string"
+                },
+                "middle_name": {
+                    "maxLength": 150,
+                    "nullable": true,
+                    "title": "Отчество",
+                    "type": "string"
+                },
+                "phone": {
+                    "maxLength": 100,
+                    "nullable": true,
+                    "title": "Телефон",
                     "type": "string"
                 },
                 "photo": {
@@ -67,12 +107,18 @@
                     "readOnly": true,
                     "title": "Photo",
                     "type": "string"
+                },
+                "roles": {
+                    "items": {
+                        "minLength": 1,
+                        "type": "string"
+                    },
+                    "readOnly": true,
+                    "type": "array"
                 }
             },
             "required": [
-                "email",
-                "first_name",
-                "last_name"
+                "email"
             ],
             "type": "object"
         }
