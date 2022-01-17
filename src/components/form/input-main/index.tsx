@@ -25,7 +25,6 @@ export interface IValue {
 }
 
 export enum ERequestType {
-    Organization,
     Customer,
     Contractor,
     IsCustomer,
@@ -35,10 +34,6 @@ export enum ERequestType {
 }
 
 const methods = {
-    [ERequestType.Organization]: {
-        single: mainRequest.endpoints.getMainOrganizationById,
-        list  : mainRequest.endpoints.getMainOrganization
-    },
     [ERequestType.Customer]: {
         single: mainRequest.endpoints.getMainOrganizationCustomerById,
         list  : mainRequest.endpoints.getMainOrganizationCustomer
@@ -212,7 +207,11 @@ const InputMain = (props: IProps & typeof defaultProps) => {
                             }));
                     }))
                         .then((resp: Array<IValue>) => {
-                            setValue(props.name, resp, { shouldDirty: true });
+                            if(props.isMulti) {
+                                setValue(props.name, resp, { shouldDirty: true });
+                            } else {
+                                setValue(props.name, resp[0], { shouldDirty: true });
+                            }
 
                             if(props.isRefetch) {
                                 props.onRefetchSuccess?.(false);

@@ -1,5 +1,8 @@
 .dashboard {
     position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 
     &__wrapper {
         display: grid;
@@ -20,6 +23,11 @@
         border-radius: 6px;
         border: 1px solid var(--color-border);
         padding: 16px;
+
+        & > div {
+            max-width: 28px;
+            height: 28px;
+        }
     }
 
     &__counter-text {
@@ -45,5 +53,9 @@
                 cursor: pointer;
             }
         }
+    }
+
+    &__disabled-text {
+        color: var(--color-text-light);
     }
 }

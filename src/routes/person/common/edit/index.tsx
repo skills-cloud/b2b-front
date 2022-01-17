@@ -7,14 +7,15 @@ import FormInput from 'component/form/input';
 import Button from 'component/button';
 
 import Modal from 'component/modal';
-import InputSelect from 'component/form/select';
+import InputSelect, { IValue } from 'component/form/select';
 import DateInput from 'component/form/date';
 import InputDictionary from 'component/form/input-dictionary';
+import InputMain from 'component/form/input-main';
 
 import { dictionary } from 'adapter/api/dictionary';
 import { cv } from 'adapter/api/cv';
 import { contact } from 'adapter/api/contact';
-import { CvDetailReadFull, NoName85 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
+import { CvDetailReadFull, NoName89 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
 import { CvDetailWrite } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
@@ -29,22 +30,14 @@ export interface IProps {
 
 export interface IFormValues {
     common: {
+        organization_contractor: IValue,
         gender: {
             value: IGenderType,
             label: string
         },
-        city: {
-            value: string,
-            label: string
-        },
-        country: {
-            value: string,
-            label: string
-        },
-        citizenship: {
-            value: string,
-            label: string
-        },
+        city: IValue,
+        country: IValue,
+        citizenship: IValue,
         photo?: string
     },
     contacts: Array<{
@@ -148,11 +141,12 @@ export const CommonEdit = (props: IProps) => {
 
                 patchCvById({
                     ...rest,
-                    gender        : formData.common.gender.value,
-                    city_id       : parseInt(formData.common.city?.value, 10),
-                    citizenship_id: parseInt(formData.common.citizenship?.value, 10),
-                    country_id    : parseInt(formData.common.country?.value, 10),
-                    id            : parseInt(props.id, 10)
+                    organization_contractor_id: parseInt(formData.common.organization_contractor?.value, 10),
+                    gender                    : formData.common.gender.value,
+                    city_id                   : parseInt(formData.common.city?.value, 10),
+                    citizenship_id            : parseInt(formData.common.citizenship?.value, 10),
+                    country_id                : parseInt(formData.common.country?.value, 10),
+                    id                        : parseInt(props.id, 10)
                 })
                     .unwrap()
                     .then((resp) => {
@@ -253,6 +247,7 @@ export const CommonEdit = (props: IProps) => {
                             requestType={InputDictionary.requestType.Citizenship}
                             name="common.citizenship"
                             placeholder={t('routes.specialists-create.main.form.citizenship')}
+                            isMulti={false}
                         />
                     </div>
                     <div className={cn('common-edit__field', 'common-edit__field_ext')}>
@@ -262,12 +257,14 @@ export const CommonEdit = (props: IProps) => {
                             direction="column"
                             name="common.country"
                             placeholder={t('routes.specialists-create.main.form.country')}
+                            isMulti={false}
                         />
                         <InputDictionary
                             requestType={InputDictionary.requestType.City}
                             name="common.city"
                             placeholder={t('routes.specialists-create.main.form.city')}
                             direction="column"
+                            isMulti={false}
                         />
                     </div>
                     <div className={cn('common-edit__field')}>
@@ -286,6 +283,17 @@ export const CommonEdit = (props: IProps) => {
                     <div className={cn('common-edit__field')}>
                         <strong>{t('routes.person.common.fields.birth_date')}</strong>
                         <DateInput name="common.birth_date" />
+                    </div>
+                    <div className={cn('common-edit__field')}>
+                        <strong>{t('routes.person.common.fields.contractor.title')}</strong>
+                        <InputMain
+                            defaultValue={[props.fields.organization_contractor_id]}
+                            required={true}
+                            name="common.organization_contractor"
+                            direction="row"
+                            requestType={InputMain.requestType.Contractor}
+                            isMulti={false}
+                        />
                     </div>
                 </div>
             );

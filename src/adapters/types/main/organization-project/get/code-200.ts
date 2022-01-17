@@ -39,6 +39,7 @@ export type NoName22 = string;
 export type NoName23 = number;
 export type NoName24 = number;
 export type NoName25 = string;
+export type RequestsCountTotal = number;
 export type NoName26 = string;
 
 export interface OrganizationProjectRead {
@@ -60,6 +61,8 @@ export interface OrganizationProjectRead {
     organization_customer?: Organization;
     organization_customer_id: NoName24;
     plan_description?: NoName25;
+    requests_count_by_status?: RequestsCountByStatus;
+    requests_count_total?: RequestsCountTotal;
     updated_at?: NoName26;
 }
 export interface IndustrySector {
@@ -86,4 +89,10 @@ export interface Organization {
     is_customer?: NoName20;
     name: NoName21;
     updated_at?: NoName22;
+}
+export interface RequestsCountByStatus {
+    draft: number;
+    in_progress: number;
+    done: number;
+    closed: number;
 }

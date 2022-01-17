@@ -102,7 +102,7 @@ const MainInfo = (data: RequestRead) => {
             case 'recruiter':
             case 'resource_manager':
                 if(data[field]?.last_name && data[field]?.first_name) {
-                    content = `${data[field]?.last_name} ${data[field]?.first_name.slice(0, 1)}.`;
+                    content = `${data[field]?.last_name} ${data[field]?.first_name?.slice(0, 1)}.`;
                 }
                 break;
             case 'description':

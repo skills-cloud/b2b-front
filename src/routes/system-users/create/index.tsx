@@ -10,8 +10,8 @@ import FormInput from 'component/form/input';
 import DateInput from 'component/form/date';
 import Button from 'component/button';
 import Error from 'component/error';
+import InputMain from 'component/form/input-main';
 
-import { mainRequest } from 'adapter/api/main';
 import { acc } from 'adapter/api/acc';
 
 import style from './index.module.pcss';
@@ -54,28 +54,35 @@ export const SystemUsersCreate = () => {
         control: context.control
     });
 
-    const [getOrganizationContractor] = mainRequest.useLazyGetMainOrganizationContractorQuery();
     const [setUserManage, { error, isError, isLoading }] = acc.useSetUserManageMutation();
 
     const elErrors = useMemo(() => {
         if(!isLoading && isError) {
             const errors = error as {
                 data: {
-                    details: Record<string, Array<string>>
+                    details: Record<string, Array<string>> | string
                 }
             };
 
-            const keys = Object.keys(errors.data.details);
+            if(typeof errors.data?.details !== 'string') {
+                const keys = Object.keys(errors.data.details);
 
-            return (
-                <div>
-                    {keys.map((key) => {
-                        return errors.data.details[key].map((message, index) => (
-                            <Error key={`${key}-${index}}`}>{message}</Error>
-                        ));
-                    })}
-                </div>
-            );
+                return (
+                    <div>
+                        {keys.map((key) => {
+                            if(typeof errors?.data?.details?.[key] === 'string') {
+                                return <Error key={key}>{`${key}: ${errors?.data?.details?.[key]}`}</Error>;
+                            }
+
+                            return (errors?.data?.details as Record<string, Array<string>>)?.[key]?.map((message, index) => (
+                                <Error key={`${key}-${index}}`}>{message}</Error>
+                            ));
+                        })}
+                    </div>
+                );
+            }
+
+            return <Error>{errors?.data?.details}</Error>;
         }
     }, [isError, isLoading]);
 
@@ -151,26 +158,13 @@ export const SystemUsersCreate = () => {
                                 className={cn('system-users-create__organization')}
                             >
                                 <div className={cn('system-users-create__organization-fields')}>
-                                    <InputSelect
+                                    <InputMain
                                         name={`organizations.${index}.organization_contractor_id`}
                                         direction="column"
+                                        requestType={InputMain.requestType.Contractor}
                                         label={!index && t('routes.system-create.form.organization_contractor_id.label')}
                                         placeholder={t('routes.system-create.form.organization_contractor_id.placeholder')}
-                                        loadOptions={(value, cb) => {
-                                            getOrganizationContractor({
-                                                search: value
-                                            })
-                                                .unwrap()
-                                                .then(({ results }) => {
-                                                    cb(
-                                                        results.map((organization) => ({
-                                                            value: organization.id,
-                                                            label: organization.name
-                                                        }))
-                                                    );
-                                                })
-                                                .catch(console.error);
-                                        }}
+                                        isMulti={false}
                                     />
                                     <InputSelect
                                         name={`organizations.${index}.role`}

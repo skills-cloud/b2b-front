@@ -66,7 +66,6 @@ export type Photo = string;
 export type NoName44 = number;
 export type NoName45 = string;
 export type NoName46 = string;
-export type CurrentUserRole = string;
 export type NoName47 = string;
 export type NoName48 = string;
 export type NoName49 = string;
@@ -78,7 +77,6 @@ export type NoName52 = boolean;
 export type NoName53 = string;
 export type NoName54 = number;
 export type NoName55 = number;
-export type ModulesCount = number;
 export type NoName56 = string;
 export type NoName57 = number;
 export type NoName58 = number;
@@ -192,7 +190,6 @@ export interface UserInline {
 }
 export interface OrganizationProjectInline {
     created_at?: NoName46;
-    current_user_role?: CurrentUserRole;
     date_from?: NoName47;
     date_to?: NoName48;
     description?: NoName49;
@@ -202,7 +199,6 @@ export interface OrganizationProjectInline {
     industry_sector_id?: NoName54;
     manager?: UserInline;
     manager_id?: NoName55;
-    modules_count?: ModulesCount;
     name: NoName56;
     organization_contractor?: Organization;
     organization_contractor_id: NoName57;

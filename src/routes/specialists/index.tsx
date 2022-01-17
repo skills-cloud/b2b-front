@@ -110,14 +110,6 @@ export const Specialists = () => {
         setShowModalById(null);
     };
 
-    // Хз зачем тут сабмит
-    const onSubmit = context.handleSubmit(
-        () => void(0),
-        (formError) => {
-            console.error(formError);
-        }
-    );
-
     const elModal = useMemo(() => {
         if(showModalById) {
             const linkedIds = data?.results.find((item) => item.id === showModalById)?.linked_ids;
@@ -179,7 +171,7 @@ export const Specialists = () => {
                 <Wrapper>
                     <H3>{t('routes.specialists.sidebar.filters.title')}</H3>
                     <FormProvider {...context}>
-                        <form className={cn('specialists__form')} onSubmit={onSubmit}>
+                        <form className={cn('specialists__form')}>
                             <FormInput
                                 name="search"
                                 type="search"
@@ -228,9 +220,6 @@ export const Specialists = () => {
                                 label={t('routes.specialists.sidebar.filters.form.years.label')}
                                 placeholder={t('routes.specialists.sidebar.filters.form.years.placeholder')}
                             />
-                            <Button disabled={isFetching} isLoading={isFetching} type="submit">
-                                {t('routes.specialists.sidebar.filters.buttons.submit')}
-                            </Button>
                             <Button disabled={isFetching} type="button" onClick={onClearFilter} isSecondary={true}>
                                 {t('routes.specialists.sidebar.filters.buttons.clear')}
                             </Button>

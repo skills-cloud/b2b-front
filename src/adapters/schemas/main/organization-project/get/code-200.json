@@ -171,6 +171,20 @@
                     "title": "Ресурсный план",
                     "type": "string"
                 },
+                "requests_count_by_status": {
+                    "additionalProperties": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "readOnly": true,
+                    "title": "Requests count by status",
+                    "type": "object"
+                },
+                "requests_count_total": {
+                    "readOnly": true,
+                    "title": "Requests count total",
+                    "type": "integer"
+                },
                 "updated_at": {
                     "format": "date-time",
                     "readOnly": true,

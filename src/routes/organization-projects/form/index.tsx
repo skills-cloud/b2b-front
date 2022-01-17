@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
@@ -18,6 +18,7 @@ import { OrganizationProjectRead } from 'adapter/types/main/organization-project
 
 import style from './index.module.pcss';
 import InputMain from 'component/form/input-main';
+import Error from 'component/error';
 
 export interface IProps {
     formId: string,
@@ -66,6 +67,14 @@ const OrganizationProjectCreateForm = (props: IProps) => {
     });
 
     const { data: userData } = acc.useGetAccUserQuery({});
+
+    const [error, setError] = useState<Array<string> | null>(null);
+
+    const values = context.watch();
+
+    useEffect(() => {
+        setError(null);
+    }, [JSON.stringify(values)]);
 
     const users = useMemo(() => {
         if(userData?.results) {
@@ -122,12 +131,23 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                 })
                 .catch((err) => {
                     console.error(err);
+                    const errors = Object.values<Array<string>>(err?.data?.details).map((item: Array<string>) => {
+                        return item[0];
+                    });
+
+                    setError(errors);
                 });
         },
         (formError) => {
             console.error(formError);
         }
     );
+
+    const elError = () => {
+        if(error?.length) {
+            return error.map((err, index) => <Error key={index}>{err}</Error>);
+        }
+    };
 
     const errorMessage = t('routes.organization-project.create.required-error');
 
@@ -205,6 +225,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     name="plan_description"
                     label={t('routes.organization-project.create.plan_description')}
                 />
+                {elError()}
             </form>
         </FormProvider>
     );
