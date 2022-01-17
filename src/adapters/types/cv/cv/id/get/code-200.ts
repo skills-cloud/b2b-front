@@ -245,7 +245,6 @@ export type ID32 = number;
 export type NoName171 = number;
 export type NoName172 = string;
 export type NoName173 = string;
-export type CurrentUserRole = string;
 export type NoName174 = string;
 export type NoName175 = string;
 export type NoName176 = string;
@@ -253,7 +252,6 @@ export type NoName177 = string;
 export type ID33 = number;
 export type NoName178 = number;
 export type NoName179 = number;
-export type ModulesCount = number;
 export type NoName180 = string;
 export type NoName181 = number;
 export type NoName182 = number;
@@ -697,7 +695,6 @@ export interface FunPointTypePositionLaborEstimateInline {
 }
 export interface OrganizationProjectInline {
     created_at?: NoName173;
-    current_user_role?: CurrentUserRole;
     date_from?: NoName174;
     date_to?: NoName175;
     description?: NoName176;
@@ -707,7 +704,6 @@ export interface OrganizationProjectInline {
     industry_sector_id?: NoName178;
     manager?: UserInline;
     manager_id?: NoName179;
-    modules_count?: ModulesCount;
     name: NoName180;
     organization_contractor?: Organization;
     organization_contractor_id: NoName181;

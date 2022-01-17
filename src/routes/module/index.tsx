@@ -46,7 +46,7 @@ const Module = () => {
 
     const { data } = mainRequest.useGetMainModuleByIdQuery({ id: moduleId });
     const { data: requests, isLoading } = mainRequest.useGetMainRequestQuery({
-        organization_project_id: projectId
+        organization_project_id: [parseInt(projectId, 10)]
     });
 
     const elRequests = () => {

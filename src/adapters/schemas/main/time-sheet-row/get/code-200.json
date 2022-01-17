@@ -620,11 +620,6 @@
                     "title": "Создано",
                     "type": "string"
                 },
-                "current_user_role": {
-                    "readOnly": true,
-                    "title": "Current user role",
-                    "type": "string"
-                },
                 "date_from": {
                     "format": "date",
                     "nullable": true,
@@ -671,11 +666,6 @@
                     "type": "integer",
                     "x-url-object-detail": "/api/acc/user-manage/$id/",
                     "x-url-object-list": "/api/acc/user-manage/"
-                },
-                "modules_count": {
-                    "readOnly": true,
-                    "title": "Modules count",
-                    "type": "integer"
                 },
                 "name": {
                     "maxLength": 500,

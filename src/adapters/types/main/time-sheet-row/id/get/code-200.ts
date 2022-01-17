@@ -93,7 +93,6 @@ export type ID10 = number;
 export type NoName67 = number;
 export type NoName68 = string;
 export type NoName69 = string;
-export type CurrentUserRole = string;
 export type NoName70 = string;
 export type NoName71 = string;
 export type NoName72 = string;
@@ -105,7 +104,6 @@ export type NoName75 = boolean;
 export type NoName76 = string;
 export type NoName77 = number;
 export type NoName78 = number;
-export type ModulesCount = number;
 export type NoName79 = string;
 export type NoName80 = number;
 export type NoName81 = number;
@@ -282,7 +280,6 @@ export interface Position {
 }
 export interface OrganizationProjectInline {
     created_at?: NoName69;
-    current_user_role?: CurrentUserRole;
     date_from?: NoName70;
     date_to?: NoName71;
     description?: NoName72;
@@ -292,7 +289,6 @@ export interface OrganizationProjectInline {
     industry_sector_id?: NoName77;
     manager?: UserInline;
     manager_id?: NoName78;
-    modules_count?: ModulesCount;
     name: NoName79;
     organization_contractor?: Organization;
     organization_contractor_id: NoName80;

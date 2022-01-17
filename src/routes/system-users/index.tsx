@@ -16,8 +16,9 @@ import FormInput from 'component/form/input';
 import FormSelect from 'component/form/select';
 import Button from 'component/button';
 import useQuery from 'hook/use-query';
+import InputMain from 'component/form/input-main';
+
 import { acc } from 'adapter/api/acc';
-import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
 
@@ -35,7 +36,6 @@ export const SystemUsers = () => {
         organization_contractor_id: query.get('organization_contractor_id') ? [query.get('organization_contractor_id') as string] : undefined,
         role                      : query.get('role') ? [query.get('role') as string] : undefined
     });
-    const [trigger] = mainRequest.useLazyGetMainOrganizationQuery();
 
     const elLoading = useMemo(() => {
         if(isFetching) {
@@ -109,26 +109,13 @@ export const SystemUsers = () => {
                                         type="search"
                                         placeholder={t('routes.system-users.sidebar.filters.form.search.placeholder')}
                                     />
-                                    <FormSelect
+                                    <InputMain
                                         name="organization_contractor_id"
-                                        label={t('routes.system-users.sidebar.filters.form.organization_contractor_id.label')}
                                         direction="column"
+                                        requestType={InputMain.requestType.Contractor}
+                                        label={t('routes.system-users.sidebar.filters.form.organization_contractor_id.label')}
                                         placeholder={t('routes.system-users.sidebar.filters.form.organization_contractor_id.placeholder')}
-                                        isSearchable={true}
-                                        clearable={true}
-                                        loadOptions={(value, cb) => {
-                                            trigger({ search: value })
-                                                .unwrap()
-                                                .then((payload) => {
-                                                    cb(
-                                                        payload.results.map((item) => ({
-                                                            label: item.name,
-                                                            value: item.id
-                                                        }))
-                                                    );
-                                                })
-                                                .catch(console.error);
-                                        }}
+                                        isMulti={false}
                                     />
                                     <FormSelect
                                         name="role"

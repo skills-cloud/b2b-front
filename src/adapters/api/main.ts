@@ -103,7 +103,7 @@ interface IParamsCompetenciesSet {
 }
 
 export interface IGetRequestListParams {
-    organization_project_id?: string,
+    organization_project_id?: Array<number>,
     type_id?: string,
     customer_id?: string,
     status?: string,
@@ -399,7 +399,7 @@ export const mainRequest = createApi({
                 body
             })
         }),
-        getMainOrganizationContractor: build.query<IResponseGetOrganizationContractor, { search?: string } | undefined>({
+        getMainOrganizationContractor: build.query<IResponseGetOrganizationContractor, IQueryParams | undefined>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization-contractor/',

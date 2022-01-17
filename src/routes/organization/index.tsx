@@ -60,7 +60,7 @@ const Organization = () => {
                         </div>
                     </Wrapper>
                 </Section>
-                <ProjectList />
+                <ProjectList isContractor={data?.is_contractor} />
                 <ProjectCards />
             </Wrapper>
         </SidebarLayout>
