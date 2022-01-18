@@ -155,7 +155,7 @@ const ProjectRequestList = () => {
                         />
                         <InputMain
                             isMulti={false}
-                            requestType={InputMain.requestType.IsCustomer}
+                            requestType={InputMain.requestType.Customer}
                             defaultValue={[qs.customer as string]}
                             name="customer"
                             direction="column"

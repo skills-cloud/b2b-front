@@ -271,7 +271,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                         />
                         <InputMain
                             isMulti={false}
-                            requestType={InputMain.requestType.IsCustomer}
+                            requestType={InputMain.requestType.Customer}
                             name="customer"
                             direction="column"
                             label={t('routes.project-request.create.customer')}

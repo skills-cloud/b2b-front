@@ -407,32 +407,6 @@ export const mainRequest = createApi({
                 params
             })
         }),
-        getMainOrganizationIsCustomer: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
-            providesTags     : ['main'],
-            transformResponse: (resp: IResponseGetOrganization) => ({
-                ...resp,
-                results: resp.results.filter((item) => item.is_customer)
-            }),
-            query: (params) => ({
-                url   : '/organization/',
-                method: 'GET',
-                params
-            })
-        }),
-        getMainOrganizationIsCustomerById: build.query<OrganizationById, IBaseGetById>({
-            providesTags     : ['main'],
-            transformResponse: (resp: OrganizationById) => {
-                if(resp?.is_customer) {
-                    return resp;
-                }
-
-                return Promise.reject(new Error('No response'));
-            },
-            query: (params) => ({
-                url   : `/organization/${params.id}/`,
-                method: 'GET'
-            })
-        }),
         getMainOrganizationCustomerById: build.query<OrganizationById, IBaseGetById>({
             providesTags: ['main'],
             query       : (params) => ({
