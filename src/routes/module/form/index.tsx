@@ -153,7 +153,7 @@ const ModuleCreateForm = ({ formId, onSuccess, defaultValues }: IProjectsRequest
                     isMulti={false}
                     disabled={!!params.organizationId}
                     defaultValue={[params.organizationId]}
-                    requestType={InputMain.requestType.IsCustomer}
+                    requestType={InputMain.requestType.Customer}
                     label={t('routes.module.create.customer')}
                     direction="column"
                 />
