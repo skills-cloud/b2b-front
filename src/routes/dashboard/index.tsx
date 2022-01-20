@@ -82,6 +82,10 @@ const Dashboard = () => {
         if(idList?.some((item) => item.role === 'pfm')) {
             return 'pfm';
         }
+
+        if(idList?.some((item) => item.role === 'admin')) {
+            return 'admin';
+        }
     }, [JSON.stringify(idList)]);
 
     const { data: projectsData, isFetching: projectsFetching } = mainRequest.useGetMainOrganizationProjectListQuery({
@@ -369,7 +373,7 @@ const Dashboard = () => {
             );
         }
 
-        if(projectsData?.results?.length && currentRole === 'pm') {
+        if(projectsData?.results?.length && (currentRole === 'pfm' || currentRole === 'admin')) {
             return (
                 <Table<OrganizationProjectRead>
                     columns={columnsProjects}
