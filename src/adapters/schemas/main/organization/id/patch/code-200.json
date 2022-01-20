@@ -1,11 +1,11 @@
 {
     "allOf": [
         {
-            "$ref": "#/definitions/Organization"
+            "$ref": "#/definitions/MainOrganization"
         }
     ],
     "definitions": {
-        "Organization": {
+        "MainOrganization": {
             "properties": {
                 "created_at": {
                     "format": "date-time",

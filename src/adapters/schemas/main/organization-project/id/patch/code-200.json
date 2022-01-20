@@ -47,9 +47,16 @@
                     "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
                     "x-url-object-list": "/api/dictionary/industry-sector/"
                 },
-                "manager_id": {
+                "manager_pfm_id": {
                     "nullable": true,
-                    "title": "руководитель проекта",
+                    "title": "РПП",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user-manage/$id/",
+                    "x-url-object-list": "/api/acc/user-manage/"
+                },
+                "manager_pm_id": {
+                    "nullable": true,
+                    "title": "РП",
                     "type": "integer",
                     "x-url-object-detail": "/api/acc/user-manage/$id/",
                     "x-url-object-list": "/api/acc/user-manage/"

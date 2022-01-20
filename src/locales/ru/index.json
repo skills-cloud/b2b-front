@@ -536,8 +536,10 @@
                     "title": "Компетенции",
                     "empty": "Нет связанных компетенций",
                     "role": "Роль",
+                    "price": "{{value}} руб.",
                     "skills": "Навыки",
                     "files": "Файлы",
+                    "empty-text": "Не указано",
                     "edit": {
                         "title_competence": "Компетенции",
                         "title_checkbox": "{{value}}",
@@ -681,6 +683,7 @@
                 "fields": {
                     "name": "ФИО",
                     "first_name": "Имя",
+                    "price": "Ставка",
                     "last_name": "Фамилия",
                     "middle_name": "Отчество",
                     "citizenship": {
@@ -1120,8 +1123,9 @@
                 "industry_sector": "Отрасль",
                 "customer": "Заказчик",
                 "project": "Проект",
+                "contractor": "Организация исполнитель",
                 "module": "Модуль",
-                "resource_manager": "Ресурсный менеджер",
+                "manager_rm": "ПМ",
                 "recruiter": "Ответственный рекрутер",
                 "type": "Тип запроса",
                 "description": "Описание запроса",

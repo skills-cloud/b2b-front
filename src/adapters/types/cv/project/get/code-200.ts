@@ -25,18 +25,15 @@ export type NoName11 = number;
 export type NoName12 = boolean;
 export type NoName13 = string;
 export type NoName14 = string;
-export type NoName15 = string;
 export type ID3 = number;
-export type NoName16 = boolean;
-export type NoName17 = boolean;
+export type NoName15 = boolean;
+export type NoName16 = string;
+export type NoName17 = number;
 export type NoName18 = string;
-export type NoName19 = string;
-export type NoName20 = number;
-export type NoName21 = string;
 export type ID4 = number;
-export type NoName22 = boolean;
-export type NoName23 = string;
-export type NoName24 = number;
+export type NoName19 = boolean;
+export type NoName20 = string;
+export type NoName21 = number;
 
 export interface CvProjectRead {
     competencies?: CompetenceInline[];
@@ -51,9 +48,9 @@ export interface CvProjectRead {
     is_verified?: NoName12;
     name: NoName13;
     organization?: Organization;
-    organization_id: NoName20;
+    organization_id: NoName17;
     position?: Position;
-    position_id: NoName24;
+    position_id: NoName21;
 }
 export interface CompetenceInline {
     description?: NoName;
@@ -69,17 +66,14 @@ export interface IndustrySector {
     name: NoName10;
 }
 export interface Organization {
-    created_at?: NoName14;
-    description?: NoName15;
+    description?: NoName14;
     id?: ID3;
-    is_contractor?: NoName16;
-    is_customer?: NoName17;
-    name: NoName18;
-    updated_at?: NoName19;
+    is_verified?: NoName15;
+    name: NoName16;
 }
 export interface Position {
-    description?: NoName21;
+    description?: NoName18;
     id?: ID4;
-    is_verified?: NoName22;
-    name: NoName23;
+    is_verified?: NoName19;
+    name: NoName20;
 }

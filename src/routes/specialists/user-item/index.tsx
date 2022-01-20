@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { differenceInCalendarYears } from 'date-fns';
 
@@ -10,9 +10,10 @@ import StarRating from 'component/star-rating';
 import IconApply from 'component/icons/apply';
 import IconPlus from 'component/icons/plus';
 
-import { CvListReadFull, CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
+import { CvListReadFull } from 'adapter/types/cv/cv/get/code-200';
 
 import style from './index.module.pcss';
+import Empty from 'component/empty';
 
 export interface IProps {
     cvItem: CvListReadFull,
@@ -36,11 +37,25 @@ const UserItem = (props: IProps & typeof defaultProps) => {
         }
     };
 
-    const elCompetencies = (competencies?: Array<CvPositionCompetenceRead>) => {
-        if(competencies?.length) {
+    const elCompetencies = () => {
+        // const competencies = props.cvItem?.positions?.reduce((acc, curr) => {
+        //     if(curr.competencies?.length) {
+        //         acc.push(...curr.competencies);
+        //     }
+        //
+        //     return acc;
+        // }, [] as Array<CvPositionCompetenceRead>);
+
+        if(props.cvItem?.positions?.[0]?.competencies?.length) {
+            let competenceToRender = props.cvItem.positions[0].competencies;
+
+            if(competenceToRender.length >= 10) {
+                competenceToRender = competenceToRender.slice(0, 9);
+            }
+
             return (
                 <div className={cn('user-item__competencies')}>
-                    {competencies.map((comp) => (
+                    {competenceToRender.map((comp) => (
                         <div key={comp.competence_id} className={cn('user-item__competence')}>
                             {comp.competence?.name}
                         </div>
@@ -49,7 +64,7 @@ const UserItem = (props: IProps & typeof defaultProps) => {
             );
         }
 
-        return '\u2014';
+        return <Empty textPosition="left">{t('routes.person.blocks.competencies.empty-text')}</Empty>;
     };
 
     const elAddButton = (cvId?: number) => {
@@ -107,7 +122,12 @@ const UserItem = (props: IProps & typeof defaultProps) => {
         const firstName = props.cvItem.first_name;
         const lastName = props.cvItem.last_name;
         let title = `${firstName || ''} ${lastName || ''}`.trim();
-        const subTitle = props.cvItem.career?.[0]?.position?.name || '\u2014';
+
+        let subTitle: ReactNode = props.cvItem.positions?.[0]?.title || props.cvItem.positions?.[0]?.position?.name || props.cvItem.career?.[0]?.position?.name;
+
+        if(!subTitle) {
+            subTitle = <Empty textPosition="left">{t('routes.person.blocks.competencies.empty-text')}</Empty>;
+        }
 
         if(!firstName && !lastName) {
             title = t('routes.specialists.main.first-name');
@@ -126,6 +146,18 @@ const UserItem = (props: IProps & typeof defaultProps) => {
         );
     };
 
+    const elPrice = useMemo(() => {
+        if(props.cvItem.price) {
+            return (
+                <span className={cn('user-item__price')}>
+                    {t('routes.person.blocks.competencies.price', { value: props.cvItem.price })}
+                </span>
+            );
+        }
+
+        return <Empty textPosition="left">{t('routes.person.blocks.competencies.empty-text')}</Empty>;
+    }, [props.cvItem.price]);
+
     return (
         <div className={cn('user-item')}>
             <div className={cn('user-item__info')}>
@@ -142,7 +174,7 @@ const UserItem = (props: IProps & typeof defaultProps) => {
                 <p className={cn('user-item__block-title')}>
                     {t('routes.specialists.main.rate')}
                 </p>
-                {'\u2014'}
+                {elPrice}
             </div>
         </div>
     );

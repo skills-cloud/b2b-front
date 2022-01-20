@@ -30,9 +30,9 @@
                     "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
                     "x-url-object-list": "/api/dictionary/industry-sector/"
                 },
-                "manager_id": {
+                "manager_rm_id": {
                     "nullable": true,
-                    "title": "руководитель проекта",
+                    "title": "РМ",
                     "type": "integer",
                     "x-url-object-detail": "/api/acc/user-manage/$id/",
                     "x-url-object-list": "/api/acc/user-manage/"
@@ -56,20 +56,6 @@
                         "20": "Обычный",
                         "30": "Низкий"
                     }
-                },
-                "recruiter_id": {
-                    "nullable": true,
-                    "title": "отв. рекрутер",
-                    "type": "integer",
-                    "x-url-object-detail": "/api/acc/user-manage/$id/",
-                    "x-url-object-list": "/api/acc/user-manage/"
-                },
-                "resource_manager_id": {
-                    "nullable": true,
-                    "title": "рес. менеджер",
-                    "type": "integer",
-                    "x-url-object-detail": "/api/acc/user-manage/$id/",
-                    "x-url-object-list": "/api/acc/user-manage/"
                 },
                 "start_date": {
                     "format": "date",

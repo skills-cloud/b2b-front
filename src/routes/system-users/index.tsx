@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
+import { parse, stringify } from 'query-string';
+import debounce from 'lodash.debounce';
 
 import SidebarLayout from 'component/layout/sidebar';
 import Wrapper from 'component/section/wrapper';
@@ -17,25 +19,43 @@ import FormSelect from 'component/form/select';
 import Button from 'component/button';
 import useQuery from 'hook/use-query';
 import InputMain from 'component/form/input-main';
+import Empty from 'component/empty';
 
 import { acc } from 'adapter/api/acc';
 
 import style from './index.module.pcss';
+import { useDebouncedEffect } from 'helper/use-debounce';
 
 export const SystemUsers = () => {
     const { t, i18n } = useTranslation();
     const cn = useClassnames(style);
     const history = useHistory();
     const query = useQuery();
+    const qs = useMemo(() => parse(history.location.search), [history.location.search]);
     const context = useForm({
-        mode: 'onSubmit'
+        mode         : 'onSubmit',
+        defaultValues: qs
     });
+
+    const values = context.watch();
 
     const { data, requestId, isFetching } = acc.useGetUserManageQuery({
         search                    : query.get('search') || undefined,
         organization_contractor_id: query.get('organization_contractor_id') ? [query.get('organization_contractor_id') as string] : undefined,
         role                      : query.get('role') ? [query.get('role') as string] : undefined
     });
+
+    const historyPush = debounce(() => {
+        history.push({
+            search: stringify(values, {
+                skipEmptyString: true
+            })
+        });
+    }, 300);
+
+    useEffect(() => {
+        historyPush();
+    }, [JSON.stringify(values)]);
 
     const elLoading = useMemo(() => {
         if(isFetching) {
@@ -46,7 +66,7 @@ export const SystemUsers = () => {
     const elUsers = useMemo(() => {
         if(!isFetching) {
             if(!data?.results.length) {
-                return t('routes.system-users.main.empty');
+                return <Empty>{t('routes.system-users.main.empty')}</Empty>;
             }
 
             return (
@@ -90,20 +110,7 @@ export const SystemUsers = () => {
                         <Wrapper>
                             <H3>{t('routes.system-users.sidebar.filters.title')}</H3>
                             <FormProvider {...context}>
-                                <form
-                                    className={cn('system-users__form')}
-                                    onSubmit={context.handleSubmit((payload) => {
-                                        const qs = new URLSearchParams();
-
-                                        payload.search && qs.append('search', payload.search);
-                                        payload.organization_contractor_id?.value && qs.append('organization_contractor_id', payload.organization_contractor_id.value);
-                                        payload.role?.value && qs.append('role', payload.role.value);
-
-                                        history.replace({
-                                            search: qs.toString()
-                                        });
-                                    })}
-                                >
+                                <form className={cn('system-users__form')}>
                                     <FormInput
                                         name="search"
                                         type="search"
@@ -136,11 +143,6 @@ export const SystemUsers = () => {
                                             label: t('routes.system-create.form.roles.rm'),
                                             value: 'rm'
                                         }]}
-                                    />
-                                    <Button
-                                        type="submit"
-                                        disabled={isFetching}
-                                        children={t('routes.system-users.sidebar.filters.buttons.submit')}
                                     />
                                     <Button
                                         type="reset"

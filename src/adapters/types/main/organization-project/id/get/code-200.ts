@@ -26,21 +26,20 @@ export type NoName12 = string;
 export type NoName13 = string;
 export type NoName14 = string;
 export type Photo = string;
-export type NoName15 = number;
 export type ModulesCount = number;
+export type NoName15 = string;
 export type NoName16 = string;
 export type NoName17 = string;
-export type NoName18 = string;
 export type ID3 = number;
+export type NoName18 = boolean;
 export type NoName19 = boolean;
-export type NoName20 = boolean;
+export type NoName20 = string;
 export type NoName21 = string;
-export type NoName22 = string;
+export type NoName22 = number;
 export type NoName23 = number;
-export type NoName24 = number;
-export type NoName25 = string;
+export type NoName24 = string;
 export type RequestsCountTotal = number;
-export type NoName26 = string;
+export type NoName25 = string;
 
 export interface OrganizationProjectRead {
     created_at?: NoName;
@@ -52,18 +51,18 @@ export interface OrganizationProjectRead {
     id?: ID;
     industry_sector?: IndustrySector;
     industry_sector_id?: NoName8;
-    manager?: UserInline;
-    manager_id?: NoName15;
+    manager_pfm_id?: UserInline;
+    manager_pm_id?: UserInline;
     modules_count?: ModulesCount;
-    name: NoName16;
-    organization_contractor?: Organization;
-    organization_contractor_id: NoName23;
-    organization_customer?: Organization;
-    organization_customer_id: NoName24;
-    plan_description?: NoName25;
+    name: NoName15;
+    organization_contractor?: MainOrganization;
+    organization_contractor_id: NoName22;
+    organization_customer?: MainOrganization;
+    organization_customer_id: NoName23;
+    plan_description?: NoName24;
     requests_count_by_status?: RequestsCountByStatus;
     requests_count_total?: RequestsCountTotal;
-    updated_at?: NoName26;
+    updated_at?: NoName25;
 }
 export interface IndustrySector {
     description?: NoName5;
@@ -81,13 +80,18 @@ export interface UserInline {
     phone?: NoName14;
     photo?: Photo;
 }
-export interface Organization {
-    created_at?: NoName17;
-    description?: NoName18;
+export interface MainOrganization {
+    created_at?: NoName16;
+    description?: NoName17;
     id?: ID3;
-    is_contractor?: NoName19;
-    is_customer?: NoName20;
-    name: NoName21;
-    updated_at?: NoName22;
+    is_contractor?: NoName18;
+    is_customer?: NoName19;
+    name: NoName20;
+    updated_at?: NoName21;
 }
-export interface RequestsCountByStatus {}
+export interface RequestsCountByStatus {
+    draft: number;
+    in_progress: number;
+    done: number;
+    closed: number;
+}

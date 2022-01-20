@@ -51,10 +51,10 @@
                     "type": "boolean"
                 },
                 "organization_id": {
-                    "title": "Организация",
+                    "title": "Компания",
                     "type": "integer",
-                    "x-url-object-detail": "/api/main/organization/$id/",
-                    "x-url-object-list": "/api/main/organization/"
+                    "x-url-object-detail": "/api/dictionary/organization/$id/",
+                    "x-url-object-list": "/api/dictionary/organization/"
                 },
                 "position_id": {
                     "nullable": true,

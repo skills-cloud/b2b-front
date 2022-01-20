@@ -52,19 +52,12 @@ const ProjectRequestPdf = () => {
             doc.text(t('components.pdf.project.project'), startX, startY, { align: 'left' });
             doc.text(data.module?.organization_project?.name || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
-            const manager = `${data.resource_manager?.last_name || ''} ${(data.resource_manager?.first_name || '').slice(0, 1)}`;
+            const manager = `${data.manager_rm?.last_name || ''} ${(data.manager_rm?.first_name || '').slice(0, 1)}`;
 
             startY += 16;
 
             doc.text(t('components.pdf.project.manager'), startX, startY, { align: 'left' });
             doc.text(manager.trim() || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
-
-            const recruiter = `${data.recruiter?.last_name || ''} ${(data.recruiter?.first_name || '').slice(0, 1)}`;
-
-            startY += 16;
-
-            doc.text(t('components.pdf.project.recruiter'), startX, startY, { align: 'left' });
-            doc.text(recruiter.trim() || t('components.pdf.project.empty'), startXColumn, startY, { align: 'left' });
 
             startY += 16;
 

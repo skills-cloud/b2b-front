@@ -110,10 +110,10 @@
                     "$ref": "#/definitions/Organization"
                 },
                 "organization_id": {
-                    "title": "Организация",
+                    "title": "Компания",
                     "type": "integer",
-                    "x-url-object-detail": "/api/main/organization/$id/",
-                    "x-url-object-list": "/api/main/organization/"
+                    "x-url-object-detail": "/api/dictionary/organization/$id/",
+                    "x-url-object-list": "/api/dictionary/organization/"
                 },
                 "position": {
                     "$ref": "#/definitions/Position"
@@ -163,12 +163,6 @@
         },
         "Organization": {
             "properties": {
-                "created_at": {
-                    "format": "date-time",
-                    "readOnly": true,
-                    "title": "Создано",
-                    "type": "string"
-                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -179,24 +173,14 @@
                     "title": "ID",
                     "type": "integer"
                 },
-                "is_contractor": {
-                    "title": "Это исполнитель?",
-                    "type": "boolean"
-                },
-                "is_customer": {
-                    "title": "Это заказчик?",
+                "is_verified": {
+                    "title": "Подтверждено",
                     "type": "boolean"
                 },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
                     "title": "Название",
-                    "type": "string"
-                },
-                "updated_at": {
-                    "format": "date-time",
-                    "readOnly": true,
-                    "title": "Обновлено",
                     "type": "string"
                 }
             },

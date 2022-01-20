@@ -23,6 +23,10 @@
                     "title": "ID",
                     "type": "integer"
                 },
+                "is_customer": {
+                    "title": "Это заказчик?",
+                    "type": "boolean"
+                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,

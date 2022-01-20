@@ -15,8 +15,8 @@ export type NoName5 = 'all' | 'weekends' | 'workdays';
 export type NoName6 = string;
 export type NoName7 = 'F' | 'M';
 export type ID = number;
-export type NoName8 = boolean;
-export type NoName9 = string;
+export type NoName8 = string;
+export type NoName9 = number;
 export type NoName10 = string;
 export type NoName11 = number;
 export type Photo = string;
@@ -103,42 +103,39 @@ export type ID12 = number;
 export type NoName75 = boolean;
 export type NoName76 = string;
 export type NoName77 = number;
-export type NoName78 = number;
-export type NoName79 = string;
+export type NoName78 = string;
+export type NoName79 = number;
 export type NoName80 = number;
-export type NoName81 = number;
+export type NoName81 = string;
 export type NoName82 = string;
-export type NoName83 = string;
+export type NoName83 = number;
 export type NoName84 = number;
-export type NoName85 = number;
-export type NoName86 = string;
-export type NoName87 = number;
+export type NoName85 = string;
+export type NoName86 = number;
 export type ID13 = number;
+export type NoName87 = number;
 export type NoName88 = number;
 export type NoName89 = number;
-export type NoName90 = number;
-export type NoName91 = string;
-export type NoName92 = number;
+export type NoName90 = string;
+export type NoName91 = number;
+export type NoName92 = string;
 export type NoName93 = string;
-export type NoName94 = string;
 /**
  * если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date
  */
+export type NoName94 = number;
 export type NoName95 = number;
 export type NoName96 = number;
-export type NoName97 = number;
-export type NoName98 = 10 | 20 | 30;
-export type NoName99 = number;
-export type NoName100 = number;
-export type NoName101 = string;
-export type NoName102 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName97 = 10 | 20 | 30;
+export type NoName98 = string;
+export type NoName99 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName100 = string;
+export type NoName101 = number;
+export type NoName102 = number;
 export type NoName103 = string;
-export type NoName104 = number;
-export type NoName105 = number;
-export type NoName106 = string;
-export type NoName107 = string;
-export type NoName108 = string;
-export type NoName109 = number;
+export type NoName104 = string;
+export type NoName105 = string;
+export type NoName106 = number;
 
 export interface TimeSheetRowRead {
     created_at?: NoName;
@@ -148,11 +145,11 @@ export interface TimeSheetRowRead {
     date_to?: NoName18;
     id?: ID1;
     request: RequestInline;
-    request_id: NoName105;
-    task_description?: NoName106;
-    task_name: NoName107;
-    updated_at?: NoName108;
-    work_time: NoName109;
+    request_id: NoName102;
+    task_description?: NoName103;
+    task_name: NoName104;
+    updated_at?: NoName105;
+    work_time: NoName106;
 }
 export interface CvInlineShort {
     birth_date?: NoName1;
@@ -163,8 +160,8 @@ export interface CvInlineShort {
     first_name?: NoName6;
     gender?: null | NoName7;
     id?: ID;
-    is_resource_owner?: NoName8;
-    last_name?: NoName9;
+    last_name?: NoName8;
+    manager_rm_id?: NoName9;
     middle_name?: NoName10;
     organization_contractor_id: NoName11;
     photo?: Photo;
@@ -178,17 +175,15 @@ export interface RequestInline {
     description?: NoName20;
     id?: ID2;
     industry_sector_id?: NoName21;
-    manager?: UserInline;
-    manager_id?: NoName28;
+    manager_rm?: UserInline;
+    manager_rm_id?: NoName28;
     module?: ModuleInline;
-    module_id: NoName97;
-    priority?: NoName98;
-    recruiter_id?: NoName99;
-    resource_manager_id?: NoName100;
-    start_date?: NoName101;
-    status?: NoName102;
-    title?: NoName103;
-    type_id?: NoName104;
+    module_id: NoName96;
+    priority?: NoName97;
+    start_date?: NoName98;
+    status?: NoName99;
+    title?: NoName100;
+    type_id?: NoName101;
 }
 export interface UserInline {
     birth_date?: NoName22;
@@ -212,13 +207,13 @@ export interface ModuleInline {
     manager_id?: NoName67;
     name: NoName68;
     organization_project?: OrganizationProjectInline;
-    organization_project_id: NoName84;
+    organization_project_id: NoName83;
     positions_labor_estimates?: ModulePositionLaborEstimateInline[];
-    sorting?: NoName92;
-    start_date?: NoName93;
-    updated_at?: NoName94;
-    work_days_count?: NoName95;
-    work_days_hours_count?: NoName96;
+    sorting?: NoName91;
+    start_date?: NoName92;
+    updated_at?: NoName93;
+    work_days_count?: NoName94;
+    work_days_hours_count?: NoName95;
 }
 export interface ModuleFunPointInline {
     created_at?: NoName32;
@@ -248,12 +243,12 @@ export interface FunPointTypeInline {
     difficulty_levels?: FunPointTypeDifficultyLevelInline[];
     id?: ID5;
     name: NoName43;
-    organization_customer?: Organization;
+    organization_customer?: MainOrganization;
     organization_customer_id?: NoName50;
     positions_labor_estimates?: FunPointTypePositionLaborEstimateInline[];
     updated_at?: NoName60;
 }
-export interface Organization {
+export interface MainOrganization {
     created_at?: NoName44;
     description?: NoName45;
     id?: ID6;
@@ -287,15 +282,15 @@ export interface OrganizationProjectInline {
     id?: ID11;
     industry_sector?: IndustrySector;
     industry_sector_id?: NoName77;
-    manager?: UserInline;
-    manager_id?: NoName78;
-    name: NoName79;
-    organization_contractor?: Organization;
-    organization_contractor_id: NoName80;
-    organization_customer?: Organization;
-    organization_customer_id: NoName81;
-    plan_description?: NoName82;
-    updated_at?: NoName83;
+    manager_pfm_id?: UserInline;
+    manager_pm_id?: UserInline;
+    name: NoName78;
+    organization_contractor?: MainOrganization;
+    organization_contractor_id: NoName79;
+    organization_customer?: MainOrganization;
+    organization_customer_id: NoName80;
+    plan_description?: NoName81;
+    updated_at?: NoName82;
 }
 export interface IndustrySector {
     description?: NoName74;
@@ -304,13 +299,13 @@ export interface IndustrySector {
     name: NoName76;
 }
 export interface ModulePositionLaborEstimateInline {
-    count?: NoName85;
-    created_at?: NoName86;
-    hours?: NoName87;
+    count?: NoName84;
+    created_at?: NoName85;
+    hours?: NoName86;
     id?: ID13;
-    module_id: NoName88;
+    module_id: NoName87;
     position?: Position;
-    position_id: NoName89;
-    sorting?: NoName90;
-    updated_at?: NoName91;
+    position_id: NoName88;
+    sorting?: NoName89;
+    updated_at?: NoName90;
 }

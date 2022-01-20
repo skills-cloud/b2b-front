@@ -16,7 +16,7 @@ import InputProject from 'component/form/input-project';
 import Input from 'component/form/input';
 import InputModule from 'component/form/input-module';
 
-import { Request, NoName9 as TStatus, NoName5 as TPriority } from 'adapter/types/main/request/id/patch/code-200';
+import { Request, NoName7 as TStatus, NoName5 as TPriority } from 'adapter/types/main/request/id/patch/code-200';
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 import { mainRequest } from 'src/adapters/api/main';
 import { acc } from 'src/adapters/api/acc';
@@ -33,6 +33,7 @@ interface IFormValues {
     customer: ISelect,
     project: ISelect,
     module: ISelect,
+    organization_contractor: ISelect,
     type: ISelect,
     prioritySelect: {
         value: TPriority,
@@ -42,7 +43,7 @@ interface IFormValues {
         value: TStatus,
         label: string
     },
-    resource_manager: ISelect,
+    manager_rm: ISelect,
     recruiter: ISelect,
     period: {
         start_date: string | undefined,
@@ -70,10 +71,17 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
     const { t } = useTranslation();
     const params = useParams<IParams>();
 
+    const [projectId, setProjectId] = useState<string>('');
+
     const [post, { isLoading: isLoadingPost }] = mainRequest.usePostMainRequestMutation();
     const [patch, { isLoading: isLoadingPatch }] = mainRequest.usePatchMainRequestMutation();
     const { data: accUsersData } = acc.useGetAccUserQuery(undefined);
-    const { data: projectData } = mainRequest.useGetMainOrganizationProjectByIdQuery({ id: params.projectId }, { skip: !params.projectId });
+    const { data: projectData } = mainRequest.useGetMainOrganizationProjectByIdQuery({
+        id: params.projectId || projectId
+    }, {
+        skip                     : !params.projectId && !projectId,
+        refetchOnMountOrArgChange: true
+    });
 
     const [activeTab, setActiveTab] = useState<ETabs>(ETabs.Main);
     const [options, setOptions] = useState<Array<IValue>>([]);
@@ -106,13 +114,9 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
     const form = useForm<IFormValues>({
         defaultValues: {
             ...defaultValues,
-            recruiter: defaultValues?.recruiter ? {
-                value: String(defaultValues?.recruiter?.id),
-                label: `${defaultValues?.recruiter?.last_name} ${defaultValues?.recruiter?.first_name}`
-            } : undefined,
-            resource_manager: defaultValues?.resource_manager ? {
-                value: String(defaultValues?.resource_manager?.id),
-                label: `${defaultValues?.resource_manager?.last_name} ${defaultValues?.resource_manager?.first_name}`
+            manager_rm: defaultValues?.manager_rm ? {
+                value: String(defaultValues?.manager_rm?.id),
+                label: `${defaultValues?.manager_rm?.last_name} ${defaultValues?.manager_rm?.first_name}`
             } : undefined,
             industry_sector: defaultValues?.industry_sector ? {
                 value: String(defaultValues?.industry_sector?.id),
@@ -121,6 +125,10 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
             customer: defaultValues?.module?.organization_project ? {
                 value: String(defaultValues?.module.organization_project.organization_customer_id),
                 label: defaultValues?.module.organization_project.organization_customer?.name
+            } : undefined,
+            organization_contractor: defaultValues?.module?.organization_project ? {
+                value: String(defaultValues?.module.organization_project.organization_contractor_id),
+                label: defaultValues?.module.organization_project.organization_contractor?.name
             } : undefined,
             project: defaultValues?.module?.organization_project ? {
                 value: String(defaultValues?.module.organization_project?.id),
@@ -149,6 +157,12 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
     const values = form.watch();
 
     useEffect(() => {
+        if(values.project?.value) {
+            setProjectId(values.project?.value);
+        }
+    }, [values.project?.value]);
+
+    useEffect(() => {
         form.setValue('period', defaultDates);
     }, [JSON.stringify(projectData)]);
 
@@ -161,7 +175,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
         prioritySelect,
         statusSelect,
         type,
-        resource_manager,
+        manager_rm,
         recruiter,
         ...data
     }) => {
@@ -190,12 +204,8 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
             postData.type_id = parseInt(type.value, 10);
         }
 
-        if(resource_manager) {
-            postData.resource_manager_id = parseInt(resource_manager.value, 10);
-        }
-
-        if(recruiter) {
-            postData.recruiter_id = parseInt(recruiter.value, 10);
+        if(manager_rm) {
+            postData.manager_rm_id = parseInt(manager_rm.value, 10);
         }
 
         const formData = Object.fromEntries(Object.entries(postData).filter(([, value]) => (!!value)));
@@ -231,7 +241,9 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
 
         return (
             <InputModule
+                defaultValue={params.moduleId}
                 isMulti={false}
+                required={true}
                 filters={filters}
                 name="module"
                 direction="column"
@@ -270,6 +282,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                             label={t('routes.project-request.create.form-title')}
                         />
                         <InputMain
+                            defaultValue={[params.organizationId]}
                             isMulti={false}
                             requestType={InputMain.requestType.Customer}
                             name="customer"
@@ -279,6 +292,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                             disabled={!!params.organizationId}
                         />
                         <InputProject
+                            defaultValue={params.projectId}
                             filters={{
                                 organization_customer_id: values.customer?.value ? [parseInt(values.customer?.value, 10)] : undefined
                             }}
@@ -287,6 +301,17 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                             label={t('routes.project-request.create.project')}
                             disabled={!!params.projectId || !values.customer?.value}
                         />
+                        {projectData?.organization_contractor_id && (
+                            <InputMain
+                                defaultValue={[projectData?.organization_contractor_id]}
+                                requestType={InputMain.requestType.Contractor}
+                                name="organization_contractor"
+                                direction="column"
+                                label={t('routes.project-request.create.contractor')}
+                                disabled={true}
+                                isMulti={false}
+                            />
+                        )}
                         {elInputModule()}
                         <InputDictionary
                             isMulti={false}
@@ -295,17 +320,11 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                             direction="column"
                             label={t('routes.project-request.create.industry_sector')}
                         />
-                        <Select
-                            name="recruiter"
-                            direction="column"
-                            label={t('routes.project-request.create.recruiter')}
-                            options={options}
-                        />
                         <div className={cn('project-request__field-group')}>
                             <Select
-                                name="resource_manager"
+                                name="manager_rm"
                                 direction="column"
-                                label={t('routes.project-request.create.resource_manager')}
+                                label={t('routes.project-request.create.manager_rm')}
                                 options={options}
                             />
                             <InputMain

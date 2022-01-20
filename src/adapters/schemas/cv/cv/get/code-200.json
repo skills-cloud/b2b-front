@@ -281,10 +281,10 @@
                     "$ref": "#/definitions/Organization"
                 },
                 "organization_id": {
-                    "title": "Организация",
+                    "title": "Компания",
                     "type": "integer",
-                    "x-url-object-detail": "/api/main/organization/$id/",
-                    "x-url-object-list": "/api/main/organization/"
+                    "x-url-object-detail": "/api/dictionary/organization/$id/",
+                    "x-url-object-list": "/api/dictionary/organization/"
                 },
                 "position": {
                     "$ref": "#/definitions/Position"
@@ -716,10 +716,6 @@
                     "title": "ID",
                     "type": "integer"
                 },
-                "is_resource_owner": {
-                    "title": "Владелец ресурса",
-                    "type": "boolean"
-                },
                 "last_name": {
                     "maxLength": 500,
                     "nullable": true,
@@ -736,6 +732,16 @@
                     },
                     "type": "array",
                     "uniqueItems": true
+                },
+                "manager_rm": {
+                    "$ref": "#/definitions/UserInline"
+                },
+                "manager_rm_id": {
+                    "nullable": true,
+                    "title": "Пользователь",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user-manage/$id/",
+                    "x-url-object-list": "/api/acc/user-manage/"
                 },
                 "middle_name": {
                     "maxLength": 500,
@@ -1061,10 +1067,10 @@
                     "$ref": "#/definitions/Organization"
                 },
                 "organization_id": {
-                    "title": "Организация",
+                    "title": "Компания",
                     "type": "integer",
-                    "x-url-object-detail": "/api/main/organization/$id/",
-                    "x-url-object-list": "/api/main/organization/"
+                    "x-url-object-detail": "/api/dictionary/organization/$id/",
+                    "x-url-object-list": "/api/dictionary/organization/"
                 },
                 "position": {
                     "$ref": "#/definitions/Position"
@@ -1112,12 +1118,12 @@
                     "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
                     "x-url-object-list": "/api/dictionary/industry-sector/"
                 },
-                "manager": {
+                "manager_rm": {
                     "$ref": "#/definitions/UserInline"
                 },
-                "manager_id": {
+                "manager_rm_id": {
                     "nullable": true,
-                    "title": "руководитель проекта",
+                    "title": "РМ",
                     "type": "integer",
                     "x-url-object-detail": "/api/acc/user-manage/$id/",
                     "x-url-object-list": "/api/acc/user-manage/"
@@ -1144,26 +1150,6 @@
                         "20": "Обычный",
                         "30": "Низкий"
                     }
-                },
-                "recruiter": {
-                    "$ref": "#/definitions/UserInline"
-                },
-                "recruiter_id": {
-                    "nullable": true,
-                    "title": "отв. рекрутер",
-                    "type": "integer",
-                    "x-url-object-detail": "/api/acc/user-manage/$id/",
-                    "x-url-object-list": "/api/acc/user-manage/"
-                },
-                "resource_manager": {
-                    "$ref": "#/definitions/UserInline"
-                },
-                "resource_manager_id": {
-                    "nullable": true,
-                    "title": "рес. менеджер",
-                    "type": "integer",
-                    "x-url-object-detail": "/api/acc/user-manage/$id/",
-                    "x-url-object-list": "/api/acc/user-manage/"
                 },
                 "start_date": {
                     "format": "date",
@@ -1617,7 +1603,7 @@
                     "type": "string"
                 },
                 "organization_customer": {
-                    "$ref": "#/definitions/Organization"
+                    "$ref": "#/definitions/MainOrganization"
                 },
                 "organization_customer_id": {
                     "title": "заказчик",
@@ -1716,6 +1702,50 @@
                     "maxLength": 500,
                     "minLength": 1,
                     "title": "Название",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "MainOrganization": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_contractor": {
+                    "title": "Это исполнитель?",
+                    "type": "boolean"
+                },
+                "is_customer": {
+                    "title": "Это заказчик?",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
                     "type": "string"
                 }
             },
@@ -1840,7 +1870,7 @@
                 },
                 "manager_id": {
                     "nullable": true,
-                    "title": "руководитель проекта",
+                    "title": "руководитель",
                     "type": "integer",
                     "x-url-object-detail": "/api/acc/user-manage/$id/",
                     "x-url-object-list": "/api/acc/user-manage/"
@@ -1965,12 +1995,6 @@
         },
         "Organization": {
             "properties": {
-                "created_at": {
-                    "format": "date-time",
-                    "readOnly": true,
-                    "title": "Создано",
-                    "type": "string"
-                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -1981,24 +2005,14 @@
                     "title": "ID",
                     "type": "integer"
                 },
-                "is_contractor": {
-                    "title": "Это исполнитель?",
-                    "type": "boolean"
-                },
-                "is_customer": {
-                    "title": "Это заказчик?",
+                "is_verified": {
+                    "title": "Подтверждено",
                     "type": "boolean"
                 },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
                     "title": "Название",
-                    "type": "string"
-                },
-                "updated_at": {
-                    "format": "date-time",
-                    "readOnly": true,
-                    "title": "Обновлено",
                     "type": "string"
                 }
             },
@@ -2049,9 +2063,16 @@
                     "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
                     "x-url-object-list": "/api/dictionary/industry-sector/"
                 },
-                "manager_id": {
+                "manager_pfm_id": {
                     "nullable": true,
-                    "title": "руководитель проекта",
+                    "title": "РПП",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user-manage/$id/",
+                    "x-url-object-list": "/api/acc/user-manage/"
+                },
+                "manager_pm_id": {
+                    "nullable": true,
+                    "title": "РП",
                     "type": "integer",
                     "x-url-object-detail": "/api/acc/user-manage/$id/",
                     "x-url-object-list": "/api/acc/user-manage/"
@@ -2138,15 +2159,11 @@
                     "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
                     "x-url-object-list": "/api/dictionary/industry-sector/"
                 },
-                "manager": {
+                "manager_pfm_id": {
                     "$ref": "#/definitions/UserInline"
                 },
-                "manager_id": {
-                    "nullable": true,
-                    "title": "руководитель проекта",
-                    "type": "integer",
-                    "x-url-object-detail": "/api/acc/user-manage/$id/",
-                    "x-url-object-list": "/api/acc/user-manage/"
+                "manager_pm_id": {
+                    "$ref": "#/definitions/UserInline"
                 },
                 "name": {
                     "maxLength": 500,
@@ -2155,7 +2172,7 @@
                     "type": "string"
                 },
                 "organization_contractor": {
-                    "$ref": "#/definitions/Organization"
+                    "$ref": "#/definitions/MainOrganization"
                 },
                 "organization_contractor_id": {
                     "title": "исполнитель",
@@ -2164,7 +2181,7 @@
                     "x-url-object-list": "/api/main/organization-contractor/"
                 },
                 "organization_customer": {
-                    "$ref": "#/definitions/Organization"
+                    "$ref": "#/definitions/MainOrganization"
                 },
                 "organization_customer_id": {
                     "title": "заказчик",

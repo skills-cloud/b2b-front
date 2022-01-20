@@ -47,7 +47,7 @@ export interface FunPointTypeRead {
     difficulty_levels?: FunPointTypeDifficultyLevelInline[];
     id?: ID1;
     name: NoName8;
-    organization_customer?: Organization;
+    organization_customer?: MainOrganization;
     organization_customer_id?: NoName15;
     positions_labor_estimates?: FunPointTypePositionLaborEstimateInline[];
     updated_at?: NoName25;
@@ -61,7 +61,7 @@ export interface FunPointTypeDifficultyLevelInline {
     sorting?: NoName6;
     updated_at?: NoName7;
 }
-export interface Organization {
+export interface MainOrganization {
     created_at?: NoName9;
     description?: NoName10;
     id?: ID2;

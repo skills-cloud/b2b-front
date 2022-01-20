@@ -110,7 +110,7 @@ export const CompetenciesEdit = (props: IProps) => {
                     id         : positionItem.id,
                     cv_id      : parseInt(specialistId, 10),
                     position_id: positionItem.position_id,
-                    years      : positionItem.years
+                    years      : positionItem.years || undefined
                 })
                     .unwrap()
                     .then(() => {
@@ -163,6 +163,8 @@ export const CompetenciesEdit = (props: IProps) => {
 
     const onClickEdit = (positionItemParam: CvPositionRead, onClose: () => void) => () => {
         const newChecked = positionItemParam.competencies?.map((item) => String(item.competence_id)) || [];
+
+        console.log('NEW CHECKED', positionItemParam.competencies, newChecked)
 
         setCompetenceExperienceMap(positionItemParam.competencies?.reduce((acc, item) => {
             if(item.years) {

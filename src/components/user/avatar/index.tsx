@@ -10,7 +10,7 @@ export interface IProps {
     className?: IStyle | string,
     titleTo?: string,
     title?: ReactNode,
-    subTitle?: string,
+    subTitle?: ReactNode,
     titleTarget?: '_blank' | '_self',
     avatar: {
         src?: string,

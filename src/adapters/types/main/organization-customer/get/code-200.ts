@@ -9,13 +9,15 @@ export type Code200 = OrganizationCustomerRead;
 export type NoName = string;
 export type NoName1 = string;
 export type ID = number;
-export type NoName2 = string;
+export type NoName2 = boolean;
 export type NoName3 = string;
+export type NoName4 = string;
 
 export interface OrganizationCustomerRead {
     created_at?: NoName;
     description?: NoName1;
     id?: ID;
-    name: NoName2;
-    updated_at?: NoName3;
+    is_customer?: NoName2;
+    name: NoName3;
+    updated_at?: NoName4;
 }

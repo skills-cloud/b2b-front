@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
-import { Organization } from 'adapter/types/main/organization/get/code-200';
-import { Organization as PostOrganization } from 'adapter/types/main/organization/post/code-201';
-import { Organization as PatchOrganization } from 'adapter/types/main/organization/id/patch/code-200';
-import { Organization as OrganizationById } from 'adapter/types/main/organization/id/get/code-200';
+import { MainOrganization } from 'adapter/types/main/organization/get/code-200';
+import { MainOrganization as PostOrganization } from 'adapter/types/main/organization/post/code-201';
+import { MainOrganization as PatchOrganization } from 'adapter/types/main/organization/id/patch/code-200';
+import { MainOrganization as OrganizationById } from 'adapter/types/main/organization/id/get/code-200';
 import { ProjectRead } from 'adapter/types/main/project/get/code-200';
 import { ProjectRead as ProjectReadById } from 'adapter/types/main/project/id/get/code-200';
 import { RequestType } from 'adapter/types/main/request-type/get/code-200';
@@ -70,7 +70,7 @@ export interface IGetOrganizationProjectListQueryParams extends IQueryParams {
 }
 
 interface IResponseGetOrganization extends IResponseBase {
-    results: Array<Organization>
+    results: Array<MainOrganization>
 }
 
 interface IResponseGetOrganizationContractor extends IResponseBase {

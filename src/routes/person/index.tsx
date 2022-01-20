@@ -35,8 +35,6 @@ export const Person = () => {
 
     const { data } = cv.useGetCvByIdQuery({ id: specialistId });
 
-    console.info('DATA', data);
-
     const onClickShowModal = () => {
         setShowModal(true);
     };
