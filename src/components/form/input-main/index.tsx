@@ -67,7 +67,7 @@ export interface IProps {
     placeholder?: string,
     tabIndex?: string,
     disabled?: boolean,
-    defaultValue?: Array<IValue | number | string>,
+    defaultValue?: Array<IValue | number | string> | IValue,
     error?: TError,
     requestLimit?: number,
     requestOffset?: number,
