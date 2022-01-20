@@ -498,6 +498,12 @@
                     "title": "Сортировка",
                     "type": "integer"
                 },
+                "status": {
+                    "minLength": 1,
+                    "readOnly": true,
+                    "title": "Status",
+                    "type": "string"
+                },
                 "type_of_employment": {
                     "$ref": "#/definitions/TypeOfEmployment"
                 },

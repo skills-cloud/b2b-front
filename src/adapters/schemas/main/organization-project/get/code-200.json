@@ -200,6 +200,20 @@
                     "title": "Requests count total",
                     "type": "integer"
                 },
+                "requests_requirements_count_by_status": {
+                    "additionalProperties": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "readOnly": true,
+                    "title": "Requests requirements count by status",
+                    "type": "object"
+                },
+                "requests_requirements_count_total": {
+                    "readOnly": true,
+                    "title": "Requests requirements count total",
+                    "type": "integer"
+                },
                 "updated_at": {
                     "format": "date-time",
                     "readOnly": true,

@@ -66,6 +66,7 @@ export type NoName35 = string;
 export type NoName36 = number;
 export type NoName37 = number;
 export type NoName38 = number;
+export type Status = string;
 export type NoName39 = string;
 export type ID6 = number;
 export type NoName40 = boolean;
@@ -98,6 +99,7 @@ export interface RequestRequirementRead {
     position_id?: NoName36;
     request_id: NoName37;
     sorting?: NoName38;
+    status?: Status;
     type_of_employment?: TypeOfEmployment;
     type_of_employment_id?: NoName42;
     work_location_address?: NoName43;
