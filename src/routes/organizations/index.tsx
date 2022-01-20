@@ -43,7 +43,7 @@ export const Organizations = () => {
         defaultValues: qs
     });
     const values = context.watch();
-    const { data, isLoading, refetch } = mainRequest.useGetMainOrganizationQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
+    const { data, isLoading } = mainRequest.useGetMainOrganizationQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
 
     useEffect(() => {
         if(timer.current) {
@@ -52,7 +52,15 @@ export const Organizations = () => {
 
         timer.current = setTimeout(() => {
             history.push({
-                search: stringify(values, {
+                search: stringify({
+                    search: values.search,
+                    ...(values.is_customer ? {
+                        is_customer: values.is_customer
+                    } : undefined),
+                    ...(values.is_contractor ? {
+                        is_contractor: values.is_contractor
+                    } : undefined)
+                }, {
                     skipEmptyString: true
                 })
             });
@@ -68,8 +76,8 @@ export const Organizations = () => {
     const onClearFilter = () => {
         context.reset({
             search       : '',
-            is_customer  : false,
-            is_contractor: false
+            is_contractor: false,
+            is_customer  : false
         });
     };
 
