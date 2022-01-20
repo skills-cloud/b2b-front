@@ -116,12 +116,21 @@
     },
     "routes": {
         "dashboard": {
-            "title": "Дашборд {{val}}",
+            "title_default": "Дашборд",
+            "title_pfm": "Дашборд РПП",
+            "title_pm": "Дашборд РП",
+            "title_rm": "Дашборд РМ",
             "empty": "Пустой список проектов",
             "counters": {
-                "projects": "Всего действующих проектов",
-                "requests": "Всего выполненных запросов",
-                "work": "Всего запросов в работе"
+                "first_pm": "Всего действующих проектов",
+                "first_pfm": "Всего действующих проектов",
+                "first_rm": "Всего запросов в работе",
+                "second_pm": "Всего выполненных запросов",
+                "second_pfm": "Всего выполненных запросов",
+                "second_rm": "Всего людей требуется",
+                "third_pm": "Всего запросов в работе",
+                "third_pfm": "Всего запросов в работе",
+                "third_rm": "Всего предложено людей"
             },
             "table": {
                 "head": {
@@ -145,6 +154,17 @@
                     "customer": "Заказчик",
                     "project": "Проект",
                     "rpp": "РПП"
+                }
+            },
+            "table-requirement": {
+                "head": {
+                    "req": "Требование",
+                    "time": "Сроки запроса",
+                    "status": "Статус",
+                    "total": "Всего людей требуется",
+                    "offer": "Всего людей предложено",
+                    "pm": "РП",
+                    "request": "Проектный запрос"
                 }
             }
         },
@@ -258,6 +278,9 @@
                         },
                         "customer": {
                             "label": "Заказчик"
+                        },
+                        "contractor": {
+                            "label": "Исполнитель"
                         }
                     },
                     "buttons": {
@@ -403,7 +426,8 @@
                 },
                 "customer": "Заказчик",
                 "contractor": "Исполнитель",
-                "manager": "РП",
+                "manager_pm": "РП",
+                "manager_pfm": "РПП",
                 "timeframe": "Таймфрейм",
                 "industry_sector": "Отрасль",
                 "description": "Описание проекта",
@@ -429,15 +453,15 @@
                     "title": "Отрасль",
                     "placeholder": "Введите отрасль"
                 },
-                "manager": {
-                    "title": "Менеджер",
-                    "placeholder": "Введите имя менеджера"
+                "manager_pm": {
+                    "title": "РП",
+                    "placeholder": "Введите имя руководителя проектов"
                 },
                 "date-from": "Дата начала",
                 "date-to": "Дата окончания",
-                "resource_manager": {
-                    "title": "РП",
-                    "placeholder": "Введите имя руководителя проекта"
+                "manager_pfm": {
+                    "title": "РПП",
+                    "placeholder": "Введите имя руководителя портфеля проектов"
                 },
                 "organization_customer": {
                     "title": "Организация заказчик",
@@ -536,8 +560,10 @@
                     "title": "Компетенции",
                     "empty": "Нет связанных компетенций",
                     "role": "Роль",
+                    "price": "{{value}} руб.",
                     "skills": "Навыки",
                     "files": "Файлы",
+                    "empty-text": "Не указано",
                     "edit": {
                         "title_competence": "Компетенции",
                         "title_checkbox": "{{value}}",
@@ -681,6 +707,7 @@
                 "fields": {
                     "name": "ФИО",
                     "first_name": "Имя",
+                    "price": "Ставка",
                     "last_name": "Фамилия",
                     "middle_name": "Отчество",
                     "citizenship": {
@@ -1120,8 +1147,10 @@
                 "industry_sector": "Отрасль",
                 "customer": "Заказчик",
                 "project": "Проект",
+                "contractor": "Организация исполнитель",
                 "module": "Модуль",
-                "resource_manager": "Ресурсный менеджер",
+                "manager_rm": "Ресурсный менеджер",
+                "manager_pm": "РП",
                 "recruiter": "Ответственный рекрутер",
                 "type": "Тип запроса",
                 "description": "Описание запроса",
@@ -1274,8 +1303,8 @@
                 "main-info": {
                     "industry_sector": "Отрасль",
                     "organization_project": "Проект",
-                    "resource_manager": "Рес. менеджер",
-                    "recruiter": "Отв. рекрутер",
+                    "manager_rm": "Рес. менеджер",
+                    "manager_pm": "ПМ",
                     "type": "Тип запроса",
                     "requirements": "Общее кол-во",
                     "description": "Описание запроса",

@@ -1,10 +1,15 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { ColumnsType } from 'antd/lib/table';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import useClassnames from 'hook/use-classnames';
-import { ORGANIZATION_ID, ORGANIZATION_PROJECT_ID, ORGANIZATION_PROJECT_MODULE_REQUEST_ID } from 'helper/url-list';
+import {
+    ORGANIZATION_ID,
+    ORGANIZATION_PROJECT_ID,
+    ORGANIZATION_PROJECT_MODULE_REQUEST_ID,
+    REQUEST_ID
+} from 'helper/url-list';
 
 import Table from 'component/table';
 import SidebarLayout from 'component/layout/sidebar';
@@ -13,17 +18,22 @@ import Loader from 'component/loader';
 import Empty from 'component/empty';
 
 import { mainRequest } from 'adapter/api/main';
+import { acc } from 'adapter/api/acc';
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
+import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
 
 import style from './index.module.pcss';
-import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
+import {
+    RequestRequirementCvRead,
+    RequestRequirementRead
+} from 'adapter/types/main/request-requirement/id/get/code-200';
 
 const NON_TABLE_HEIGHT = 40;
 
 interface ICounter {
-    total: number,
-    work: number,
-    done: number
+    first: number,
+    second: number,
+    third: number
 }
 
 type TRole = 'admin' | 'pfm' | 'pm' | 'rm';
@@ -32,7 +42,14 @@ const Dashboard = () => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
 
-    const { data, isLoading } = mainRequest.useGetMainOrganizationContractorQuery(undefined);
+    const { data: whoAmIData } = acc.useGetAccWhoAmIQuery({});
+    const { data, isFetching, refetch } = mainRequest.useGetMainOrganizationContractorQuery(undefined, {
+        refetchOnMountOrArgChange: true
+    });
+
+    useEffect(() => {
+        refetch();
+    }, [whoAmIData?.id]);
 
     const idList = useMemo(() => {
         if(data?.results?.length) {
@@ -53,16 +70,36 @@ const Dashboard = () => {
         return undefined;
     }, [JSON.stringify(data?.results)]);
 
-    const { data: projectsData, isLoading: projectsLoading } = mainRequest.useGetMainOrganizationProjectListQuery({
+    const currentRole = useMemo(() => {
+        if(idList?.some((item) => item.role === 'rm')) {
+            return 'rm';
+        }
+
+        if(idList?.some((item) => item.role === 'pm')) {
+            return 'pm';
+        }
+
+        if(idList?.some((item) => item.role === 'pfm')) {
+            return 'pfm';
+        }
+    }, [JSON.stringify(idList)]);
+
+    const { data: projectsData, isFetching: projectsFetching } = mainRequest.useGetMainOrganizationProjectListQuery({
         organization_contractor_id: idList?.map((item) => item.id)
     }, {
-        skip: !idList?.length
+        skip                     : !idList?.length,
+        refetchOnMountOrArgChange: true
     });
 
-    const { data: requestData, isLoading: requestLoading } = mainRequest.useGetMainRequestQuery({
+    const { data: requestsData, isFetching: requestFetching } = mainRequest.useGetMainRequestQuery({
         organization_project_id: projectsData?.results?.map((item) => item.id as number)
     }, {
-        skip: !!idList?.length && idList.filter((item) => item.role === 'pm').length === 0 && projectsData?.results.length !== 0
+        skip                     : currentRole === 'pfm',
+        refetchOnMountOrArgChange: true
+    });
+
+    const { data: requirementData, isFetching: requirementFetching } = mainRequest.useGetMainRequestRequirementQuery(undefined, {
+        refetchOnMountOrArgChange: true
     });
 
     const columnsProjects: ColumnsType<OrganizationProjectRead> = [
@@ -222,33 +259,138 @@ const Dashboard = () => {
         }
     ];
 
+    const columnsRequirements: ColumnsType<RequestRequirementRead> = [
+        {
+            title : t('routes.dashboard.table-requirement.head.req'),
+            key   : 'name',
+            sorter: (a, b) => (a.name || '').localeCompare(b.name || ''),
+            render: (item) => {
+                if(item.status === 'closed') {
+                    return (
+                        <div className={cn('dashboard__disabled-text')}>
+                            {item.title || t('routes.dashboard.table.values.empty')}
+                        </div>
+                    );
+                }
+
+                return (
+                    <Link
+                        to={REQUEST_ID(item.requestId)}
+                        className={cn('dashboard__link')}
+                    >
+                        {item.name || t('routes.dashboard.table.values.empty')}
+                    </Link>
+                );
+            }
+        },
+        {
+            title : t('routes.dashboard.table-requirement.head.time'),
+            render: (item) => {
+                if(item?.date_from || item.date_to) {
+                    return `${item.date_from} - ${item.date_to}`;
+                }
+
+                return t('routes.dashboard.table.values.empty');
+            }
+        },
+        {
+            title    : t('routes.dashboard.table-requirement.head.status'),
+            key      : 'status',
+            dataIndex: 'status',
+            sorter   : (a, b) => (a.status || '').localeCompare(b.status || ''),
+            render   : (status) => {
+                return status;
+            }
+        },
+        {
+            title : t('routes.dashboard.table-requirement.head.total'),
+            render: (item) => {
+                return item.count || t('routes.dashboard.table.values.empty');
+            }
+        },
+        {
+            title : t('routes.dashboard.table-requirement.head.offer'),
+            render: (item) => {
+                const count = item.cv_list.filter((cvItem: RequestRequirementCvRead) => {
+                    return cvItem.status === 'pre-candidate' || cvItem.status === 'candidate';
+                }).length;
+
+                return count || t('routes.dashboard.table.values.empty');
+            }
+        },
+        {
+            title : t('routes.dashboard.table-requirement.head.pm'),
+            render: (item) => {
+                if(item) {
+                    const request = requestsData?.results?.find((reqItem) => {
+                        return reqItem.id === item.request_id;
+                    });
+
+                    if(request?.manager_rm) {
+                        return `${request.manager_rm.last_name} ${request.manager_rm.first_name?.substring(0, 1).toUpperCase()}.`;
+                    }
+                }
+
+                return t('routes.dashboard.table.values.empty');
+            }
+        },
+        {
+            title : t('routes.dashboard.table-requirement.head.request'),
+            render: (item) => {
+                const request = requestsData?.results?.find((reqItem) => {
+                    return reqItem.id === item.request_id;
+                });
+
+                if(request?.title) {
+                    return request.title;
+                }
+
+                return t('routes.dashboard.table.values.empty');
+            }
+        }
+    ];
+
     const elTable = () => {
-        if(isLoading || projectsLoading || requestLoading) {
+        if(isFetching || projectsFetching || requestFetching) {
             return <Loader />;
         }
 
-        if(requestData?.results?.length) {
+        if(requestsData?.results?.length && currentRole === 'pm') {
             return (
                 <Table<RequestRead>
                     columns={columnsRequests}
-                    dataSource={requestData.results}
+                    dataSource={requestsData.results}
                     tableLayout="fixed"
                     className={cn('table')}
-                    loading={isLoading || projectsLoading}
+                    loading={isFetching || requestFetching}
                     scroll={{ y: `calc(100vh - ${NON_TABLE_HEIGHT}px)` }}
                     rowKey="id"
                 />
             );
         }
 
-        if(projectsData?.results?.length) {
+        if(projectsData?.results?.length && currentRole === 'pm') {
             return (
                 <Table<OrganizationProjectRead>
                     columns={columnsProjects}
                     dataSource={projectsData.results}
                     tableLayout="fixed"
                     className={cn('table')}
-                    loading={isLoading || projectsLoading}
+                    loading={isFetching || projectsFetching}
+                    scroll={{ y: `calc(100vh - ${NON_TABLE_HEIGHT}px)` }}
+                    rowKey="id"
+                />
+            );
+        }
+
+        if(requirementData?.results?.length && currentRole === 'rm') {
+            return (
+                <Table<RequestRequirementRead>
+                    columns={columnsRequirements}
+                    dataSource={requirementData.results}
+                    tableLayout="fixed"
+                    className={cn('table')}
+                    loading={isFetching || projectsFetching}
                     scroll={{ y: `calc(100vh - ${NON_TABLE_HEIGHT}px)` }}
                     rowKey="id"
                 />
@@ -258,58 +400,106 @@ const Dashboard = () => {
         return <Empty>{t('routes.dashboard.empty')}</Empty>;
     };
 
+    const elHeader = () => {
+        let context = 'default';
+
+        if(!isFetching && !projectsFetching && !requestFetching && !requirementFetching && currentRole) {
+            context = currentRole;
+        }
+
+        return (
+            <h1 className={cn('dashboard__title')}>
+                {t('routes.dashboard.title', { context })}
+            </h1>
+        );
+    };
+
     const elCounters = useMemo(() => {
-        const counters = projectsData?.results.reduce((acc, curr) => {
+        const counters = projectsData?.results.reduce((accumulator, curr) => {
             if(curr.requests_count_total && curr.requests_count_total >= 0) {
                 // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                acc.total = acc.total + curr.requests_count_total;
+                accumulator.first = accumulator.first + curr.requests_count_total;
             }
 
             if(curr.requests_count_by_status?.in_progress && curr.requests_count_by_status?.in_progress >= 0) {
                 // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                acc.work = acc.work + curr.requests_count_by_status?.in_progress;
+                accumulator.second = accumulator.second + curr.requests_count_by_status?.in_progress;
             }
 
             if(curr.requests_count_by_status?.done && curr.requests_count_by_status?.done >= 0) {
                 // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                acc.done = acc.done + curr.requests_count_by_status?.done;
+                accumulator.third = accumulator.third + curr.requests_count_by_status?.done;
             }
 
-            return acc;
+            return accumulator;
         }, {
-            total: 0,
-            work : 0,
-            done : 0
+            first : 0,
+            second: 0,
+            third : 0
         } as ICounter);
+
+        const peopleCount = requirementData?.results?.reduce((accumulator, curr) => {
+            if(curr.cv_list?.length) {
+                accumulator.need = curr.cv_list.filter((person) => {
+                    return person.status === 'pre-candidate' || person.status === 'candidate';
+                }).length;
+            }
+
+            if(curr.count) {
+                accumulator.offer = accumulator.offer + curr.count;
+            }
+
+            return accumulator;
+        }, {
+            need : 0,
+            offer: 0
+        });
+
+        const countersReqs = projectsData?.results.reduce((accumulator, curr) => {
+            if(curr.requests_requirements_count_total && curr.requests_requirements_count_total >= 0) {
+                // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+                accumulator.first = accumulator.first + curr.requests_requirements_count_total;
+            }
+
+            return accumulator;
+        }, {
+            first : 0,
+            second: peopleCount?.need,
+            third : peopleCount?.offer
+        } as ICounter);
+
+        const countersToRender = currentRole === 'rm' ? countersReqs : counters;
 
         return (
             <div className={cn('dashboard__counters')}>
                 <div className={cn('dashboard__counter')}>
-                    <span className={cn('dashboard__counter-text')}>{t('routes.dashboard.counters.projects')}</span>
-                    {isLoading ? <Loader /> : <span className={cn('dashboard__counter-value')}>{counters?.total}</span>}
+                    <span className={cn('dashboard__counter-text')}>
+                        {t('routes.dashboard.counters.first', { context: currentRole })}
+                    </span>
+                    {isFetching ? <Loader /> : <span className={cn('dashboard__counter-value')}>{countersToRender?.first}</span>}
                 </div>
                 <div className={cn('dashboard__counter')}>
-                    <span className={cn('dashboard__counter-text')}>{t('routes.dashboard.counters.requests')}</span>
-                    {isLoading ? <Loader /> : <span className={cn('dashboard__counter-value')}>{counters?.done}</span>}
+                    <span className={cn('dashboard__counter-text')}>
+                        {t('routes.dashboard.counters.second', { context: currentRole })}
+                    </span>
+                    {isFetching ? <Loader /> : <span className={cn('dashboard__counter-value')}>{countersToRender?.second}</span>}
                 </div>
                 <div className={cn('dashboard__counter')}>
-                    <span className={cn('dashboard__counter-text')}>{t('routes.dashboard.counters.work')}</span>
-                    {isLoading ? <Loader /> : <span className={cn('dashboard__counter-value')}>{counters?.work}</span>}
+                    <span className={cn('dashboard__counter-text')}>
+                        {t('routes.dashboard.counters.third', { context: currentRole })}
+                    </span>
+                    {isFetching ? <Loader /> : <span className={cn('dashboard__counter-value')}>{countersToRender?.third}</span>}
                 </div>
             </div>
         );
-    }, [isLoading, projectsLoading, projectsData?.results?.length]);
+    }, [isFetching, currentRole, projectsFetching, JSON.stringify(projectsData?.results), JSON.stringify(requirementData?.results)]);
 
     return (
         <div className={cn('dashboard')}>
             <SidebarLayout>
                 <Section>
                     <div className={cn('dashboard__wrapper')}>
-                        <h1 className={cn('dashboard__title')}>
-                            {t('routes.dashboard.title', {
-                                val: requestData?.results?.length ? 'РП' : 'РПП'
-                            })}
-                        </h1>
+                        {elHeader()}
                         {elCounters}
                         {elTable()}
                     </div>

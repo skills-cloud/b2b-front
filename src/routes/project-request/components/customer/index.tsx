@@ -13,7 +13,7 @@ import Button from 'component/button';
 import SectionContentList from 'component/section/content-list';
 import SectionContentListItem from 'component/section/content-list-item';
 
-import { Organization } from 'adapter/types/main/organization/id/get/code-200';
+import { MainOrganization } from 'adapter/types/main/organization/id/get/code-200';
 
 import EditCustomerForm, { MAIN_CUSTOMER_FORM_ID } from '../edit-customer';
 import style from './index.module.pcss';
@@ -25,7 +25,7 @@ enum EModalSteps {
 }
 
 interface ICustomer {
-    customer: Organization | undefined,
+    customer: MainOrganization | undefined,
     requestId: number
 }
 

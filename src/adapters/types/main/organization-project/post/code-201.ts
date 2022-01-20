@@ -14,11 +14,12 @@ export type NoName4 = string;
 export type ID = number;
 export type NoName5 = number;
 export type NoName6 = number;
-export type NoName7 = string;
-export type NoName8 = number;
+export type NoName7 = number;
+export type NoName8 = string;
 export type NoName9 = number;
-export type NoName10 = string;
+export type NoName10 = number;
 export type NoName11 = string;
+export type NoName12 = string;
 
 export interface OrganizationProject {
     created_at?: NoName;
@@ -28,10 +29,11 @@ export interface OrganizationProject {
     goals?: NoName4;
     id?: ID;
     industry_sector_id?: NoName5;
-    manager_id?: NoName6;
-    name: NoName7;
-    organization_contractor_id: NoName8;
-    organization_customer_id: NoName9;
-    plan_description?: NoName10;
-    updated_at?: NoName11;
+    manager_pfm_id?: NoName6;
+    manager_pm_id?: NoName7;
+    name: NoName8;
+    organization_contractor_id: NoName9;
+    organization_customer_id: NoName10;
+    plan_description?: NoName11;
+    updated_at?: NoName12;
 }

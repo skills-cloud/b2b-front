@@ -9,14 +9,14 @@ import Textarea from 'component/form/textarea';
 import Checkbox from 'component/form/checkbox';
 
 import { mainRequest } from 'adapter/api/main';
-import { Organization } from 'adapter/types/main/organization/get/code-200';
+import { MainOrganization } from 'adapter/types/main/organization/get/code-200';
 
 import style from './index.module.pcss';
 
 export interface IProps {
     formId: string,
     onSuccess: (id: number) => void,
-    defaultValues?: Organization
+    defaultValues?: MainOrganization
 }
 
 const OrganizationCreateForm = (props: IProps) => {

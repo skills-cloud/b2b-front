@@ -18,6 +18,7 @@ export type NoName7 = string;
 export type ID1 = number;
 export type NoName8 = string;
 export type NoName9 = string;
+export type CurrentUserRole = string;
 export type NoName10 = string;
 export type ID2 = number;
 export type NoName11 = boolean;
@@ -47,7 +48,7 @@ export interface FunPointTypeRead {
     difficulty_levels?: FunPointTypeDifficultyLevelInline[];
     id?: ID1;
     name: NoName8;
-    organization_customer?: Organization;
+    organization_customer?: MainOrganization;
     organization_customer_id?: NoName15;
     positions_labor_estimates?: FunPointTypePositionLaborEstimateInline[];
     updated_at?: NoName25;
@@ -61,8 +62,9 @@ export interface FunPointTypeDifficultyLevelInline {
     sorting?: NoName6;
     updated_at?: NoName7;
 }
-export interface Organization {
+export interface MainOrganization {
     created_at?: NoName9;
+    current_user_role?: CurrentUserRole;
     description?: NoName10;
     id?: ID2;
     is_contractor?: NoName11;

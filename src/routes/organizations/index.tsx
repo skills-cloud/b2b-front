@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -27,65 +27,58 @@ import style from './index.module.pcss';
 
 export interface IFormValues {
     search?: string,
-    is_customer?: boolean
+    is_customer?: boolean,
+    is_contractor?: boolean
 }
 
 export const Organizations = () => {
     const cn = useClassnames(style);
     const history = useHistory();
     const { t, i18n } = useTranslation();
-    const qs = useMemo(() => parse(history.location.search), [history.location.search]);
-
-    const defaultValues = {
-        search     : '',
-        is_customer: false
-    };
+    const qs = useMemo(() => parse(history.location.search, { parseBooleans: true }), [history.location.search]);
+    const timer = useRef<ReturnType<typeof setTimeout>>();
 
     const context = useForm<IFormValues>({
-        mode: 'all',
-        defaultValues
+        mode         : 'all',
+        defaultValues: qs
     });
-
-    const { data, isLoading, refetch } = mainRequest.useGetMainOrganizationCustomerQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
+    const values = context.watch();
+    const { data, isLoading } = mainRequest.useGetMainOrganizationQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
 
     useEffect(() => {
-        if(Object.values(qs).length) {
-            const newDefaultValues = {
-                ...defaultValues,
-                ...qs
-            };
-
-            context.reset(newDefaultValues);
+        if(timer.current) {
+            clearTimeout(timer.current);
         }
-    }, []);
 
-    useEffect(() => {
-        refetch();
-    }, [JSON.stringify(qs)]);
-
-    const onSubmit = context.handleSubmit(
-        (formData) => {
-            const objectToNormalize = {
-                search: formData.search,
-                ...(formData.is_customer ? {
-                    is_customer: formData.is_customer
-                } : undefined)
-            };
-
-            history.replace({
-                search: stringify(normalizeObject(objectToNormalize))
+        timer.current = setTimeout(() => {
+            history.push({
+                search: stringify({
+                    search: values.search,
+                    ...(values.is_customer ? {
+                        is_customer: values.is_customer
+                    } : undefined),
+                    ...(values.is_contractor ? {
+                        is_contractor: values.is_contractor
+                    } : undefined)
+                }, {
+                    skipEmptyString: true
+                })
             });
-        },
-        (formError) => {
-            console.error(formError);
-        }
-    );
+        }, 300);
+
+        return () => {
+            if(timer.current) {
+                clearTimeout(timer.current);
+            }
+        };
+    }, [JSON.stringify(values)]);
 
     const onClearFilter = () => {
-        history.replace({
-            search: ''
+        context.reset({
+            search       : '',
+            is_contractor: false,
+            is_customer  : false
         });
-        context.reset(defaultValues);
     };
 
     const elOrganizations = useMemo(() => {
@@ -127,10 +120,14 @@ export const Organizations = () => {
                 <Wrapper>
                     <H3>{t('routes.organizations.sidebar.filters.title')}</H3>
                     <FormProvider {...context}>
-                        <form className={cn('organizations__form')} onSubmit={onSubmit}>
+                        <form className={cn('organizations__form')}>
                             <Checkbox
                                 name="is_customer"
                                 label={t('routes.organizations.sidebar.filters.form.customer.label')}
+                            />
+                            <Checkbox
+                                name="is_contractor"
+                                label={t('routes.organizations.sidebar.filters.form.contractor.label')}
                             />
                             <FormInput
                                 name="search"
@@ -138,9 +135,6 @@ export const Organizations = () => {
                                 label={t('routes.organizations.sidebar.filters.form.search.label')}
                                 placeholder={t('routes.organizations.sidebar.filters.form.search.placeholder')}
                             />
-                            <Button type="submit">
-                                {t('routes.organizations.sidebar.filters.buttons.submit')}
-                            </Button>
                             <Button type="button" onClick={onClearFilter} isSecondary={true}>
                                 {t('routes.organizations.sidebar.filters.buttons.clear')}
                             </Button>

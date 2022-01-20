@@ -36,7 +36,7 @@
                 },
                 "manager_id": {
                     "nullable": true,
-                    "title": "руководитель проекта",
+                    "title": "руководитель",
                     "type": "integer",
                     "x-url-object-detail": "/api/acc/user-manage/$id/",
                     "x-url-object-list": "/api/acc/user-manage/"

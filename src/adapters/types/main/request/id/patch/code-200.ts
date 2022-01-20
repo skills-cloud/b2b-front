@@ -13,25 +13,21 @@ export type NoName2 = number;
 export type NoName3 = number;
 export type NoName4 = number;
 export type NoName5 = 10 | 20 | 30;
-export type NoName6 = number;
-export type NoName7 = number;
+export type NoName6 = string;
+export type NoName7 = 'closed' | 'done' | 'draft' | 'in_progress';
 export type NoName8 = string;
-export type NoName9 = 'closed' | 'done' | 'draft' | 'in_progress';
-export type NoName10 = string;
-export type NoName11 = number;
+export type NoName9 = number;
 
 export interface Request {
     deadline_date?: NoName;
     description?: NoName1;
     id?: ID;
     industry_sector_id?: NoName2;
-    manager_id?: NoName3;
+    manager_rm_id?: NoName3;
     module_id: NoName4;
     priority?: NoName5;
-    recruiter_id?: NoName6;
-    resource_manager_id?: NoName7;
-    start_date?: NoName8;
-    status?: NoName9;
-    title?: NoName10;
-    type_id?: NoName11;
+    start_date?: NoName6;
+    status?: NoName7;
+    title?: NoName8;
+    type_id?: NoName9;
 }

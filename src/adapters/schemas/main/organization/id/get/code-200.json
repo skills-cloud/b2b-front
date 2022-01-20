@@ -1,16 +1,21 @@
 {
     "allOf": [
         {
-            "$ref": "#/definitions/Organization"
+            "$ref": "#/definitions/MainOrganization"
         }
     ],
     "definitions": {
-        "Organization": {
+        "MainOrganization": {
             "properties": {
                 "created_at": {
                     "format": "date-time",
                     "readOnly": true,
                     "title": "Создано",
+                    "type": "string"
+                },
+                "current_user_role": {
+                    "readOnly": true,
+                    "title": "Current user role",
                     "type": "string"
                 },
                 "description": {

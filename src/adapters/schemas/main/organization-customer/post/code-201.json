@@ -13,6 +13,11 @@
                     "title": "Создано",
                     "type": "string"
                 },
+                "current_user_role": {
+                    "readOnly": true,
+                    "title": "Current user role",
+                    "type": "string"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -22,6 +27,10 @@
                     "readOnly": true,
                     "title": "ID",
                     "type": "integer"
+                },
+                "is_contractor": {
+                    "title": "Это исполнитель?",
+                    "type": "boolean"
                 },
                 "name": {
                     "maxLength": 500,

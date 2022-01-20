@@ -2,7 +2,6 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { createLogger } from 'redux-logger';
 import { useSelector as useSelectorRedux, useDispatch as useDispatchRedux, TypedUseSelectorHook } from 'react-redux';
 
-import userReducer, { key as keyUser } from 'component/user/reducer';
 import { cv } from 'adapter/api/cv';
 import { contact } from 'adapter/api/contact';
 import { acc } from 'adapter/api/acc';
@@ -38,7 +37,6 @@ if(__DEVELOPMENT__) {
 const store = configureStore({
     devTools: false,
     reducer : {
-        [keyUser]                : userReducer,
         [cv.reducerPath]         : cv.reducer,
         [contact.reducerPath]    : contact.reducer,
         [acc.reducerPath]        : acc.reducer,

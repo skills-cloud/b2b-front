@@ -27,7 +27,6 @@ export interface IValue {
 export enum ERequestType {
     Customer,
     Contractor,
-    IsCustomer,
     Project,
     RequestType,
     FunPointType
@@ -41,10 +40,6 @@ const methods = {
     [ERequestType.Contractor]: {
         single: mainRequest.endpoints.getMainOrganizationContractorById,
         list  : mainRequest.endpoints.getMainOrganizationContractor
-    },
-    [ERequestType.IsCustomer]: {
-        single: mainRequest.endpoints.getMainOrganizationIsCustomerById,
-        list  : mainRequest.endpoints.getMainOrganizationIsCustomer
     },
     [ERequestType.Project]: {
         single: mainRequest.endpoints.getMainOrganizationProjectById,
@@ -72,7 +67,7 @@ export interface IProps {
     placeholder?: string,
     tabIndex?: string,
     disabled?: boolean,
-    defaultValue?: Array<IValue | number | string>,
+    defaultValue?: Array<IValue | number | string> | IValue,
     error?: TError,
     requestLimit?: number,
     requestOffset?: number,

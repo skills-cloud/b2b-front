@@ -7,15 +7,19 @@
 
 export type Code201 = OrganizationCustomer;
 export type NoName = string;
+export type CurrentUserRole = string;
 export type NoName1 = string;
 export type ID = number;
-export type NoName2 = string;
+export type NoName2 = boolean;
 export type NoName3 = string;
+export type NoName4 = string;
 
 export interface OrganizationCustomer {
     created_at?: NoName;
+    current_user_role?: CurrentUserRole;
     description?: NoName1;
     id?: ID;
-    name: NoName2;
-    updated_at?: NoName3;
+    is_contractor?: NoName2;
+    name: NoName3;
+    updated_at?: NoName4;
 }

@@ -1,30 +1,18 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { Code200 as Code200UserManageGet } from 'adapter/types/acc/user-manage/get/code-200';
+import { Code200 as Code200UserManageGet, UserManageRead } from 'adapter/types/acc/user-manage/get/code-200';
 import { Code201 as Code201UserManagePost } from 'adapter/types/acc/user-manage/post/code-201';
-
-export interface IUserData {
-    id?: number,
-    last_login?: string,
-    is_superuser?: boolean,
-    is_staff?: boolean,
-    is_active?: boolean,
-    date_joined?: string,
-    email: string,
-    first_name: string,
-    last_name: string,
-    photo?: string
-}
 
 interface IQueryParams {
     ordering?: Array<string>,
+    role?: Array<string>,
     search?: string,
     page?: number,
     page_size?: number
 }
 
 interface IResponseGetAccUser {
-    results: Array<IUserData>
+    results: Array<UserManageRead>
 }
 
 export const acc = createApi({
@@ -99,6 +87,7 @@ export const acc = createApi({
             gender?: 'M' | 'F' | '-',
             birth_date?: string,
             phone?: string,
+            password?: string,
             organization_contractors_roles?: Array<{
                 role: string,
                 organization_contractor_id: number

@@ -10,7 +10,7 @@ import {
     TableRow,
     WidthType
 } from 'docx';
-import { RequestRead, RequestRequirementRead, Organization } from 'adapter/types/main/request/id/get/code-200';
+import { RequestRead, RequestRequirementRead, MainOrganization } from 'adapter/types/main/request/id/get/code-200';
 
 class DocumentCreator {
     public borderStyle = { style: BorderStyle.NONE, size: 0, color: '#FFFFFF' };
@@ -81,8 +81,7 @@ class DocumentCreator {
     }
 
     public createBasicInfo(data: RequestRead): Table {
-        const manager = `${data.resource_manager?.last_name || ''} ${(data.resource_manager?.first_name || '').slice(0, 1)}`;
-        const recruiter = `${data.recruiter?.last_name || ''} ${(data.recruiter?.first_name || '').slice(0, 1)}`;
+        const manager = `${data.manager_rm?.last_name || ''} ${(data.manager_rm?.first_name || '').slice(0, 1)}`;
 
         return new Table({
             alignment: AlignmentType.LEFT,
@@ -90,7 +89,6 @@ class DocumentCreator {
                 this.createRow(i18n.t('components.pdf.project.sector'), data.industry_sector?.name),
                 this.createRow(i18n.t('components.pdf.project.project'), data.module?.organization_project?.name),
                 this.createRow(i18n.t('components.pdf.project.manager'), manager),
-                this.createRow(i18n.t('components.pdf.project.recruiter'), recruiter),
                 this.createRow(i18n.t('components.pdf.project.customer'), data.module?.organization_project?.organization_customer?.name),
                 this.createRow(i18n.t('components.pdf.project.sector'), data.industry_sector?.name)
             ]
@@ -134,7 +132,7 @@ class DocumentCreator {
         ]).reduce((prev, curr) => prev.concat(curr), []) || [];
     }
 
-    public createCustomer(data?: Organization) {
+    public createCustomer(data?: MainOrganization) {
         return new Table({
             alignment: AlignmentType.LEFT,
             rows     : [

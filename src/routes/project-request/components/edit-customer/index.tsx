@@ -5,7 +5,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 import InputMain from 'component/form/input-main';
 
-import { Organization } from 'adapter/types/main/request/id/get/code-200';
+import { MainOrganization } from 'adapter/types/main/request/id/get/code-200';
 import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
@@ -13,7 +13,7 @@ import style from './index.module.pcss';
 export const MAIN_CUSTOMER_FORM_ID = 'MAIN_CUSTOMER_FORM_ID';
 
 interface IEditRequirements {
-    customer: Organization | undefined,
+    customer: MainOrganization | undefined,
     onEditCustomer?(): void,
     onClose: () => void,
     requestId: number
@@ -60,7 +60,7 @@ const EditCustomer = ({ customer, requestId, onEditCustomer }: IEditRequirements
                     placeholder={t('routes.project-request.customer.form.name.placeholder')}
                     name="customer"
                     direction="column"
-                    requestType={InputMain.requestType.IsCustomer}
+                    requestType={InputMain.requestType.Customer}
                     className={cn('edit-customer__name')}
                 />
                 {/* <Input */}

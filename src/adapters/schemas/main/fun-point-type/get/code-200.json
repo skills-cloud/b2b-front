@@ -137,7 +137,7 @@
                     "type": "string"
                 },
                 "organization_customer": {
-                    "$ref": "#/definitions/Organization"
+                    "$ref": "#/definitions/MainOrganization"
                 },
                 "organization_customer_id": {
                     "title": "заказчик",
@@ -164,12 +164,17 @@
             ],
             "type": "object"
         },
-        "Organization": {
+        "MainOrganization": {
             "properties": {
                 "created_at": {
                     "format": "date-time",
                     "readOnly": true,
                     "title": "Создано",
+                    "type": "string"
+                },
+                "current_user_role": {
+                    "readOnly": true,
+                    "title": "Current user role",
                     "type": "string"
                 },
                 "description": {

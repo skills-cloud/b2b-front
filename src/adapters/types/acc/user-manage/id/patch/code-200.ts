@@ -11,16 +11,16 @@ export type NoName1 = string;
 export type NoName2 = string;
 export type NoName3 = '-' | 'F' | 'M';
 export type ID = number;
-export type NoName4 = string;
+/**
+ * Отметьте, если пользователь должен считаться активным. Уберите эту отметку вместо удаления учётной записи.
+ */
+export type NoName4 = boolean;
 export type NoName5 = string;
-export type NoName6 = number;
+export type NoName6 = string;
+export type NoName7 = number;
 export type OrganizationContractorName = string;
-export type NoName7 = 'admin' | 'pfm' | 'pm' | 'rm';
-export type OrganizationContractorId = number;
-export type OrganizationContractorName1 = string;
-export type NoName8 = number;
-export type OrganizationProjectName = string;
-export type NoName9 = 'admin' | 'pfm' | 'pm' | 'rm';
+export type NoName8 = 'admin' | 'pfm' | 'pm' | 'rm';
+export type NoName9 = string;
 export type NoName10 = string;
 
 export interface UserManage {
@@ -29,21 +29,15 @@ export interface UserManage {
     first_name?: NoName2;
     gender?: null | NoName3;
     id?: ID;
-    last_name?: NoName4;
-    middle_name?: NoName5;
+    is_active?: NoName4;
+    last_name?: NoName5;
+    middle_name?: NoName6;
     organization_contractors_roles?: UserOrganizationContractorRole[];
-    organization_projects_roles?: UserOrganizationProjectRole[];
+    password: NoName9;
     phone?: NoName10;
 }
 export interface UserOrganizationContractorRole {
-    organization_contractor_id: NoName6;
+    organization_contractor_id: NoName7;
     organization_contractor_name?: OrganizationContractorName;
-    role: NoName7;
-}
-export interface UserOrganizationProjectRole {
-    organization_contractor_id?: OrganizationContractorId;
-    organization_contractor_name?: OrganizationContractorName1;
-    organization_project_id: NoName8;
-    organization_project_name?: OrganizationProjectName;
-    role: NoName9;
+    role: NoName8;
 }

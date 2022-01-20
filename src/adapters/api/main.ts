@@ -1,14 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
-import { Organization } from 'adapter/types/main/organization/get/code-200';
-import { Organization as PostOrganization } from 'adapter/types/main/organization/post/code-201';
-import { Organization as PatchOrganization } from 'adapter/types/main/organization/id/patch/code-200';
-import { Organization as OrganizationById } from 'adapter/types/main/organization/id/get/code-200';
+import { MainOrganization } from 'adapter/types/main/organization/get/code-200';
+import { MainOrganization as PostOrganization } from 'adapter/types/main/organization/post/code-201';
+import { MainOrganization as PatchOrganization } from 'adapter/types/main/organization/id/patch/code-200';
+import { MainOrganization as OrganizationById } from 'adapter/types/main/organization/id/get/code-200';
 import { ProjectRead } from 'adapter/types/main/project/get/code-200';
 import { ProjectRead as ProjectReadById } from 'adapter/types/main/project/id/get/code-200';
 import { RequestType } from 'adapter/types/main/request-type/get/code-200';
 import { RequestType as RequestTypeById } from 'adapter/types/main/request-type/id/get/code-200';
-import { RequestRequirementRead, RequestRequirementCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
+import { RequestRequirementRead } from 'adapter/types/main/request-requirement/get/code-200';
+import { RequestRequirementRead as RequestRequirementReadById, RequestRequirementCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
 import { OrganizationProject } from 'adapter/types/main/organization-project/post/code-201';
@@ -57,7 +58,8 @@ export interface IResponseBase {
 }
 
 export interface IGetOrganizationListQueryParams extends IQueryParams {
-    is_customer?: 'true' | 'false'
+    is_customer?: boolean,
+    is_contractor?: boolean
 }
 
 export interface IResponseGetOrganizationProject extends IResponseBase {
@@ -70,7 +72,7 @@ export interface IGetOrganizationProjectListQueryParams extends IQueryParams {
 }
 
 interface IResponseGetOrganization extends IResponseBase {
-    results: Array<Organization>
+    results: Array<MainOrganization>
 }
 
 interface IResponseGetOrganizationContractor extends IResponseBase {
@@ -225,6 +227,10 @@ export interface IResponseGetFunPointTypeList extends IResponseBase {
     results: Array<FunPointTypeRead>
 }
 
+export interface IResponseGetMainRequestRequirement extends IResponseBase {
+    results: Array<RequestRequirementRead>
+}
+
 export const mainRequest = createApi({
     reducerPath: 'api/main/request',
     tagTypes   : ['main', 'expected-labor-estimate', 'create-request-for-saved-labor-estimate'],
@@ -232,7 +238,15 @@ export const mainRequest = createApi({
         baseUrl: '/api/main'
     }),
     endpoints: (build) => ({
-        getMainRequestRequirementById: build.query<RequestRequirementRead, IBaseGetById>({
+        getMainRequestRequirement: build.query<IResponseGetMainRequestRequirement, undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/request-requirement/',
+                method: 'GET',
+                params
+            })
+        }),
+        getMainRequestRequirementById: build.query<RequestRequirementReadById, IBaseGetById>({
             providesTags: ['main'],
             query       : ({ id }) => ({
                 url   : `/request-requirement/${id}/`,
@@ -405,32 +419,6 @@ export const mainRequest = createApi({
                 url   : '/organization-contractor/',
                 method: 'GET',
                 params
-            })
-        }),
-        getMainOrganizationIsCustomer: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined>({
-            providesTags     : ['main'],
-            transformResponse: (resp: IResponseGetOrganization) => ({
-                ...resp,
-                results: resp.results.filter((item) => item.is_customer)
-            }),
-            query: (params) => ({
-                url   : '/organization/',
-                method: 'GET',
-                params
-            })
-        }),
-        getMainOrganizationIsCustomerById: build.query<OrganizationById, IBaseGetById>({
-            providesTags     : ['main'],
-            transformResponse: (resp: OrganizationById) => {
-                if(resp?.is_customer) {
-                    return resp;
-                }
-
-                return Promise.reject(new Error('No response'));
-            },
-            query: (params) => ({
-                url   : `/organization/${params.id}/`,
-                method: 'GET'
             })
         }),
         getMainOrganizationCustomerById: build.query<OrganizationById, IBaseGetById>({

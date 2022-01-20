@@ -171,15 +171,18 @@
                     "title": "ID",
                     "type": "integer"
                 },
-                "is_resource_owner": {
-                    "title": "Владелец ресурса",
-                    "type": "boolean"
-                },
                 "last_name": {
                     "maxLength": 500,
                     "nullable": true,
                     "title": "Фамилия",
                     "type": "string"
+                },
+                "manager_rm_id": {
+                    "nullable": true,
+                    "title": "Пользователь",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user-manage/$id/",
+                    "x-url-object-list": "/api/acc/user-manage/"
                 },
                 "middle_name": {
                     "maxLength": 500,
@@ -494,6 +497,12 @@
                     "minimum": -2147483648,
                     "title": "Сортировка",
                     "type": "integer"
+                },
+                "status": {
+                    "minLength": 1,
+                    "readOnly": true,
+                    "title": "Status",
+                    "type": "string"
                 },
                 "type_of_employment": {
                     "$ref": "#/definitions/TypeOfEmployment"
