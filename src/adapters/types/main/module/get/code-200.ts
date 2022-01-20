@@ -25,6 +25,7 @@ export type NoName13 = string;
 export type ID1 = number;
 export type NoName14 = string;
 export type NoName15 = string;
+export type CurrentUserRole = string;
 export type NoName16 = string;
 export type ID2 = number;
 export type NoName17 = boolean;
@@ -76,28 +77,30 @@ export type ID9 = number;
 export type NoName52 = boolean;
 export type NoName53 = string;
 export type NoName54 = number;
-export type NoName55 = string;
+export type NoName55 = number;
 export type NoName56 = number;
-export type NoName57 = number;
-export type NoName58 = string;
-export type NoName59 = string;
-export type NoName60 = number;
-export type NoName61 = number;
-export type NoName62 = string;
+export type NoName57 = string;
+export type NoName58 = number;
+export type NoName59 = number;
+export type NoName60 = string;
+export type NoName61 = string;
+export type NoName62 = number;
 export type NoName63 = number;
-export type ID10 = number;
-export type NoName64 = number;
+export type NoName64 = string;
 export type NoName65 = number;
+export type ID10 = number;
 export type NoName66 = number;
-export type NoName67 = string;
+export type NoName67 = number;
 export type NoName68 = number;
 export type NoName69 = string;
-export type NoName70 = string;
+export type NoName70 = number;
+export type NoName71 = string;
+export type NoName72 = string;
 /**
  * если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date
  */
-export type NoName71 = number;
-export type NoName72 = number;
+export type NoName73 = number;
+export type NoName74 = number;
 
 export interface ModuleRead {
     created_at?: NoName;
@@ -111,13 +114,13 @@ export interface ModuleRead {
     manager_id?: NoName44;
     name: NoName45;
     organization_project?: OrganizationProjectInline;
-    organization_project_id: NoName60;
+    organization_project_id: NoName62;
     positions_labor_estimates?: ModulePositionLaborEstimateInline[];
-    sorting?: NoName68;
-    start_date?: NoName69;
-    updated_at?: NoName70;
-    work_days_count?: NoName71;
-    work_days_hours_count?: NoName72;
+    sorting?: NoName70;
+    start_date?: NoName71;
+    updated_at?: NoName72;
+    work_days_count?: NoName73;
+    work_days_hours_count?: NoName74;
 }
 export interface ModuleFunPointInline {
     created_at?: NoName3;
@@ -154,6 +157,7 @@ export interface FunPointTypeInline {
 }
 export interface MainOrganization {
     created_at?: NoName15;
+    current_user_role?: CurrentUserRole;
     description?: NoName16;
     id?: ID2;
     is_contractor?: NoName17;
@@ -196,15 +200,17 @@ export interface OrganizationProjectInline {
     id?: ID8;
     industry_sector?: IndustrySector;
     industry_sector_id?: NoName54;
-    manager_pfm_id?: UserInline;
-    manager_pm_id?: UserInline;
-    name: NoName55;
+    manager_pfm?: UserInline;
+    manager_pfm_id?: NoName55;
+    manager_pm?: UserInline;
+    manager_pm_id?: NoName56;
+    name: NoName57;
     organization_contractor?: MainOrganization;
-    organization_contractor_id: NoName56;
+    organization_contractor_id: NoName58;
     organization_customer?: MainOrganization;
-    organization_customer_id: NoName57;
-    plan_description?: NoName58;
-    updated_at?: NoName59;
+    organization_customer_id: NoName59;
+    plan_description?: NoName60;
+    updated_at?: NoName61;
 }
 export interface IndustrySector {
     description?: NoName51;
@@ -213,13 +219,13 @@ export interface IndustrySector {
     name: NoName53;
 }
 export interface ModulePositionLaborEstimateInline {
-    count?: NoName61;
-    created_at?: NoName62;
-    hours?: NoName63;
+    count?: NoName63;
+    created_at?: NoName64;
+    hours?: NoName65;
     id?: ID10;
-    module_id: NoName64;
+    module_id: NoName66;
     position?: Position;
-    position_id: NoName65;
-    sorting?: NoName66;
-    updated_at?: NoName67;
+    position_id: NoName67;
+    sorting?: NoName68;
+    updated_at?: NoName69;
 }

@@ -7,6 +7,7 @@
 
 export type Code201 = OrganizationContractor;
 export type NoName = string;
+export type CurrentUserRole = string;
 export type NoName1 = string;
 export type ID = number;
 export type NoName2 = boolean;
@@ -15,6 +16,7 @@ export type NoName4 = string;
 
 export interface OrganizationContractor {
     created_at?: NoName;
+    current_user_role?: CurrentUserRole;
     description?: NoName1;
     id?: ID;
     is_customer?: NoName2;

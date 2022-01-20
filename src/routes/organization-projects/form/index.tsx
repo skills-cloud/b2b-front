@@ -31,8 +31,9 @@ interface ISelect {
     label: string
 }
 
-interface IFormValues extends Omit<OrganizationProjectRead, 'industry_sector' | 'manager' | 'organization_customer' | 'organization_contractor'> {
-    manager: ISelect,
+interface IFormValues extends Omit<OrganizationProjectRead, 'industry_sector' | 'manager_pm' | 'manager_pfm' | 'organization_customer' | 'organization_contractor'> {
+    manager_pm: ISelect,
+    manager_pfm: ISelect,
     organization_contractor: ISelect,
     organization_customer: ISelect,
     recruiter: ISelect,
@@ -47,22 +48,26 @@ const OrganizationProjectCreateForm = (props: IProps) => {
         mode         : 'onChange',
         defaultValues: {
             ...props.defaultValues,
-            manager: props.defaultValues?.manager ? {
-                value: props.defaultValues?.manager_id,
-                label: `${props.defaultValues?.manager.last_name} ${props.defaultValues?.manager.first_name}`
-            } : '',
+            manager_pm: props.defaultValues?.manager_pm ? {
+                value: props.defaultValues?.manager_pm_id,
+                label: `${props.defaultValues?.manager_pm.last_name} ${props.defaultValues?.manager_pm.first_name}`
+            } : undefined,
+            manager_pfm: props.defaultValues?.manager_pfm ? {
+                value: props.defaultValues?.manager_pfm_id,
+                label: `${props.defaultValues?.manager_pfm.last_name} ${props.defaultValues?.manager_pfm.first_name}`
+            } : undefined,
             organization_contractor: props.defaultValues?.organization_contractor ? {
-                value: props.defaultValues?.organization_contractor?.id,
+                value: String(props.defaultValues?.organization_contractor?.id),
                 label: props.defaultValues?.organization_contractor?.name
-            } : '',
+            } : undefined,
             organization_customer: props.defaultValues?.organization_customer ? {
                 value: props.defaultValues?.organization_customer?.id,
                 label: props.defaultValues?.organization_customer?.name
-            } : '',
+            } : undefined,
             industry_sector: props.defaultValues?.industry_sector ? {
                 value: props.defaultValues?.industry_sector?.id,
                 label: props.defaultValues?.industry_sector?.name
-            } : ''
+            } : undefined
         }
     });
 
@@ -76,31 +81,63 @@ const OrganizationProjectCreateForm = (props: IProps) => {
         setError(null);
     }, [JSON.stringify(values)]);
 
-    const users = useMemo(() => {
+    const usersPm = useMemo(() => {
         if(userData?.results) {
-            return userData.results.map((item) => ({
-                label: item.last_name || item.first_name ? `${item.last_name} ${item.first_name}` : item.email,
-                value: String(item.id)
-            }));
+            return userData.results
+                .filter((user) => {
+                    return user?.organization_contractors_roles?.filter((orgRoles) => {
+                        if(values.organization_contractor?.value) {
+                            return orgRoles.organization_contractor_id === parseInt(values.organization_contractor?.value, 10)
+                        }
+                    }).some((role) => role.role === 'pm');
+                })
+                .map((item) => ({
+                    label: item.last_name || item.first_name ? `${item.last_name} ${item.first_name}` : item.email,
+                    value: String(item.id)
+                }));
         }
 
         return [];
-    }, [JSON.stringify(userData?.results)]);
+    }, [JSON.stringify(userData?.results), JSON.stringify(values.organization_contractor)]);
+
+    const usersPfm = useMemo(() => {
+        if(userData?.results) {
+            return userData.results
+                .filter((user) => {
+                    return user?.organization_contractors_roles?.filter((orgRoles) => {
+                        if(values.organization_contractor?.value) {
+                            return orgRoles.organization_contractor_id === parseInt(values.organization_contractor?.value, 10)
+                        }
+                    }).some((role) => role.role === 'pfm');
+                })
+                .map((item) => ({
+                    label: item.last_name || item.first_name ? `${item.last_name} ${item.first_name}` : item.email,
+                    value: String(item.id)
+                }));
+        }
+
+        return [];
+    }, [JSON.stringify(userData?.results), JSON.stringify(values.organization_contractor)]);
 
 
     const [post] = mainRequest.usePostMainOrganizationProjectMutation();
     const [patch] = mainRequest.usePatchMainOrganizationProjectMutation();
 
     const onSubmit = context.handleSubmit(
-        ({ industry_sector, manager, organization_customer, organization_contractor, ...data }: IFormValues) => {
+        ({ industry_sector, manager_pm, manager_pfm, organization_customer, organization_contractor, ...data }: IFormValues) => {
             const postData = { ...data };
 
             if(industry_sector) {
                 postData.industry_sector_id = parseInt(industry_sector.value, 10);
             }
 
-            if(manager) {
-                postData.manager_id = parseInt(manager.value, 10);
+            if(manager_pm) {
+                postData.manager_pm_id = parseInt(manager_pm.value, 10);
+            }
+
+
+            if(manager_pfm) {
+                postData.manager_pfm_id = parseInt(manager_pfm.value, 10);
             }
 
             if(organization_customer) {
@@ -189,11 +226,19 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     isMulti={false}
                 />
                 <Select
-                    name="manager"
+                    name="manager_pm"
                     direction="column"
-                    label={t('routes.organization-project.create.resource_manager.title')}
-                    placeholder={t('routes.organization-project.create.resource_manager.placeholder')}
-                    options={users}
+                    label={t('routes.organization-project.create.manager_pm.title')}
+                    placeholder={t('routes.organization-project.create.manager_pm.placeholder')}
+                    options={usersPm}
+                    isMulti={false}
+                />
+                <Select
+                    name="manager_pfm"
+                    direction="column"
+                    label={t('routes.organization-project.create.manager_pfm.title')}
+                    placeholder={t('routes.organization-project.create.manager_pfm.placeholder')}
+                    options={usersPfm}
                     isMulti={false}
                 />
                 <div className={cn('form__fields')}>

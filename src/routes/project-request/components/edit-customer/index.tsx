@@ -5,7 +5,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 import InputMain from 'component/form/input-main';
 
-import { Organization } from 'adapter/types/main/request/id/get/code-200';
+import { MainOrganization } from 'adapter/types/main/request/id/get/code-200';
 import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
@@ -13,7 +13,7 @@ import style from './index.module.pcss';
 export const MAIN_CUSTOMER_FORM_ID = 'MAIN_CUSTOMER_FORM_ID';
 
 interface IEditRequirements {
-    customer: Organization | undefined,
+    customer: MainOrganization | undefined,
     onEditCustomer?(): void,
     onClose: () => void,
     requestId: number

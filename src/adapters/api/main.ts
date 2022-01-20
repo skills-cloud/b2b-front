@@ -57,7 +57,8 @@ export interface IResponseBase {
 }
 
 export interface IGetOrganizationListQueryParams extends IQueryParams {
-    is_customer?: 'true' | 'false'
+    is_customer?: boolean,
+    is_contractor?: boolean
 }
 
 export interface IResponseGetOrganizationProject extends IResponseBase {

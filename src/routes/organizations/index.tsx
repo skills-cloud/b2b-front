@@ -27,7 +27,8 @@ import style from './index.module.pcss';
 
 export interface IFormValues {
     search?: string,
-    is_customer?: boolean
+    is_customer?: boolean,
+    is_contractor?: boolean
 }
 
 export const Organizations = () => {
@@ -36,56 +37,38 @@ export const Organizations = () => {
     const { t, i18n } = useTranslation();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
-    const defaultValues = {
-        search     : '',
-        is_customer: false
-    };
-
     const context = useForm<IFormValues>({
-        mode: 'all',
-        defaultValues
+        mode         : 'all',
+        defaultValues: qs
     });
+    const values = context.watch();
 
-    const { data, isLoading, refetch } = mainRequest.useGetMainOrganizationCustomerQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
+    const { data, isLoading, refetch } = mainRequest.useGetMainOrganizationQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
 
     useEffect(() => {
-        if(Object.values(qs).length) {
-            const newDefaultValues = {
-                ...defaultValues,
-                ...qs
-            };
-
-            context.reset(newDefaultValues);
-        }
-    }, []);
+        history.push({
+            search: stringify({
+                search: values.search,
+                ...(values.is_customer ? {
+                    is_customer: values.is_customer
+                } : undefined),
+                ...(values.is_contractor ? {
+                    is_contractor: values.is_contractor
+                } : undefined)
+            }, {
+                skipEmptyString: true
+            })
+        });
+    }, [JSON.stringify(values)]);
 
     useEffect(() => {
         refetch();
     }, [JSON.stringify(qs)]);
 
-    const onSubmit = context.handleSubmit(
-        (formData) => {
-            const objectToNormalize = {
-                search: formData.search,
-                ...(formData.is_customer ? {
-                    is_customer: formData.is_customer
-                } : undefined)
-            };
-
-            history.replace({
-                search: stringify(normalizeObject(objectToNormalize))
-            });
-        },
-        (formError) => {
-            console.error(formError);
-        }
-    );
-
     const onClearFilter = () => {
-        history.replace({
+        context.reset({
             search: ''
         });
-        context.reset(defaultValues);
     };
 
     const elOrganizations = useMemo(() => {
@@ -127,10 +110,14 @@ export const Organizations = () => {
                 <Wrapper>
                     <H3>{t('routes.organizations.sidebar.filters.title')}</H3>
                     <FormProvider {...context}>
-                        <form className={cn('organizations__form')} onSubmit={onSubmit}>
+                        <form className={cn('organizations__form')}>
                             <Checkbox
                                 name="is_customer"
                                 label={t('routes.organizations.sidebar.filters.form.customer.label')}
+                            />
+                            <Checkbox
+                                name="is_contractor"
+                                label={t('routes.organizations.sidebar.filters.form.contractor.label')}
                             />
                             <FormInput
                                 name="search"
@@ -138,9 +125,6 @@ export const Organizations = () => {
                                 label={t('routes.organizations.sidebar.filters.form.search.label')}
                                 placeholder={t('routes.organizations.sidebar.filters.form.search.placeholder')}
                             />
-                            <Button type="submit">
-                                {t('routes.organizations.sidebar.filters.buttons.submit')}
-                            </Button>
                             <Button type="button" onClick={onClearFilter} isSecondary={true}>
                                 {t('routes.organizations.sidebar.filters.buttons.clear')}
                             </Button>

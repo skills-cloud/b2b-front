@@ -13,6 +13,11 @@
                     "title": "Создано",
                     "type": "string"
                 },
+                "current_user_role": {
+                    "readOnly": true,
+                    "title": "Current user role",
+                    "type": "string"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -23,8 +28,8 @@
                     "title": "ID",
                     "type": "integer"
                 },
-                "is_customer": {
-                    "title": "Это заказчик?",
+                "is_contractor": {
+                    "title": "Это исполнитель?",
                     "type": "boolean"
                 },
                 "name": {
