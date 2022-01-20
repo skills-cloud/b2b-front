@@ -29,8 +29,8 @@ import style from './index.module.pcss';
 const MAIN_INFO_FIELDS = [
     'industry_sector',
     'organization_project',
-    'resource_manager',
-    'recruiter',
+    'manager_rm',
+    'manager_pm',
     'type',
     'requirements',
     'description',
@@ -99,8 +99,15 @@ const MainInfo = (data: RequestRead) => {
         let content;
 
         switch (field) {
-            case 'recruiter':
-            case 'resource_manager':
+            case 'manager_pm': {
+                const pm = data?.module?.organization_project?.[field];
+
+                if(pm) {
+                    content = `${pm.last_name} ${pm.first_name?.slice(0, 1)}.`;
+                }
+                break;
+            }
+            case 'manager_rm':
                 if(data[field]?.last_name && data[field]?.first_name) {
                     content = `${data[field]?.last_name} ${data[field]?.first_name?.slice(0, 1)}.`;
                 }

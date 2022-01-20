@@ -24,7 +24,6 @@ import Empty from 'component/empty';
 import { acc } from 'adapter/api/acc';
 
 import style from './index.module.pcss';
-import { useDebouncedEffect } from 'helper/use-debounce';
 
 export const SystemUsers = () => {
     const { t, i18n } = useTranslation();

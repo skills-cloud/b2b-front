@@ -116,7 +116,10 @@
     },
     "routes": {
         "dashboard": {
-            "title": "Дашборд {{val}}",
+            "title_default": "Дашборд",
+            "title_pfm": "Дашборд РПП",
+            "title_pm": "Дашборд РП",
+            "title_rm": "Дашборд РМ",
             "empty": "Пустой список проектов",
             "counters": {
                 "projects": "Всего действующих проектов",
@@ -258,6 +261,9 @@
                         },
                         "customer": {
                             "label": "Заказчик"
+                        },
+                        "contractor": {
+                            "label": "Исполнитель"
                         }
                     },
                     "buttons": {
@@ -403,7 +409,8 @@
                 },
                 "customer": "Заказчик",
                 "contractor": "Исполнитель",
-                "manager": "РП",
+                "manager_pm": "РП",
+                "manager_pfm": "РПП",
                 "timeframe": "Таймфрейм",
                 "industry_sector": "Отрасль",
                 "description": "Описание проекта",
@@ -429,15 +436,15 @@
                     "title": "Отрасль",
                     "placeholder": "Введите отрасль"
                 },
-                "manager": {
-                    "title": "Менеджер",
-                    "placeholder": "Введите имя менеджера"
+                "manager_pm": {
+                    "title": "РП",
+                    "placeholder": "Введите имя руководителя проектов"
                 },
                 "date-from": "Дата начала",
                 "date-to": "Дата окончания",
-                "resource_manager": {
-                    "title": "РП",
-                    "placeholder": "Введите имя руководителя проекта"
+                "manager_pfm": {
+                    "title": "РПП",
+                    "placeholder": "Введите имя руководителя портфеля проектов"
                 },
                 "organization_customer": {
                     "title": "Организация заказчик",
@@ -1125,7 +1132,8 @@
                 "project": "Проект",
                 "contractor": "Организация исполнитель",
                 "module": "Модуль",
-                "manager_rm": "ПМ",
+                "manager_rm": "Ресурсный менеджер",
+                "manager_pm": "РП",
                 "recruiter": "Ответственный рекрутер",
                 "type": "Тип запроса",
                 "description": "Описание запроса",
@@ -1278,8 +1286,8 @@
                 "main-info": {
                     "industry_sector": "Отрасль",
                     "organization_project": "Проект",
-                    "resource_manager": "Рес. менеджер",
-                    "recruiter": "Отв. рекрутер",
+                    "manager_rm": "Рес. менеджер",
+                    "manager_pm": "ПМ",
                     "type": "Тип запроса",
                     "requirements": "Общее кол-во",
                     "description": "Описание запроса",

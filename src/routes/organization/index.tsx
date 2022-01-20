@@ -29,6 +29,26 @@ const Organization = () => {
     const params = useParams<IParams>();
     const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.organizationId });
 
+    const elSidebar = () => {
+        const listToRender = Object.values(ESectionInvariants);
+
+        if(data?.is_contractor) {
+            listToRender.splice(1, 2);
+        }
+
+        return (
+            <SidebarNav>
+                {listToRender.map((nav) => {
+                    return (
+                        <NavItem key={nav} to={`#${nav}`}>
+                            {t(`routes.organization.blocks.sections.${nav}`)}
+                        </NavItem>
+                    );
+                })}
+            </SidebarNav>
+        );
+    };
+
     if(!data) {
         return null;
     }
@@ -36,15 +56,7 @@ const Organization = () => {
     return (
         <SidebarLayout sidebar={
             <Section withoutPaddings={true}>
-                <SidebarNav>
-                    {Object.values(ESectionInvariants).map((nav) => {
-                        return (
-                            <NavItem key={nav} to={`#${nav}`}>
-                                {t(`routes.organization.blocks.sections.${nav}`)}
-                            </NavItem>
-                        );
-                    })}
-                </SidebarNav>
+                {elSidebar()}
             </Section>
         }
         >
@@ -60,8 +72,8 @@ const Organization = () => {
                         </div>
                     </Wrapper>
                 </Section>
-                <ProjectList isContractor={data?.is_contractor} />
-                <ProjectCards />
+                {data?.is_customer && <ProjectList isContractor={data?.is_contractor} />}
+                {data?.is_customer && <ProjectCards />}
             </Wrapper>
         </SidebarLayout>
     );

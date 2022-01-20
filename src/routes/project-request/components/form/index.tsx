@@ -44,6 +44,7 @@ interface IFormValues {
         label: string
     },
     manager_rm: ISelect,
+    manager_pm: string,
     recruiter: ISelect,
     period: {
         start_date: string | undefined,
@@ -164,6 +165,16 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
 
     useEffect(() => {
         form.setValue('period', defaultDates);
+
+        if(projectData?.manager_pm?.last_name || projectData?.manager_pm?.first_name) {
+            let name = projectData.manager_pm.last_name || '';
+
+            if(projectData.manager_pm.first_name) {
+                name = `${name} ${projectData.manager_pm.first_name.substring(0, 1).toUpperCase()}.`;
+            }
+
+            form.setValue('manager_pm', name);
+        }
     }, [JSON.stringify(projectData)]);
 
     const onSubmit = form.handleSubmit(({
@@ -310,6 +321,14 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                                 label={t('routes.project-request.create.contractor')}
                                 disabled={true}
                                 isMulti={false}
+                            />
+                        )}
+                        {projectData?.manager_pm && (
+                            <Input
+                                type="text"
+                                disabled={true}
+                                name="manager_pm"
+                                label={t('routes.project-request.create.manager_pm')}
                             />
                         )}
                         {elInputModule()}

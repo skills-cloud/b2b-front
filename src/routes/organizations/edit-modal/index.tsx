@@ -5,13 +5,13 @@ import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import Button from 'component/button';
 
-import { Organization } from 'adapter/types/main/organization/get/code-200';
+import { MainOrganization } from 'adapter/types/main/organization/get/code-200';
 
 import OrganizationCreateForm from '../form';
 
 interface IEditModal {
     setVisible: (visible: boolean) => void,
-    fields: Organization
+    fields: MainOrganization
 }
 
 const FORM_MAIN_ID = 'ORGANIZATION_EDIT_FORM_MAIN_ID';

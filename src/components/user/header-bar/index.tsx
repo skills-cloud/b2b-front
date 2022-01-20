@@ -13,6 +13,7 @@ import DropdownMenu from 'component/dropdown/menu';
 import DropdownMenuItem from 'component/dropdown/menu-item';
 
 import { acc } from 'adapter/api/acc';
+import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
 
@@ -33,6 +34,7 @@ export const UserHeaderBar = (props: IProps) => {
         void postAccLogout({})
             .then(() => {
                 dispatch(acc.util.resetApiState());
+                dispatch(mainRequest.util.resetApiState());
                 history.push('/login');
             });
     };

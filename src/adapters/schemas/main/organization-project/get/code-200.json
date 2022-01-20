@@ -41,6 +41,11 @@
                     "title": "Создано",
                     "type": "string"
                 },
+                "current_user_role": {
+                    "readOnly": true,
+                    "title": "Current user role",
+                    "type": "string"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -127,11 +132,25 @@
                     "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
                     "x-url-object-list": "/api/dictionary/industry-sector/"
                 },
+                "manager_pfm": {
+                    "$ref": "#/definitions/UserInline"
+                },
                 "manager_pfm_id": {
+                    "nullable": true,
+                    "title": "РПП",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user-manage/$id/",
+                    "x-url-object-list": "/api/acc/user-manage/"
+                },
+                "manager_pm": {
                     "$ref": "#/definitions/UserInline"
                 },
                 "manager_pm_id": {
-                    "$ref": "#/definitions/UserInline"
+                    "nullable": true,
+                    "title": "РП",
+                    "type": "integer",
+                    "x-url-object-detail": "/api/acc/user-manage/$id/",
+                    "x-url-object-list": "/api/acc/user-manage/"
                 },
                 "modules_count": {
                     "readOnly": true,
