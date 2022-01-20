@@ -66,7 +66,7 @@ export const Specialists = () => {
             search: stringify({
                 ...otherValues,
                 ...(country ? { country_id: country?.map((item) => item?.value) } : {}),
-                ...(position ? { position_id: position?.map((item) => item?.value) } : {}),
+                ...(position ? { positions_ids_any: position?.map((item) => item?.value) } : {}),
                 ...(city ? { city_id: city.map((item) => item?.value) } : {}),
                 ...(competencies ? { competencies_ids_any: competencies.map((item) => item?.value) } : {})
             }, {

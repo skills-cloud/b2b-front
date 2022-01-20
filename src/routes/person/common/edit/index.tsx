@@ -15,7 +15,7 @@ import InputMain from 'component/form/input-main';
 import { dictionary } from 'adapter/api/dictionary';
 import { cv } from 'adapter/api/cv';
 import { contact } from 'adapter/api/contact';
-import { CvDetailReadFull, NoName89 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
+import { CvDetailReadFull, NoName87 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
 import { CvDetailWrite } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
@@ -30,6 +30,7 @@ export interface IProps {
 
 export interface IFormValues {
     common: {
+        price?: number,
         organization_contractor: IValue,
         gender: {
             value: IGenderType,
@@ -293,6 +294,14 @@ export const CommonEdit = (props: IProps) => {
                             direction="row"
                             requestType={InputMain.requestType.Contractor}
                             isMulti={false}
+                        />
+                    </div>
+                    <div className={cn('common-edit__field')}>
+                        <strong>{t('routes.person.common.fields.price')}</strong>
+                        <FormInput
+                            name="common.price"
+                            type="number"
+                            placeholder={t('routes.person.common.fields.price')}
                         />
                     </div>
                 </div>

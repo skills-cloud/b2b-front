@@ -21,6 +21,7 @@ import { dictionary } from 'adapter/api/dictionary';
 import { CvTimeSlotRead } from 'adapter/types/cv/cv/id/get/code-200';
 
 import style from './index.module.pcss';
+import Error from 'component/error';
 
 export interface IProps {
     id: string
@@ -32,8 +33,8 @@ const Access = (props: IProps) => {
     const { specialistId } = useParams<IParams>();
     const { data: timeSlotData } = timeslot.useGetTimeSlotQuery({ cv_id: parseInt(specialistId, 10) });
     const { data: typeOfEmployment } = dictionary.useGetTypeOfEmploymentQuery(undefined);
-    const [setTimeSlot, { isLoading }] = timeslot.useSetTimeSlotMutation();
-    const [patchTimeSlot, { isLoading: isPatchLoading }] = timeslot.usePatchTimeSlotByIdMutation();
+    const [setTimeSlot, { isLoading, isError, error }] = timeslot.useSetTimeSlotMutation();
+    const [patchTimeSlot, { isLoading: isPatchLoading, isError: isPatchError, error: patchError }] = timeslot.usePatchTimeSlotByIdMutation();
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [dayToEdit, setDayToEdit] = useState<Date>(new Date());
@@ -108,6 +109,34 @@ const Access = (props: IProps) => {
         setDayToEdit(new Date());
     };
 
+    const elErrors = useMemo(() => {
+        const errors = (error || patchError) as {
+            data: {
+                details: Record<string, Array<string>> | string
+            }
+        };
+
+        if(errors?.data?.details && typeof errors?.data?.details !== 'string') {
+            const keys = Object.keys(errors.data.details);
+
+            return (
+                <div>
+                    {keys.map((key) => {
+                        if(typeof errors?.data?.details?.[key] === 'string') {
+                            return <Error key={key}>{`${key}: ${errors?.data?.details?.[key]}`}</Error>;
+                        }
+
+                        return (errors?.data?.details as Record<string, Array<string>>)?.[key]?.map((message, index) => (
+                            <Error key={`${key}-${index}}`}>{message}</Error>
+                        ));
+                    })}
+                </div>
+            );
+        }
+
+        return <Error>{errors?.data?.details}</Error>;
+    }, [isError, isPatchError, isLoading, isPatchLoading, patchError, error]);
+
     const onSubmit = methods.handleSubmit(
         (formData) => {
             if(activeTimeSlotId) {
@@ -125,9 +154,7 @@ const Access = (props: IProps) => {
                         setActiveTimeSlotId(null);
                         methods.reset();
                     })
-                    .catch((error) => {
-                        console.error(error);
-                    });
+                    .catch(console.error);
             }
 
             return setTimeSlot({
@@ -143,9 +170,7 @@ const Access = (props: IProps) => {
                     setActiveTimeSlotId(null);
                     methods.reset();
                 })
-                .catch((error) => {
-                    console.error(error);
-                });
+                .catch(console.error);
         },
         (formError) => {
             console.info('FORM ERROR', formError);
@@ -195,6 +220,7 @@ const Access = (props: IProps) => {
                                 />
                             </div>
                             <InputRadio
+                                required={true}
                                 name="type_of_employment"
                                 direction="column"
                                 optionsDirection="column"
@@ -214,6 +240,7 @@ const Access = (props: IProps) => {
                                 </div>
                             </div>
                         </form>
+                        {elErrors}
                     </FormProvider>
                 </Modal>
             );

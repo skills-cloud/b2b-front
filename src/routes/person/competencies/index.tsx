@@ -11,6 +11,7 @@ import SkillsTag from 'component/skills-tag';
 import Empty from 'component/empty';
 
 import { position } from 'adapter/api/position';
+import { CvPositionCompetenceRead } from 'adapter/types/cv/cv/get/code-200';
 
 import CompetenciesEdit from './edit';
 import style from './index.module.pcss';
@@ -37,6 +38,28 @@ const Competencies = (props: IProps) => {
         }
     }, [isEdit]);
 
+    const elCompetencies = (competencies?: Array<CvPositionCompetenceRead>) => {
+        if(competencies?.length) {
+            return (
+                <div className={cn('competencies__skills')}>
+                    {competencies?.map((comp) => (
+                        <SkillsTag
+                            key={comp.competence_id}
+                            tooltip={t('routes.person.blocks.competencies.experience.invariant', {
+                                context: comp.years
+                            })}
+                            theme="dark"
+                        >
+                            {comp.competence?.name}
+                        </SkillsTag>
+                    ))}
+                </div>
+            );
+        }
+
+        return t('routes.person.blocks.competencies.empty');
+    };
+
     const elContent = () => {
         if(isLoading && !data?.results.length) {
             return <Loader />;
@@ -57,19 +80,7 @@ const Competencies = (props: IProps) => {
                                     </div>
                                     <div className={cn('competencies__list-item')}>
                                         <strong>{t('routes.person.blocks.competencies.skills')}</strong>
-                                        <div className={cn('competencies__skills')}>
-                                            {pos.competencies?.map((comp) => (
-                                                <SkillsTag
-                                                    key={comp.competence_id}
-                                                    tooltip={t('routes.person.blocks.competencies.experience.invariant', {
-                                                        context: comp.years
-                                                    })}
-                                                    theme="dark"
-                                                >
-                                                    {comp.competence?.name}
-                                                </SkillsTag>
-                                            ))}
-                                        </div>
+                                        {elCompetencies(pos.competencies)}
                                     </div>
                                 </div>
                             );

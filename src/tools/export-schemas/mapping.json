@@ -52,6 +52,8 @@
         "/dictionary/education-specialty/{id}/",
         "/dictionary/industry-sector/",
         "/dictionary/industry-sector/{id}/",
+        "/dictionary/organization/",
+        "/dictionary/organization/{id}/",
         "/dictionary/physical-limitation/",
         "/dictionary/physical-limitation/{id}/",
         "/dictionary/position/",

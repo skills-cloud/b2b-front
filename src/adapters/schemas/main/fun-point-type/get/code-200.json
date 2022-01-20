@@ -137,7 +137,7 @@
                     "type": "string"
                 },
                 "organization_customer": {
-                    "$ref": "#/definitions/Organization"
+                    "$ref": "#/definitions/MainOrganization"
                 },
                 "organization_customer_id": {
                     "title": "заказчик",
@@ -164,7 +164,7 @@
             ],
             "type": "object"
         },
-        "Organization": {
+        "MainOrganization": {
             "properties": {
                 "created_at": {
                     "format": "date-time",

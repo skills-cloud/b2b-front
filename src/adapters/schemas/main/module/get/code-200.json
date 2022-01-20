@@ -85,7 +85,7 @@
                     "type": "string"
                 },
                 "organization_customer": {
-                    "$ref": "#/definitions/Organization"
+                    "$ref": "#/definitions/MainOrganization"
                 },
                 "organization_customer_id": {
                     "title": "заказчик",
@@ -184,6 +184,50 @@
                     "maxLength": 500,
                     "minLength": 1,
                     "title": "Название",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "MainOrganization": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Создано",
+                    "type": "string"
+                },
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_contractor": {
+                    "title": "Это исполнитель?",
+                    "type": "boolean"
+                },
+                "is_customer": {
+                    "title": "Это заказчик?",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "readOnly": true,
+                    "title": "Обновлено",
                     "type": "string"
                 }
             },
@@ -365,7 +409,7 @@
                 },
                 "manager_id": {
                     "nullable": true,
-                    "title": "руководитель проекта",
+                    "title": "руководитель",
                     "type": "integer",
                     "x-url-object-detail": "/api/acc/user-manage/$id/",
                     "x-url-object-list": "/api/acc/user-manage/"
@@ -431,50 +475,6 @@
             ],
             "type": "object"
         },
-        "Organization": {
-            "properties": {
-                "created_at": {
-                    "format": "date-time",
-                    "readOnly": true,
-                    "title": "Создано",
-                    "type": "string"
-                },
-                "description": {
-                    "nullable": true,
-                    "title": "Описание",
-                    "type": "string"
-                },
-                "id": {
-                    "readOnly": true,
-                    "title": "ID",
-                    "type": "integer"
-                },
-                "is_contractor": {
-                    "title": "Это исполнитель?",
-                    "type": "boolean"
-                },
-                "is_customer": {
-                    "title": "Это заказчик?",
-                    "type": "boolean"
-                },
-                "name": {
-                    "maxLength": 500,
-                    "minLength": 1,
-                    "title": "Название",
-                    "type": "string"
-                },
-                "updated_at": {
-                    "format": "date-time",
-                    "readOnly": true,
-                    "title": "Обновлено",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "name"
-            ],
-            "type": "object"
-        },
         "OrganizationProjectInline": {
             "properties": {
                 "created_at": {
@@ -520,15 +520,11 @@
                     "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
                     "x-url-object-list": "/api/dictionary/industry-sector/"
                 },
-                "manager": {
+                "manager_pfm_id": {
                     "$ref": "#/definitions/UserInline"
                 },
-                "manager_id": {
-                    "nullable": true,
-                    "title": "руководитель проекта",
-                    "type": "integer",
-                    "x-url-object-detail": "/api/acc/user-manage/$id/",
-                    "x-url-object-list": "/api/acc/user-manage/"
+                "manager_pm_id": {
+                    "$ref": "#/definitions/UserInline"
                 },
                 "name": {
                     "maxLength": 500,
@@ -537,7 +533,7 @@
                     "type": "string"
                 },
                 "organization_contractor": {
-                    "$ref": "#/definitions/Organization"
+                    "$ref": "#/definitions/MainOrganization"
                 },
                 "organization_contractor_id": {
                     "title": "исполнитель",
@@ -546,7 +542,7 @@
                     "x-url-object-list": "/api/main/organization-contractor/"
                 },
                 "organization_customer": {
-                    "$ref": "#/definitions/Organization"
+                    "$ref": "#/definitions/MainOrganization"
                 },
                 "organization_customer_id": {
                     "title": "заказчик",

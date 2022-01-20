@@ -1,0 +1,37 @@
+{
+    "allOf": [
+        {
+            "$ref": "#/definitions/Organization"
+        }
+    ],
+    "definitions": {
+        "Organization": {
+            "properties": {
+                "description": {
+                    "nullable": true,
+                    "title": "Описание",
+                    "type": "string"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_verified": {
+                    "title": "Подтверждено",
+                    "type": "boolean"
+                },
+                "name": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Название",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        }
+    }
+}

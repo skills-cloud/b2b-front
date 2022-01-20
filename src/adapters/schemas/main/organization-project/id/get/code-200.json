@@ -33,7 +33,7 @@
             ],
             "type": "object"
         },
-        "Organization": {
+        "MainOrganization": {
             "properties": {
                 "created_at": {
                     "format": "date-time",
@@ -127,15 +127,11 @@
                     "x-url-object-detail": "/api/dictionary/industry-sector/$id/",
                     "x-url-object-list": "/api/dictionary/industry-sector/"
                 },
-                "manager": {
+                "manager_pfm_id": {
                     "$ref": "#/definitions/UserInline"
                 },
-                "manager_id": {
-                    "nullable": true,
-                    "title": "руководитель проекта",
-                    "type": "integer",
-                    "x-url-object-detail": "/api/acc/user-manage/$id/",
-                    "x-url-object-list": "/api/acc/user-manage/"
+                "manager_pm_id": {
+                    "$ref": "#/definitions/UserInline"
                 },
                 "modules_count": {
                     "readOnly": true,
@@ -149,7 +145,7 @@
                     "type": "string"
                 },
                 "organization_contractor": {
-                    "$ref": "#/definitions/Organization"
+                    "$ref": "#/definitions/MainOrganization"
                 },
                 "organization_contractor_id": {
                     "title": "исполнитель",
@@ -158,7 +154,7 @@
                     "x-url-object-list": "/api/main/organization-contractor/"
                 },
                 "organization_customer": {
-                    "$ref": "#/definitions/Organization"
+                    "$ref": "#/definitions/MainOrganization"
                 },
                 "organization_customer_id": {
                     "title": "заказчик",

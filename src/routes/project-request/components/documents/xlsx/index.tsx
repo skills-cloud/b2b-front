@@ -35,8 +35,7 @@ const ProjectRequestCsv = () => {
 
     const elTable = () => {
         if(data) {
-            const manager = `${data.resource_manager?.last_name || ''} ${(data.resource_manager?.first_name || '').slice(0, 1)}`;
-            const recruiter = `${data.recruiter?.last_name || ''} ${(data.recruiter?.first_name || '').slice(0, 1)}`;
+            const manager = `${data.manager_rm?.last_name || ''} ${(data.manager_rm?.first_name || '').slice(0, 1)}`;
 
             return (
                 <table>
@@ -53,7 +52,6 @@ const ProjectRequestCsv = () => {
                         {elRow(t('components.pdf.project.sector'), data.industry_sector?.name)}
                         {elRow(t('components.pdf.project.project'), data.module?.organization_project?.name)}
                         {elRow(t('components.pdf.project.manager'), manager)}
-                        {elRow(t('components.pdf.project.recruiter'), recruiter)}
                         {elRow(t('components.pdf.project.type'), data.type?.name)}
                         {elRow(t('components.pdf.project.customer'), data.module?.organization_project?.organization_customer?.name)}
                         <tr><td colSpan={COL_SPAN_FULL} /></tr>
