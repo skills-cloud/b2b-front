@@ -800,6 +800,20 @@
                     "title": "Ресурсный план",
                     "type": "string"
                 },
+                "requests_requirements_count_by_status": {
+                    "additionalProperties": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "readOnly": true,
+                    "title": "Requests requirements count by status",
+                    "type": "object"
+                },
+                "requests_requirements_count_total": {
+                    "readOnly": true,
+                    "title": "Requests requirements count total",
+                    "type": "integer"
+                },
                 "updated_at": {
                     "format": "date-time",
                     "readOnly": true,
@@ -1196,6 +1210,12 @@
                     "minimum": -2147483648,
                     "title": "Сортировка",
                     "type": "integer"
+                },
+                "status": {
+                    "minLength": 1,
+                    "readOnly": true,
+                    "title": "Status",
+                    "type": "string"
                 },
                 "type_of_employment": {
                     "$ref": "#/definitions/TypeOfEmployment"

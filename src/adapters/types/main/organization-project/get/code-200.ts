@@ -42,6 +42,7 @@ export type NoName24 = number;
 export type NoName25 = number;
 export type NoName26 = string;
 export type RequestsCountTotal = number;
+export type RequestsRequirementsCountTotal = number;
 export type NoName27 = string;
 
 export interface OrganizationProjectRead {
@@ -67,6 +68,8 @@ export interface OrganizationProjectRead {
     plan_description?: NoName26;
     requests_count_by_status?: RequestsCountByStatus;
     requests_count_total?: RequestsCountTotal;
+    requests_requirements_count_by_status?: RequestsRequirementsCountByStatus;
+    requests_requirements_count_total?: RequestsRequirementsCountTotal;
     updated_at?: NoName27;
 }
 export interface IndustrySector {
@@ -96,6 +99,12 @@ export interface MainOrganization {
     updated_at?: NoName23;
 }
 export interface RequestsCountByStatus {
+    draft: number;
+    in_progress: number;
+    done: number;
+    closed: number;
+}
+export interface RequestsRequirementsCountByStatus {
     draft: number;
     in_progress: number;
     done: number;

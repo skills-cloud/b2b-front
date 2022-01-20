@@ -8,7 +8,8 @@ import { ProjectRead } from 'adapter/types/main/project/get/code-200';
 import { ProjectRead as ProjectReadById } from 'adapter/types/main/project/id/get/code-200';
 import { RequestType } from 'adapter/types/main/request-type/get/code-200';
 import { RequestType as RequestTypeById } from 'adapter/types/main/request-type/id/get/code-200';
-import { RequestRequirementRead, RequestRequirementCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
+import { RequestRequirementRead } from 'adapter/types/main/request-requirement/get/code-200';
+import { RequestRequirementRead as RequestRequirementReadById, RequestRequirementCompetenceRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
 import { OrganizationProject } from 'adapter/types/main/organization-project/post/code-201';
@@ -226,6 +227,10 @@ export interface IResponseGetFunPointTypeList extends IResponseBase {
     results: Array<FunPointTypeRead>
 }
 
+export interface IResponseGetMainRequestRequirement extends IResponseBase {
+    results: Array<RequestRequirementRead>
+}
+
 export const mainRequest = createApi({
     reducerPath: 'api/main/request',
     tagTypes   : ['main', 'expected-labor-estimate', 'create-request-for-saved-labor-estimate'],
@@ -233,7 +238,15 @@ export const mainRequest = createApi({
         baseUrl: '/api/main'
     }),
     endpoints: (build) => ({
-        getMainRequestRequirementById: build.query<RequestRequirementRead, IBaseGetById>({
+        getMainRequestRequirement: build.query<IResponseGetMainRequestRequirement, undefined>({
+            providesTags: ['main'],
+            query       : (params) => ({
+                url   : '/request-requirement/',
+                method: 'GET',
+                params
+            })
+        }),
+        getMainRequestRequirementById: build.query<RequestRequirementReadById, IBaseGetById>({
             providesTags: ['main'],
             query       : ({ id }) => ({
                 url   : `/request-requirement/${id}/`,

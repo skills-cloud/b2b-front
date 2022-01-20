@@ -1,5 +1,5 @@
-import React, { useMemo, useEffect, ReactNode, ChangeEvent } from 'react';
-import { useFormContext } from 'react-hook-form';
+import React, { useMemo, useEffect, ReactNode, ChangeEvent, Fragment } from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
 import { IStyle, useClassnames } from 'hook/use-classnames';
@@ -17,13 +17,13 @@ export interface IProps {
     tabIndex?: number,
     disabled?: boolean,
     elError?: boolean,
-    defaultChecked?: boolean,
+    checked?: boolean,
     onChange?(e: ChangeEvent<HTMLInputElement>): void
 }
 
 const Checkbox = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
-    const { formState: { errors }, watch, trigger, register } = useFormContext();
+    const { formState: { errors }, watch, trigger, control } = useFormContext();
     const direction = useMemo(() => props.direction || 'row', [props.direction]);
     const value = watch(props.name);
 
@@ -48,30 +48,38 @@ const Checkbox = (props: IProps) => {
     }, [props.elError, props.name, errors[props.name]]);
 
     useEffect(() => {
-        if(value || props.defaultChecked) {
+        if(value) {
             void trigger(props.name);
         }
-    }, [props.defaultChecked]);
+    }, []);
 
     return (
         <label className={cn('checkbox', `checkbox_${direction}`)}>
-            <div className={cn('checkbox__group')}>
-                <input
-                    type="checkbox"
-                    autoFocus={props.autoFocus}
-                    tabIndex={props.tabIndex}
-                    disabled={props.disabled}
-                    defaultChecked={props.defaultChecked}
-                    className={cn('checkbox__input', {
-                        'checkbox__input_error': errors[props.name]
-                    })}
-                    {...register(props.name, {
-                        required: props.required
-                    })}
-                />
-                {elError}
-            </div>
-            {elLabel}
+            <Controller
+                name={props.name}
+                control={control}
+                render={({ field }) => {
+                    return (
+                        <Fragment>
+                            <div className={cn('checkbox__group')}>
+                                <input
+                                    type="checkbox"
+                                    autoFocus={props.autoFocus}
+                                    tabIndex={props.tabIndex}
+                                    disabled={props.disabled}
+                                    className={cn('checkbox__input', {
+                                        'checkbox__input_error': errors[props.name]
+                                    })}
+                                    {...field}
+                                    checked={field.value}
+                                />
+                                {elError}
+                            </div>
+                            {elLabel}
+                        </Fragment>
+                    );
+                }}
+            />
         </label>
     );
 };

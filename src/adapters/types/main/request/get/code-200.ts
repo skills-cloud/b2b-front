@@ -88,6 +88,7 @@ export type NoName61 = string;
 export type NoName62 = number;
 export type NoName63 = number;
 export type NoName64 = string;
+export type RequestsRequirementsCountTotal = number;
 export type NoName65 = string;
 export type NoName66 = number;
 export type NoName67 = number;
@@ -164,6 +165,7 @@ export type NoName113 = string;
 export type NoName114 = number;
 export type NoName115 = number;
 export type NoName116 = number;
+export type Status = string;
 export type NoName117 = string;
 export type ID17 = number;
 export type NoName118 = boolean;
@@ -320,8 +322,11 @@ export interface OrganizationProjectInline {
     organization_customer?: MainOrganization;
     organization_customer_id: NoName63;
     plan_description?: NoName64;
+    requests_requirements_count_by_status?: RequestsRequirementsCountByStatus;
+    requests_requirements_count_total?: RequestsRequirementsCountTotal;
     updated_at?: NoName65;
 }
+export interface RequestsRequirementsCountByStatus {}
 export interface ModulePositionLaborEstimateInline {
     count?: NoName67;
     created_at?: NoName68;
@@ -349,6 +354,7 @@ export interface RequestRequirementRead {
     position_id?: NoName114;
     request_id: NoName115;
     sorting?: NoName116;
+    status?: Status;
     type_of_employment?: TypeOfEmployment;
     type_of_employment_id?: NoName120;
     work_location_address?: NoName121;

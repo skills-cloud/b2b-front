@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -49,9 +49,10 @@ export const Specialists = () => {
         defaultValues: qs
     });
     const values = context.watch();
+    const timer = useRef<ReturnType<typeof setTimeout>>();
 
-    const { data, isLoading, isFetching, refetch } = cv.useGetCvListQuery(normalizeObject(qs));
-    const { data: requirementData, refetch: reqsRefetch } = mainRequest.useGetMainRequestRequirementByIdQuery(
+    const { data, isLoading, isFetching } = cv.useGetCvListQuery(normalizeObject(qs));
+    const { data: requirementData } = mainRequest.useGetMainRequestRequirementByIdQuery(
         { id: params.requirementId },
         { refetchOnMountOrArgChange: true, skip: !params.requirementId }
     );
@@ -60,25 +61,32 @@ export const Specialists = () => {
     const [showModalById, setShowModalById] = useState<number | null>(null);
 
     useEffect(() => {
-        const { country, position, city, competencies, ...otherValues } = values;
+        if(timer.current) {
+            clearTimeout(timer.current);
+        }
 
-        history.push({
-            search: stringify({
-                ...otherValues,
-                ...(country ? { country_id: country?.map((item) => item?.value) } : {}),
-                ...(position ? { positions_ids_any: position?.map((item) => item?.value) } : {}),
-                ...(city ? { city_id: city.map((item) => item?.value) } : {}),
-                ...(competencies ? { competencies_ids_any: competencies.map((item) => item?.value) } : {})
-            }, {
-                skipEmptyString: true
-            })
-        });
+        timer.current = setTimeout(() => {
+            const { country, position, city, competencies, ...otherValues } = values;
+
+            history.push({
+                search: stringify({
+                    ...otherValues,
+                    ...(country ? { country_id: country?.map((item) => item?.value) } : {}),
+                    ...(position ? { positions_ids_any: position?.map((item) => item?.value) } : {}),
+                    ...(city ? { city_id: city.map((item) => item?.value) } : {}),
+                    ...(competencies ? { competencies_ids_any: competencies.map((item) => item?.value) } : {})
+                }, {
+                    skipEmptyString: true
+                })
+            });
+        }, 300);
+
+        return () => {
+            if(timer.current) {
+                clearTimeout(timer.current);
+            }
+        };
     }, [JSON.stringify(values)]);
-
-    useEffect(() => {
-        refetch();
-        reqsRefetch();
-    }, [JSON.stringify(qs), params]);
 
     const onClickAddToRequest = useCallback((cvItemId?: number) => {
         setAddToRequest(cvItemId);

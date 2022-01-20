@@ -83,6 +83,7 @@ export type NoName57 = string;
 export type NoName58 = number;
 export type NoName59 = number;
 export type NoName60 = string;
+export type RequestsRequirementsCountTotal = number;
 export type NoName61 = string;
 export type NoName62 = number;
 export type NoName63 = number;
@@ -210,6 +211,8 @@ export interface OrganizationProjectInline {
     organization_customer?: MainOrganization;
     organization_customer_id: NoName59;
     plan_description?: NoName60;
+    requests_requirements_count_by_status?: RequestsRequirementsCountByStatus;
+    requests_requirements_count_total?: RequestsRequirementsCountTotal;
     updated_at?: NoName61;
 }
 export interface IndustrySector {
@@ -218,6 +221,7 @@ export interface IndustrySector {
     is_verified?: NoName52;
     name: NoName53;
 }
+export interface RequestsRequirementsCountByStatus {}
 export interface ModulePositionLaborEstimateInline {
     count?: NoName63;
     created_at?: NoName64;

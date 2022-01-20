@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -35,39 +35,49 @@ export const Organizations = () => {
     const cn = useClassnames(style);
     const history = useHistory();
     const { t, i18n } = useTranslation();
-    const qs = useMemo(() => parse(history.location.search), [history.location.search]);
+    const qs = useMemo(() => parse(history.location.search, { parseBooleans: true }), [history.location.search]);
+    const timer = useRef<ReturnType<typeof setTimeout>>();
 
     const context = useForm<IFormValues>({
         mode         : 'all',
         defaultValues: qs
     });
     const values = context.watch();
-
-    const { data, isLoading, refetch } = mainRequest.useGetMainOrganizationQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
+    const { data, isLoading } = mainRequest.useGetMainOrganizationQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
 
     useEffect(() => {
-        history.push({
-            search: stringify({
-                search: values.search,
-                ...(values.is_customer ? {
-                    is_customer: values.is_customer
-                } : undefined),
-                ...(values.is_contractor ? {
-                    is_contractor: values.is_contractor
-                } : undefined)
-            }, {
-                skipEmptyString: true
-            })
-        });
+        if(timer.current) {
+            clearTimeout(timer.current);
+        }
+
+        timer.current = setTimeout(() => {
+            history.push({
+                search: stringify({
+                    search: values.search,
+                    ...(values.is_customer ? {
+                        is_customer: values.is_customer
+                    } : undefined),
+                    ...(values.is_contractor ? {
+                        is_contractor: values.is_contractor
+                    } : undefined)
+                }, {
+                    skipEmptyString: true
+                })
+            });
+        }, 300);
+
+        return () => {
+            if(timer.current) {
+                clearTimeout(timer.current);
+            }
+        };
     }, [JSON.stringify(values)]);
-
-    useEffect(() => {
-        refetch();
-    }, [JSON.stringify(qs)]);
 
     const onClearFilter = () => {
         context.reset({
-            search: ''
+            search       : '',
+            is_contractor: false,
+            is_customer  : false
         });
     };
 

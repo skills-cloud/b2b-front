@@ -263,6 +263,7 @@ export type NoName185 = string;
 export type NoName186 = number;
 export type NoName187 = number;
 export type NoName188 = string;
+export type RequestsRequirementsCountTotal = number;
 export type NoName189 = string;
 export type NoName190 = number;
 export type NoName191 = number;
@@ -291,6 +292,7 @@ export type NoName208 = string;
 export type NoName209 = number;
 export type NoName210 = number;
 export type NoName211 = number;
+export type Status = string;
 export type NoName212 = string;
 export type ID37 = number;
 export type NoName213 = boolean;
@@ -599,6 +601,7 @@ export interface CvRequestRequirementInlineSerializer {
     request?: CvRequestInlineSerializer;
     request_id: NoName210;
     sorting?: NoName211;
+    status?: Status;
     type_of_employment?: TypeOfEmployment;
     type_of_employment_id?: NoName215;
     work_location_address?: NoName216;
@@ -722,8 +725,11 @@ export interface OrganizationProjectInline {
     organization_customer?: MainOrganization;
     organization_customer_id: NoName187;
     plan_description?: NoName188;
+    requests_requirements_count_by_status?: RequestsRequirementsCountByStatus;
+    requests_requirements_count_total?: RequestsRequirementsCountTotal;
     updated_at?: NoName189;
 }
+export interface RequestsRequirementsCountByStatus {}
 export interface ModulePositionLaborEstimateInline {
     count?: NoName191;
     created_at?: NoName192;
