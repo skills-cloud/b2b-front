@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { parse, stringify } from 'query-string';
-import debounce from 'lodash.debounce';
 
 import SidebarLayout from 'component/layout/sidebar';
 import Wrapper from 'component/section/wrapper';
@@ -24,12 +23,12 @@ import Empty from 'component/empty';
 import { acc } from 'adapter/api/acc';
 
 import style from './index.module.pcss';
-import { useDebouncedEffect } from 'helper/use-debounce';
 
 export const SystemUsers = () => {
     const { t, i18n } = useTranslation();
     const cn = useClassnames(style);
     const history = useHistory();
+    const timer = useRef<ReturnType<typeof setTimeout>>();
     const query = useQuery();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
     const context = useForm({
@@ -45,16 +44,24 @@ export const SystemUsers = () => {
         role                      : query.get('role') ? [query.get('role') as string] : undefined
     });
 
-    const historyPush = debounce(() => {
-        history.push({
-            search: stringify(values, {
-                skipEmptyString: true
-            })
-        });
-    }, 300);
-
     useEffect(() => {
-        historyPush();
+        if(timer.current) {
+            clearTimeout(timer.current);
+        }
+
+        timer.current = setTimeout(() => {
+            history.push({
+                search: stringify(values, {
+                    skipEmptyString: true
+                })
+            });
+        }, 300);
+
+        return () => {
+            if(timer.current) {
+                clearTimeout(timer.current);
+            }
+        };
     }, [JSON.stringify(values)]);
 
     const elLoading = useMemo(() => {
