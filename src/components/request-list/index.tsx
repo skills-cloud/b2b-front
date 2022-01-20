@@ -120,7 +120,8 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
                                         {t('routes.project-request-list.requests.content.creator')}
                                     </h5>
                                     <p className={cn('request-list__item-content-block-text')}>
-                                        {requestItem.recruiter?.last_name || t('routes.project-request-list.requests.content.empty')}
+                                        {/* TODO убрать поле или заменить */}
+                                        {t('routes.project-request-list.requests.content.empty')}
                                     </p>
                                 </div>
                                 <div className={cn('request-list__item-content-block')}>
@@ -128,7 +129,7 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
                                         {t('routes.project-request-list.requests.content.resource-manager')}
                                     </h5>
                                     <p className={cn('request-list__item-content-block-text')}>
-                                        {requestItem.resource_manager?.last_name || t('routes.project-request-list.requests.content.empty')}
+                                        {requestItem.manager_rm?.last_name || t('routes.project-request-list.requests.content.empty')}
                                     </p>
                                 </div>
                                 <div className={cn('request-list__item-content-block')}>

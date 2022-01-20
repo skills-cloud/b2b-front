@@ -16,8 +16,6 @@ import Modal from 'component/modal';
 import Button from 'component/button';
 import Textarea from 'component/form/textarea';
 
-import { key as keyUser } from 'component/user/reducer';
-import { useSelector } from 'component/core/store';
 import { cv } from 'adapter/api/cv';
 
 import CommonEdit from './edit';
@@ -39,12 +37,6 @@ export const Common = (props: IProps) => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [showVerify, setShowVerify] = useState<boolean>(false);
     const { data, refetch } = cv.useGetCvByIdQuery({ id: specialistId }, { refetchOnMountOrArgChange: true });
-
-    const { email, first_name, last_name } = useSelector((store) => ({
-        email     : store[keyUser].email,
-        first_name: store[keyUser].first_name,
-        last_name : store[keyUser].last_name
-    }));
 
     const onClickMore = useCallback(() => {
         setMore(true);
@@ -170,24 +162,7 @@ export const Common = (props: IProps) => {
                 </div>
             );
         }
-
-        return (
-            <div className={cn('person__info-list')}>
-                <div className={cn('person__list-item')}>
-                    <strong>{t('routes.person.blocks.common.contacts.email')}</strong>
-                    <span>{email}</span>
-                </div>
-                <div className={cn('person__list-item')}>
-                    <strong>{t('routes.person.blocks.common.contacts.telephone')}</strong>
-                    <span>+7 922 230 33 56</span>
-                </div>
-                <div className={cn('person__list-item')}>
-                    <strong>{t('routes.person.blocks.common.contacts.skype')}</strong>
-                    <span>anton.s13</span>
-                </div>
-            </div>
-        );
-    }, [email, JSON.stringify(data?.contacts)]);
+    }, [JSON.stringify(data?.contacts)]);
 
     const elLocation = useMemo(() => {
         if(data?.city) {
@@ -220,16 +195,12 @@ export const Common = (props: IProps) => {
     }, [JSON.stringify(data), data, more]);
 
     const elUserName = useMemo(() => {
-        let userName = `${last_name || ''} ${first_name || ''}`;
-
-        if(specialistId) {
-            userName = `${data?.last_name || ''} ${data?.first_name || ''} ${data?.middle_name || ''}`;
-        }
-
         return (
-            <h1 className={cn('person__title')}>{userName.trim()}</h1>
+            <h1 className={cn('person__title')}>
+                {`${data?.last_name || ''} ${data?.first_name || ''} ${data?.middle_name || ''}`}
+            </h1>
         );
-    }, [last_name, first_name, data?.first_name, data?.last_name, data?.middle_name]);
+    }, [data?.first_name, data?.last_name, data?.middle_name]);
 
     return (
         <div id={props.id} key={specialistId} className={cn('person__block', 'person__info')}>
