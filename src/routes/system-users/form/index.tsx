@@ -10,111 +10,108 @@ import InputMain from 'component/form/input-main';
 import InputSelect from 'component/form/select';
 import DateInput from 'component/form/date';
 import Button from 'component/button';
-import Error from 'component/error';
-import Input from 'component/form/input';
+import Checkbox from 'component/form/checkbox';
+import ErrorsComponent from 'component/error/errors';
 
 import { acc } from 'adapter/api/acc';
-import { UserManageRead } from 'adapter/types/acc/user-manage/get/code-200';
+import { NoName3 as IGender, UserManageRead } from 'adapter/types/acc/user-manage/get/code-200';
 
 import style from './index.module.pcss';
 
 interface IProps {
-    defaultValues?: UserManageRead
+    defaultValues?: UserManageRead,
+    onSuccess?(): void
 }
+
+interface IFormValues {
+    email: string,
+    first_name?: string,
+    middle_name?: string,
+    last_name?: string,
+    password?: string,
+    gender?: {
+        label: string | null,
+        value: IGender | null
+    },
+    birth_date?: string,
+    phone?: string,
+    organizations?: Array<{
+        role: {
+            label: string,
+            value: string
+        },
+        organization_contractor_id: {
+            label: string,
+            value: number
+        }
+    }>
+}
+
 
 const SystemUserForm = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const history = useHistory();
-    const context = useForm<{
-        email: string,
-        first_name?: string,
-        middle_name?: string,
-        last_name?: string,
-        password?: string,
-        gender?: {
-            label: string,
-            value: 'M' | 'F' | '-'
-        },
-        birth_date?: string,
-        phone?: string,
-        organizations?: Array<{
-            role: {
-                label: string,
-                value: string
-            },
-            organization_contractor_id: {
-                label: string,
-                value: number
-            }
-        }>
-    }>({
+    const context = useForm<IFormValues>({
         mode         : 'onSubmit',
         defaultValues: {
-            organizations: [{}]
+            ...props.defaultValues,
+            gender: {
+                value: props.defaultValues?.gender,
+                label: props.defaultValues?.gender
+            },
+            organizations: props.defaultValues?.organization_contractors_roles?.map((orgRole) => ({
+                role: {
+                    value: orgRole.role,
+                    label: orgRole.role
+                },
+                organization_contractor_id: {
+                    value: orgRole.organization_contractor_id,
+                    label: orgRole.organization_contractor_name
+                }
+            })) || [{}]
         }
     });
 
     const [setUserManage, { error, isError, isLoading }] = acc.useSetUserManageMutation();
+    const [patchUserManage, { error: patchError, isError: isPatchError, isLoading: isPatchLoading }] = acc.usePatchUserManageMutation();
 
     const organizations = useFieldArray({
         name   : 'organizations',
         control: context.control
     });
 
-    const elErrors = useMemo(() => {
-        if(!isLoading && isError) {
-            const errors = error as {
-                data: {
-                    details: Record<string, Array<string>> | string
-                }
+    const onSubmit = context.handleSubmit(
+        (payload) => {
+            const method = props.defaultValues ? patchUserManage : setUserManage;
+            const data = {
+                ...payload,
+                gender                        : payload.gender?.value || '-',
+                password                      : payload.password || '',
+                organization_contractors_roles: payload.organizations?.filter((item) => item.role && item.organization_contractor_id).map((item) => ({
+                    role                      : item?.role?.value,
+                    organization_contractor_id: item?.organization_contractor_id?.value
+                }))
             };
 
-            if(typeof errors.data?.details !== 'string') {
-                const keys = Object.keys(errors.data.details);
+            method(data)
+                .unwrap()
+                .then(() => {
+                    history.push('/system-users');
+                    props.onSuccess?.();
+                })
+                .catch(console.error);
+        },
+        console.error
+    );
 
-                return (
-                    <div>
-                        {keys.map((key) => {
-                            if(typeof errors?.data?.details?.[key] === 'string') {
-                                return <Error key={key}>{`${key}: ${errors?.data?.details?.[key]}`}</Error>;
-                            }
-
-                            return (errors?.data?.details as Record<string, Array<string>>)?.[key]?.map((message, index) => (
-                                <Error key={`${key}-${index}}`}>{message}</Error>
-                            ));
-                        })}
-                    </div>
-                );
-            }
-
-            return <Error>{errors?.data?.details}</Error>;
-        }
-    }, [isError, isLoading]);
+    const errorMessage = t('routes.system-create.error-required');
 
     return (
         <FormProvider {...context}>
             <form
                 className={cn('form')}
-                onSubmit={context.handleSubmit(
-                    (payload) => {
-                        setUserManage({
-                            ...payload,
-                            gender                        : payload.gender?.value || '-',
-                            password                      : payload.password || '',
-                            organization_contractors_roles: payload.organizations?.filter((item) => item.role && item.organization_contractor_id).map((item) => ({
-                                role                      : item?.role?.value,
-                                organization_contractor_id: item?.organization_contractor_id?.value
-                            }))
-                        })
-                            .unwrap()
-                            .then(() => {
-                                history.push('/system-users');
-                            })
-                            .catch(console.error);
-                    },
-                    console.error
-                )}
+                onSubmit={onSubmit}
             >
                 <div className={cn('form__block')}>
                     <h3
@@ -142,7 +139,7 @@ const SystemUserForm = (props: IProps) => {
                 <FormInput
                     type="text"
                     name="email"
-                    required={true}
+                    required={errorMessage}
                     label={t('routes.system-create.form.email.label')}
                     placeholder={t('routes.system-create.form.email.placeholder')}
                 />
@@ -230,18 +227,29 @@ const SystemUserForm = (props: IProps) => {
                         placeholder={t('routes.specialists-create.main.form.birth_date')}
                     />
                 </div>
-                <Input
+                <FormInput
+                    required={props.defaultValues ? false : errorMessage}
                     name="password"
                     type="password"
                     label={t('routes.login.form.password')}
                 />
-                {elErrors}
+                {props.defaultValues && (
+                    <Checkbox
+                        name="is_active"
+                        label={t('routes.system-edit.is_active')}
+                    />
+                )}
+                <ErrorsComponent
+                    error={error || patchError}
+                    isError={isError || isPatchError}
+                    isLoading={isLoading || isPatchLoading}
+                />
                 <Button
                     className={cn('form__button')}
                     type="submit"
-                    children={t('routes.system-create.form.buttons.create')}
-                    disabled={isLoading}
-                    isLoading={isLoading}
+                    children={props.defaultValues ? t('routes.system-buttons.save') : t('routes.system-buttons.create')}
+                    disabled={isLoading || isPatchLoading}
+                    isLoading={isLoading || isPatchLoading}
                 />
             </form>
         </FormProvider>

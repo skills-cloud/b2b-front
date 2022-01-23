@@ -95,6 +95,13 @@
                     "title": "Отчество",
                     "type": "string"
                 },
+                "organizations_contractors_roles": {
+                    "items": {
+                        "$ref": "#/definitions/WhoAmIContractorRole"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
                 "phone": {
                     "maxLength": 100,
                     "nullable": true,
@@ -107,18 +114,44 @@
                     "readOnly": true,
                     "title": "Photo",
                     "type": "string"
-                },
-                "roles": {
-                    "items": {
-                        "minLength": 1,
-                        "type": "string"
-                    },
-                    "readOnly": true,
-                    "type": "array"
                 }
             },
             "required": [
                 "email"
+            ],
+            "type": "object"
+        },
+        "WhoAmIContractorRole": {
+            "properties": {
+                "organization_contractor_id": {
+                    "readOnly": true,
+                    "title": "Organization contractor id",
+                    "type": "string"
+                },
+                "organization_contractor_name": {
+                    "minLength": 1,
+                    "title": "Organization contractor name",
+                    "type": "string"
+                },
+                "role": {
+                    "enum": [
+                        "admin",
+                        "pfm",
+                        "pm",
+                        "rm"
+                    ],
+                    "title": "Роль",
+                    "type": "string",
+                    "x-enum-description": {
+                        "admin": "Администратор",
+                        "pfm": "Руководитель портфеля проектов",
+                        "pm": "Руководитель проекта",
+                        "rm": "Ресурсный менеджер"
+                    }
+                }
+            },
+            "required": [
+                "role"
             ],
             "type": "object"
         }

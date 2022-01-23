@@ -18,6 +18,7 @@ import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
 import InputMain from 'component/form/input-main';
 
+import { acc } from 'adapter/api/acc';
 import { dictionary } from 'adapter/api/dictionary';
 import { CvCareerRead } from 'adapter/types/cv/career/id/get/code-200';
 import { NoName6 as IGenderType } from 'adapter/types/cv/cv/post/code-201';
@@ -29,6 +30,7 @@ export interface ICvForm extends Omit<CvCareerRead, 'gender' | 'country' | 'city
     city: IValue,
     citizenship: IValue,
     organization_contractor: IValue,
+    manager_rm: IValue,
     gender: {
         label: string,
         value: IGenderType
@@ -57,6 +59,7 @@ export const SpecialistsCreate = () => {
             common: [{}]
         }
     });
+    const values = context.watch();
     const { isValid } = context.formState;
     const [postCv] = cv.usePostCvMutation();
     const [postContact] = contact.usePostContactMutation();
@@ -71,6 +74,7 @@ export const SpecialistsCreate = () => {
     const [mainContact, setMainContact] = useState<number>(0);
     const [postCvLoading, setPostCvLoading] = useState<boolean>(false);
 
+    const { data: whoAmIData } = acc.useGetAccWhoAmIQuery(undefined);
     const { data: contacts } = dictionary.useGetContactTypeQuery({ search: '' });
 
     useEffect(() => {
@@ -85,6 +89,52 @@ export const SpecialistsCreate = () => {
         setMainContact(index);
     };
 
+    const { data: userData, refetch } = acc.useGetUserManageQuery({
+        organization_contractor_id: [values.organization_contractor?.value],
+        role                      : ['rm']
+    }, {
+        skip: !values.organization_contractor?.value
+    });
+
+    useEffect(() => {
+        if(values.organization_contractor?.value) {
+            const isUserInCompany = !userData?.results?.find((user) => {
+                return user.organization_contractors_roles?.some((orgRole) => {
+                    return orgRole.organization_contractor_id === parseInt(values.organization_contractor.value, 10);
+                });
+            });
+
+            if(!isUserInCompany) {
+                refetch();
+                context.setValue('manager_rm', {
+                    value: '',
+                    label: ''
+                });
+            }
+        }
+    }, [values.organization_contractor?.value]);
+
+    const usersRm = useMemo(() => {
+        if(userData?.results) {
+            return userData.results
+                .map((item) => ({
+                    label: item.last_name || item.first_name ? `${item.last_name} ${item.first_name}` : item.email,
+                    value: String(item.id)
+                }));
+        }
+
+        return [];
+    }, [JSON.stringify(userData?.results), JSON.stringify(values.organization_contractor)]);
+
+    useEffect(() => {
+        if(whoAmIData?.organizations_contractors_roles?.[0]) {
+            context.setValue('organization_contractor', {
+                value: whoAmIData?.organizations_contractors_roles?.[0].organization_contractor_id as string,
+                label: whoAmIData?.organizations_contractors_roles?.[0].organization_contractor_name as string
+            });
+        }
+    }, [whoAmIData]);
+
     const onSubmit = context.handleSubmit(
         (formData) => {
             setPostCvLoading(true);
@@ -98,6 +148,7 @@ export const SpecialistsCreate = () => {
             postCv({
                 ...rest,
                 organization_contractor_id: parseInt(formData.organization_contractor?.value, 10),
+                manager_rm_id             : parseInt(formData.manager_rm?.value, 10),
                 gender                    : formData.gender?.value,
                 city_id                   : parseInt(formData.city?.value, 10),
                 citizenship_id            : parseInt(formData.citizenship?.value, 10),
@@ -295,6 +346,7 @@ export const SpecialistsCreate = () => {
                             />
                         </div>
                         <InputMain
+                            disabled={true}
                             required={true}
                             name="organization_contractor"
                             direction="column"
@@ -302,6 +354,15 @@ export const SpecialistsCreate = () => {
                             label={t('routes.organization-project.create.organization_contractor.title')}
                             placeholder={t('routes.organization-project.create.organization_contractor.placeholder')}
                             isMulti={false}
+                        />
+                        <InputSelect
+                            disabled={!values.organization_contractor?.value}
+                            name="manager_rm"
+                            direction="column"
+                            label={t('routes.organization-project.create.manager_rm.title')}
+                            placeholder={t('routes.organization-project.create.manager_rm.placeholder')}
+                            isMulti={false}
+                            options={usersRm}
                         />
                         <Button
                             className={cn('specialists-create__button')}

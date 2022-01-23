@@ -20,8 +20,8 @@ export type NoName6 = string;
 export type NoName7 = number;
 export type OrganizationContractorName = string;
 export type NoName8 = 'admin' | 'pfm' | 'pm' | 'rm';
+export type Password = string;
 export type NoName9 = string;
-export type NoName10 = string;
 
 export interface UserManage {
     birth_date?: NoName;
@@ -33,8 +33,8 @@ export interface UserManage {
     last_name?: NoName5;
     middle_name?: NoName6;
     organization_contractors_roles?: UserOrganizationContractorRole[];
-    password: NoName9;
-    phone?: NoName10;
+    password?: Password;
+    phone?: NoName9;
 }
 export interface UserOrganizationContractorRole {
     organization_contractor_id: NoName7;

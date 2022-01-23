@@ -71,7 +71,7 @@ const Checkbox = (props: IProps) => {
                                         'checkbox__input_error': errors[props.name]
                                     })}
                                     {...field}
-                                    checked={field.value}
+                                    checked={field.value !== undefined ? field.value : false}
                                 />
                                 {elError}
                             </div>

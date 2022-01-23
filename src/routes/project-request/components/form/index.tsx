@@ -15,6 +15,7 @@ import InputMain from 'component/form/input-main';
 import InputProject from 'component/form/input-project';
 import Input from 'component/form/input';
 import InputModule from 'component/form/input-module';
+import ErrorsComponent from 'component/error/errors';
 
 import { Request, NoName7 as TStatus, NoName5 as TPriority } from 'adapter/types/main/request/id/patch/code-200';
 import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
@@ -30,7 +31,7 @@ interface ISelect {
 
 interface IFormValues {
     industry_sector: ISelect,
-    customer: ISelect,
+    organization_customer: ISelect,
     project: ISelect,
     module: ISelect,
     organization_contractor: ISelect,
@@ -74,14 +75,19 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
 
     const [projectId, setProjectId] = useState<string>('');
 
-    const [post, { isLoading: isLoadingPost }] = mainRequest.usePostMainRequestMutation();
-    const [patch, { isLoading: isLoadingPatch }] = mainRequest.usePatchMainRequestMutation();
-    const { data: accUsersData } = acc.useGetAccUserQuery(undefined);
-    const { data: projectData } = mainRequest.useGetMainOrganizationProjectByIdQuery({
+    const [post, { isLoading: isLoadingPost, isError, error }] = mainRequest.usePostMainRequestMutation();
+    const [patch, { isLoading: isLoadingPatch, isError: isPatchError, error: patchError }] = mainRequest.usePatchMainRequestMutation();
+    const { data: projectData, refetch } = mainRequest.useGetMainOrganizationProjectByIdQuery({
         id: params.projectId || projectId
     }, {
         skip                     : !params.projectId && !projectId,
         refetchOnMountOrArgChange: true
+    });
+    const { data: accUsersData } = acc.useGetAccUserQuery({
+        role                      : ['rm'],
+        organization_contractor_id: [projectData?.organization_contractor_id as number]
+    }, {
+        skip: !projectData?.organization_contractor_id
     });
 
     const [activeTab, setActiveTab] = useState<ETabs>(ETabs.Main);
@@ -123,7 +129,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                 value: String(defaultValues?.industry_sector?.id),
                 label: defaultValues?.industry_sector?.name
             } : undefined,
-            customer: defaultValues?.module?.organization_project ? {
+            organization_customer: defaultValues?.module?.organization_project ? {
                 value: String(defaultValues?.module.organization_project.organization_customer_id),
                 label: defaultValues?.module.organization_project.organization_customer?.name
             } : undefined,
@@ -164,6 +170,15 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
     }, [values.project?.value]);
 
     useEffect(() => {
+        const projectDataOrgId = projectData?.organization_customer_id;
+        const valuesOrgId = parseInt(values.organization_customer?.value, 10);
+
+        if(projectDataOrgId !== valuesOrgId || valuesOrgId !== defaultValues?.module?.organization_project?.organization_customer_id) {
+            refetch();
+        }
+    }, [JSON.stringify(values.organization_customer)]);
+
+    useEffect(() => {
         form.setValue('period', defaultDates);
 
         if(projectData?.manager_pm?.last_name || projectData?.manager_pm?.first_name) {
@@ -182,7 +197,7 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
         industry_sector,
         project,
         module,
-        customer,
+        organization_customer,
         prioritySelect,
         statusSelect,
         type,
@@ -293,24 +308,24 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                             label={t('routes.project-request.create.form-title')}
                         />
                         <InputMain
-                            defaultValue={[params.organizationId]}
+                            defaultValue={[params.organizationId || projectData?.organization_customer_id as number]}
                             isMulti={false}
                             requestType={InputMain.requestType.Customer}
-                            name="customer"
+                            name="organization_customer"
                             direction="column"
                             label={t('routes.project-request.create.customer')}
                             required={errorMessage}
-                            disabled={!!params.organizationId}
+                            disabled={!!defaultValues || !!params.organizationId}
                         />
                         <InputProject
                             defaultValue={params.projectId}
                             filters={{
-                                organization_customer_id: values.customer?.value ? [parseInt(values.customer?.value, 10)] : undefined
+                                organization_customer_id: values.organization_customer?.value ? [parseInt(values.organization_customer?.value, 10)] : undefined
                             }}
                             name="project"
                             direction="column"
                             label={t('routes.project-request.create.project')}
-                            disabled={!!params.projectId || !values.customer?.value}
+                            disabled={!!params.projectId || !values.organization_customer?.value}
                         />
                         {projectData?.organization_contractor_id && (
                             <InputMain
@@ -403,6 +418,11 @@ const ProjectsRequestForm = ({ formId, onSuccess, defaultValues, setIsLoading }:
                         >{t('routes.project-request.create.period-form.add')}
                         </a> */}
                     </div>
+                    <ErrorsComponent
+                        error={error || patchError}
+                        isError={isError || isPatchError}
+                        isLoading={isLoadingPatch || isLoadingPost}
+                    />
                 </form>
             </FormProvider>
         </React.Fragment>

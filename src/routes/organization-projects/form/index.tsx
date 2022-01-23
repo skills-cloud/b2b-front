@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
@@ -11,14 +11,14 @@ import InputDictionary from 'component/form/input-dictionary';
 import DateInput from 'component/form/date';
 import Textarea from 'component/form/textarea';
 import Select from 'component/form/select';
+import InputMain from 'component/form/input-main';
+import ErrorsComponent from 'component/error/errors';
 
 import { mainRequest } from 'adapter/api/main';
 import { acc } from 'adapter/api/acc';
 import { OrganizationProjectRead } from 'adapter/types/main/organization-project/get/code-200';
 
 import style from './index.module.pcss';
-import InputMain from 'component/form/input-main';
-import Error from 'component/error';
 
 export interface IProps {
     formId: string,
@@ -73,32 +73,23 @@ const OrganizationProjectCreateForm = (props: IProps) => {
 
     const { data: userData } = acc.useGetAccUserQuery({});
 
-    const [error, setError] = useState<Array<string> | null>(null);
-
     const values = context.watch();
 
     useEffect(() => {
-        setError(null);
-    }, [JSON.stringify(values)]);
+        const contractorValue = values.organization_contractor?.value;
 
-    const usersPm = useMemo(() => {
-        if(userData?.results) {
-            return userData.results
-                .filter((user) => {
-                    return user?.organization_contractors_roles?.filter((orgRoles) => {
-                        if(values.organization_contractor?.value) {
-                            return orgRoles.organization_contractor_id === parseInt(values.organization_contractor?.value, 10)
-                        }
-                    }).some((role) => role.role === 'pm');
-                })
-                .map((item) => ({
-                    label: item.last_name || item.first_name ? `${item.last_name} ${item.first_name}` : item.email,
-                    value: String(item.id)
-                }));
+        if(contractorValue && (parseInt(contractorValue, 10) !== props.defaultValues?.organization_contractor_id)) {
+            context.setValue('manager_pm', {
+                value: undefined,
+                label: ''
+            });
+
+            context.setValue('manager_pfm', {
+                value: undefined,
+                label: ''
+            });
         }
-
-        return [];
-    }, [JSON.stringify(userData?.results), JSON.stringify(values.organization_contractor)]);
+    }, [JSON.stringify(values.organization_contractor)]);
 
     const usersPfm = useMemo(() => {
         if(userData?.results) {
@@ -106,8 +97,10 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                 .filter((user) => {
                     return user?.organization_contractors_roles?.filter((orgRoles) => {
                         if(values.organization_contractor?.value) {
-                            return orgRoles.organization_contractor_id === parseInt(values.organization_contractor?.value, 10)
+                            return orgRoles.organization_contractor_id === parseInt(values.organization_contractor?.value, 10);
                         }
+
+                        return void(0);
                     }).some((role) => role.role === 'pfm');
                 })
                 .map((item) => ({
@@ -119,9 +112,30 @@ const OrganizationProjectCreateForm = (props: IProps) => {
         return [];
     }, [JSON.stringify(userData?.results), JSON.stringify(values.organization_contractor)]);
 
+    const usersPm = useMemo(() => {
+        if(userData?.results) {
+            return userData.results
+                .filter((user) => {
+                    return user?.organization_contractors_roles?.filter((orgRoles) => {
+                        if(values.organization_contractor?.value) {
+                            return orgRoles.organization_contractor_id === parseInt(values.organization_contractor?.value, 10);
+                        }
 
-    const [post] = mainRequest.usePostMainOrganizationProjectMutation();
-    const [patch] = mainRequest.usePatchMainOrganizationProjectMutation();
+                        return void(0);
+                    }).some((role) => role.role === 'pm');
+                })
+                .map((item) => ({
+                    label: item.last_name || item.first_name ? `${item.last_name} ${item.first_name}` : item.email,
+                    value: String(item.id)
+                }));
+        }
+
+        return [];
+    }, [JSON.stringify(userData?.results), JSON.stringify(values.organization_contractor)]);
+
+
+    const [post, { isError, isLoading, error }] = mainRequest.usePostMainOrganizationProjectMutation();
+    const [patch, { isError: isPatchError, isLoading: isPatchLoading, error: patchError }] = mainRequest.usePatchMainOrganizationProjectMutation();
 
     const onSubmit = context.handleSubmit(
         ({ industry_sector, manager_pm, manager_pfm, organization_customer, organization_contractor, ...data }: IFormValues) => {
@@ -166,14 +180,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                         props.onSuccess();
                     }
                 })
-                .catch((err) => {
-                    console.error(err);
-                    const errors = Object.values<Array<string>>(err?.data?.details).map((item: Array<string>) => {
-                        return item[0];
-                    });
-
-                    setError(errors);
-                });
+                .catch(console.error);
         },
         (formError) => {
             console.error(formError);
@@ -181,9 +188,13 @@ const OrganizationProjectCreateForm = (props: IProps) => {
     );
 
     const elError = () => {
-        if(error?.length) {
-            return error.map((err, index) => <Error key={index}>{err}</Error>);
-        }
+        return (
+            <ErrorsComponent
+                error={error || patchError}
+                isError={isError || isPatchError}
+                isLoading={isLoading || isPatchLoading}
+            />
+        );
     };
 
     const errorMessage = t('routes.organization-project.create.required-error');
@@ -199,6 +210,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     placeholder={t('routes.organization-project.create.name.placeholder')}
                 />
                 <InputMain
+                    required={errorMessage}
                     disabled={true}
                     defaultValue={[props.defaultValues?.organization_customer?.id as number]}
                     name="organization_customer"
@@ -209,6 +221,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     isMulti={false}
                 />
                 <InputMain
+                    required={errorMessage}
                     defaultValue={[props.defaultValues?.organization_contractor?.id as number]}
                     name="organization_contractor"
                     direction="column"
@@ -226,6 +239,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     isMulti={false}
                 />
                 <Select
+                    clearable={true}
                     name="manager_pm"
                     direction="column"
                     label={t('routes.organization-project.create.manager_pm.title')}
@@ -234,6 +248,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     isMulti={false}
                 />
                 <Select
+                    clearable={true}
                     name="manager_pfm"
                     direction="column"
                     label={t('routes.organization-project.create.manager_pfm.title')}

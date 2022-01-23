@@ -27,7 +27,7 @@ export const UserHeaderBar = (props: IProps) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const { data } = acc.useGetAccWhoAmIQuery({});
+    const { data } = acc.useGetAccWhoAmIQuery(undefined);
     const [postAccLogout] = acc.usePostAccLogoutMutation();
 
     const onLogout = () => {
