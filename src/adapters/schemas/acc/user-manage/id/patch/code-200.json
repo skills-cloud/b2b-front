@@ -77,9 +77,8 @@
                     "type": "array"
                 },
                 "password": {
-                    "maxLength": 128,
                     "minLength": 1,
-                    "title": "Пароль",
+                    "title": "Password",
                     "type": "string"
                 },
                 "phone": {
@@ -90,8 +89,7 @@
                 }
             },
             "required": [
-                "email",
-                "password"
+                "email"
             ],
             "type": "object"
         },

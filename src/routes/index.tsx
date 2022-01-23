@@ -13,7 +13,7 @@ const history = createBrowserHistory();
 export const Routes = () => {
     const location = useLocation();
     const { t, i18n } = useTranslation();
-    const { data } = acc.useGetAccWhoAmIQuery({});
+    const { data } = acc.useGetAccWhoAmIQuery(undefined);
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
 
     const elRoutes = (routes: Array<IProps>) => {

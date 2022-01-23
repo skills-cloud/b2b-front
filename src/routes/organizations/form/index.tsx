@@ -7,6 +7,7 @@ import { useClassnames } from 'hook/use-classnames';
 import Input from 'component/form/input';
 import Textarea from 'component/form/textarea';
 import Checkbox from 'component/form/checkbox';
+import ErrorsComponent from 'component/error/errors';
 
 import { mainRequest } from 'adapter/api/main';
 import { MainOrganization } from 'adapter/types/main/organization/get/code-200';
@@ -27,8 +28,8 @@ const OrganizationCreateForm = (props: IProps) => {
         defaultValues: props.defaultValues
     });
 
-    const [post] = mainRequest.usePostMainOrganizationMutation();
-    const [patch] = mainRequest.usePatchMainOrganizationMutation();
+    const [post, { isError, isLoading, error }] = mainRequest.usePostMainOrganizationMutation();
+    const [patch, { isError: isPatchError, isLoading: isPatchLoading, error: patchError }] = mainRequest.usePatchMainOrganizationMutation();
 
     const onSubmit = context.handleSubmit(
         (formData) => {
@@ -73,6 +74,15 @@ const OrganizationCreateForm = (props: IProps) => {
                 <Checkbox
                     name="is_customer"
                     label={t('routes.organization.create.customer')}
+                />
+                <Checkbox
+                    name="is_contractor"
+                    label={t('routes.organization.create.customer')}
+                />
+                <ErrorsComponent
+                    error={error || patchError}
+                    isLoading={isLoading || isPatchLoading}
+                    isError={isError || isPatchError}
                 />
             </form>
         </FormProvider>

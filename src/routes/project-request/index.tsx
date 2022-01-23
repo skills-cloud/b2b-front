@@ -51,7 +51,7 @@ const ProjectRequest = () => {
 
         return (
             <Fragment>
-                <MainInfo {...data} />
+                <MainInfo />
                 {data.id && <Requirements requirements={data?.requirements} requestId={data.id} />}
                 {data.id && <Customer customer={data.module?.organization_project?.organization_customer} requestId={data.id} />}
             </Fragment>

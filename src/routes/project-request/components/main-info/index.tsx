@@ -15,8 +15,6 @@ import Separator from 'component/separator';
 import Section from 'component/section';
 import DeleteAction from 'component/section/actions/delete';
 
-import { RequestRead } from 'adapter/types/main/request/id/get/code-200';
-
 import { useClassnames } from 'hook/use-classnames';
 import useFormatDistance from 'component/dates/format-distance';
 
@@ -25,6 +23,7 @@ import EditModal from '../edit-modal';
 import ConfirmModal from '../confirm-modal';
 import projectRequest from './data.mock';
 import style from './index.module.pcss';
+import { mainRequest } from 'adapter/api/main';
 
 const MAIN_INFO_FIELDS = [
     'industry_sector',
@@ -41,14 +40,18 @@ const MAIN_INFO_FIELDS = [
 const PROJECT_TERM_FIELDS = ['project-term', 'duration'];
 const FORMAT_DATE = 'dd.MM.yyyy';
 
-const MainInfo = (data: RequestRead) => {
-    const { module, priority, status, start_date, deadline_date, requirements, id } = data;
+const MainInfo = () => {
     const params = useParams<IParams>();
     const { t } = useTranslation();
     const cn = useClassnames(style);
     const formatDistance = useFormatDistance();
     const [visible, setVisible] = useState(params?.subpage === 'edit');
     const [confirm, setConfirm] = useState<boolean>(false);
+
+    const { data } = mainRequest.useGetMainRequestByIdQuery(
+        { id: params.requestId },
+        { refetchOnMountOrArgChange: true }
+    );
 
     const onClickConfirmDelete = () => {
         setConfirm(true);
@@ -63,17 +66,17 @@ const MainInfo = (data: RequestRead) => {
 
         switch (field) {
             case 'project-term':
-                if(start_date && deadline_date) {
-                    const startDate = format(new Date(start_date), FORMAT_DATE);
-                    const endDate = format(new Date(deadline_date), FORMAT_DATE);
+                if(data?.start_date && data?.deadline_date) {
+                    const startDate = format(new Date(data.start_date), FORMAT_DATE);
+                    const endDate = format(new Date(data.deadline_date), FORMAT_DATE);
 
                     content = <React.Fragment>{startDate}&nbsp;&mdash; {endDate}</React.Fragment>;
                 }
 
                 break;
             case 'duration':
-                if(start_date && deadline_date) {
-                    content = formatDistance({ date: new Date(start_date), baseDate: new Date(deadline_date) });
+                if(data?.start_date && data?.deadline_date) {
+                    content = formatDistance({ date: new Date(data.start_date), baseDate: new Date(data.deadline_date) });
                 }
                 break;
             case 'rest':
@@ -85,7 +88,7 @@ const MainInfo = (data: RequestRead) => {
                 );
                 break;
             default:
-                content = data[field]?.name;
+                content = data?.[field]?.name;
         }
 
         if(content === undefined) {
@@ -108,7 +111,7 @@ const MainInfo = (data: RequestRead) => {
                 break;
             }
             case 'manager_rm':
-                if(data[field]?.last_name && data[field]?.first_name) {
+                if(data?.[field]?.last_name && data[field]?.first_name) {
                     content = `${data[field]?.last_name} ${data[field]?.first_name?.slice(0, 1)}.`;
                 }
                 break;
@@ -116,13 +119,16 @@ const MainInfo = (data: RequestRead) => {
                 content = data?.description;
                 break;
             case 'requirements':
-                content = requirements?.length;
+                content = data?.requirements?.length;
                 break;
             case 'customer':
                 content = data?.module?.organization_project?.organization_customer?.name;
                 break;
+            case 'organization_project':
+                content = data?.module?.organization_project?.name;
+                break;
             default:
-                content = data[field]?.name;
+                content = data?.[field]?.name;
         }
 
         if(content === undefined) {
@@ -158,9 +164,9 @@ const MainInfo = (data: RequestRead) => {
     return (
         <Section>
             {elHeader()}
-            {priority && (
+            {data?.priority && (
                 <Tag kind={Tag.kinds.Secondary}>
-                    {t(`routes.project-request.blocks.priority.${priority}`)}
+                    {t(`routes.project-request.blocks.priority.${data.priority}`)}
                 </Tag>
             )}
             {status && (
@@ -190,12 +196,12 @@ const MainInfo = (data: RequestRead) => {
                     </SectionContentListItem>
                 ))}
             </SectionContentList>
-            {visible && <EditModal setVisible={onSetVisible} fields={data} />}
-            {confirm && module?.organization_project && (
+            {visible && data && <EditModal setVisible={onSetVisible} fields={data} />}
+            {confirm && data?.module?.organization_project && (
                 <ConfirmModal
                     setVisible={setConfirm}
-                    requestId={String(id)}
-                    requestName={module.organization_project.name}
+                    requestId={String(data.id)}
+                    requestName={data.module.organization_project.name}
                 />
             )}
         </Section>

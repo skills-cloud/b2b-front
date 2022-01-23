@@ -27,7 +27,10 @@ export type NoName7 = boolean;
 export type NoName8 = string;
 export type NoName9 = string;
 export type NoName10 = string;
-export type NoName11 = string;
+export type OrganizationContractorId = string;
+export type OrganizationContractorName = string;
+export type NoName11 = 'admin' | 'pfm' | 'pm' | 'rm';
+export type NoName12 = string;
 export type Photo = string;
 
 export interface WhoAmI {
@@ -43,7 +46,12 @@ export interface WhoAmI {
     last_login?: NoName8;
     last_name?: NoName9;
     middle_name?: NoName10;
-    phone?: NoName11;
+    organizations_contractors_roles?: WhoAmIContractorRole[];
+    phone?: NoName12;
     photo?: Photo;
-    roles?: string[];
+}
+export interface WhoAmIContractorRole {
+    organization_contractor_id?: OrganizationContractorId;
+    organization_contractor_name?: OrganizationContractorName;
+    role: NoName11;
 }

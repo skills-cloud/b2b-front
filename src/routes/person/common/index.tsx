@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { Fragment, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
@@ -20,6 +20,7 @@ import { cv } from 'adapter/api/cv';
 
 import CommonEdit from './edit';
 import style from './index.module.pcss';
+import { mainRequest } from 'adapter/api/main';
 
 export interface IProps {
     id?: string
@@ -37,6 +38,11 @@ export const Common = (props: IProps) => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [showVerify, setShowVerify] = useState<boolean>(false);
     const { data, refetch } = cv.useGetCvByIdQuery({ id: specialistId }, { refetchOnMountOrArgChange: true });
+    const { data: orgData } = mainRequest.useGetMainOrganizationContractorByIdQuery({
+        id: String(data?.organization_contractor_id)
+    }, {
+        skip: !data?.organization_contractor_id
+    });
 
     const onClickMore = useCallback(() => {
         setMore(true);
@@ -67,12 +73,24 @@ export const Common = (props: IProps) => {
     );
 
     const elBaseMore = useMemo(() => {
-        if(more) {
+        if(more && orgData) {
+            let name = data?.last_name;
+
+            if(data?.first_name) {
+                name = `${name} ${data.first_name}`;
+            }
+
             return (
-                <div className={cn('person__list-item')}>
-                    <strong>{t('routes.person.blocks.common.base.resource-owner')}</strong>
-                    <span>StarHr</span>
-                </div>
+                <Fragment>
+                    <div className={cn('person__list-item')}>
+                        <strong>{t('routes.person.blocks.common.base.resource-owner')}</strong>
+                        <span>{orgData.name}</span>
+                    </div>
+                    <div className={cn('person__list-item')}>
+                        <strong>{t('routes.person.blocks.common.base.resource-manager')}</strong>
+                        <span>{name}</span>
+                    </div>
+                </Fragment>
             );
         }
     }, [more, JSON.stringify(data)]);

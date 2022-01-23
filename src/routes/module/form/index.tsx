@@ -45,10 +45,8 @@ const ModuleCreateForm = ({ formId, onSuccess, defaultValues }: IProjectsRequest
     const { t } = useTranslation();
     const params = useParams<IParams>();
 
-    const [error, setError] = useState<string | null>(null);
-
-    const [post] = mainRequest.usePostMainModuleMutation();
-    const [patch] = mainRequest.usePatchMainModuleMutation();
+    const [post, { error, isLoading, isError }] = mainRequest.usePostMainModuleMutation();
+    const [patch, { error: patchError, isLoading: isPatchLoading, isError: isPatchError }] = mainRequest.usePatchMainModuleMutation();
     const { data: accUsersData } = acc.useGetAccUserQuery(undefined);
     const { data: projectData } = mainRequest.useGetMainOrganizationProjectByIdQuery({
         id: params.projectId
@@ -121,18 +119,39 @@ const ModuleCreateForm = ({ formId, onSuccess, defaultValues }: IProjectsRequest
                 }
             })
             .catch((err) => {
-                setError(err.data?.message);
                 console.error(err);
             });
     });
 
     const errorMessage = t('routes.module.create.required-error');
 
-    const elError = useMemo(() => {
-        if(error) {
-            return <Error elIcon={true}>{error}</Error>;
+    const elErrors = useMemo(() => {
+        const errors = (error || patchError) as {
+            data: {
+                details: Record<string, Array<string>> | string
+            }
+        };
+
+        if(errors?.data?.details && typeof errors?.data?.details !== 'string') {
+            const keys = Object.keys(errors.data.details);
+
+            return (
+                <div>
+                    {keys.map((key) => {
+                        if(typeof errors?.data?.details?.[key] === 'string') {
+                            return <Error key={key}>{`${key}: ${errors?.data?.details?.[key]}`}</Error>;
+                        }
+
+                        return (errors?.data?.details as Record<string, Array<string>>)?.[key]?.map((message, index) => (
+                            <Error key={`${key}-${index}}`}>{message}</Error>
+                        ));
+                    })}
+                </div>
+            );
         }
-    }, [error]);
+
+        return <Error>{errors?.data?.details}</Error>;
+    }, [isError, isPatchError, isLoading, isPatchLoading, patchError, error]);
 
     return (
         <FormProvider {...form}>
@@ -186,7 +205,7 @@ const ModuleCreateForm = ({ formId, onSuccess, defaultValues }: IProjectsRequest
                     name="description"
                     label={t('routes.module.create.description')}
                 />
-                {elError}
+                {elErrors}
             </form>
         </FormProvider>
     );
