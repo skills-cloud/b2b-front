@@ -87,7 +87,7 @@ const SystemUserForm = (props: IProps) => {
             const data = {
                 ...payload,
                 gender                        : payload.gender?.value || '-',
-                password                      : payload.password || '',
+                password                      : payload.password || undefined,
                 organization_contractors_roles: payload.organizations?.filter((item) => item.role && item.organization_contractor_id).map((item) => ({
                     role                      : item?.role?.value,
                     organization_contractor_id: item?.organization_contractor_id?.value
