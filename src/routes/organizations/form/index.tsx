@@ -77,7 +77,7 @@ const OrganizationCreateForm = (props: IProps) => {
                 />
                 <Checkbox
                     name="is_contractor"
-                    label={t('routes.organization.create.customer')}
+                    label={t('routes.organization.create.contractor')}
                 />
                 <ErrorsComponent
                     error={error || patchError}

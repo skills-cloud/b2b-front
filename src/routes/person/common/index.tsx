@@ -74,10 +74,10 @@ export const Common = (props: IProps) => {
 
     const elBaseMore = useMemo(() => {
         if(more && orgData) {
-            let name = data?.last_name;
+            let name = data?.manager_rm?.last_name;
 
-            if(data?.first_name) {
-                name = `${name} ${data.first_name}`;
+            if(data?.manager_rm?.first_name) {
+                name = `${name} ${data.manager_rm.first_name}`;
             }
 
             return (

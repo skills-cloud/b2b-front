@@ -139,8 +139,8 @@
             "organization-roles": {
                 "label": "Выберите роль и компанию",
                 "admin": "{{organization}} - Админ",
-                "pfm": "{{organization}} - ППМ",
-                "pm": "{{organization}} - ПМ",
+                "pfm": "{{organization}} - РПП",
+                "pm": "{{organization}} - РП",
                 "rm": "{{organization}} - РМ"
             },
             "table": {
@@ -991,7 +991,7 @@
                 "title": "Новый модуль",
                 "form-title": "Название модуля",
                 "customer": "Заказчик",
-                "manager": "ПМ",
+                "manager": "РП",
                 "project": "Проект",
                 "description": "Описание результата",
                 "goals": "Цели",
@@ -1342,7 +1342,7 @@
                     "industry_sector": "Отрасль",
                     "organization_project": "Проект",
                     "manager_rm": "Рес. менеджер",
-                    "manager_pm": "ПМ",
+                    "manager_pm": "РП",
                     "type": "Тип запроса",
                     "requirements": "Общее кол-во",
                     "description": "Описание запроса",
