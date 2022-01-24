@@ -326,9 +326,10 @@ const Dashboard = () => {
                     const request = requestsData?.results?.find((reqItem) => {
                         return reqItem.id === item.request_id;
                     });
+                    const manager = request?.module?.organization_project?.manager_pm;
 
-                    if(request?.manager_rm) {
-                        return `${request.manager_rm.last_name} ${request.manager_rm.first_name?.substring(0, 1).toUpperCase()}.`;
+                    if(manager) {
+                        return `${manager.last_name} ${manager.first_name?.substring(0, 1).toUpperCase()}.`;
                     }
                 }
 

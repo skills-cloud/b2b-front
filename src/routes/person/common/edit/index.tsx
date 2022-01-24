@@ -19,6 +19,7 @@ import { CvDetailReadFull, NoName87 as IGenderType } from 'adapter/types/cv/cv/i
 import { CvDetailWrite } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
+import { acc } from 'adapter/api/acc';
 
 export interface IProps {
     className?: string | IStyle,
@@ -36,6 +37,7 @@ export interface IFormValues {
             value: IGenderType,
             label: string
         },
+        manager_rm: IValue,
         city: IValue,
         country: IValue,
         citizenship: IValue,
@@ -56,7 +58,8 @@ export const CommonEdit = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const { t } = useTranslation();
     const { contacts, ...other } = props.fields;
-    const methods = useForm<IFormValues>({
+
+    const context = useForm<IFormValues>({
         defaultValues: {
             common: {
                 ...other,
@@ -66,6 +69,10 @@ export const CommonEdit = (props: IProps) => {
                 } : {
                     label: '',
                     value: undefined
+                },
+                manager_rm: {
+                    label: `${other.manager_rm?.last_name} ${other.manager_rm?.first_name}`,
+                    value: String(other.manager_rm?.id)
                 },
                 city       : { label: other.city?.name, value: String(other.city?.id) },
                 citizenship: { label: other.citizenship?.name, value: String(other.citizenship?.id) },
@@ -82,6 +89,7 @@ export const CommonEdit = (props: IProps) => {
             main_contact: null
         }
     });
+    const values = context.watch();
     const [patchCvById, { isLoading }] = cv.usePatchCvByIdMutation();
     const [postContact] = contact.usePostContactMutation();
     const [patchContact] = contact.usePatchContactMutation();
@@ -89,9 +97,17 @@ export const CommonEdit = (props: IProps) => {
 
     const { data } = dictionary.useGetContactTypeQuery({ search: '' });
 
+    const { data: userData } = acc.useGetUserManageQuery({
+        organization_contractor_id: [values.common?.organization_contractor?.value],
+        role                      : ['rm']
+    }, {
+        skip                     : !values.common?.organization_contractor?.value,
+        refetchOnMountOrArgChange: true
+    });
+
     const { fields, append, remove } = useFieldArray({
         keyName: 'fieldId',
-        control: methods.control,
+        control: context.control,
         name   : 'contacts'
     });
     const [activeTab, setActiveTab] = useState<'main' | 'contacts'>('main');
@@ -113,7 +129,7 @@ export const CommonEdit = (props: IProps) => {
 
     const onClickMainContact = (contactId: number) => () => {
         setMainContact(contactId);
-        methods.setValue('main_contact', contactId);
+        context.setValue('main_contact', contactId);
     };
 
     const onRemove = (index: number, id: number) => () => {
@@ -135,13 +151,26 @@ export const CommonEdit = (props: IProps) => {
         }
     };
 
-    const onSubmit = methods.handleSubmit(
+    const usersRm = useMemo(() => {
+        if(userData?.results) {
+            return userData.results
+                .map((item) => ({
+                    label: item.last_name || item.first_name ? `${item.last_name} ${item.first_name}` : item.email,
+                    value: String(item.id)
+                }));
+        }
+
+        return [];
+    }, [JSON.stringify(userData?.results), JSON.stringify(values.common?.organization_contractor)]);
+
+    const onSubmit = context.handleSubmit(
         (formData: IFormValues) => {
             if(activeTab === 'main') {
                 const { photo, ...rest } = formData.common;
 
                 patchCvById({
                     ...rest,
+                    manager_rm_id             : parseInt(formData.common.manager_rm?.value, 10),
                     organization_contractor_id: parseInt(formData.common.organization_contractor?.value, 10),
                     gender                    : formData.common.gender.value,
                     city_id                   : parseInt(formData.common.city?.value, 10),
@@ -290,10 +319,22 @@ export const CommonEdit = (props: IProps) => {
                         <InputMain
                             defaultValue={[props.fields.organization_contractor_id]}
                             required={true}
+                            disabled={true}
                             name="common.organization_contractor"
                             direction="row"
                             requestType={InputMain.requestType.Contractor}
                             isMulti={false}
+                        />
+                    </div>
+                    <div className={cn('common-edit__field')}>
+                        <strong>{t('routes.organization-project.create.manager_rm.title')}</strong>
+                        <InputSelect
+                            disabled={!values.common?.organization_contractor?.value}
+                            name="common.manager_rm"
+                            direction="column"
+                            placeholder={t('routes.organization-project.create.manager_rm.placeholder')}
+                            isMulti={false}
+                            options={usersRm}
                         />
                     </div>
                     <div className={cn('common-edit__field')}>
@@ -388,7 +429,7 @@ export const CommonEdit = (props: IProps) => {
                 </div>
             </div>
             <form>
-                <FormProvider {...methods}>
+                <FormProvider {...context}>
                     {elFormContent()}
                 </FormProvider>
             </form>
