@@ -18,7 +18,6 @@ export type NoName7 = string;
 export type ID1 = number;
 export type NoName8 = string;
 export type NoName9 = string;
-export type CurrentUserRole = string;
 export type NoName10 = string;
 export type ID2 = number;
 export type NoName11 = boolean;
@@ -64,7 +63,7 @@ export interface FunPointTypeDifficultyLevelInline {
 }
 export interface MainOrganization {
     created_at?: NoName9;
-    current_user_role?: CurrentUserRole;
+    current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
     description?: NoName10;
     id?: ID2;
     is_contractor?: NoName11;

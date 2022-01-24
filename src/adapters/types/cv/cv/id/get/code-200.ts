@@ -221,7 +221,6 @@ export type NoName153 = string;
 export type ID29 = number;
 export type NoName154 = string;
 export type NoName155 = string;
-export type CurrentUserRole = string;
 export type NoName156 = string;
 export type ID30 = number;
 export type NoName157 = boolean;
@@ -688,7 +687,7 @@ export interface FunPointTypeInline {
 }
 export interface MainOrganization {
     created_at?: NoName155;
-    current_user_role?: CurrentUserRole;
+    current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
     description?: NoName156;
     id?: ID30;
     is_contractor?: NoName157;
@@ -708,6 +707,7 @@ export interface FunPointTypePositionLaborEstimateInline {
 }
 export interface OrganizationProjectInline {
     created_at?: NoName177;
+    current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
     date_from?: NoName178;
     date_to?: NoName179;
     description?: NoName180;

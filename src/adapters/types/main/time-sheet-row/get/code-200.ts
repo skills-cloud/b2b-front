@@ -60,7 +60,6 @@ export type NoName42 = string;
 export type ID5 = number;
 export type NoName43 = string;
 export type NoName44 = string;
-export type CurrentUserRole = string;
 export type NoName45 = string;
 export type ID6 = number;
 export type NoName46 = boolean;
@@ -254,7 +253,7 @@ export interface FunPointTypeInline {
 }
 export interface MainOrganization {
     created_at?: NoName44;
-    current_user_role?: CurrentUserRole;
+    current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
     description?: NoName45;
     id?: ID6;
     is_contractor?: NoName46;
@@ -280,6 +279,7 @@ export interface Position {
 }
 export interface OrganizationProjectInline {
     created_at?: NoName69;
+    current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
     date_from?: NoName70;
     date_to?: NoName71;
     description?: NoName72;

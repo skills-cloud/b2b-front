@@ -15,9 +15,8 @@
                 },
                 "email": {
                     "format": "email",
-                    "maxLength": 254,
                     "minLength": 1,
-                    "title": "Адрес электронной почты",
+                    "title": "Email",
                     "type": "string"
                 },
                 "first_name": {
@@ -77,9 +76,8 @@
                     "type": "array"
                 },
                 "password": {
-                    "maxLength": 128,
                     "minLength": 1,
-                    "title": "Пароль",
+                    "title": "Password",
                     "type": "string"
                 },
                 "phone": {
@@ -89,10 +87,6 @@
                     "type": "string"
                 }
             },
-            "required": [
-                "email",
-                "password"
-            ],
             "type": "object"
         },
         "UserOrganizationContractorRole": {

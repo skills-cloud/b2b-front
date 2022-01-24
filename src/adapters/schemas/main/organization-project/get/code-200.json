@@ -41,10 +41,24 @@
                     "title": "Создано",
                     "type": "string"
                 },
-                "current_user_role": {
+                "current_user_roles": {
+                    "items": {
+                        "enum": [
+                            "admin",
+                            "pfm",
+                            "pm",
+                            "rm"
+                        ],
+                        "type": "string"
+                    },
                     "readOnly": true,
-                    "title": "Current user role",
-                    "type": "string"
+                    "type": "array",
+                    "x-enum-description": {
+                        "admin": "Администратор",
+                        "pfm": "Руководитель портфеля проектов",
+                        "pm": "Руководитель проекта",
+                        "rm": "Ресурсный менеджер"
+                    }
                 },
                 "description": {
                     "nullable": true,
@@ -90,10 +104,24 @@
                     "title": "Создано",
                     "type": "string"
                 },
-                "current_user_role": {
+                "current_user_roles": {
+                    "items": {
+                        "enum": [
+                            "admin",
+                            "pfm",
+                            "pm",
+                            "rm"
+                        ],
+                        "type": "string"
+                    },
                     "readOnly": true,
-                    "title": "Current user role",
-                    "type": "string"
+                    "type": "array",
+                    "x-enum-description": {
+                        "admin": "Администратор",
+                        "pfm": "Руководитель портфеля проектов",
+                        "pm": "Руководитель проекта",
+                        "rm": "Ресурсный менеджер"
+                    }
                 },
                 "date_from": {
                     "format": "date",

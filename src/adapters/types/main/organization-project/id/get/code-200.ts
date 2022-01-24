@@ -7,7 +7,6 @@
 
 export type Code200 = OrganizationProjectRead;
 export type NoName = string;
-export type CurrentUserRole = string;
 export type NoName1 = string;
 export type NoName2 = string;
 export type NoName3 = string;
@@ -31,7 +30,6 @@ export type NoName16 = number;
 export type ModulesCount = number;
 export type NoName17 = string;
 export type NoName18 = string;
-export type CurrentUserRole1 = string;
 export type NoName19 = string;
 export type ID3 = number;
 export type NoName20 = boolean;
@@ -47,7 +45,7 @@ export type NoName27 = string;
 
 export interface OrganizationProjectRead {
     created_at?: NoName;
-    current_user_role?: CurrentUserRole;
+    current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
     date_from?: NoName1;
     date_to?: NoName2;
     description?: NoName3;
@@ -90,7 +88,7 @@ export interface UserInline {
 }
 export interface MainOrganization {
     created_at?: NoName18;
-    current_user_role?: CurrentUserRole1;
+    current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
     description?: NoName19;
     id?: ID3;
     is_contractor?: NoName20;

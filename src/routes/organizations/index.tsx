@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useRef } from 'react';
+import React, { useMemo, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -20,10 +20,17 @@ import Section from 'component/section';
 import Wrapper from 'component/section/wrapper';
 import AddAction from 'component/section/actions/add';
 import Empty from 'component/empty';
+import Dropdown from 'component/dropdown';
+import DropdownMenu from 'component/dropdown/menu';
+import DropdownMenuItem from 'component/dropdown/menu-item';
+import DotsAction from 'component/section/actions/dots';
+import EditAction from 'component/section/actions/edit';
 
 import { mainRequest } from 'adapter/api/main';
+import { MainOrganization } from 'adapter/types/main/organization/get/code-200';
 
 import style from './index.module.pcss';
+import EditModal from 'route/organizations/edit-modal';
 
 export interface IFormValues {
     search?: string,
@@ -44,6 +51,8 @@ export const Organizations = () => {
     });
     const values = context.watch();
     const { data, isLoading } = mainRequest.useGetMainOrganizationQuery(normalizeObject(qs), { refetchOnMountOrArgChange: true });
+
+    const [itemToEdit, setItemToEdit] = useState<MainOrganization>();
 
     useEffect(() => {
         if(timer.current) {
@@ -81,6 +90,20 @@ export const Organizations = () => {
         });
     };
 
+    const onClickClose = () => {
+        setItemToEdit(undefined);
+    };
+
+    const elCustomerContractor = (isCustomer?: boolean, isContractor?: boolean) => {
+        if(isCustomer && !isContractor) {
+            return t('routes.organizations.main.list.customer');
+        } else if(isContractor && !isCustomer) {
+            return t('routes.organizations.main.list.contractor');
+        } else if(isCustomer && isContractor) {
+            return `${t('routes.organizations.main.list.customer')} • ${t('routes.organizations.main.list.contractor')}`;
+        }
+    };
+
     const elOrganizations = useMemo(() => {
         if(isLoading) {
             return <Loader />;
@@ -92,17 +115,38 @@ export const Organizations = () => {
                     {data.results.map((item) => {
                         return (
                             <div key={item.id} className={cn('organizations__list-item')}>
-                                <div className={cn('organizations__list-item-block')}>
-                                    <Link to={ORGANIZATION_ID(item.id)} className={cn('organizations__list-item-link')}>
-                                        {item.name}
-                                    </Link>
-                                    {item.is_customer && t('routes.organizations.main.list.customer')}
+                                <div className={cn('organizations__list-item-content')}>
+                                    <div className={cn('organizations__list-item-block')}>
+                                        <Link to={ORGANIZATION_ID(item.id)} className={cn('organizations__list-item-link')}>
+                                            {item.name}
+                                        </Link>
+                                        {elCustomerContractor(item.is_customer, item.is_contractor)}
+                                    </div>
+                                    <div className={cn('organizations__list-item-block', 'organizations__list-item-block_row')}>
+                                        <span className={cn('organizations__list-item-span')}>{t('routes.organizations.main.list.description.title')}</span>
+                                        <p className={cn('organizations__list-item-text')}>
+                                            {item.description || t('routes.organizations.main.list.description.empty')}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className={cn('organizations__list-item-block', 'organizations__list-item-block_row')}>
-                                    <span className={cn('organizations__list-item-span')}>{t('routes.organizations.main.list.description.title')}</span>
-                                    <p className={cn('organizations__list-item-text')}>
-                                        {item.description || t('routes.organizations.main.list.description.empty')}
-                                    </p>
+                                <div className={cn('organizations__list-item-actions')}>
+                                    <Dropdown
+                                        render={({ onClose }) => (
+                                            <DropdownMenu>
+                                                <DropdownMenuItem selected={false} onClick={onClose}>
+                                                    <EditAction
+                                                        label={t('routes.organizations.main.controls.edit')}
+                                                        onClick={() => {
+                                                            setItemToEdit(item);
+                                                            onClose();
+                                                        }}
+                                                    />
+                                                </DropdownMenuItem>
+                                            </DropdownMenu>
+                                        )}
+                                    >
+                                        <DotsAction />
+                                    </Dropdown>
                                 </div>
                             </div>
                         );
@@ -145,6 +189,12 @@ export const Organizations = () => {
         );
     };
 
+    const elEditModal = () => {
+        if(itemToEdit) {
+            return <EditModal setVisible={onClickClose} fields={itemToEdit} />;
+        }
+    };
+
     return (
         <SidebarLayout sidebar={elSidebar()}>
             <Section>
@@ -153,6 +203,7 @@ export const Organizations = () => {
                         {t('routes.organizations.main.title')}
                     </SectionHeader>
                     {elOrganizations}
+                    {elEditModal()}
                 </Wrapper>
             </Section>
         </SidebarLayout>

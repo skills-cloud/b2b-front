@@ -9,7 +9,7 @@ import Loader from 'component/loader';
 import Routes from 'route/index';
 import 'locale';
 
-store.dispatch(acc.endpoints.getAccWhoAmI.initiate({}))
+store.dispatch(acc.endpoints.getAccWhoAmI.initiate(undefined))
     .finally(() => {
         render((
             <Suspense fallback={<Loader />}>

@@ -24,7 +24,7 @@ const Login = () => {
     const { t, i18n } = useTranslation();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
     const [postAccLogin] = acc.usePostAccLoginMutation();
-    const { data, isLoading } = acc.useGetAccWhoAmIQuery({});
+    const { data, isLoading } = acc.useGetAccWhoAmIQuery(undefined);
 
     const methods = useForm();
 
