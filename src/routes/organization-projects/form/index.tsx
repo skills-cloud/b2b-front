@@ -72,6 +72,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
     });
 
     const { data: userData } = acc.useGetAccUserQuery({});
+    const { data: whoAmIData } = acc.useGetAccWhoAmIQuery(undefined);
 
     const values = context.watch();
 
@@ -90,6 +91,15 @@ const OrganizationProjectCreateForm = (props: IProps) => {
             });
         }
     }, [JSON.stringify(values.organization_contractor)]);
+
+    useEffect(() => {
+        if(whoAmIData?.organizations_contractors_roles?.[0] && whoAmIData.organizations_contractors_roles[0]?.organization_contractor_id) {
+            context.setValue('organization_customer', {
+                value: parseInt(whoAmIData.organizations_contractors_roles[0].organization_contractor_id, 10),
+                label: whoAmIData.organizations_contractors_roles[0].organization_contractor_name || ''
+            });
+        }
+    }, [JSON.stringify(whoAmIData?.organizations_contractors_roles)]);
 
     const usersPfm = useMemo(() => {
         if(userData?.results) {
@@ -211,7 +221,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                 />
                 <InputMain
                     required={errorMessage}
-                    disabled={true}
+                    disabled={!!props.defaultValues || !!whoAmIData?.organizations_contractors_roles?.length}
                     defaultValue={[props.defaultValues?.organization_customer?.id as number]}
                     name="organization_customer"
                     direction="column"
