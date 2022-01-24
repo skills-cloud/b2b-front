@@ -361,17 +361,19 @@ const Dashboard = () => {
                 return parseInt(currentRoleAndCompany.companyId, 10) === request.module?.organization_project?.organization_contractor_id;
             });
 
-            return (
-                <Table<RequestRead>
-                    columns={columnsRequests}
-                    dataSource={dataToRender}
-                    tableLayout="fixed"
-                    className={cn('table')}
-                    loading={isFetching || requestFetching}
-                    scroll={{ y: `calc(100vh - ${NON_TABLE_HEIGHT}px)` }}
-                    rowKey="id"
-                />
-            );
+            if(dataToRender?.length) {
+                return (
+                    <Table<RequestRead>
+                        columns={columnsRequests}
+                        dataSource={dataToRender}
+                        tableLayout="fixed"
+                        className={cn('table')}
+                        loading={isFetching || requestFetching}
+                        scroll={{ y: `calc(100vh - ${NON_TABLE_HEIGHT}px)` }}
+                        rowKey="id"
+                    />
+                );
+            }
         }
 
         if((currentRoleAndCompany?.role === 'pfm' || currentRoleAndCompany?.role === 'admin')) {
@@ -379,17 +381,19 @@ const Dashboard = () => {
                 return item.organization_contractor_id === parseInt(currentRoleAndCompany.companyId, 10);
             });
 
-            return (
-                <Table<OrganizationProjectRead>
-                    columns={columnsProjects}
-                    dataSource={dataToRender}
-                    tableLayout="fixed"
-                    className={cn('table')}
-                    loading={isFetching || projectsFetching}
-                    scroll={{ y: `calc(100vh - ${NON_TABLE_HEIGHT}px)` }}
-                    rowKey="id"
-                />
-            );
+            if(dataToRender?.length) {
+                return (
+                    <Table<OrganizationProjectRead>
+                        columns={columnsProjects}
+                        dataSource={dataToRender}
+                        tableLayout="fixed"
+                        className={cn('table')}
+                        loading={isFetching || projectsFetching}
+                        scroll={{ y: `calc(100vh - ${NON_TABLE_HEIGHT}px)` }}
+                        rowKey="id"
+                    />
+                );
+            }
         }
 
         if(requirementData?.results?.length && currentRoleAndCompany?.role === 'rm') {
