@@ -64,15 +64,15 @@ const Dashboard = () => {
             const role = data.organizations_contractors_roles[0];
 
             setCurrentRoleAndCompany({
-                role     : role.role,
-                companyId: String(role.organization_contractor_id)
+                role     : role?.role,
+                companyId: String(role?.organization_contractor_id)
             });
             context.setValue('company', {
                 value: role?.organization_contractor_id,
-                label: t(`routes.dashboard.organization-roles.${role.role}`, {
+                label: t(`routes.dashboard.organization-roles.${role?.role}`, {
                     organization: role?.organization_contractor_name
                 }),
-                payload: role.role
+                payload: role?.role
             });
         }
     }, [JSON.stringify(data)]);
