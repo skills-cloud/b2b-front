@@ -15,9 +15,8 @@
                 },
                 "email": {
                     "format": "email",
-                    "maxLength": 254,
                     "minLength": 1,
-                    "title": "Адрес электронной почты",
+                    "title": "Email",
                     "type": "string"
                 },
                 "first_name": {
@@ -88,9 +87,6 @@
                     "type": "string"
                 }
             },
-            "required": [
-                "email"
-            ],
             "type": "object"
         },
         "UserOrganizationContractorRole": {

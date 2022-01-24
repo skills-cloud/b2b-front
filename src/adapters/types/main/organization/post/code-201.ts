@@ -7,7 +7,6 @@
 
 export type Code201 = MainOrganization;
 export type NoName = string;
-export type CurrentUserRole = string;
 export type NoName1 = string;
 export type ID = number;
 export type NoName2 = boolean;
@@ -17,7 +16,7 @@ export type NoName5 = string;
 
 export interface MainOrganization {
     created_at?: NoName;
-    current_user_role?: CurrentUserRole;
+    current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
     description?: NoName1;
     id?: ID;
     is_contractor?: NoName2;

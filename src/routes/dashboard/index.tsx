@@ -67,8 +67,9 @@ const Dashboard = () => {
                 role     : role?.role,
                 companyId: String(role?.organization_contractor_id)
             });
+
             context.setValue('company', {
-                value: role?.organization_contractor_id,
+                value: `${role?.organization_contractor_id}-${role?.role}`,
                 label: t(`routes.dashboard.organization-roles.${role?.role}`, {
                     organization: role?.organization_contractor_name
                 }),
@@ -441,7 +442,7 @@ const Dashboard = () => {
                             direction="column"
                             isMulti={false}
                             options={roles.map((role) => ({
-                                value: String(role.organization_contractor_id),
+                                value: `${String(role.organization_contractor_id)}-${role.role}`,
                                 label: t(`routes.dashboard.organization-roles.${role.role}`, {
                                     organization: role.organization_contractor_name
                                 }),

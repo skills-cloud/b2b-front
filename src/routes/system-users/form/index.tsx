@@ -14,7 +14,7 @@ import Checkbox from 'component/form/checkbox';
 import ErrorsComponent from 'component/error/errors';
 
 import { acc } from 'adapter/api/acc';
-import { NoName3 as IGender, UserManageRead } from 'adapter/types/acc/user-manage/get/code-200';
+import { NoName2 as IGender, UserManageRead } from 'adapter/types/acc/user-manage/get/code-200';
 
 import style from './index.module.pcss';
 
@@ -63,7 +63,7 @@ const SystemUserForm = (props: IProps) => {
             organizations: props.defaultValues?.organization_contractors_roles?.map((orgRole) => ({
                 role: {
                     value: orgRole.role,
-                    label: orgRole.role
+                    label: t(`routes.system-create.form.roles.${orgRole.role}`)
                 },
                 organization_contractor_id: {
                     value: orgRole.organization_contractor_id,
@@ -84,11 +84,12 @@ const SystemUserForm = (props: IProps) => {
     const onSubmit = context.handleSubmit(
         (payload) => {
             const method = props.defaultValues ? patchUserManage : setUserManage;
+            const { organizations: payloadOrganizations, ...fields } = payload;
             const data = {
-                ...payload,
+                ...fields,
                 gender                        : payload.gender?.value || '-',
                 password                      : payload.password || undefined,
-                organization_contractors_roles: payload.organizations?.filter((item) => item.role && item.organization_contractor_id).map((item) => ({
+                organization_contractors_roles: payloadOrganizations?.filter((item) => item.role && item.organization_contractor_id).map((item) => ({
                     role                      : item?.role?.value,
                     organization_contractor_id: item?.organization_contractor_id?.value
                 }))
@@ -221,6 +222,7 @@ const SystemUserForm = (props: IProps) => {
                         }]}
                     />
                     <DateInput
+                        required={errorMessage}
                         direction="column"
                         name="birth_date"
                         label={t('routes.specialists-create.main.form.birth_date')}

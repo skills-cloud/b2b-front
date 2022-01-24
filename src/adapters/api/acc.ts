@@ -109,7 +109,8 @@ export const acc = createApi({
                 organization_project_id?: number
             }>
         }>({
-            query: (body) => ({
+            invalidatesTags: ['acc'],
+            query          : (body) => ({
                 url   : 'user-manage/',
                 method: 'POST',
                 body
@@ -134,7 +135,8 @@ export const acc = createApi({
                 organization_project_id?: number
             }>
         }>({
-            query: ({ id, ...body }) => ({
+            invalidatesTags: ['acc'],
+            query          : ({ id, ...body }) => ({
                 url   : `user-manage/${id}/`,
                 method: 'PATCH',
                 body
