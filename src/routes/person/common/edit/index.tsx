@@ -155,7 +155,7 @@ export const CommonEdit = (props: IProps) => {
         if(userData?.results) {
             return userData.results
                 .map((item) => ({
-                    label: item.last_name || item.first_name ? `${item.last_name} ${item.first_name}` : item.email,
+                    label: item.last_name || item.first_name ? `${item.last_name} ${item.first_name}` : item.email || '',
                     value: String(item.id)
                 }));
         }
