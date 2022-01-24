@@ -11,15 +11,16 @@ import InputSelect, { IValue } from 'component/form/select';
 import DateInput from 'component/form/date';
 import InputDictionary from 'component/form/input-dictionary';
 import InputMain from 'component/form/input-main';
+import ErrorsComponent from 'component/error/errors';
 
 import { dictionary } from 'adapter/api/dictionary';
+import { acc } from 'adapter/api/acc';
 import { cv } from 'adapter/api/cv';
 import { contact } from 'adapter/api/contact';
 import { CvDetailReadFull, NoName87 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
 import { CvDetailWrite } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';
-import { acc } from 'adapter/api/acc';
 
 export interface IProps {
     className?: string | IStyle,
@@ -90,7 +91,7 @@ export const CommonEdit = (props: IProps) => {
         }
     });
     const values = context.watch();
-    const [patchCvById, { isLoading }] = cv.usePatchCvByIdMutation();
+    const [patchCvById, { isLoading, isError, error }] = cv.usePatchCvByIdMutation();
     const [postContact] = contact.usePostContactMutation();
     const [patchContact] = contact.usePatchContactMutation();
     const [deleteContact] = contact.useDeleteContactMutation();
@@ -345,6 +346,7 @@ export const CommonEdit = (props: IProps) => {
                             placeholder={t('routes.person.common.fields.price')}
                         />
                     </div>
+                    <ErrorsComponent error={error} isError={isError} isLoading={isLoading} />
                 </div>
             );
         }
