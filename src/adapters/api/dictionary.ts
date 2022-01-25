@@ -21,6 +21,11 @@ import { Competence as CompetenceById } from 'adapter/types/dictionary/competenc
 import { Citizenship } from 'adapter/types/dictionary/citizenship/get/code-200';
 import { Citizenship as CitizenshipById } from 'adapter/types/dictionary/citizenship/id/get/code-200';
 import { CompetenceTree } from 'adapter/types/dictionary/competence-tree/get/code-200';
+import { Code200 as Code200Organization } from 'adapter/types/dictionary/organization/get/code-200';
+
+export interface IResponseGetOrganization {
+    results: Array<Code200Organization>
+}
 
 export interface IResponseGetCityList {
     count: number,
@@ -257,6 +262,21 @@ export const dictionary = createApi({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : `type-of-employment/${params.id}/`,
+                method: 'GET'
+            })
+        }),
+        getOrganization: build.query<IResponseGetOrganization, { search?: string, page_size?: number } | undefined>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : 'organization/',
+                method: 'GET',
+                params
+            })
+        }),
+        getOrganizationById: build.query<Code200Organization, { id: string }>({
+            providesTags: ['dictionary'],
+            query       : (params) => ({
+                url   : `organization/${params.id}/`,
                 method: 'GET'
             })
         })

@@ -10,14 +10,15 @@ import Error from 'component/error';
 import InputFile from 'component/form/file';
 import InputDictionary from 'component/form/input-dictionary';
 import InputProject from 'component/form/input-project';
+import Textarea from 'component/form/textarea';
+import InputSelect from 'component/form/select';
 
 import { career } from 'adapter/api/career';
+import { dictionary } from 'adapter/api/dictionary';
 import { CvCareerRead, CvCareerFileRead } from 'adapter/types/cv/career/get/code-200';
 
 import style from './index.module.pcss';
-import Textarea from 'component/form/textarea';
-import InputSelect from 'component/form/select';
-import { mainRequest } from 'adapter/api/main';
+import ErrorsComponent from 'component/error/errors';
 
 export interface IResultForm extends Omit<CvCareerRead, 'competencies_select' | 'organization' | 'position' | 'projects'> {
     competencies_select: Array<{
@@ -50,33 +51,16 @@ const CareerForm = (props: IProjectForm) => {
     const { t } = useTranslation();
     const { specialistId } = useParams<IParams>();
     const methods = useForm(props.defaultValues);
-    const [postCareer, { isLoading: isPostLoading }] = career.usePostCareerMutation();
-    const [patchCareer, { isLoading: isPatchLoading }] = career.usePatchCareerByIdMutation();
+    const [postCareer, { isLoading: isPostLoading, isError, error }] = career.usePostCareerMutation();
+    const [patchCareer, { isLoading: isPatchLoading, isError: isPatchError, error: patchError }] = career.usePatchCareerByIdMutation();
     const [uploadFile] = career.useUploadCareerFileByIdMutation();
     const [deleteFile] = career.useDeleteCareerFileByIdMutation();
 
-    const [error, setError] = useState<Array<string> | string | null>(null);
-
-    const { data, isLoading } = mainRequest.useGetMainOrganizationQuery(undefined);
-
-    const organizations = useMemo(() => {
-        if(data?.results) {
-            return data.results.map((item) => ({
-                value: String(item.id),
-                label: item.name
-            }));
-        }
-
-        return [];
-    }, [data?.results]);
+    const [getOrganizations] = dictionary.useLazyGetOrganizationQuery(undefined);
 
     useEffect(() => {
         props.onSetLoading?.(isPatchLoading || isPostLoading);
     }, [isPostLoading, isPatchLoading]);
-
-    const onChangeForm = () => {
-        setError(null);
-    };
 
     const onDeleteFile = (file: CvCareerFileRead) => {
         if(file) {
@@ -90,6 +74,8 @@ const CareerForm = (props: IProjectForm) => {
     const onSubmit = methods.handleSubmit((formData) => {
         const submitData = {
             ...formData.career,
+            date_from       : formData.career.date_from ? formData.career.date_from : undefined,
+            date_to         : formData.career.date_to ? formData.career.date_to : undefined,
             cv_id           : parseInt(specialistId, 10),
             competencies_ids: formData.career?.competencies_select?.map(({ value }) => value) as Array<number>,
             organization_id : formData.career?.organization?.value as number,
@@ -118,51 +104,40 @@ const CareerForm = (props: IProjectForm) => {
                     });
                 }
 
-                props.onSubmit?.();
-            })
-            .catch((err) => {
-                console.error(err);
-
-                if(typeof err.data?.details === 'object') {
-                    setError(Object.keys(err.data?.details).map((item) => `${item}: ${err.data?.details[item]}`));
-                } else {
-                    setError(err.data?.status);
+                if(!isError || !isPatchError) {
+                    props.onSubmit?.();
                 }
-            });
+            })
+            .catch(console.error);
     });
-
-    const elError = useMemo(() => {
-        if(error) {
-            if(Array.isArray(error)) {
-                return error.map((item, index) => (
-                    <Error
-                        key={index}
-                        className={cn('competencies-edit__error')}
-                        elIcon={true}
-                    >
-                        {item}
-                    </Error>
-                ));
-            }
-
-            return <Error className={cn('competencies-edit__error')} elIcon={true}>{error}</Error>;
-        }
-    }, [error]);
 
     return (
         <FormProvider {...methods}>
-            <form id="career-form" onSubmit={onSubmit} onChange={onChangeForm} className={cn('career-form')}>
+            <form id="career-form" onSubmit={onSubmit} className={cn('career-form')}>
                 <div className={cn('career-form__item')}>
                     <label className={cn('career-form__label')}>
                         {t('routes.person.career.fields.organization')}
                     </label>
                     <InputSelect
-                        options={organizations}
+                        loadOptions={(value, cb) => {
+                            getOrganizations({
+                                search   : value,
+                                page_size: 1000
+                            })
+                                .unwrap()
+                                .then(({ results }) => {
+                                    cb(
+                                        results.map((organization) => ({
+                                            value: organization.id,
+                                            label: organization.name
+                                        }))
+                                    );
+                                });
+                        }}
                         isMulti={false}
                         name="career.organization"
                         placeholder={t('routes.person.career.fields.placeholder.organization')}
                         required={true}
-                        isLoading={isLoading}
                     />
                 </div>
                 <div className={cn('career-form__item')}>
@@ -222,7 +197,7 @@ const CareerForm = (props: IProjectForm) => {
                     />
                 </div>
             </form>
-            {elError}
+            <ErrorsComponent error={error || patchError} isError={isError || isPatchError} isLoading={isPostLoading || isPatchLoading} />
         </FormProvider>
     );
 };
