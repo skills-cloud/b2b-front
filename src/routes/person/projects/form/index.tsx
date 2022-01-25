@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
@@ -10,7 +10,7 @@ import useClassnames from 'hook/use-classnames';
 import FormInput from 'component/form/input';
 import FormDate from 'component/form/date';
 import InputSelect from 'component/form/select';
-import Error from 'component/error';
+import ErrorsComponent from 'component/error/errors';
 import InputDictionary from 'component/form/input-dictionary';
 import Textarea from 'component/form/textarea';
 
@@ -18,7 +18,6 @@ import { useDispatch } from 'component/core/store';
 import { dictionary } from 'adapter/api/dictionary';
 import { CvProjectRead } from 'adapter/types/cv/project/get/code-200';
 import { project } from 'adapter/api/project';
-import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
 
@@ -49,19 +48,14 @@ const CareerForm = (props: IProjectForm) => {
     const { t } = useTranslation();
     const { specialistId } = useParams<IParams>();
     const methods = useForm(props.defaultValues);
-    const [postProject, { isLoading: isPostLoading }] = project.usePostProjectMutation();
-    const [patchProject, { isLoading: isPatchLoading }] = project.usePatchProjectByIdMutation();
-    const { data: dataOrganizationList } = mainRequest.useGetMainOrganizationQuery(undefined);
 
-    const [error, setError] = useState<Array<string> | string | null>(null);
+    const [postProject, { isLoading: isPostLoading, isError, error }] = project.usePostProjectMutation();
+    const [patchProject, { isLoading: isPatchLoading, isError: isPatchError, error: patchError }] = project.usePatchProjectByIdMutation();
+    const [getOrganizations] = dictionary.useLazyGetOrganizationQuery(undefined);
 
     useEffect(() => {
         props.onSetLoading?.(isPatchLoading || isPostLoading);
     }, [isPostLoading, isPatchLoading]);
-
-    const onChangeForm = () => {
-        setError(null);
-    };
 
     const onSubmit = methods.handleSubmit((formData) => {
         const data = {
@@ -78,15 +72,7 @@ const CareerForm = (props: IProjectForm) => {
             .then(() => {
                 props.onSubmit?.();
             })
-            .catch((err) => {
-                console.error(err);
-
-                if(typeof err.data?.details === 'object') {
-                    setError(Object.keys(err.data?.details).map((item) => `${item}: ${err.data?.details[item]}`));
-                } else {
-                    setError(err.data?.status);
-                }
-            });
+            .catch(console.error);
     });
 
     const onLoadPositionOptions = debounce((search_string: string, callback) => {
@@ -110,27 +96,9 @@ const CareerForm = (props: IProjectForm) => {
             });
     }, 150);
 
-    const elError = useMemo(() => {
-        if(error) {
-            if(Array.isArray(error)) {
-                return error.map((item, index) => (
-                    <Error
-                        key={index}
-                        className={cn('competencies-edit__error')}
-                        elIcon={true}
-                    >
-                        {item}
-                    </Error>
-                ));
-            }
-
-            return <Error className={cn('competencies-edit__error')} elIcon={true}>{error}</Error>;
-        }
-    }, [error]);
-
     return (
         <FormProvider {...methods}>
-            <form id="projects-form" onSubmit={onSubmit} onChange={onChangeForm}>
+            <form id="projects-form" onSubmit={onSubmit}>
                 <div className={cn('projects-form')}>
                     <div className={cn('projects-form__item')}>
                         <label className={cn('projects-form__label')}>
@@ -152,7 +120,21 @@ const CareerForm = (props: IProjectForm) => {
                         </label>
                         <InputSelect
                             name="project.organization"
-                            options={dataOrganizationList?.results.map((result) => ({ label: result.name, value: String(result.id) })) || []}
+                            loadOptions={(value, cb) => {
+                                getOrganizations({
+                                    search   : value,
+                                    page_size: 1000
+                                })
+                                    .unwrap()
+                                    .then(({ results }) => {
+                                        cb(
+                                            results.map((organization) => ({
+                                                value: organization.id,
+                                                label: organization.name
+                                            }))
+                                        );
+                                    });
+                            }}
                             placeholder={t('routes.person.projects.fields.placeholder.organization')}
                             required={true}
                         />
@@ -185,7 +167,7 @@ const CareerForm = (props: IProjectForm) => {
                     />
                 </div>
             </form>
-            {elError}
+            <ErrorsComponent error={error || patchError} isError={isError || isPatchError} isLoading={isPostLoading || isPatchLoading} />
         </FormProvider>
     );
 };
