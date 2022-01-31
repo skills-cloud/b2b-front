@@ -35,6 +35,8 @@ import { FunPointTypePositionLaborEstimateWrite as FunPointTypePositionLaborEsti
 import { ModulePositionLaborEstimateWrite } from 'adapter/types/main/module-position-labor-estimate/post/code-201';
 import { OrganizationContractorRead } from 'adapter/types/main/organization-contractor/get/code-200';
 import { OrganizationContractorRead as OrganizationContractorReadById } from 'adapter/types/main/organization-contractor/id/get/code-200';
+import { TimeSheetRowUpdate } from 'adapter/types/main/time-sheet-row/post/code-201';
+import { TimeSheetRowUpdate as TimeSheetRowUpdatePatch } from 'adapter/types/main/time-sheet-row/id/patch/code-200';
 
 export interface IOrganizationProjectPost extends OrganizationProject {
     id: number
@@ -106,15 +108,15 @@ interface IParamsCompetenciesSet {
 
 export interface IGetRequestListParams {
     organization_project_id?: Array<number>,
-    type_id?: string,
-    customer_id?: string,
-    status?: string,
-    priority?: string,
-    industry_sector_id?: string,
-    project_id?: string,
-    resource_manager_id?: string,
-    recruiter_id?: string,
+    organization_customer_id?: Array<number>,
+    industry_sector_id?: Array<number>,
+    resource_manager_id?: Array<number>,
+    recruiter_id?: Array<number>,
+    manager_id?: Array<number>,
+    type_id?: Array<number>,
+    status?: Array<string>,
     ordering?: Array<string>,
+    priority?: 10 | 20 | 30,
     search?: string,
     page?: number,
     page_size?: number
@@ -186,7 +188,7 @@ export interface IGetTimeSheetListParams {
 export interface IDataPostTimeSheet {
     id?: number,
     request_id: number,
-    cv_id: number,
+    cv_ids: Array<number>,
     date_from?: string,
     date_to?: string,
     task_name: string,
@@ -231,6 +233,16 @@ export interface IResponseGetMainRequestRequirement extends IResponseBase {
     results: Array<RequestRequirementRead>
 }
 
+export interface ITimeSheetRowCreate {
+    request_id: number,
+    date_from?: string,
+    date_to?: string,
+    task_name: string,
+    task_description?: string,
+    work_time: number,
+    cv_ids: Array<number>
+}
+
 export const mainRequest = createApi({
     reducerPath: 'api/main/request',
     tagTypes   : ['main', 'expected-labor-estimate', 'create-request-for-saved-labor-estimate'],
@@ -268,7 +280,7 @@ export const mainRequest = createApi({
             })
         }),
         getOrganizationProjectCardItem: build.query<Array<OrganizationProjectCardItemReadTree>,
-        { organization_id?: Array<string>, organization_project_id?: Array<string>}>({
+        { organization_customer_id?: Array<string>, organization_project_id?: Array<string>}>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/organization-project-card-item/',
@@ -380,6 +392,13 @@ export const mainRequest = createApi({
                 url   : `/organization/${id}/`,
                 method: 'PATCH',
                 body
+            })
+        }),
+        deleteMainOrganization: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/organization/${id}/`,
+                method: 'DELETE'
             })
         }),
         getMainOrganization: build.query<IResponseGetOrganization, IGetOrganizationListQueryParams | undefined | void>({
@@ -561,7 +580,7 @@ export const mainRequest = createApi({
                 params
             })
         }),
-        postMainTimeSheetRow: build.mutation<IResponsePostTimeSheet, IDataPostTimeSheet>({
+        postMainTimeSheetRow: build.mutation<Array<TimeSheetRowUpdate>, ITimeSheetRowCreate>({
             invalidatesTags: ['main'],
             query          : (body) => ({
                 url   : '/time-sheet-row/',
@@ -576,7 +595,7 @@ export const mainRequest = createApi({
                 method: 'GET'
             })
         }),
-        patchMainTimeSheetRow: build.mutation<IResponsePostTimeSheet, IDataPostTimeSheet>({
+        patchMainTimeSheetRow: build.mutation<TimeSheetRowUpdatePatch, TimeSheetRowUpdatePatch>({
             invalidatesTags: ['main'],
             query          : ({ id, ...rest }) => ({
                 url   : `/time-sheet-row/${id}/`,

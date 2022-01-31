@@ -21,13 +21,13 @@ import DotsAction from 'component/section/actions/dots';
 import DropdownMenu from 'component/dropdown/menu';
 import DropdownMenuItem from 'component/dropdown/menu-item';
 import DeleteAction from 'component/section/actions/delete';
+import Empty from 'component/empty';
 
 import { mainRequest } from 'adapter/api/main';
 
 import FunPointCreateForm from './form';
 import ConfirmModalDeleteFunPoint from './confirm-modal';
 import style from './index.module.pcss';
-import Empty from 'component/empty';
 
 enum ESectionInvariants {
     FunPoints = 'fun-points'

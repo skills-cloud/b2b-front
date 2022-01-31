@@ -27,6 +27,7 @@ import EditAction from 'component/section/actions/edit';
 import DeleteAction from 'component/section/actions/delete';
 import ConfirmModal from 'route/timesheet/confirm-modal';
 import EditModal from 'route/timesheet/edit-modal';
+import Empty from 'component/empty';
 
 import { mainRequest } from 'adapter/api/main';
 import { TimeSheetRowRead } from 'adapter/types/main/time-sheet-row/get/code-200';
@@ -57,16 +58,19 @@ const Timesheets = () => {
     const [editTimesheet, setEditTimesheet] = useState<TimeSheetRowRead | null>(null);
     const [deleteId, setDeleteId] = useState<number>();
 
-    const obj = normalizeObject({ organization_project_id: [params.projectId] });
-
-    const { data, isLoading, refetch } = mainRequest.useGetMainTimeSheetRowQuery({
-        ...obj,
-        ...qs
-    });
     const { data: requestData } = mainRequest.useGetMainRequestByIdQuery(
         { id: params.requestId },
         { refetchOnMountOrArgChange: true }
     );
+
+    const obj = normalizeObject({ organization_project_id: [requestData?.module?.organization_project_id || params.projectId] });
+
+    const { data, isLoading, refetch } = mainRequest.useGetMainTimeSheetRowQuery({
+        ...obj,
+        ...qs
+    }, {
+        skip: !requestData?.module?.organization_project_id && !params.projectId
+    });
 
     useEffect(() => {
         if(Object.values(qs).length) {
@@ -125,7 +129,7 @@ const Timesheets = () => {
             id: data?.results.map((item) => item.cv_id)
         };
 
-        if(startValue) {
+        if(startValue?.id?.length) {
             return (
                 <InputCv
                     requestType={InputCv.requestType.Cv}
@@ -174,7 +178,7 @@ const Timesheets = () => {
         }
 
         if(!data?.results.length) {
-            return t('routes.timesheet.content.empty');
+            return <Empty>{t('routes.timesheet.content.empty')}</Empty>;
         }
 
         return data?.results.map((item) => {
@@ -254,8 +258,19 @@ const Timesheets = () => {
 
     const elEditModal = () => {
         if(editTimesheet || showModal) {
+            const idsArray = requestData?.requirements?.reduce((acc, curr) => {
+                let newAcc = [...acc];
+
+                if(curr.cv_list_ids) {
+                    newAcc = newAcc.concat(curr.cv_list_ids.map((item) => parseInt(item, 10)));
+                }
+
+                return newAcc;
+            }, [] as Array<number>);
+
             const cvFilters = {
-                id: data?.results.map((item) => item.cv_id)
+                id        : [...new Set(idsArray)],
+                request_id: [requestData?.id as number]
             };
 
             const defaultValuesNew = {
@@ -272,6 +287,7 @@ const Timesheets = () => {
                     fields={editTimesheet || defaultValuesNew}
                     cvFilters={cvFilters}
                     requestId={params.requestId}
+                    isEdit={!!editTimesheet}
                 />
             );
         }

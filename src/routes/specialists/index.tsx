@@ -33,7 +33,7 @@ export interface IFormValues {
     years?: string,
     country?: Array<IValue> | null,
     city?: Array<IValue> | null,
-    position?: Array<IValue> | null,
+    positions_ids?: Array<IValue> | null,
     competencies?: Array<IValue>
 }
 
@@ -66,13 +66,13 @@ export const Specialists = () => {
         }
 
         timer.current = setTimeout(() => {
-            const { country, position, city, competencies, ...otherValues } = values;
+            const { country, positions_ids, city, competencies, ...otherValues } = values;
 
             history.push({
                 search: stringify({
                     ...otherValues,
                     ...(country ? { country_id: country?.map((item) => item?.value) } : {}),
-                    ...(position ? { positions_ids_any: position?.map((item) => item?.value) } : {}),
+                    ...(positions_ids ? { positions_ids_any: positions_ids?.map((item) => item?.value) } : {}),
                     ...(city ? { city_id: city.map((item) => item?.value) } : {}),
                     ...(competencies ? { competencies_ids_any: competencies.map((item) => item?.value) } : {})
                 }, {
@@ -99,12 +99,12 @@ export const Specialists = () => {
 
     const onClearFilter = () => {
         context.reset({
-            search      : '',
-            years       : '',
-            country     : [],
-            city        : [],
-            competencies: [],
-            position    : []
+            search       : '',
+            years        : '',
+            country      : [],
+            city         : [],
+            competencies : [],
+            positions_ids: []
         });
     };
 
@@ -188,8 +188,8 @@ export const Specialists = () => {
                             />
                             <InputDictionary
                                 requestType={InputDictionary.requestType.Position}
-                                defaultValue={Array.isArray(qs.position_id) ? qs.position_id : [qs.position_id as string]}
-                                name="position"
+                                defaultValue={Array.isArray(qs.positions_ids_any) ? qs.positions_ids_any : [qs.positions_ids_any as string]}
+                                name="positions_ids"
                                 direction="column"
                                 placeholder={t('routes.specialists.sidebar.filters.form.position.placeholder')}
                                 label={t('routes.specialists.sidebar.filters.form.position.label')}

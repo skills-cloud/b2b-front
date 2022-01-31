@@ -22,7 +22,8 @@ import style from './index.module.pcss';
 interface IProps {
     id: string,
     resourceValue?: Array<ModulePositionLaborEstimateInline>,
-    isLoading?: boolean
+    isLoading?: boolean,
+    isUserHasPermission?: boolean
 }
 
 const ResourceValue = (props: IProps) => {
@@ -49,19 +50,21 @@ const ResourceValue = (props: IProps) => {
             return (
                 <div className={cn('resource-value__content')}>
                     <Resources resources={props.resourceValue} />
-                    <div className={cn('resource-value__button-wrapper')}>
-                        <Button
-                            isSecondary={true}
-                            onClick={() => {
-                                void create({
-                                    id: moduleId
-                                });
-                            }}
-                            disabled={isLoading}
-                            isLoading={isLoading}
-                            children={t('routes.module.resource-value.create-requests')}
-                        />
-                    </div>
+                    {props.isUserHasPermission && (
+                        <div className={cn('resource-value__button-wrapper')}>
+                            <Button
+                                isSecondary={true}
+                                onClick={() => {
+                                    void create({
+                                        id: moduleId
+                                    });
+                                }}
+                                disabled={isLoading}
+                                isLoading={isLoading}
+                                children={t('routes.module.resource-value.create-requests')}
+                            />
+                        </div>
+                    )}
                 </div>
             );
         }
@@ -70,7 +73,9 @@ const ResourceValue = (props: IProps) => {
     };
 
     const elEditResources = () => {
-        return <EditAction onClick={onEditResources} />;
+        if(props.isUserHasPermission) {
+            return <EditAction onClick={onEditResources} />;
+        }
     };
 
     return (

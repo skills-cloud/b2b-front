@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
 import { IParams, ORGANIZATION_PROJECT_MODULE_REQUEST_CREATE } from 'helper/url-list';
+import useRoles from 'hook/use-roles';
 
 import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
@@ -48,6 +49,7 @@ const Module = () => {
     const { data: requests, isLoading } = mainRequest.useGetMainRequestQuery({
         organization_project_id: [parseInt(projectId, 10)]
     });
+    const { su, pfm, pm, admin } = useRoles(data?.organization_project?.organization_contractor_id);
 
     const elRequests = () => {
         if(isLoading) {
@@ -55,7 +57,13 @@ const Module = () => {
         }
 
         if(requests?.results.length) {
-            return <RequestList fromOrganization={true} requestList={requests.results} />;
+            return (
+                <RequestList
+                    fromOrganization={true}
+                    requestList={requests.results}
+                    isUserHasPermission={su || admin || pfm || pm}
+                />
+            );
         }
 
         return <Empty>{t('routes.module.blocks.empty')}</Empty>;
@@ -70,26 +78,30 @@ const Module = () => {
     };
 
     const elActions = () => {
-        return (
-            <Dropdown
-                render={({ onClose }) => (
-                    <DropdownMenu>
-                        <DropdownMenuItem selected={false} onClick={onClose}>
-                            <EditAction onClick={onClickEdit} label={t('routes.module.blocks.actions.edit')} />
-                        </DropdownMenuItem>
-                        <DropdownMenuItem selected={false} onClick={onClose}>
-                            <DeleteAction onClick={onClickDelete} label={t('routes.module.blocks.actions.delete')} />
-                        </DropdownMenuItem>
-                    </DropdownMenu>
-                )}
-            >
-                <DotsAction />
-            </Dropdown>
-        );
+        if(su || admin || pfm || pm) {
+            return (
+                <Dropdown
+                    render={({ onClose }) => (
+                        <DropdownMenu>
+                            <DropdownMenuItem selected={false} onClick={onClose}>
+                                <EditAction onClick={onClickEdit} label={t('routes.module.blocks.actions.edit')} />
+                            </DropdownMenuItem>
+                            <DropdownMenuItem selected={false} onClick={onClose}>
+                                <DeleteAction onClick={onClickDelete} label={t('routes.module.blocks.actions.delete')} />
+                            </DropdownMenuItem>
+                        </DropdownMenu>
+                    )}
+                >
+                    <DotsAction />
+                </Dropdown>
+            );
+        }
     };
 
     const elCreateRequest = () => {
-        return <AddAction to={ORGANIZATION_PROJECT_MODULE_REQUEST_CREATE(organizationId, projectId, moduleId)} />;
+        if(su || admin || pfm || pm) {
+            return <AddAction to={ORGANIZATION_PROJECT_MODULE_REQUEST_CREATE(organizationId, projectId, moduleId)} />;
+        }
     };
 
     const elSidebar = () => {
@@ -137,12 +149,14 @@ const Module = () => {
                     </SectionContentList>
                 </Section>
                 <FunPointsComponent
+                    isUserHasPermission={su || admin || pfm || pm}
                     id={ESectionInvariants.FunPoints}
                     funPoints={data?.fun_points}
                     difficulty={data?.difficulty_factor}
                     isLoading={isLoading}
                 />
                 <ResourceValueComponent
+                    isUserHasPermission={su || admin || pfm || pm}
                     id={ESectionInvariants.ResourceValue}
                     resourceValue={data?.positions_labor_estimates}
                     isLoading={isLoading}

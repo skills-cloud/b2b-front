@@ -99,8 +99,8 @@ const Request = (props: IProps) => {
             addSpecialist({
                 id       : String(formData.id),
                 cv_id    : String(props.specialistId),
-                date_from: formData.date_from,
-                date_to  : formData.date_to,
+                date_from: formData.date_from || undefined,
+                date_to  : formData.date_to || undefined,
                 status   : EStatus.PreCandidate
             })
                 .unwrap()
@@ -145,6 +145,7 @@ const Request = (props: IProps) => {
         }
 
         if(isError && currentReqId === reqId) {
+            // TODO ошибки в тултип
             content = (
                 <IconWarning
                     svg={{

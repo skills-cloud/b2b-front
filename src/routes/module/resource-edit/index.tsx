@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
 import { useParams } from 'react-router';
@@ -9,17 +9,17 @@ import { IParams } from 'helper/url-list';
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import Button from 'component/button';
-import Error from 'component/error';
 import InputDictionary from 'component/form/input-dictionary';
 import Input from 'component/form/input';
 import AddAction from 'component/section/actions/add';
 import DeleteAction from 'component/section/actions/delete';
+import ErrorsComponent from 'component/error/errors';
+import { IValue } from 'component/form/select';
 
 import { mainRequest } from 'adapter/api/main';
 import { ModulePositionLaborEstimateInline } from 'adapter/types/main/module/get/code-200';
 
 import style from './index.module.pcss';
-import { IValue } from 'component/form/select';
 
 interface IEditModal {
     setVisible: (visible: boolean) => void,
@@ -40,11 +40,9 @@ const ResourceEdit = ({ setVisible, onClickCancel, defaultValues }: IEditModal) 
         }
     });
 
-    const [error, setError] = useState<string | null>(null);
-
-    const [post] = mainRequest.usePostMainModulePositionLaborEstimateMutation();
-    const [patch] = mainRequest.usePatchMainModulePositionLaborEstimateMutation();
-    const [deleteMethod] = mainRequest.useDeleteMainModulePositionLaborEstimateMutation();
+    const [post, { error, isError, isLoading }] = mainRequest.usePostMainModulePositionLaborEstimateMutation();
+    const [patch, { error: patchError, isError: isPatchError, isLoading: isPatchLoading }] = mainRequest.usePatchMainModulePositionLaborEstimateMutation();
+    const [deleteMethod, { error: deleteError, isError: isDeleteError, isLoading: isDeleteLoading }] = mainRequest.useDeleteMainModulePositionLaborEstimateMutation();
 
     const { fields, append, remove } = useFieldArray({
         keyName: 'fieldId',
@@ -95,15 +93,8 @@ const ResourceEdit = ({ setVisible, onClickCancel, defaultValues }: IEditModal) 
         },
         (formError) => {
             console.error(formError);
-            setError('error');
         }
     );
-
-    const elError = useMemo(() => {
-        if(error) {
-            return <Error elIcon={true}>{error}</Error>;
-        }
-    }, [error]);
 
     return (
         <Modal
@@ -166,7 +157,11 @@ const ResourceEdit = ({ setVisible, onClickCancel, defaultValues }: IEditModal) 
                     </div>
                 </div>
             </FormProvider>
-            {elError}
+            <ErrorsComponent
+                error={error || patchError || deleteError}
+                isError={isError || isPatchError || isDeleteError}
+                isLoading={isLoading || isPatchLoading || isDeleteLoading}
+            />
         </Modal>
     );
 };

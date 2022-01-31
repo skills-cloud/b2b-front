@@ -5,7 +5,10 @@
         position: relative;
         display: grid;
         grid-gap: 16px;
-        grid-template-columns: 1fr 40px;
+
+        &_with-actions {
+            grid-template-columns: 1fr 40px;
+        }
 
         &::after {
             content: "";

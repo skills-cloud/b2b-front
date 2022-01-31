@@ -71,10 +71,15 @@ const OrganizationProjectCreateForm = (props: IProps) => {
         }
     });
 
-    const { data: userData } = acc.useGetAccUserQuery({});
-    const { data: whoAmIData } = acc.useGetAccWhoAmIQuery(undefined);
-
     const values = context.watch();
+
+    const { data: userData } = acc.useGetAccUserQuery({
+        organization_contractor_id: [parseInt(values?.organization_contractor?.value as string, 10)]
+    }, {
+        skip                     : !values?.organization_contractor?.value,
+        refetchOnMountOrArgChange: true
+    });
+    const { data: whoAmIData } = acc.useGetAccWhoAmIQuery(undefined);
 
     useEffect(() => {
         const contractorValue = values.organization_contractor?.value;
@@ -177,6 +182,8 @@ const OrganizationProjectCreateForm = (props: IProps) => {
 
             const request = method({
                 ...rest,
+                date_from               : rest.date_from || undefined,
+                date_to                 : rest.date_to || undefined,
                 organization_customer_id: parseInt(params.organizationId, 10),
                 id                      : requestId as number
             });
@@ -221,8 +228,8 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                 />
                 <InputMain
                     required={errorMessage}
-                    disabled={!!props.defaultValues || !!whoAmIData?.organizations_contractors_roles?.length}
-                    defaultValue={[props.defaultValues?.organization_customer?.id as number]}
+                    disabled={!!props.defaultValues || !!params.organizationId || !!whoAmIData?.organizations_contractors_roles?.length}
+                    defaultValue={[props.defaultValues?.organization_customer?.id as number || params.organizationId]}
                     name="organization_customer"
                     direction="column"
                     requestType={InputMain.requestType.Customer}
@@ -250,6 +257,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                 />
                 <Select
                     clearable={true}
+                    disabled={!values.organization_contractor?.value}
                     name="manager_pm"
                     direction="column"
                     label={t('routes.organization-project.create.manager_pm.title')}
@@ -258,6 +266,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     isMulti={false}
                 />
                 <Select
+                    disabled={!values.organization_contractor?.value}
                     clearable={true}
                     name="manager_pfm"
                     direction="column"

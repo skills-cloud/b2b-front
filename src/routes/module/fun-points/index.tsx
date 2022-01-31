@@ -22,6 +22,7 @@ import style from './index.module.pcss';
 
 interface IProps {
     isLoading?: boolean,
+    isUserHasPermission?: boolean,
     funPoints?: Array<ModuleFunPointInline>,
     difficulty?: number,
     id: string
@@ -67,11 +68,13 @@ const FunPoints = (props: IProps) => {
                             {props.difficulty?.toFixed(2)}
                         </SectionContentListItem>
                     </SectionContentList>
-                    <div className={cn('fun-points__generate')}>
-                        <Button type="button" isSecondary={true} onClick={onClickGenerate}>
-                            {t('routes.module.fun-points.button')}
-                        </Button>
-                    </div>
+                    {props.isUserHasPermission && (
+                        <div className={cn('fun-points__generate')}>
+                            <Button type="button" isSecondary={true} onClick={onClickGenerate}>
+                                {t('routes.module.fun-points.button')}
+                            </Button>
+                        </div>
+                    )}
                 </div>
             );
         }
@@ -80,7 +83,9 @@ const FunPoints = (props: IProps) => {
     };
 
     const elEditFunPoints = () => {
-        return <EditAction to={ORGANIZATION_PROJECT_MODULE_FUN_POINTS(organizationId, projectId, moduleId)} />;
+        if(props.isUserHasPermission) {
+            return <EditAction to={ORGANIZATION_PROJECT_MODULE_FUN_POINTS(organizationId, projectId, moduleId)} />;
+        }
     };
 
     return (
