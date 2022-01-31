@@ -25,6 +25,8 @@ import { OrganizationProjectCardItemReadTree } from 'adapter/types/main/organiza
 import { RequestRequirementCvRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 
 import style from './index.module.pcss';
+import Empty from 'component/empty';
+import ErrorsComponent from 'component/error/errors';
 
 interface ICard extends OrganizationProjectCardItemReadTree{
     count: number
@@ -128,7 +130,9 @@ export const Candidates = () => {
         refetchOnMountOrArgChange: true
     });
     const { data: projectCardData } = mainRequest.useGetOrganizationProjectCardItemQuery({
-        organization_project_id: [projectId]
+        organization_project_id: [projectId || String(data?.module?.organization_project?.id)]
+    }, {
+        skip: !projectId && !data?.module?.organization_project?.id
     });
 
     const reqsList = useMemo(() => {
@@ -169,7 +173,7 @@ export const Candidates = () => {
         skip: !reqsList?.length && !reqsCvList?.length
     });
 
-    const [post] = mainRequest.usePostRequestRequirementCvSetDetailsMutation();
+    const [post, { error, isError, isLoading: isPostLoading }] = mainRequest.usePostRequestRequirementCvSetDetailsMutation();
     const [unLinkCard] = mainRequest.useDeleteMainRequestCvUnlinkByIdMutation();
     const [cvList, setCvList] = useState<Array<TCvList>>([]);
     const [cards, setCards] = useState<TCardMap>({});
@@ -187,7 +191,7 @@ export const Candidates = () => {
 
             setCvList(results);
         }
-    }, [JSON.stringify(cvListData)]);
+    }, [JSON.stringify(cvListData), JSON.stringify(reqsCvList)]);
 
     useEffect(() => {
         if(projectCardData) {
@@ -268,6 +272,7 @@ export const Candidates = () => {
             .then(() => {
                 setVisibleModal(null);
                 methods.reset();
+                cvListRefetch();
             })
             .catch(console.error);
     };
@@ -275,9 +280,9 @@ export const Candidates = () => {
     const elAdditionalBlock = (cvItem?: TCvList) => {
         const careerItem = cvItem?.career?.[0];
 
-        if(cvItem && careerItem) {
-            const dateFrom = careerItem.date_from ? new Date(careerItem.date_from) : new Date();
-            const dateTo = careerItem.date_to ? new Date(careerItem.date_to) : new Date();
+        if(cvItem) {
+            const dateFrom = careerItem?.date_from ? new Date(careerItem?.date_from) : new Date();
+            const dateTo = careerItem?.date_to ? new Date(careerItem?.date_to) : new Date();
             const experience = differenceInCalendarYears(dateTo, dateFrom);
 
             return (
@@ -496,6 +501,27 @@ export const Candidates = () => {
 
     const renderCard = projectCardData?.filter((item) => item.id === visibleModal) || [];
 
+    const elContent = () => {
+        if(renderCard.length === 1) {
+            return renderTree(renderCard[0].children);
+        }
+
+        if(renderCard.length === 0 && projectCardData?.length) {
+            return projectCardData?.map((item) => (
+                <Checkbox
+                    key={item.id}
+                    name={`card-${item.id}`}
+                    label={item.name}
+                    className={{
+                        'checkbox__label': cn('candidates__modal-card-checkbox')
+                    }}
+                />
+            ));
+        }
+
+        return <Empty>{t('routes.candidates.modal-card.empty')}</Empty>;
+    };
+
     const elCardsModal = () => {
         if(visibleModal !== null) {
             return (
@@ -522,17 +548,12 @@ export const Candidates = () => {
                 >
                     <FormProvider {...methods}>
                         <form method="POST" onSubmit={methods.handleSubmit(applyCardForm)} id={APPLY_CARD_FORM_ID}>
-                            {renderCard.length === 1 && renderTree(renderCard[0].children)}
-                            {renderCard.length === 0 && projectCardData?.map((item) => (
-                                <Checkbox
-                                    key={item.id}
-                                    name={`card-${item.id}`}
-                                    label={item.name}
-                                    className={{
-                                        'checkbox__label': cn('candidates__modal-card-checkbox')
-                                    }}
-                                />
-                            ))}
+                            {elContent()}
+                            <ErrorsComponent
+                                error={error}
+                                isError={isError}
+                                isLoading={isPostLoading}
+                            />
                         </form>
                     </FormProvider>
                 </Modal>

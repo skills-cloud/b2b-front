@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useClassnames } from 'hook/use-classnames';
 
 import SectionHeader from 'component/section/header';
-import EditAction from 'component/section/actions/edit';
+// import EditAction from 'component/section/actions/edit';
 import Modal from 'component/modal';
 import ModalFooterSubmit from 'component/modal/footer-submit';
 import Header from 'component/header';
@@ -37,22 +37,15 @@ const Customer = ({ customer, requestId }: ICustomer) => {
         setModalStep(EModalSteps.Close);
     }, []);
 
-    const onEditAction = () => {
-        setModalStep(EModalSteps.Base);
-    };
+    // const onEditAction = () => {
+    //     setModalStep(EModalSteps.Base);
+    // };
 
     return (
         <React.Fragment>
             <Section>
                 <div className={cn('customer__section-header')} id="employer">
-                    <SectionHeader
-                        dropdownActions={
-                            <EditAction
-                                label={t('routes.project-request.customer.edit')}
-                                onClick={onEditAction}
-                            />
-                        }
-                    >
+                    <SectionHeader>
                         {t('routes.project-request.customer.title')}
                     </SectionHeader>
                 </div>

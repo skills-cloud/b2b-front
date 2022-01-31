@@ -12,6 +12,7 @@ import {
 import { useClassnames } from 'hook/use-classnames';
 
 import { RequestRead } from 'adapter/types/main/request/get/code-200';
+import { acc } from 'adapter/api/acc';
 
 import EditAction from 'component/section/actions/edit';
 import DeleteAction from 'component/section/actions/delete';
@@ -25,15 +26,18 @@ import style from './index.module.pcss';
 
 interface IRequestList {
     requestList: Array<RequestRead>,
-    fromOrganization?: boolean
+    fromOrganization?: boolean,
+    isUserHasPermission?: boolean
 }
 
-const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
+const RequestList = ({ requestList, fromOrganization, isUserHasPermission }: IRequestList) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const [confirm, setConfirm] = useState<boolean>(false);
     const [requestId, setRequestId] = useState<string>();
     const [projectName, setProjectName] = useState<string>();
+
+    const { data: whoAmIData } = acc.useGetAccWhoAmIQuery(undefined);
 
     const onClickConfirmDelete = (newRequestId?: string, newProjectName?: string) => () => {
         setConfirm(true);
@@ -59,15 +63,20 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
                         requestUrl = ORGANIZATION_PROJECT_MODULE_REQUEST_ID(organizationId, projectId, moduleId, requestItem.id);
                     }
 
-                    const candidatesCount = requestItem.requirements?.reduce((acc, curr) => {
+                    const candidatesCount = requestItem.requirements?.reduce((accumulator, curr) => {
                         let newAcc = 0;
 
                         if(curr?.cv_list) {
-                            newAcc = acc + curr.cv_list.length;
+                            newAcc = accumulator + curr.cv_list.length;
                         }
 
                         return newAcc;
                     }, 0);
+
+                    const contractorId = requestItem.module?.organization_project?.organization_contractor_id;
+                    const isContractorMatch = whoAmIData?.organizations_contractors_roles?.some((item) => {
+                        return item.organization_contractor_id === contractorId && item.role && item.role !== 'rm';
+                    });
 
                     return (
                         <div key={requestItem.id} className={cn('request-list__item')}>
@@ -92,26 +101,28 @@ const RequestList = ({ requestList, fromOrganization }: IRequestList) => {
                                     >
                                         {t(`routes.project-request-list.requests.request-item.priority.value.${requestItem.priority}`)}
                                     </div>
-                                    <Dropdown
-                                        render={() => (
-                                            <DropdownMenu>
-                                                <DropdownMenuItem selected={false}>
-                                                    <EditAction
-                                                        to={organizationId ? ORGANIZATION_PROJECT_MODULE_REQUEST_EDIT(organizationId, projectId, moduleId, requestItem.id) : REQUEST_EDIT(requestItem.id)}
-                                                        label={t('routes.project-request-list.requests.actions.edit')}
-                                                    />
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem selected={false}>
-                                                    <DeleteAction
-                                                        onClick={onClickConfirmDelete(String(requestItem.id), requestItem.title)}
-                                                        label={t('routes.project-request-list.requests.actions.delete')}
-                                                    />
-                                                </DropdownMenuItem>
-                                            </DropdownMenu>
-                                        )}
-                                    >
-                                        <DotsAction className={{ 'action__content': cn('request-list__icon-dots') }} />
-                                    </Dropdown>
+                                    {(isUserHasPermission || isContractorMatch) && (
+                                        <Dropdown
+                                            render={() => (
+                                                <DropdownMenu>
+                                                    <DropdownMenuItem selected={false}>
+                                                        <EditAction
+                                                            to={organizationId ? ORGANIZATION_PROJECT_MODULE_REQUEST_EDIT(organizationId, projectId, moduleId, requestItem.id) : REQUEST_EDIT(requestItem.id)}
+                                                            label={t('routes.project-request-list.requests.actions.edit')}
+                                                        />
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem selected={false}>
+                                                        <DeleteAction
+                                                            onClick={onClickConfirmDelete(String(requestItem.id), requestItem.title)}
+                                                            label={t('routes.project-request-list.requests.actions.delete')}
+                                                        />
+                                                    </DropdownMenuItem>
+                                                </DropdownMenu>
+                                            )}
+                                        >
+                                            <DotsAction className={{ 'action__content': cn('request-list__icon-dots') }} />
+                                        </Dropdown>
+                                    )}
                                 </div>
                             </div>
                             <div className={cn('request-list__item-content')}>

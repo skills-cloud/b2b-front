@@ -30,6 +30,7 @@ import { mainRequest } from 'adapter/api/main';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
 
 import style from './index.module.pcss';
+import useRoles from 'hook/use-roles';
 
 enum EModalSteps {
     NewRole,
@@ -53,6 +54,14 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
     const [editID, setEditID] = useState<number>();
     const editRequirements = requirements?.find(({ id }) => id === editID);
     const [step, setModalStep] = useState<EModalSteps>(EModalSteps.Close);
+
+    const { data } = mainRequest.useGetMainRequestByIdQuery(
+        { id: String(requestId) },
+        { refetchOnMountOrArgChange: true }
+    );
+
+    const { su, pfm, pm, admin } = useRoles(data?.module?.organization_project?.organization_contractor_id);
+
     const onClose = useCallback(() => {
         setModalStep(EModalSteps.Close);
     }, []);
@@ -63,7 +72,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
 
             if(req) {
                 const params = {
-                    position_id         : req.position_id,
+                    positions_ids_any   : [req.position_id],
                     years               : req.experience_years,
                     competencies_ids_any: req.competencies?.map((comp) => comp.competence_id)
                 };
@@ -127,27 +136,34 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     contextLocation = 'city';
                 }
 
+                const actions = [
+                    <SearchAction
+                        key="search"
+                        label={t('routes.project-request-list.dropdown.search')}
+                        onClick={onClickSearch(requirementId)}
+                    />
+                ];
+
+                if(su || admin || pfm || pm) {
+                    actions.unshift(
+                        <EditAction
+                            key="edit"
+                            label={t('routes.project-request-list.dropdown.edit')}
+                            onClick={onEditAction(requirementId)}
+                        />,
+                        <DeleteAction
+                            key="delete"
+                            label={t('routes.project-request-list.dropdown.delete')}
+                            onClick={onDeleteAction(requirementId)}
+                        />
+                    );
+                }
+
                 return (
                     <Section key={requirementId}>
                         <div className={cn('requirements__gap-bottom')}>
                             <SectionHeader
-                                dropdownActions={[
-                                    <EditAction
-                                        key="edit"
-                                        label={t('routes.project-request-list.dropdown.edit')}
-                                        onClick={onEditAction(requirementId)}
-                                    />,
-                                    <DeleteAction
-                                        key="delete"
-                                        label={t('routes.project-request-list.dropdown.delete')}
-                                        onClick={onDeleteAction(requirementId)}
-                                    />,
-                                    <SearchAction
-                                        key="search"
-                                        label={t('routes.project-request-list.dropdown.search')}
-                                        onClick={onClickSearch(requirementId)}
-                                    />
-                                ]}
+                                dropdownActions={actions}
                             >
                                 {name || t('routes.project-request.blocks.empty-title-requirement')}
                             </SectionHeader>
@@ -313,16 +329,18 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     }}
                 />
             )}
-            <Section>
-                <div
-                    className={cn('requirements__add-request')} onClick={() => {
-                        setEditID(undefined);
-                        setModalStep(EModalSteps.NewRole);
-                    }}
-                >
-                    {t('routes.project-request.requirements.edit-modal.add-request')}
-                </div>
-            </Section>
+            {su || admin || pfm || pm && (
+                <Section>
+                    <div
+                        className={cn('requirements__add-request')} onClick={() => {
+                            setEditID(undefined);
+                            setModalStep(EModalSteps.NewRole);
+                        }}
+                    >
+                        {t('routes.project-request.requirements.edit-modal.add-request')}
+                    </div>
+                </Section>
+            )}
         </React.Fragment>
     );
 };

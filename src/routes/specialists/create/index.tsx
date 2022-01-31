@@ -4,7 +4,6 @@ import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
 import { useHistory } from 'react-router';
 
 import { SPECIALIST_ID } from 'helper/url-list';
-import { useCancelTokens } from 'hook/cancel-token';
 import useClassnames from 'hook/use-classnames';
 
 import { cv } from 'adapter/api/cv';
@@ -17,6 +16,7 @@ import Button from 'component/button';
 import UserAvatar from 'component/user/avatar';
 import Loader from 'component/loader';
 import InputMain from 'component/form/input-main';
+import ErrorsComponent from 'component/error/errors';
 
 import { acc } from 'adapter/api/acc';
 import { dictionary } from 'adapter/api/dictionary';
@@ -47,11 +47,6 @@ export interface ICvForm extends Omit<CvCareerRead, 'gender' | 'country' | 'city
 export const SpecialistsCreate = () => {
     const cn = useClassnames(style);
     const { t, i18n } = useTranslation();
-    const [
-        tokenCvList,
-        tokenCreateCv,
-        tokenContacts
-    ] = useCancelTokens(3);
     const history = useHistory();
     const context = useForm<ICvForm>({
         mode         : 'onChange',
@@ -61,9 +56,9 @@ export const SpecialistsCreate = () => {
     });
     const values = context.watch();
     const { isValid } = context.formState;
-    const [postCv] = cv.usePostCvMutation();
-    const [postContact] = contact.usePostContactMutation();
-    const { data, isLoading } = cv.useGetCvListQuery({}, {
+    const [postCv, { error, isError, isLoading }] = cv.usePostCvMutation();
+    const [postContact, { error: postContactError, isError: postContactIsError, isLoading: postContactIsLoading }] = contact.usePostContactMutation();
+    const { data, isLoading: isListLoading } = cv.useGetCvListQuery({}, {
         refetchOnMountOrArgChange: true
     });
     const { fields, append, remove } = useFieldArray({
@@ -72,18 +67,9 @@ export const SpecialistsCreate = () => {
         name   : 'common'
     });
     const [mainContact, setMainContact] = useState<number>(0);
-    const [postCvLoading, setPostCvLoading] = useState<boolean>(false);
 
     const { data: whoAmIData } = acc.useGetAccWhoAmIQuery(undefined);
     const { data: contacts } = dictionary.useGetContactTypeQuery({ search: '' });
-
-    useEffect(() => {
-        return () => {
-            tokenCvList.remove();
-            tokenCreateCv.remove();
-            tokenContacts.remove();
-        };
-    }, []);
 
     const onClickMainContact = (index: number) => () => {
         setMainContact(index);
@@ -137,7 +123,6 @@ export const SpecialistsCreate = () => {
 
     const onSubmit = context.handleSubmit(
         (formData) => {
-            setPostCvLoading(true);
             const { common, ...rest } = formData;
             const newContacts = common.map((item, index) => ({
                 contact_type_id: parseInt(item.contact_type.value, 10),
@@ -156,8 +141,6 @@ export const SpecialistsCreate = () => {
             })
                 .unwrap()
                 .then((resp) => {
-                    setPostCvLoading(false);
-
                     if(resp.id) {
                         Promise.all(newContacts.map((newContact) => {
                             const dataRequest = {
@@ -175,10 +158,7 @@ export const SpecialistsCreate = () => {
                             });
                     }
                 })
-                .catch((err) => {
-                    setPostCvLoading(false);
-                    console.error(err);
-                });
+                .catch(console.error);
         },
         (err) => {
             console.error(err);
@@ -186,7 +166,7 @@ export const SpecialistsCreate = () => {
     );
 
     const elUsers = useMemo(() => {
-        if(isLoading) {
+        if(isListLoading) {
             return <Loader />;
         }
 
@@ -213,7 +193,7 @@ export const SpecialistsCreate = () => {
         }
 
         return <span className={cn('specialists-create__users-empty')}>{t('routes.specialists.main.users.empty')}</span>;
-    }, [data?.results, i18n.language, isLoading]);
+    }, [data?.results, i18n.language, isListLoading]);
 
     return (
         <div className={cn('specialists-create')}>
@@ -364,11 +344,16 @@ export const SpecialistsCreate = () => {
                             isMulti={false}
                             options={usersRm}
                         />
+                        <ErrorsComponent
+                            error={error || postContactError}
+                            isError={isError || postContactIsError}
+                            isLoading={isLoading || postContactIsLoading}
+                        />
                         <Button
                             className={cn('specialists-create__button')}
                             type="submit"
-                            disabled={postCvLoading || !isValid}
-                            isLoading={postCvLoading}
+                            disabled={isLoading || postContactIsLoading || !isValid}
+                            isLoading={isLoading || postContactIsLoading}
                         >
                             {t('routes.specialists-create.main.form.button-submit')}
                         </Button>

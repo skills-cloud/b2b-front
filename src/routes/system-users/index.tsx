@@ -4,6 +4,8 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { parse, stringify } from 'query-string';
 
+import useRoles from 'hook/use-roles';
+
 import SidebarLayout from 'component/layout/sidebar';
 import Wrapper from 'component/section/wrapper';
 import Section from 'component/section';
@@ -45,13 +47,15 @@ export const SystemUsers = () => {
         defaultValues: qs
     });
 
+    const { data: whoAmIData } = acc.useGetAccWhoAmIQuery(undefined);
+    const { su, pfm, pm, admin } = useRoles(whoAmIData?.organizations_contractors_roles?.find((item) => item.organization_contractor_id)?.organization_contractor_id);
+
     const [showModal, setShowModal] = useState<boolean>(false);
     const [userToEdit, setUserToEdit] = useState<Code200UserManagePatch>();
     const [userToDelete, setUserToDelete] = useState<Code200UserManagePatch>();
 
     const values = context.watch();
 
-    const { data: whoAmIData } = acc.useGetAccWhoAmIQuery(undefined);
     const { data, requestId, isFetching, refetch } = acc.useGetUserManageQuery({
         search                    : query.get('search') || undefined,
         organization_contractor_id: query.get('organization_contractor_id') ? [query.get('organization_contractor_id') as string] : undefined,
@@ -103,7 +107,11 @@ export const SystemUsers = () => {
                                 className={cn('system-users__user')}
                             >
                                 <Avatar />
-                                <div className={cn('system-users__user-wrapper')}>
+                                <div
+                                    className={cn('system-users__user-wrapper', {
+                                        'system-users__user-wrapper_permissions': su || admin || pfm || pm
+                                    })}
+                                >
                                     <div className={cn('system-users__user-info')}>
                                         <div className={cn('system-users__name')}>
                                             {`${user.first_name} ${user.last_name}`}
@@ -126,35 +134,37 @@ export const SystemUsers = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    <div className={cn('system-users__actions')}>
-                                        <Dropdown
-                                            render={({ onClose }) => (
-                                                <DropdownMenu>
-                                                    <DropdownMenuItem selected={false}>
-                                                        <EditAction
-                                                            onClick={() => {
-                                                                setUserToEdit(user);
-                                                                onClickEdit();
-                                                                onClose();
-                                                            }}
-                                                            label={t('routes.system-users.edit')}
-                                                        />
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem selected={false}>
-                                                        <DeleteAction
-                                                            label={t('routes.system-users.delete')}
-                                                            onClick={() => {
-                                                                setUserToDelete(user);
-                                                                onClose();
-                                                            }}
-                                                        />
-                                                    </DropdownMenuItem>
-                                                </DropdownMenu>
-                                            )}
-                                        >
-                                            <DotsAction />
-                                        </Dropdown>
-                                    </div>
+                                    {(su || admin || pfm || pm) && (
+                                        <div className={cn('system-users__actions')}>
+                                            <Dropdown
+                                                render={({ onClose }) => (
+                                                    <DropdownMenu>
+                                                        <DropdownMenuItem selected={false}>
+                                                            <EditAction
+                                                                onClick={() => {
+                                                                    setUserToEdit(user);
+                                                                    onClickEdit();
+                                                                    onClose();
+                                                                }}
+                                                                label={t('routes.system-users.edit')}
+                                                            />
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem selected={false}>
+                                                            <DeleteAction
+                                                                label={t('routes.system-users.delete')}
+                                                                onClick={() => {
+                                                                    setUserToDelete(user);
+                                                                    onClose();
+                                                                }}
+                                                            />
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenu>
+                                                )}
+                                            >
+                                                <DotsAction />
+                                            </Dropdown>
+                                        </div>
+                                    )}
                                 </div>
                             </li>
                         );
@@ -261,7 +271,7 @@ export const SystemUsers = () => {
         >
             <Section>
                 <Wrapper>
-                    <SectionHeader actions={<AddAction to="/system-users/create" />}>
+                    <SectionHeader actions={(su || admin || pfm || pm) && <AddAction to="/system-users/create" />}>
                         {t('routes.system-users.main.title')}
                     </SectionHeader>
                     {elLoading}

@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 
 import { IParams } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
+import useRoles from 'hook/use-roles';
 
 import Section from 'component/section';
 import SidebarLayout from 'component/layout/sidebar';
@@ -42,12 +43,16 @@ const OrganizationProjects = () => {
         organization_project_id: [parseInt(projectId, 10)]
     });
 
+    const { su, pfm, pm, admin } = useRoles(data?.organization_contractor_id);
+
     const onClickEdit = () => {
         setVisible(true);
     };
 
     const elEditAction = () => {
-        return <EditAction onClick={onClickEdit} />;
+        if(su || admin || pfm || pm) {
+            return <EditAction onClick={onClickEdit} />;
+        }
     };
 
     const elSidebar = () => {
@@ -124,6 +129,7 @@ const OrganizationProjects = () => {
                     </SectionContentList>
                 </Section>
                 <ModulesList
+                    contractorId={data?.organization_contractor_id}
                     isLoading={isLoadingModules}
                     modules={modules?.results}
                     id={ESectionInvariants.Modules}

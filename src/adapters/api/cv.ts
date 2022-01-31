@@ -23,6 +23,7 @@ export interface IGetCvListFilters {
     positions_ids_any?: Array<number>,
     positions_ids_all?: Array<number>,
     citizenship_id?: Array<number>,
+    request_id?: Array<number>,
     competencies_ids_any?: Array<number>,
     competencies_ids_all?: Array<number>,
     ordering?: Array<TOrderingValues>,
