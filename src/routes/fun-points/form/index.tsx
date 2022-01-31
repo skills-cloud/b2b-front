@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
@@ -15,19 +15,18 @@ import InputType from 'component/form/input-type';
 import InputDifficulty from 'component/form/input-difficulty';
 import { IValue } from 'component/form/select';
 import Textarea from 'component/form/textarea';
-import Error from 'component/error';
 import InputDictionary from 'component/form/input-dictionary';
-// @ts-ignore
 import DeleteAction from 'component/section/actions/delete';
 import AddAction from 'component/section/actions/add';
 import IconApply from 'component/icons/apply';
+import Loader from 'component/loader';
 
 import { FunPointTypePositionLaborEstimateInline } from 'adapter/types/main/module/id/get/code-200';
 import { ModuleFunPointInline } from 'adapter/types/main/module/get/code-200';
 import { mainRequest } from 'adapter/api/main';
 
 import style from './index.module.pcss';
-import Loader from 'component/loader';
+import ErrorsComponent from 'component/error/errors';
 
 export const FORM_FUN_POINT_CREATE_ID = 'FORM_FUN_POINT_CREATE_ID';
 
@@ -54,7 +53,6 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
     const { t } = useTranslation();
     const params = useParams<IParams>();
 
-    const [error, setError] = useState<string | null>(null);
     const [typeId, setTypeId] = useState<string>('');
     const [showLabors, setShowLabors] = useState<boolean>(false);
     const [isSuccessDiff, setIsSuccessDiff] = useState<boolean>();
@@ -141,8 +139,8 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
         refetchOnMountOrArgChange: true
     });
 
-    const [post] = mainRequest.usePostMainModuleFunPointMutation();
-    const [patch] = mainRequest.usePatchMainModuleFunPointMutation();
+    const [post, { error, isError, isLoading }] = mainRequest.usePostMainModuleFunPointMutation();
+    const [patch, { error: patchError, isError: isPatchError, isLoading: isPatchLoading }] = mainRequest.usePatchMainModuleFunPointMutation();
     const [postFunPointType] = mainRequest.usePostMainFunPointTypeMutation();
     const [postDifficultyLevel] = mainRequest.usePostMainFunPointDifficultyLevelMutation();
     const [patchTypeDifficultyLevel, { isLoading: isLoadingPatchDiffLevel }] = mainRequest.usePatchMainFunPointDifficultyLevelMutation();
@@ -238,10 +236,7 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                     onSuccess(id);
                 }
             })
-            .catch((err) => {
-                setError(err.data?.message || err?.message);
-                console.error(err);
-            });
+            .catch(console.error);
     });
 
     const onSubmitLabor = (labor: { position: IValue, id: number, hours?: number }) => () => {
@@ -325,14 +320,8 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
             .catch(console.error);
     });
 
-    const elError = useMemo(() => {
-        if(error) {
-            return <Error elIcon={true}>{error}</Error>;
-        }
-    }, [error]);
-
-    const elStatus = (isLoading?: boolean, isSuccess?: boolean) => {
-        if(isLoading) {
+    const elStatus = (isStatusLoading?: boolean, isSuccess?: boolean) => {
+        if(isStatusLoading) {
             return <Loader />;
         }
 
@@ -459,7 +448,11 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                             />
                         </Fragment>
                     )}
-                    {elError}
+                    <ErrorsComponent
+                        error={error || patchError}
+                        isError={isError || isPatchError}
+                        isLoading={isLoading || isPatchLoading}
+                    />
                 </form>
             </FormProvider>
         );

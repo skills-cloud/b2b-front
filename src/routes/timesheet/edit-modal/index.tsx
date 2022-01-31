@@ -13,13 +13,14 @@ import TimesheetForm from '../form';
 interface IEditModal {
     setVisible: (visible: boolean) => void,
     fields?: Partial<TimeSheetRowRead>,
+    isEdit?: boolean,
     cvFilters?: IGetCvListFilters,
     requestId?: string
 }
 
 const FORM_TIMESHEET_ID = 'FORM_TIMESHEET_ID';
 
-const EditModal = ({ setVisible, cvFilters, fields, requestId }: IEditModal) => {
+const EditModal = ({ setVisible, cvFilters, fields, requestId, isEdit }: IEditModal) => {
     const { t } = useTranslation();
 
     return (
@@ -46,6 +47,7 @@ const EditModal = ({ setVisible, cvFilters, fields, requestId }: IEditModal) => 
                 onSuccess={() => {
                     setVisible(false);
                 }}
+                isEdit={isEdit}
                 defaultValues={fields}
                 cvFilters={cvFilters}
                 requestId={requestId}

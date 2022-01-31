@@ -24,6 +24,7 @@ import ConfirmModal from '../confirm-modal';
 import projectRequest from './data.mock';
 import style from './index.module.pcss';
 import { mainRequest } from 'adapter/api/main';
+import useRoles from 'hook/use-roles';
 
 const MAIN_INFO_FIELDS = [
     'industry_sector',
@@ -52,6 +53,8 @@ const MainInfo = () => {
         { id: params.requestId },
         { refetchOnMountOrArgChange: true }
     );
+
+    const { su, pfm, pm, admin } = useRoles(data?.module?.organization_project?.organization_contractor_id);
 
     const onClickConfirmDelete = () => {
         setConfirm(true);
@@ -103,10 +106,10 @@ const MainInfo = () => {
 
         switch (field) {
             case 'manager_pm': {
-                const pm = data?.module?.organization_project?.[field];
+                const manager_pm = data?.module?.organization_project?.[field];
 
-                if(pm) {
-                    content = `${pm.last_name} ${pm.first_name?.slice(0, 1)}.`;
+                if(manager_pm) {
+                    content = `${manager_pm.last_name} ${manager_pm.first_name?.slice(0, 1)}.`;
                 }
                 break;
             }
@@ -154,7 +157,7 @@ const MainInfo = () => {
 
         return (
             <div className={cn('main-info__gap-bottom')} id={ESectionInvariants.MainInfo}>
-                <SectionHeader dropdownActions={actions}>
+                <SectionHeader dropdownActions={su || admin || pfm || pm ? actions : undefined}>
                     {data?.title || t('routes.project-request.blocks.empty-title')}
                 </SectionHeader>
             </div>

@@ -89,9 +89,9 @@ const UserItem = (props: IProps & typeof defaultProps) => {
     const elAdditionalBlock = () => {
         const cvItemCareer = props.cvItem?.career?.[0];
 
-        if(props.cvItem && cvItemCareer) {
-            const dateFrom = cvItemCareer.date_from ? new Date(cvItemCareer.date_from) : new Date();
-            const dateTo = cvItemCareer.date_to ? new Date(cvItemCareer.date_to) : new Date();
+        if(props.cvItem) {
+            const dateFrom = cvItemCareer?.date_from ? new Date(cvItemCareer.date_from) : new Date();
+            const dateTo = cvItemCareer?.date_to ? new Date(cvItemCareer.date_to) : new Date();
             const experience = differenceInCalendarYears(dateTo, dateFrom);
             const showLinkedParam = props.cvItem.linked_ids;
 

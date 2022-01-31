@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useParams } from 'react-router';
 
 import { useClassnames } from 'hook/use-classnames';
+import { IParams } from 'helper/url-list';
 
 import Section from 'component/section';
 import IconDots from 'component/icons/dots';
@@ -23,15 +25,15 @@ import Select, { IValue } from 'component/form/select';
 import InputDictionary from 'component/form/input-dictionary';
 import Loader from 'component/loader';
 import Empty from 'component/empty';
+import Wrapper from 'component/section/wrapper';
+import ErrorsComponent from 'component/error/errors';
 
 import { mainRequest } from 'adapter/api/main';
 import { dictionary } from 'adapter/api/dictionary';
 
 import CardItem from './card-item';
 import style from './index.module.pcss';
-import Wrapper from 'component/section/wrapper';
-import { useParams } from 'react-router';
-import { IParams } from 'helper/url-list';
+import useRoles from 'hook/use-roles';
 
 const FORM_ORGANIZATION_CARD_ID = 'FORM_ORGANIZATION_CARD_ID';
 const FORM_CREATE_CARD_FROM_TEMPLATE = 'FORM_CREATE_CARD_FROM_TEMPLATE';
@@ -39,12 +41,21 @@ const FORM_CREATE_CARD_FROM_TEMPLATE = 'FORM_CREATE_CARD_FROM_TEMPLATE';
 interface IForm {
     cardName: string,
     cardNameSub: string,
-    position: Array<IValue>
+    position: Array<IValue>,
+    project?: IValue
 }
 
-const ProjectCards = () => {
+interface IProps {
+    projects?: Array<{
+        label: string,
+        value: string
+    }>
+}
+
+const ProjectCards = (props: IProps) => {
     const cn = useClassnames(style);
     const { organizationId, projectId } = useParams<IParams>();
+    const { su, admin, pfm } = useRoles(organizationId);
 
     const [visibleModalId, setVisibleModalId] = useState<number | null>(null);
     const [showAllTree, setShowAllTree] = useState(false);
@@ -52,16 +63,25 @@ const ProjectCards = () => {
     const [checked, setChecked] = useState<Array<string>>([]);
     const [visibleAddCard, setVisibleAddCard] = useState(false);
     const { t } = useTranslation();
-    const methods = useForm();
+    const context = useForm();
     const formCreateByTemplate = useForm();
-    const cardGetParams = projectId ? { organization_project_id: [projectId] } : { organization_customer_id: [organizationId] };
-    const { data: cards, isLoading } = mainRequest.useGetOrganizationProjectCardItemQuery(cardGetParams);
+    // const cardGetParams = projectId ? { organization_project_id: [projectId] } : { organization_customer_id: [organizationId] };
     const { data: baseProjectCards } = mainRequest.useGetBaseProjectCardTemplateQuery(undefined);
     const { data: positions } = dictionary.useGetPositionListQuery(undefined);
-    const [patch] = mainRequest.usePatchMainOrganizationProjectCardMutation();
-    const [post] = mainRequest.usePostMainOrganizationProjectCardMutation();
+    const [patch, { error: patchError, isError: isPatchError, isLoading: isPatchLoading }] = mainRequest.usePatchMainOrganizationProjectCardMutation();
+    const [post, { error, isError, isLoading: isPostLoading }] = mainRequest.usePostMainOrganizationProjectCardMutation();
     const [remove] = mainRequest.useDeleteMainOrganizationProjectCardByIdMutation();
-    const [createCardFromTemplate] = mainRequest.usePostBaseProjectCardMutation();
+    const [createCardFromTemplate, { error: templateError, isError: isTemplateError, isLoading: isTemplateLoading }] = mainRequest.usePostBaseProjectCardMutation();
+
+    const values = context.watch();
+
+    const { data: cards, isLoading } = mainRequest.useGetOrganizationProjectCardItemQuery({
+        organization_customer_id: [organizationId]
+    });
+
+    const { data: cardsProject } = mainRequest.useGetOrganizationProjectCardItemQuery({
+        organization_project_id: [projectId || values.project?.value]
+    });
 
     const positionMap = useMemo(() => {
         return positions?.results.reduce((acc, item) => {
@@ -80,7 +100,7 @@ const ProjectCards = () => {
     }, [setVisibleModalId, setShowAllTree]);
 
     useEffect(() => {
-        methods.setValue('cardNameSub', '');
+        context.setValue('cardNameSub', '');
     }, [visibleAddCard]);
 
     // const setVisibleModal = useCallback((state) => {
@@ -90,22 +110,22 @@ const ProjectCards = () => {
     // }, [closeModal]);
 
     useEffect(() => {
-        if(cards && positionMap) {
-            methods.setValue('cardName', visibleModalId !== null ? cards[visibleModalId].name : '');
-            methods.setValue('position', visibleModalId !== null ? cards[visibleModalId]?.positions_ids?.map((id) => ({
+        if(cardsProject && positionMap) {
+            context.setValue('cardName', visibleModalId !== null ? cardsProject[visibleModalId].name : '');
+            context.setValue('position', visibleModalId !== null ? cardsProject[visibleModalId]?.positions_ids?.map((id) => ({
                 value: id,
                 label: positionMap[id]
             })) : undefined);
         }
-    }, [cards, visibleModalId, positionMap]);
+    }, [cardsProject, visibleModalId, positionMap]);
 
-    const editCard = (values: IForm) => {
+    const editCard = (formValues: IForm) => {
         if(visibleModalId === null) {
-            if(projectId) {
+            if(projectId || formValues.project?.value) {
                 post({
-                    name                   : values.cardName,
+                    name                   : formValues.cardName,
                     parent_id              : undefined,
-                    organization_project_id: parseInt(projectId, 10)
+                    organization_project_id: formValues.project?.value ? parseInt(formValues.project?.value, 10) : parseInt(projectId, 10)
                 })
                     .unwrap()
                     .then(closeModal)
@@ -113,10 +133,10 @@ const ProjectCards = () => {
             }
         }
 
-        if(cards && visibleModalId !== null && values.cardNameSub) {
+        if(cardsProject && visibleModalId !== null && formValues.cardNameSub) {
             post({
-                name     : values.cardNameSub,
-                parent_id: cards[visibleModalId].id
+                name     : formValues.cardNameSub,
+                parent_id: cardsProject[visibleModalId].id
             })
                 .unwrap()
                 .then(() => setVisibleAddCard(false))
@@ -125,29 +145,27 @@ const ProjectCards = () => {
             return;
         }
 
-        if(!cards || visibleModalId === null) {
+        if(!cardsProject || visibleModalId === null) {
             return;
         }
 
         patch({
-            name         : values.cardName,
-            id           : cards[visibleModalId].id,
-            positions_ids: values?.position?.map(({ value }) => parseInt(value, 10))
+            name         : formValues.cardName,
+            id           : cardsProject[visibleModalId].id,
+            positions_ids: formValues?.position?.map(({ value }) => parseInt(value, 10))
         })
             .unwrap()
             .then(() => setVisibleAddCard(false))
             .catch(console.error);
     };
 
-    // TODO error catch
-
-    const createCardFromTemplateRequest = (values: { card_id: { value: string }}) => {
+    const createCardFromTemplateRequest = (formValues: { card_id: { value: string }, project: IValue }) => {
         if(!projectId) {
             return;
         }
         createCardFromTemplate({
-            root_card_item_id: values.card_id.value,
-            project_id       : projectId
+            root_card_item_id: formValues.card_id.value,
+            project_id       : formValues.project?.value || projectId
         }).unwrap()
             .then(() => {
                 setShowCreateByTemplateModal(false);
@@ -156,7 +174,7 @@ const ProjectCards = () => {
     };
 
     const addAction = () => {
-        if(projectId) {
+        if(su || pfm || admin && (projectId || !!props.projects?.length)) {
             return (
                 <Dropdown
                     render={({ onClose }) => (
@@ -204,7 +222,7 @@ const ProjectCards = () => {
         if(cards?.length) {
             return (
                 <div className={cn('organization__cards')}>
-                    {cards.map(({ id, name, children }, index) => (
+                    {cards.map(({ id, name, children, organization_project_id }, index) => (
                         <div className={cn('organization__card')} key={id}>
                             <div className={cn('organization__card-icon-wrapper')}>
                                 <IconChecked
@@ -221,42 +239,51 @@ const ProjectCards = () => {
                                     count: children.length
                                 })}
                             </div>
-                            <div className={cn('organization__card-edit')}>
-                                <Dropdown
-                                    render={({ onClose }) => (
-                                        <DropdownMenu>
-                                            <DropdownMenuItem
-                                                selected={false}
-                                                onClick={() => {
-                                                    if(id) {
-                                                        setVisibleModalId(index);
-                                                        onClose();
-                                                    }
-                                                }}
-                                            >
-                                                {t('routes.organization.blocks.cards-edit')}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem
-                                                selected={false}
-                                                onClick={() => {
-                                                    if(id) {
-                                                        remove({ id: String(id) })
-                                                            .then(onClose).catch(console.error);
-                                                    }
-                                                }}
-                                            >
-                                                {t('routes.organization.blocks.cards-delete')}
-                                            </DropdownMenuItem>
-                                        </DropdownMenu>
-                                    )}
-                                >
-                                    <IconDots
-                                        svg={{
-                                            className: cn('organization__card-icon')
-                                        }}
-                                    />
-                                </Dropdown>
-                            </div>
+                            {su || admin || pfm && (
+                                <div className={cn('organization__card-edit')}>
+                                    <Dropdown
+                                        render={({ onClose }) => (
+                                            <DropdownMenu>
+                                                <DropdownMenuItem
+                                                    selected={false}
+                                                    onClick={() => {
+                                                        if(id) {
+                                                            if(props.projects) {
+                                                                context.setValue('project',
+                                                                    props.projects.find((project) => {
+                                                                        return parseInt(project.value, 10) === organization_project_id;
+                                                                    })
+                                                                );
+                                                            }
+                                                            setVisibleModalId(index);
+                                                            onClose();
+                                                        }
+                                                    }}
+                                                >
+                                                    {t('routes.organization.blocks.cards-edit')}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    selected={false}
+                                                    onClick={() => {
+                                                        if(id) {
+                                                            remove({ id: String(id) })
+                                                                .then(onClose).catch(console.error);
+                                                        }
+                                                    }}
+                                                >
+                                                    {t('routes.organization.blocks.cards-delete')}
+                                                </DropdownMenuItem>
+                                            </DropdownMenu>
+                                        )}
+                                    >
+                                        <IconDots
+                                            svg={{
+                                                className: cn('organization__card-icon')
+                                            }}
+                                        />
+                                    </Dropdown>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -276,7 +303,7 @@ const ProjectCards = () => {
                     {elContent()}
                 </Wrapper>
             </Section>
-            {(visibleModalId !== null || showAllTree) && cards !== undefined && (
+            {(visibleModalId !== null || showAllTree) && cardsProject !== undefined && (
                 <Modal
                     header={t('routes.organization.blocks.modal.title', {
                         context: visibleModalId === null ? 'add' : 'edit'
@@ -297,52 +324,73 @@ const ProjectCards = () => {
                         setVisibleAddCard(false);
                     }}
                 >
-                    <FormProvider {...methods}>
-                        <form method="PATCH" onSubmit={methods.handleSubmit(editCard)} id={FORM_ORGANIZATION_CARD_ID}>
-                            <Input name="cardName" type="text" label={t('routes.organization.blocks.modal.card-title')} />
-                            {visibleModalId !== null && (
-                                <div className={cn('organization__cards-column')}>
-                                    <InputDictionary
-                                        requestType={InputDictionary.requestType.Position}
-                                        name="position"
-                                        direction="column"
-                                        label={t('routes.organization.blocks.modal.position')}
-                                    />
-                                    {visibleAddCard && (
-                                        <span className={cn('organization__cards-add-input')}>
-                                            <Input
-                                                name="cardNameSub"
-                                                type="text"
-                                                label={t('routes.organization.blocks.modal.card-sub')}
-                                            />
-                                        </span>
-                                    )}
-                                    {!visibleAddCard && (
-                                        <span
-                                            className={cn('organization__cards-add-subdirectory')}
-                                            onClick={() => {
-                                                setVisibleAddCard(true);
-                                            }}
-                                        >
-                                            {t('routes.organization.blocks.modal.subdirectory')}
-                                        </span>
-                                    )}
-                                </div>
+                    <FormProvider {...context}>
+                        <form
+                            onSubmit={context.handleSubmit(editCard)} id={FORM_ORGANIZATION_CARD_ID}
+                            className={cn('organization__cards-add-form')}
+                        >
+                            {props.projects?.length && (
+                                <Select
+                                    direction="column"
+                                    name="project"
+                                    options={props.projects}
+                                    label={t('routes.organization.blocks.modal.project.title')}
+                                    placeholder={t('routes.organization.blocks.modal.project.placeholder')}
+                                />
                             )}
-                            {}
+                            {(values.project || projectId) && (
+                                <Fragment>
+                                    <Input name="cardName" type="text" label={t('routes.organization.blocks.modal.card-title')} />
+                                    {visibleModalId !== null && (
+                                        <div className={cn('organization__cards-column')}>
+                                            <InputDictionary
+                                                requestType={InputDictionary.requestType.Position}
+                                                name="position"
+                                                direction="column"
+                                                label={t('routes.organization.blocks.modal.position')}
+                                            />
+                                            {visibleAddCard && (
+                                                <span className={cn('organization__cards-add-input')}>
+                                                    <Input
+                                                        name="cardNameSub"
+                                                        type="text"
+                                                        label={t('routes.organization.blocks.modal.card-sub')}
+                                                    />
+                                                </span>
+                                            )}
+                                            {!visibleAddCard && (
+                                                <span
+                                                    className={cn('organization__cards-add-subdirectory')}
+                                                    onClick={() => {
+                                                        setVisibleAddCard(true);
+                                                    }}
+                                                >
+                                                    {t('routes.organization.blocks.modal.subdirectory')}
+                                                </span>
+                                            )}
+                                        </div>
+                                    )}
+                                </Fragment>
+                            )}
+                            <ErrorsComponent
+                                error={error || patchError}
+                                isError={isError || isPatchError}
+                                isLoading={isPostLoading || isPatchLoading}
+                            />
                         </form>
                     </FormProvider>
-                    <TreeList
-                        needRenderSearch={false}
-                        onSetChecked={setChecked}
-                        defaultChecked={checked}
-                        isLoading={isLoading}
-                        items={visibleModalId === null ? [] : cards[visibleModalId].children}
-                        expandOpen={<IconExpand svg={{ className: cn('organization__expand-icon') }} />}
-                        expandClose={<IconCollapse svg={{ className: cn('organization__expand-icon') }} />}
-                        label={(props) => (<CardItem {...props} />)}
-                    />
-
+                    {(values.project?.value || projectId) && visibleModalId !== null && (
+                        <TreeList
+                            needRenderSearch={true}
+                            onSetChecked={setChecked}
+                            defaultChecked={checked}
+                            isLoading={isLoading}
+                            items={cardsProject[visibleModalId].children}
+                            expandOpen={<IconExpand svg={{ className: cn('organization__expand-icon') }} />}
+                            expandClose={<IconCollapse svg={{ className: cn('organization__expand-icon') }} />}
+                            label={(params) => (<CardItem {...params} />)}
+                        />
+                    )}
                 </Modal>
             )}
             {showCreateByTemplateModal && (
@@ -385,6 +433,11 @@ const ProjectCards = () => {
                                     label: item.name,
                                     value: String(item.id)
                                 })) ?? []}
+                            />
+                            <ErrorsComponent
+                                error={templateError}
+                                isError={isTemplateError}
+                                isLoading={isTemplateLoading}
                             />
                         </form>
                     </FormProvider>

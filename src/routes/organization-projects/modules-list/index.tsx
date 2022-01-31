@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 
 import { IParams, ORGANIZATION_PROJECT_MODULE_CREATE, ORGANIZATION_PROJECT_MODULE_ID } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
+import useRoles from 'hook/use-roles';
 
 import SectionContentListItem from 'component/section/content-list-item';
 import SectionHeader from 'component/section/header';
@@ -33,6 +34,7 @@ enum EModuleInvariants {
 
 interface IProps {
     id?: string,
+    contractorId?: number,
     modules?: Array<ModuleRead>,
     isLoading?: boolean
 }
@@ -41,6 +43,7 @@ const ModulesList = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const { projectId, organizationId } = useParams<IParams>();
+    const { su, pfm, pm, admin } = useRoles(props.contractorId);
 
     const renderField = (field: EModuleInvariants, module: ModuleRead) => {
         let content = null;
@@ -94,7 +97,9 @@ const ModulesList = (props: IProps) => {
     };
 
     const elCreateModule = () => {
-        return <AddAction to={ORGANIZATION_PROJECT_MODULE_CREATE(organizationId, projectId)} />;
+        if(su || admin || pfm || pm) {
+            return <AddAction to={ORGANIZATION_PROJECT_MODULE_CREATE(organizationId, projectId)} />;
+        }
     };
 
     const elContent = () => {

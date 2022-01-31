@@ -1,16 +1,12 @@
 import React, { useState, FC, ReactNode, MouseEvent, useEffect, useMemo } from 'react';
 import { MultiValueRemoveProps } from 'react-select/src/components/MultiValue';
-import { useTranslation } from 'react-i18next';
+import CreatableSelect from 'react-select/creatable';
 import ReactSelect, { components, OptionTypeBase } from 'react-select';
-import AsyncSelect from 'react-select/async';
-import AsyncCreatableSelect from 'react-select/async-creatable';
-import debounce from 'lodash.debounce';
 import { ErrorMessage } from '@hookform/error-message';
 import { Controller, Message, useFormContext } from 'react-hook-form';
 import { ValidationRule } from 'react-hook-form/dist/types/validator';
 
 import { useClassnames, IStyle } from 'hook/use-classnames';
-import { useDispatch } from 'component/core/store';
 
 import Error from 'component/error';
 import IconClose from 'component/icons/close';
@@ -19,6 +15,7 @@ import { IGetRequestListParams, mainRequest } from 'adapter/api/main';
 
 import getStyles from './style';
 import style from './index.module.pcss';
+import { useTranslation } from 'react-i18next';
 
 export type TError = string | null;
 
@@ -27,17 +24,6 @@ export interface IValue {
     value: string | number
 }
 
-export enum ERequestType {
-    Request,
-}
-
-const methods = {
-    [ERequestType.Request]: {
-        single: mainRequest.endpoints.getMainRequestById,
-        list  : mainRequest.endpoints.getMainRequest
-    }
-};
-
 export interface IProps {
     className?: string | IStyle,
     name: string,
@@ -45,20 +31,17 @@ export interface IProps {
     required?: Message | ValidationRule<boolean>,
     label?: ReactNode,
     createable?: boolean,
-    isLoadingOptions?: boolean,
     autoFocus?: boolean,
     clearable?: boolean,
     placeholder?: string,
     tabIndex?: string,
     disabled?: boolean,
-    defaultValue?: Array<IValue | number | string>,
+    defaultValue?: IValue | number | string,
     filters?: IGetRequestListParams,
     error?: TError,
     requestLimit?: number,
     requestOffset?: number,
     elError?: boolean,
-    isMulti?: boolean,
-    requestType: ERequestType,
     onChange?(value: IValue): void
 }
 
@@ -82,19 +65,15 @@ const MultiValueRemove: FC<MultiValueRemoveProps<Record<string, unknown>>> = (pr
 };
 
 const defaultProps = {
-    direction       : 'row',
-    isLoadingOptions: false,
-    isMulti         : true
+    direction: 'row'
 };
 
 const InputRequest = (props: IProps & typeof defaultProps) => {
+    const { t } = useTranslation();
     const cn = useClassnames(style, props.className, true);
     const { formState: { errors }, watch, trigger, control, setValue } = useFormContext();
-    const dispatch = useDispatch();
-    const { t } = useTranslation();
 
     const [isFocus, setIsFocus] = useState(false);
-    const [options, setOptions] = useState<Array<IValue>>();
     const value = watch(props.name);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -124,106 +103,37 @@ const InputRequest = (props: IProps & typeof defaultProps) => {
         }
     }, []);
 
+    const { data } = mainRequest.useGetMainRequestQuery(undefined);
+
+    const { data: dataById } = mainRequest.useGetMainRequestByIdQuery({
+        id: props.defaultValue as string
+    }, {
+        skip: !props.defaultValue
+    });
+
     useEffect(() => {
-        if(!props.isLoadingOptions) {
-            const method = methods[props.requestType].list.initiate(props.filters);
-
-            dispatch(method)
-                .then(({ data: loadData }) => {
-                    if(loadData?.results?.length) {
-                        const res = loadData.results.map((item) => ({
-                            label: item?.title as string || t('components.form.input-request.empty'),
-                            value: String(item.id)
-                        }));
-
-                        setOptions(res);
-                    }
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        }
-    }, []);
-
-    useEffect((): void => {
-        const initValue = props.defaultValue;
-
-        if(initValue) {
-            const ids: Array<number | string> = [];
-            const values: Array<IValue> = [];
-
-            const pushToArrays = (arrayItem: number | string | IValue) => {
-                if(typeof arrayItem === 'number' || typeof arrayItem === 'string') {
-                    ids.push(arrayItem);
-                } else {
-                    values.push(arrayItem);
-                }
+        if(dataById) {
+            const newValue = {
+                label: dataById?.title || t('components.form.input-request.empty'),
+                value: String(dataById?.id) || ''
             };
 
-            if(Array.isArray(initValue)) {
-                for(const item of initValue) {
-                    pushToArrays(item);
-                }
-            } else {
-                pushToArrays(initValue);
-            }
-
-            if(ids.length) {
-                const baseMethod = methods[props.requestType];
-
-                if(baseMethod.single) {
-                    Promise.all(ids.map((item) => {
-                        const method = baseMethod.single.initiate({
-                            id: String(item)
-                        });
-
-                        return dispatch(method)
-                            .then((resp) => ({
-                                label: resp.data?.title as string || t('components.form.input-request.empty'),
-                                value: String(resp.data?.id) || ''
-                            }));
-                    }))
-                        .then((resp: Array<IValue>) => {
-                            setValue(props.name, resp, { shouldDirty: true });
-                        })
-                        .catch((err) => {
-                            console.error(err);
-                        });
-                }
-            } else if(values.length) {
-                setValue(props.name, values, { shouldDirty: values.some((item) => !!item) });
-            }
+            setValue(props.name, newValue, { shouldDirty: true });
         }
-    }, []);
+    }, [JSON.stringify(dataById)]);
+
+    const options = useMemo(() => {
+        return data?.results.map((item) => ({
+            label: item.title || t('components.form.input-request.empty'),
+            value: String(item.id)
+        })) || [];
+    }, [JSON.stringify(data?.results)]);
 
     const onFocus = (): void => {
         if(!isFocus) {
             setIsFocus(true);
         }
     };
-
-    const onLoadOptions = debounce((search_string: string, callback) => {
-        const method = methods[props.requestType].list.initiate({
-            search: search_string
-        });
-
-        dispatch(method)
-            .then(({ data: loadData }) => {
-                if(loadData?.results?.length) {
-                    const res = loadData.results.map((item) => ({
-                        label: item?.title as string || t('components.form.input-request.empty'),
-                        value: String(item.id)
-                    }));
-
-                    callback(res);
-                } else {
-                    callback(null);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, 150);
 
     const elLabel = (): ReactNode => {
         if(props.label) {
@@ -254,7 +164,6 @@ const InputRequest = (props: IProps & typeof defaultProps) => {
             defaultValue  : renderValue,
             placeholder   : props.placeholder,
             autoFocus     : props.autoFocus,
-            isMulti       : props.isMulti,
             isClearable   : props.clearable,
             tabIndex      : props.tabIndex,
             cacheOption   : true,
@@ -267,12 +176,8 @@ const InputRequest = (props: IProps & typeof defaultProps) => {
             })
         };
 
-        if(props.isLoadingOptions) {
-            if(props.createable) {
-                return <AsyncCreatableSelect {...selectProps} loadOptions={onLoadOptions} />;
-            }
-
-            return <AsyncSelect {...selectProps} loadOptions={onLoadOptions} />;
+        if(props.createable) {
+            return <CreatableSelect {...selectProps} />;
         }
 
         return <ReactSelect {...selectProps} options={options} />;
@@ -297,8 +202,6 @@ const InputRequest = (props: IProps & typeof defaultProps) => {
         />
     );
 };
-
-InputRequest.requestType = ERequestType;
 
 InputRequest.defaultProps = defaultProps;
 

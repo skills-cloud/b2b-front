@@ -2,11 +2,12 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { parse, stringify } from 'query-string';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
-import { REQUEST_CREATE } from 'helper/url-list';
+import { IParams, REQUEST_CREATE } from 'helper/url-list';
 import { useClassnames } from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
+import useRoles from 'hook/use-roles';
 
 import InputSelect, { IValue } from 'component/form/select';
 import Loader from 'component/loader';
@@ -18,24 +19,30 @@ import { H3 } from 'component/header';
 import SidebarLayout from 'component/layout/sidebar';
 import Section from 'component/section';
 import SectionHeader from 'component/section/header';
+import Wrapper from 'component/section/wrapper';
 
 import { mainRequest } from 'adapter/api/main';
 
 import RequestList from 'component/request-list';
 import style from './index.module.pcss';
+import { acc } from 'adapter/api/acc';
 
 export interface IFormPayload {
     industry_sector?: Array<IValue> | null,
     priority?: IValue | null,
     status?: IValue | null,
-    customer?: IValue | null,
-    project?: IValue | null
+    organization_customer?: Array<IValue> | null,
+    organization_project?: Array<IValue> | null
 }
 
 const ProjectRequestList = () => {
     const cn = useClassnames(style);
+    const { organizationId } = useParams<IParams>();
     const history = useHistory();
     const { t, i18n } = useTranslation();
+    const { data: whoAmIData } = acc.useGetAccWhoAmIQuery(undefined);
+    const alternativeOrgId = whoAmIData?.organizations_contractors_roles?.find((item) => item.organization_contractor_id);
+    const { su, pfm, pm, admin } = useRoles(organizationId || alternativeOrgId?.organization_contractor_id);
 
     const PRIORITY_SUGGESTS = useMemo(() => [{
         value: '30',
@@ -80,14 +87,16 @@ const ProjectRequestList = () => {
         }
 
         timer.current = setTimeout(() => {
+            const filters = {
+                ...(values.industry_sector ? { industry_sector_id: values.industry_sector?.map((item) => item?.value) } : {}),
+                ...(values.organization_customer ? { organization_customer_id: values.organization_customer?.map((item) => item?.value) } : {}),
+                ...(values.organization_project ? { organization_project_id: values.organization_project?.map((item) => item?.value) } : {}),
+                priority: values.priority?.value,
+                status  : values.status?.value
+            };
+
             history.push({
-                search: stringify({
-                    ...(values.industry_sector ? { industry_sector_id: values.industry_sector?.map((item) => item?.value) } : {}),
-                    priority   : values.priority?.value,
-                    status     : values.status?.value,
-                    customer_id: values.customer?.value,
-                    project_id : values.project?.value
-                }, {
+                search: stringify(filters, {
                     skipEmptyString: true
                 })
             });
@@ -102,11 +111,11 @@ const ProjectRequestList = () => {
 
     const onClearFilter = () => {
         context.reset({
-            industry_sector: [],
-            priority       : null,
-            status         : null,
-            customer       : null,
-            project        : null
+            industry_sector      : [],
+            organization_customer: [],
+            organization_project : [],
+            priority             : null,
+            status               : null
         });
     };
 
@@ -125,67 +134,75 @@ const ProjectRequestList = () => {
     const elSidebar = () => {
         return (
             <Section>
-                <H3>{t('routes.project-request-list.sidebar.filters.title')}</H3>
-                <FormProvider {...context}>
-                    <form className={cn('request-list__form')}>
-                        <InputDictionary
-                            requestType={InputDictionary.requestType.IndustrySector}
-                            defaultValue={Array.isArray(qs.industry_sector_id) ? qs.industry_sector_id : [qs.industry_sector_id as string]}
-                            name="industry_sector"
-                            direction="column"
-                            clearable={true}
-                            label={t('routes.project-request-list.sidebar.filters.industry-sector.label')}
-                            placeholder={t('routes.project-request-list.sidebar.filters.industry-sector.placeholder')}
-                        />
-                        <InputSelect
-                            name="priority"
-                            direction="column"
-                            clearable={true}
-                            label={t('routes.project-request-list.sidebar.filters.priority.label')}
-                            placeholder={t('routes.project-request-list.sidebar.filters.priority.placeholder')}
-                            options={PRIORITY_SUGGESTS}
-                        />
-                        <InputSelect
-                            name="status"
-                            direction="column"
-                            clearable={true}
-                            label={t('routes.project-request-list.sidebar.filters.status.label')}
-                            placeholder={t('routes.project-request-list.sidebar.filters.status.placeholder')}
-                            options={STATUSES_SUGGESTS}
-                        />
-                        <InputMain
-                            isMulti={false}
-                            requestType={InputMain.requestType.Customer}
-                            defaultValue={[qs.customer_id as string]}
-                            name="customer"
-                            direction="column"
-                            clearable={true}
-                            label={t('routes.project-request-list.sidebar.filters.customer.label')}
-                            placeholder={t('routes.project-request-list.sidebar.filters.customer.placeholder')}
-                        />
-                        <InputMain
-                            isMulti={false}
-                            requestType={InputMain.requestType.Project}
-                            defaultValue={[qs.project_id as string]}
-                            name="project"
-                            direction="column"
-                            clearable={true}
-                            label={t('routes.project-request-list.sidebar.filters.project.label')}
-                            placeholder={t('routes.project-request-list.sidebar.filters.project.placeholder')}
-                        />
-                        <Button type="button" onClick={onClearFilter} isSecondary={true}>
-                            {t('routes.project-request-list.sidebar.filters.buttons.clear')}
-                        </Button>
-                    </form>
-                </FormProvider>
+                <Wrapper>
+                    <H3>{t('routes.project-request-list.sidebar.filters.title')}</H3>
+                    <FormProvider {...context}>
+                        <form className={cn('request-list__form')}>
+                            <InputDictionary
+                                requestType={InputDictionary.requestType.IndustrySector}
+                                defaultValue={Array.isArray(qs.industry_sector_id) ? qs.industry_sector_id : [qs.industry_sector_id as string]}
+                                name="industry_sector"
+                                direction="column"
+                                clearable={true}
+                                label={t('routes.project-request-list.sidebar.filters.industry-sector.label')}
+                                placeholder={t('routes.project-request-list.sidebar.filters.industry-sector.placeholder')}
+                            />
+                            <InputSelect
+                                name="priority"
+                                direction="column"
+                                clearable={true}
+                                label={t('routes.project-request-list.sidebar.filters.priority.label')}
+                                placeholder={t('routes.project-request-list.sidebar.filters.priority.placeholder')}
+                                options={PRIORITY_SUGGESTS}
+                            />
+                            <InputSelect
+                                name="status"
+                                direction="column"
+                                clearable={true}
+                                label={t('routes.project-request-list.sidebar.filters.status.label')}
+                                placeholder={t('routes.project-request-list.sidebar.filters.status.placeholder')}
+                                options={STATUSES_SUGGESTS}
+                            />
+                            <InputMain
+                                isMulti={true}
+                                requestType={InputMain.requestType.Customer}
+                                defaultValue={[qs.customer_id as string]}
+                                name="organization_customer"
+                                direction="column"
+                                clearable={true}
+                                label={t('routes.project-request-list.sidebar.filters.customer.label')}
+                                placeholder={t('routes.project-request-list.sidebar.filters.customer.placeholder')}
+                            />
+                            <InputMain
+                                isMulti={true}
+                                requestType={InputMain.requestType.Project}
+                                defaultValue={[qs.project_id as string]}
+                                name="organization_project"
+                                direction="column"
+                                clearable={true}
+                                label={t('routes.project-request-list.sidebar.filters.project.label')}
+                                placeholder={t('routes.project-request-list.sidebar.filters.project.placeholder')}
+                            />
+                            <Button type="button" onClick={onClearFilter} isSecondary={true}>
+                                {t('routes.project-request-list.sidebar.filters.buttons.clear')}
+                            </Button>
+                        </form>
+                    </FormProvider>
+                </Wrapper>
             </Section>
         );
+    };
+
+    const elActions = () => {
+        if(su || pfm || pm || admin) {
+            return <AddAction to={REQUEST_CREATE} />;
+        }
     };
 
     return (
         <SidebarLayout sidebar={elSidebar()}>
             <Section>
-                <SectionHeader actions={<AddAction to={REQUEST_CREATE} />}>
+                <SectionHeader actions={elActions()}>
                     {t('routes.project-request-list.title')}
                 </SectionHeader>
                 {elRequests}

@@ -26,8 +26,13 @@ enum ESectionInvariants {
 const Organization = () => {
     const { t } = useTranslation();
     const cn = useClassnames(style);
-    const params = useParams<IParams>();
-    const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: params.organizationId });
+    const { organizationId } = useParams<IParams>();
+    const { data } = mainRequest.useGetMainOrganizationByIdQuery({ id: organizationId });
+    const { data: projectsData } = mainRequest.useGetMainOrganizationProjectListQuery({
+        organization_customer_id: [parseInt(organizationId, 10)]
+    }, {
+        skip: !organizationId || !data || (data?.is_contractor && !data?.is_customer)
+    });
 
     const elSidebar = () => {
         const listToRender = Object.values(ESectionInvariants);
@@ -47,6 +52,19 @@ const Organization = () => {
                 })}
             </SidebarNav>
         );
+    };
+
+    const elProjectCards = () => {
+        if(data?.is_customer) {
+            return (
+                <ProjectCards
+                    projects={projectsData?.results?.map((item) => ({
+                        value: String(item.id),
+                        label: item.name
+                    }))}
+                />
+            );
+        }
     };
 
     if(!data) {
@@ -72,8 +90,8 @@ const Organization = () => {
                         </div>
                     </Wrapper>
                 </Section>
-                {data?.is_customer && <ProjectList isContractor={data?.is_contractor} />}
-                {data?.is_customer && <ProjectCards />}
+                {data?.is_customer && <ProjectList isContractor={data?.is_contractor} isCustomer={data?.is_customer} />}
+                {elProjectCards()}
             </Wrapper>
         </SidebarLayout>
     );
