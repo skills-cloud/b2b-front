@@ -16,7 +16,7 @@ import useClassnames from 'hook/use-classnames';
 import Loader from 'component/loader';
 import Avatar from 'component/avatar';
 import FormInput from 'component/form/input';
-import FormSelect from 'component/form/select';
+import FormSelect, { IValue } from 'component/form/select';
 import Button from 'component/button';
 import useQuery from 'hook/use-query';
 import InputMain from 'component/form/input-main';
@@ -35,6 +35,12 @@ import { Code200 as Code200UserManagePatch } from 'adapter/types/acc/user-manage
 import ConfirmModal from './confirm-modal';
 import style from './index.module.pcss';
 
+interface IFromValues {
+    role?: IValue,
+    organization_contractor_id?: IValue,
+    search?: string
+}
+
 export const SystemUsers = () => {
     const { t, i18n } = useTranslation();
     const cn = useClassnames(style);
@@ -42,13 +48,13 @@ export const SystemUsers = () => {
     const timer = useRef<ReturnType<typeof setTimeout>>();
     const query = useQuery();
     const qs = useMemo(() => parse(history.location.search), [history.location.search]);
-    const context = useForm({
+    const context = useForm<IFromValues>({
         mode         : 'onSubmit',
         defaultValues: qs
     });
 
     const { data: whoAmIData } = acc.useGetAccWhoAmIQuery(undefined);
-    const { su, pfm, pm, admin } = useRoles(whoAmIData?.organizations_contractors_roles?.find((item) => item.organization_contractor_id)?.organization_contractor_id);
+    const { su, admin } = useRoles(whoAmIData?.organizations_contractors_roles?.find((item) => item.organization_contractor_id)?.organization_contractor_id);
 
     const [showModal, setShowModal] = useState<boolean>(false);
     const [userToEdit, setUserToEdit] = useState<Code200UserManagePatch>();
@@ -68,8 +74,14 @@ export const SystemUsers = () => {
         }
 
         timer.current = setTimeout(() => {
+            const filters = {
+                ...values,
+                organization_contractor_id: values.organization_contractor_id?.value,
+                role                      : values.role?.value
+            };
+
             history.push({
-                search: stringify(values, {
+                search: stringify(filters, {
                     skipEmptyString: true
                 })
             });
@@ -109,7 +121,7 @@ export const SystemUsers = () => {
                                 <Avatar />
                                 <div
                                     className={cn('system-users__user-wrapper', {
-                                        'system-users__user-wrapper_permissions': su || admin || pfm || pm
+                                        'system-users__user-wrapper_permissions': su || admin
                                     })}
                                 >
                                     <div className={cn('system-users__user-info')}>
@@ -134,7 +146,7 @@ export const SystemUsers = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    {(su || admin || pfm || pm) && (
+                                    {(su || admin) && (
                                         <div className={cn('system-users__actions')}>
                                             <Dropdown
                                                 render={({ onClose }) => (
@@ -256,7 +268,7 @@ export const SystemUsers = () => {
                                         disabled={isFetching}
                                         children={t('routes.system-users.sidebar.filters.buttons.clear')}
                                         onClick={() => {
-                                            context.setValue('organization_contractor_id', '');
+                                            context.setValue('organization_contractor_id', undefined);
                                             history.replace({
                                                 search: ''
                                             });
@@ -271,7 +283,7 @@ export const SystemUsers = () => {
         >
             <Section>
                 <Wrapper>
-                    <SectionHeader actions={(su || admin || pfm || pm) && <AddAction to="/system-users/create" />}>
+                    <SectionHeader actions={(su || admin) && <AddAction to="/system-users/create" />}>
                         {t('routes.system-users.main.title')}
                     </SectionHeader>
                     {elLoading}
