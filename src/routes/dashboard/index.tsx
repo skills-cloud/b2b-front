@@ -109,7 +109,6 @@ const Dashboard = () => {
         {
             title : t('routes.dashboard.table.head.project'),
             key   : 'name',
-            width : 160,
             sorter: (a, b) => (a.name || '').localeCompare(b.name || ''),
             render: (item) => {
                 return (
@@ -140,7 +139,6 @@ const Dashboard = () => {
         },
         {
             title : t('routes.dashboard.table.head.time'),
-            width : 120,
             render: (item) => {
                 if(item?.date_from || item?.date_to) {
                     return `${item?.date_from} - ${item?.date_to}`.trim();
@@ -174,6 +172,13 @@ const Dashboard = () => {
             render   : ({ done }) => {
                 return done;
             }
+        },
+        {
+            title    : t('routes.dashboard.table.head.in_progress'),
+            dataIndex: 'requests_count_by_status',
+            render   : ({ in_progress }) => {
+                return in_progress;
+            }
         }
     ];
 
@@ -181,7 +186,6 @@ const Dashboard = () => {
         {
             title : t('routes.dashboard.table-request.head.project-request'),
             key   : 'title',
-            width : 200,
             sorter: (a, b) => (a.title || '').localeCompare(b.title || ''),
             render: (item) => {
                 const ids = {
@@ -221,7 +225,6 @@ const Dashboard = () => {
         {
             title    : t('routes.dashboard.table-request.head.start'),
             dataIndex: 'start_date',
-            width    : 120,
             render   : (start_date) => {
                 if(start_date) {
                     return start_date;
@@ -246,6 +249,34 @@ const Dashboard = () => {
             dataIndex: 'module',
             render   : (module) => {
                 return module.organization_project.organization_customer.name || t('routes.dashboard.table.values.empty');
+            }
+        },
+        {
+            title : t('routes.dashboard.table-request.head.project'),
+            render: (item) => {
+                const ids = {
+                    organizationId: item.module.organization_project.organization_customer_id,
+                    projectId     : item.module.organization_project_id,
+                    moduleId      : item.module.id,
+                    requestId     : item.id
+                };
+
+                if(item.status === 'closed') {
+                    return (
+                        <div className={cn('dashboard__disabled-text')}>
+                            {item.module.organization_project?.name || t('routes.dashboard.table.values.empty')}
+                        </div>
+                    );
+                }
+
+                return (
+                    <Link
+                        to={ORGANIZATION_PROJECT_ID(ids.organizationId, ids.projectId)}
+                        className={cn('dashboard__link')}
+                    >
+                        {item.module.organization_project?.name || t('routes.dashboard.table.values.empty')}
+                    </Link>
+                );
             }
         },
         {
