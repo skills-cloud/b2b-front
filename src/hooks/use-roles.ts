@@ -11,15 +11,14 @@ const useRoles = (organizationId?: string | number) => {
     };
 
     return useMemo(() => {
-        if(whoAmIData && organizationId) {
-            const isSuperuser = whoAmIData.is_superuser;
+        if(organizationId) {
             const isAdmin = findRole('admin');
             const isPFM = findRole('pfm');
             const isPM = findRole('pm');
             const isRM = findRole('rm');
 
             return {
-                su   : isSuperuser,
+                su   : whoAmIData?.is_superuser,
                 admin: isAdmin,
                 pfm  : isPFM,
                 pm   : isPM,
@@ -28,7 +27,7 @@ const useRoles = (organizationId?: string | number) => {
         }
 
         return {
-            su   : false,
+            su   : whoAmIData?.is_superuser,
             admin: false,
             pfm  : false,
             pm   : false,
