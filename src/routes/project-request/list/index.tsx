@@ -194,7 +194,7 @@ const ProjectRequestList = () => {
     };
 
     const elActions = () => {
-        if(su || pfm || pm || admin) {
+        if(su || admin || pfm || pm) {
             return <AddAction to={REQUEST_CREATE} />;
         }
     };
