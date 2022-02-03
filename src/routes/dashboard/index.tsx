@@ -513,7 +513,7 @@ const Dashboard = () => {
             }
         }
 
-        if((currentRoleAndCompany?.role === 'pfm' || currentRoleAndCompany?.role === 'admin')) {
+        if((currentRoleAndCompany?.role === 'pfm')) {
             const dataToRender = projectsData?.results?.filter((item) => {
                 return item.organization_contractor_id === parseInt(currentRoleAndCompany.companyId, 10);
             });
@@ -547,6 +547,10 @@ const Dashboard = () => {
                     rowKey="id"
                 />
             );
+        }
+
+        if(currentRoleAndCompany?.role === 'admin') {
+            return <Empty>{t('routes.dashboard.empty-admin')}</Empty>;
         }
 
         return <Empty>{t('routes.dashboard.empty')}</Empty>;
@@ -649,7 +653,7 @@ const Dashboard = () => {
 
         const countersToRender = currentRoleAndCompany?.role === 'rm' ? countersReqs : counters;
 
-        if(currentRoleAndCompany?.role && countersToRender && Object.values(countersToRender).some((item) => item > 0)) {
+        if(currentRoleAndCompany?.role && currentRoleAndCompany?.role !== 'admin' && countersToRender && Object.values(countersToRender).some((item) => item > 0)) {
             const isSomethingFetching = isFetching || projectsFetching || requestFetching || requirementFetching;
 
             return (

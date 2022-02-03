@@ -7,6 +7,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { IParams } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
 import { normalizeObject } from 'src/helper/normalize-object';
+import useRoles from 'hook/use-roles';
 
 import SectionHeader from 'component/section/header';
 import { H3 } from 'component/header';
@@ -71,6 +72,8 @@ const Timesheets = () => {
     }, {
         skip: !requestData?.module?.organization_project_id && !params.projectId
     });
+
+    const { su, admin, pm, rm } = useRoles(requestData?.module?.organization_project?.organization_contractor_id);
 
     useEffect(() => {
         if(Object.values(qs).length) {
@@ -212,33 +215,37 @@ const Timesheets = () => {
                     <div className={cn('timesheet__item-element')}>
                         {item.work_time ? t('routes.timesheet.content.time', { time: item.work_time }) : t('routes.timesheet.content.empty-name')}
                     </div>
-                    <Dropdown
-                        render={({ onClose }) => (
-                            <DropdownMenu>
-                                <DropdownMenuItem selected={false}>
-                                    <div className={cn('timesheet__action')} onClick={onClickEdit(item, onClose)}>
-                                        <EditAction />
-                                        {t('routes.timesheet.content.actions.edit')}
-                                    </div>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem selected={false}>
-                                    <div className={cn('timesheet__action')} onClick={onClickDelete(item.id, onClose)}>
-                                        <DeleteAction />
-                                        {t('routes.timesheet.content.actions.delete')}
-                                    </div>
-                                </DropdownMenuItem>
-                            </DropdownMenu>
-                        )}
-                    >
-                        <IconDots svg={{ className: cn('timesheet__dots') }} />
-                    </Dropdown>
+                    {(su || admin || pm || rm) && (
+                        <Dropdown
+                            render={({ onClose }) => (
+                                <DropdownMenu>
+                                    <DropdownMenuItem selected={false}>
+                                        <div className={cn('timesheet__action')} onClick={onClickEdit(item, onClose)}>
+                                            <EditAction />
+                                            {t('routes.timesheet.content.actions.edit')}
+                                        </div>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem selected={false}>
+                                        <div className={cn('timesheet__action')} onClick={onClickDelete(item.id, onClose)}>
+                                            <DeleteAction />
+                                            {t('routes.timesheet.content.actions.delete')}
+                                        </div>
+                                    </DropdownMenuItem>
+                                </DropdownMenu>
+                            )}
+                        >
+                            <IconDots svg={{ className: cn('timesheet__dots') }} />
+                        </Dropdown>
+                    )}
                 </div>
             );
         });
     };
 
     const elActions = () => {
-        return <AddAction onClick={onClickAdd} />;
+        if(su || admin || pm || rm) {
+            return <AddAction onClick={onClickAdd} />;
+        }
     };
 
     const elConfirmModal = () => {

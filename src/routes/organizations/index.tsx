@@ -189,7 +189,7 @@ export const Organizations = () => {
         }
 
         return <Empty>{t('routes.organizations.main.list.empty')}</Empty>;
-    }, [JSON.stringify(data?.results), i18n.language, isLoading]);
+    }, [JSON.stringify(data?.results), i18n.language, isLoading, whoAmIData?.is_superuser]);
 
     const elSidebar = () => {
         return (
