@@ -2125,6 +2125,22 @@
                     "title": "Ресурсный план",
                     "type": "string"
                 },
+                "status": {
+                    "enum": [
+                        "closed",
+                        "done",
+                        "draft",
+                        "in_progress"
+                    ],
+                    "title": "Статус",
+                    "type": "string",
+                    "x-enum-description": {
+                        "closed": "Закрыт",
+                        "done": "Успешно завершен",
+                        "draft": "Черновик",
+                        "in_progress": "В работе"
+                    }
+                },
                 "updated_at": {
                     "format": "date-time",
                     "readOnly": true,
@@ -2265,6 +2281,22 @@
                     "readOnly": true,
                     "title": "Requests requirements count total",
                     "type": "integer"
+                },
+                "status": {
+                    "enum": [
+                        "closed",
+                        "done",
+                        "draft",
+                        "in_progress"
+                    ],
+                    "title": "Статус",
+                    "type": "string",
+                    "x-enum-description": {
+                        "closed": "Закрыт",
+                        "done": "Успешно завершен",
+                        "draft": "Черновик",
+                        "in_progress": "В работе"
+                    }
                 },
                 "updated_at": {
                     "format": "date-time",

@@ -47,8 +47,9 @@ export type NoName27 = string;
 export type NoName28 = number;
 export type NoName29 = number;
 export type NoName30 = string;
-export type NoName31 = string;
-export type NoName32 = number;
+export type NoName31 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName32 = string;
+export type NoName33 = number;
 
 export interface CvCareerRead {
     competencies?: CompetenceInline[];
@@ -65,7 +66,7 @@ export interface CvCareerRead {
     position?: Position;
     position_id?: NoName18;
     projects?: OrganizationProject[];
-    projects_ids?: NoName32[];
+    projects_ids?: NoName33[];
 }
 export interface CompetenceInline {
     description?: NoName;
@@ -108,5 +109,6 @@ export interface OrganizationProject {
     organization_contractor_id: NoName28;
     organization_customer_id: NoName29;
     plan_description?: NoName30;
-    updated_at?: NoName31;
+    status?: NoName31;
+    updated_at?: NoName32;
 }
