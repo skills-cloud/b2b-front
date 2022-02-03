@@ -329,7 +329,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     }}
                 />
             )}
-            {su || admin || pfm || pm && (
+            {(su || admin || pfm || pm) && (
                 <Section>
                     <div
                         className={cn('requirements__add-request')} onClick={() => {

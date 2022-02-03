@@ -101,6 +101,7 @@ const TreeList = ({
 
     const [expanded, setExpanded] = useState<Array<string>>([]);
     const [checked, setChecked] = useState<Array<string>>(defaultChecked || []);
+    const [hideChecked, setHideChecked] = useState<Array<string>>([]);
     const [search, setSearch] = useState('');
     const searchString = search.trim();
 
@@ -127,8 +128,14 @@ const TreeList = ({
     useEffect(() => {
         if(searchString) {
             setExpanded([...setNodes].map((id) => id.toString()));
+            setHideChecked((oldState) => {
+                return [...new Set([...checked, ...oldState])];
+            });
         } else {
             setExpanded([]);
+            setChecked((oldState) => {
+                return [...new Set([...hideChecked, ...oldState])];
+            });
         }
     }, [searchString]);
 
@@ -139,7 +146,7 @@ const TreeList = ({
                     <InputRaw
                         placeholder={t('components.checkbox-tree.search')}
                         name="search"
-                        type="text"
+                        type="search"
                         onChange={(event: ChangeEvent<HTMLInputElement>) => {
                             setSearch(event?.target?.value);
                         }}
@@ -153,8 +160,10 @@ const TreeList = ({
                         checked={checked}
                         expanded={expanded}
                         onCheck={(checkedValues) => {
+                            const newChecked = [...new Set([...checkedValues, ...checked])];
+
                             setChecked(checkedValues);
-                            onSetChecked?.(checkedValues);
+                            onSetChecked?.(newChecked);
                         }}
                         onExpand={setExpanded}
                         nodes={convertDataToTreeList(
