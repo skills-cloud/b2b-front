@@ -1,6 +1,5 @@
 import React, { ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { differenceInCalendarYears } from 'date-fns';
 
 import { SPECIALIST_ID } from 'helper/url-list';
 import useClassnames from 'hook/use-classnames';
@@ -38,14 +37,6 @@ const UserItem = (props: IProps & typeof defaultProps) => {
     };
 
     const elCompetencies = () => {
-        // const competencies = props.cvItem?.positions?.reduce((acc, curr) => {
-        //     if(curr.competencies?.length) {
-        //         acc.push(...curr.competencies);
-        //     }
-        //
-        //     return acc;
-        // }, [] as Array<CvPositionCompetenceRead>);
-
         if(props.cvItem?.positions?.[0]?.competencies?.length) {
             let competenceToRender = props.cvItem.positions[0].competencies;
 
@@ -87,12 +78,17 @@ const UserItem = (props: IProps & typeof defaultProps) => {
     };
 
     const elAdditionalBlock = () => {
-        const cvItemCareer = props.cvItem?.career?.[0];
+        const positionsExperience = props.cvItem?.positions?.reduce((acc, curr) => {
+            let newExp = acc;
+
+            if(curr.years) {
+                newExp = newExp + curr.years;
+            }
+
+            return newExp;
+        }, 0);
 
         if(props.cvItem) {
-            const dateFrom = cvItemCareer?.date_from ? new Date(cvItemCareer.date_from) : new Date();
-            const dateTo = cvItemCareer?.date_to ? new Date(cvItemCareer.date_to) : new Date();
-            const experience = differenceInCalendarYears(dateTo, dateFrom);
             const showLinkedParam = props.cvItem.linked_ids;
 
             return (
@@ -100,7 +96,7 @@ const UserItem = (props: IProps & typeof defaultProps) => {
                     <div className={cn('user-item__user-info-exp')}>
                         <div className={cn('user-item__user-info-exp-years')}>
                             {t('routes.specialists.main.experience', {
-                                count: experience
+                                count: positionsExperience
                             })}
                         </div>
                         <StarRating rating={props.cvItem.rating} />

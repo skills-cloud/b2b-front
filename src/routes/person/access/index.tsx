@@ -21,10 +21,20 @@ import { dictionary } from 'adapter/api/dictionary';
 import { CvTimeSlotRead } from 'adapter/types/cv/cv/id/get/code-200';
 
 import style from './index.module.pcss';
-import Error from 'component/error';
+import ErrorsComponent from 'component/error/errors';
 
 export interface IProps {
     id: string
+}
+
+interface IFormValues {
+    date_from?: string,
+    date_to?: string,
+    price?: number,
+    type_of_employment_id: {
+        value?: number,
+        label?: string
+    }
 }
 
 const Access = (props: IProps) => {
@@ -40,13 +50,13 @@ const Access = (props: IProps) => {
     const [dayToEdit, setDayToEdit] = useState<Date>(new Date());
     const [activeTimeSlotId, setActiveTimeSlotId] = useState<number | null>(null);
 
-    const methods = useForm({
+    const methods = useForm<IFormValues>({
         defaultValues: {
-            date_from         : format(dayToEdit, 'yyyy-MM-dd', { locale: ru }),
-            date_to           : format(dayToEdit, 'yyyy-MM-dd', { locale: ru }),
-            price             : 0,
-            type_of_employment: {
-                value: 0,
+            date_from            : format(dayToEdit, 'yyyy-MM-dd', { locale: ru }),
+            date_to              : format(dayToEdit, 'yyyy-MM-dd', { locale: ru }),
+            price                : undefined,
+            type_of_employment_id: {
+                value: undefined,
                 label: ''
             }
         }
@@ -94,12 +104,17 @@ const Access = (props: IProps) => {
             methods.setValue('date_from', currentPeriod.date_from || '');
             methods.setValue('date_to', currentPeriod.date_to || '');
             methods.setValue('price', currentPeriod.price as number);
-            methods.setValue('type_of_employment', newTypeOfEmployment);
+            methods.setValue('type_of_employment_id', newTypeOfEmployment);
         } else {
             const value = format(date, 'yyyy-MM-dd', { locale: ru });
 
             methods.setValue('date_from', value);
             methods.setValue('date_to', value);
+            methods.setValue('price', undefined);
+            methods.setValue('type_of_employment_id', {
+                value: undefined,
+                label: ''
+            });
         }
     };
 
@@ -109,34 +124,6 @@ const Access = (props: IProps) => {
         setDayToEdit(new Date());
     };
 
-    const elErrors = useMemo(() => {
-        const errors = (error || patchError) as {
-            data: {
-                details: Record<string, Array<string>> | string
-            }
-        };
-
-        if(errors?.data?.details && typeof errors?.data?.details !== 'string') {
-            const keys = Object.keys(errors.data.details);
-
-            return (
-                <div>
-                    {keys.map((key) => {
-                        if(typeof errors?.data?.details?.[key] === 'string') {
-                            return <Error key={key}>{`${key}: ${errors?.data?.details?.[key]}`}</Error>;
-                        }
-
-                        return (errors?.data?.details as Record<string, Array<string>>)?.[key]?.map((message, index) => (
-                            <Error key={`${key}-${index}}`}>{message}</Error>
-                        ));
-                    })}
-                </div>
-            );
-        }
-
-        return <Error>{errors?.data?.details}</Error>;
-    }, [isError, isPatchError, isLoading, isPatchLoading, patchError, error]);
-
     const onSubmit = methods.handleSubmit(
         (formData) => {
             if(activeTimeSlotId) {
@@ -145,7 +132,7 @@ const Access = (props: IProps) => {
                     cv_id                : parseInt(specialistId, 10),
                     date_from            : formData.date_from,
                     date_to              : formData.date_to,
-                    type_of_employment_id: formData.type_of_employment.value,
+                    type_of_employment_id: formData.type_of_employment_id.value as number,
                     price                : formData.price
                 })
                     .unwrap()
@@ -161,7 +148,7 @@ const Access = (props: IProps) => {
                 cv_id                : parseInt(specialistId, 10),
                 date_from            : formData.date_from,
                 date_to              : formData.date_to,
-                type_of_employment_id: formData.type_of_employment.value,
+                type_of_employment_id: formData.type_of_employment_id.value as number,
                 price                : formData.price
             })
                 .unwrap()
@@ -197,6 +184,8 @@ const Access = (props: IProps) => {
 
     const elEditWindow = () => {
         if(isEdit) {
+            const errorMessage = t('routes.person.common.access.required-error');
+
             return (
                 <Modal
                     footer={elFooter()}
@@ -220,9 +209,10 @@ const Access = (props: IProps) => {
                                 />
                             </div>
                             <InputRadio
-                                required={true}
-                                name="type_of_employment"
+                                required={errorMessage}
+                                name="type_of_employment_id"
                                 direction="column"
+                                elError={true}
                                 optionsDirection="column"
                                 label={t('routes.person.common.access.form.access.title')}
                                 options={typeOfEmployment?.results.map((item) => ({ value: String(item.id), label: item.name })) || []}
@@ -233,6 +223,7 @@ const Access = (props: IProps) => {
                                 </h3>
                                 <div className={cn('access__field-set')}>
                                     <Input
+                                        required={errorMessage}
                                         type="text"
                                         name="price"
                                         label={t('routes.person.common.access.form.rate.hour')}
@@ -240,7 +231,11 @@ const Access = (props: IProps) => {
                                 </div>
                             </div>
                         </form>
-                        {elErrors}
+                        <ErrorsComponent
+                            error={error || patchError}
+                            isError={isError || isPatchError}
+                            isLoading={isLoading || isPatchLoading}
+                        />
                     </FormProvider>
                 </Modal>
             );
