@@ -83,24 +83,25 @@ export type NoName58 = number;
 export type NoName59 = number;
 export type NoName60 = string;
 export type RequestsRequirementsCountTotal = number;
-export type NoName61 = string;
-export type NoName62 = number;
+export type NoName61 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName62 = string;
 export type NoName63 = number;
-export type NoName64 = string;
-export type NoName65 = number;
-export type ID10 = number;
+export type NoName64 = number;
+export type NoName65 = string;
 export type NoName66 = number;
+export type ID10 = number;
 export type NoName67 = number;
 export type NoName68 = number;
-export type NoName69 = string;
-export type NoName70 = number;
-export type NoName71 = string;
+export type NoName69 = number;
+export type NoName70 = string;
+export type NoName71 = number;
 export type NoName72 = string;
+export type NoName73 = string;
 /**
  * если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date
  */
-export type NoName73 = number;
 export type NoName74 = number;
+export type NoName75 = number;
 
 export interface ModuleRead {
     created_at?: NoName;
@@ -114,13 +115,13 @@ export interface ModuleRead {
     manager_id?: NoName44;
     name: NoName45;
     organization_project?: OrganizationProjectInline;
-    organization_project_id: NoName62;
+    organization_project_id: NoName63;
     positions_labor_estimates?: ModulePositionLaborEstimateInline[];
-    sorting?: NoName70;
-    start_date?: NoName71;
-    updated_at?: NoName72;
-    work_days_count?: NoName73;
-    work_days_hours_count?: NoName74;
+    sorting?: NoName71;
+    start_date?: NoName72;
+    updated_at?: NoName73;
+    work_days_count?: NoName74;
+    work_days_hours_count?: NoName75;
 }
 export interface ModuleFunPointInline {
     created_at?: NoName3;
@@ -213,7 +214,8 @@ export interface OrganizationProjectInline {
     plan_description?: NoName60;
     requests_requirements_count_by_status?: RequestsRequirementsCountByStatus;
     requests_requirements_count_total?: RequestsRequirementsCountTotal;
-    updated_at?: NoName61;
+    status?: NoName61;
+    updated_at?: NoName62;
 }
 export interface IndustrySector {
     description?: NoName51;
@@ -223,13 +225,13 @@ export interface IndustrySector {
 }
 export interface RequestsRequirementsCountByStatus {}
 export interface ModulePositionLaborEstimateInline {
-    count?: NoName63;
-    created_at?: NoName64;
-    hours?: NoName65;
+    count?: NoName64;
+    created_at?: NoName65;
+    hours?: NoName66;
     id?: ID10;
-    module_id: NoName66;
+    module_id: NoName67;
     position?: Position;
-    position_id: NoName67;
-    sorting?: NoName68;
-    updated_at?: NoName69;
+    position_id: NoName68;
+    sorting?: NoName69;
+    updated_at?: NoName70;
 }

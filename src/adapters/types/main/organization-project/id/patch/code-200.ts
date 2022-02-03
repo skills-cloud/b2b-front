@@ -19,7 +19,8 @@ export type NoName8 = string;
 export type NoName9 = number;
 export type NoName10 = number;
 export type NoName11 = string;
-export type NoName12 = string;
+export type NoName12 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName13 = string;
 
 export interface OrganizationProject {
     created_at?: NoName;
@@ -35,5 +36,6 @@ export interface OrganizationProject {
     organization_contractor_id: NoName9;
     organization_customer_id: NoName10;
     plan_description?: NoName11;
-    updated_at?: NoName12;
+    status?: NoName12;
+    updated_at?: NoName13;
 }
