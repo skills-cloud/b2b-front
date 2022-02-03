@@ -66,7 +66,7 @@ const ProjectRequestList = () => {
         label: t('routes.project-request-list.sidebar.filters.status.value.done')
     }, {
         value: 'closed',
-        label: t('routes.project-request-list.sidebar.filters.status.value.done')
+        label: t('routes.project-request-list.sidebar.filters.status.value.closed')
     }], []);
 
     const timer = useRef<ReturnType<typeof setTimeout>>();

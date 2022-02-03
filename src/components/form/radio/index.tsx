@@ -68,6 +68,7 @@ const InputRadio = (props: IProps) => {
             <Controller
                 name={props.name}
                 control={control}
+                rules={{ required: props.required }}
                 render={({ field: { value: fieldValue, ...rest } }) => {
                     return (
                         <div className={cn('radio__group', `radio__group_${optionsDirection}`)}>

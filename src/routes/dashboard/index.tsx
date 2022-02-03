@@ -3,6 +3,7 @@ import { ColumnsType } from 'antd/lib/table';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
+import { isPast } from 'date-fns';
 
 import useClassnames from 'hook/use-classnames';
 import {
@@ -11,6 +12,7 @@ import {
     ORGANIZATION_PROJECT_MODULE_REQUEST_ID,
     REQUEST_ID
 } from 'helper/url-list';
+import { useLocalStorage } from 'hook/use-localstorage';
 
 import Table from 'component/table';
 import SidebarLayout from 'component/layout/sidebar';
@@ -47,6 +49,7 @@ interface IRoleAndCompany {
 const Dashboard = () => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
+    const { getStorage, setStorage } = useLocalStorage('userRole');
 
     const context = useForm();
 
@@ -63,18 +66,41 @@ const Dashboard = () => {
         if(data?.organizations_contractors_roles) {
             const role = data.organizations_contractors_roles[0];
 
-            setCurrentRoleAndCompany({
-                role     : role?.role,
-                companyId: String(role?.organization_contractor_id)
-            });
+            const currentSettings = getStorage();
 
-            context.setValue('company', {
-                value: `${role?.organization_contractor_id}-${role?.role}`,
-                label: t(`routes.dashboard.organization-roles.${role?.role}`, {
-                    organization: role?.organization_contractor_name
-                }),
-                payload: role?.role
-            });
+            if(data.id && currentSettings[data.id]) {
+                const currentCompanyAndRole = currentSettings[data.id];
+
+                setCurrentRoleAndCompany({
+                    role     : currentCompanyAndRole.payload,
+                    companyId: currentCompanyAndRole.value
+                });
+
+                context.setValue('company', currentCompanyAndRole);
+            } else {
+                setCurrentRoleAndCompany({
+                    role     : role?.role,
+                    companyId: String(role?.organization_contractor_id)
+                });
+
+                context.setValue('company', {
+                    value: `${role?.organization_contractor_id}-${role?.role}`,
+                    label: t(`routes.dashboard.organization-roles.${role?.role}`, {
+                        organization: role?.organization_contractor_name
+                    }),
+                    payload: role?.role
+                });
+
+                setStorage({
+                    [`${data?.id}`]: {
+                        value: `${role?.organization_contractor_id}-${role?.role}`,
+                        label: t(`routes.dashboard.organization-roles.${role?.role}`, {
+                            organization: role?.organization_contractor_name
+                        }),
+                        payload: role?.role
+                    }
+                });
+            }
         }
     }, [JSON.stringify(data)]);
 
@@ -83,6 +109,10 @@ const Dashboard = () => {
             setCurrentRoleAndCompany({
                 role     : company.payload,
                 companyId: company.value
+            });
+
+            setStorage({
+                [`${data?.id}`]: company
             });
         }
     }, [company]);
@@ -107,33 +137,71 @@ const Dashboard = () => {
 
     const columnsProjects: ColumnsType<OrganizationProjectRead> = [
         {
-            title : t('routes.dashboard.table.head.project'),
-            key   : 'name',
-            sorter: (a, b) => (a.name || '').localeCompare(b.name || ''),
+            title           : t('routes.dashboard.table.head.project'),
+            key             : 'id',
+            defaultSortOrder: 'descend',
+            sorter          : (a, b) => {
+                const inactiveA = a.date_to ? isPast(new Date(a.date_to)) : false;
+                const inactiveB = b.date_to ? isPast(new Date(b.date_to)) : false;
+
+                if(a.id && b.id) {
+                    if(inactiveA && !inactiveB) {
+                        return -1;
+                    } else if(inactiveB && inactiveA) {
+                        return 0;
+                    } else if(!inactiveA && !inactiveB) {
+                        return 0;
+                    } else if(!inactiveA && inactiveB) {
+                        return 1;
+                    }
+
+                    return a.id - b.id;
+                }
+
+                return 0;
+            },
             render: (item) => {
+                const inactive = item.date_to ? isPast(new Date(item.date_to)) : false;
+
+                if(!inactive) {
+                    return (
+                        <Link
+                            to={ORGANIZATION_PROJECT_ID(item.organization_customer_id, item.id)}
+                            className={cn('dashboard__link')}
+                        >
+                            {item.name}
+                        </Link>
+                    );
+                }
+
                 return (
-                    <Link
-                        to={ORGANIZATION_PROJECT_ID(item.organization_customer_id, item.id)}
-                        className={cn('dashboard__link')}
-                    >
+                    <div className={cn('dashboard__disabled-text')}>
                         {item.name}
-                    </Link>
+                    </div>
                 );
             }
         },
         {
-            title    : t('routes.dashboard.table.head.customer'),
-            key      : 'info',
-            dataIndex: 'organization_customer',
-            sorter   : (a, b) => (a.organization_customer?.name || '').localeCompare(b.organization_customer?.name || ''),
-            render   : (organization_customer) => {
+            title : t('routes.dashboard.table.head.customer'),
+            key   : 'info',
+            render: (item) => {
+                const inactive = item.date_to ? isPast(new Date(item.date_to)) : false;
+
+                if(!inactive) {
+                    return (
+                        <Link
+                            to={ORGANIZATION_ID(item.organization_customer.id)}
+                            className={cn('dashboard__link')}
+                        >
+                            {item.organization_customer.name}
+                        </Link>
+                    );
+                }
+
                 return (
-                    <Link
-                        to={ORGANIZATION_ID(organization_customer.id)}
-                        className={cn('dashboard__link')}
-                    >
-                        {organization_customer.name}
-                    </Link>
+                    <div className={cn('dashboard__disabled-text')}>
+                        {item.name}
+                    </div>
                 );
             }
         },
@@ -169,8 +237,18 @@ const Dashboard = () => {
         {
             title    : t('routes.dashboard.table.head.done'),
             dataIndex: 'requests_count_by_status',
-            render   : ({ done }) => {
-                return done;
+            render   : ({ done, closed }: { done: number, closed: number }) => {
+                let count = 0;
+
+                if(done) {
+                    count = count + done;
+                }
+
+                if(closed) {
+                    count = count + closed;
+                }
+
+                return count;
             }
         },
         {
@@ -214,11 +292,25 @@ const Dashboard = () => {
             }
         },
         {
-            title    : t('routes.dashboard.table-request.head.status'),
-            key      : 'status',
-            dataIndex: 'status',
-            sorter   : (a, b) => (a.status || '').localeCompare(b.status || ''),
-            render   : (status) => {
+            title           : t('routes.dashboard.table-request.head.status'),
+            key             : 'status',
+            dataIndex       : 'status',
+            defaultSortOrder: 'descend',
+            sorter          : (a, b) => {
+                if(a.status && b.status) {
+                    const statusHash = {
+                        'in_progress': 3,
+                        'draft'      : 2,
+                        'done'       : 1,
+                        'closed'     : 0
+                    };
+
+                    return statusHash[a.status] - statusHash[b.status];
+                }
+
+                return 0;
+            },
+            render: (status) => {
                 return status;
             }
         },
@@ -371,15 +463,26 @@ const Dashboard = () => {
         {
             title : t('routes.dashboard.table-requirement.head.request'),
             render: (item) => {
+                if(item.status === 'closed') {
+                    return (
+                        <div className={cn('dashboard__disabled-text')}>
+                            {item.title || t('routes.dashboard.table.values.empty')}
+                        </div>
+                    );
+                }
+
                 const request = requestsData?.results?.find((reqItem) => {
                     return reqItem.id === item.request_id;
                 });
 
-                if(request?.title) {
-                    return request.title;
-                }
-
-                return t('routes.dashboard.table.values.empty');
+                return (
+                    <Link
+                        to={REQUEST_ID(item.request_id)}
+                        className={cn('dashboard__link')}
+                    >
+                        {request?.title || t('routes.dashboard.table.values.empty')}
+                    </Link>
+                );
             }
         }
     ];
@@ -397,6 +500,7 @@ const Dashboard = () => {
             if(dataToRender?.length) {
                 return (
                     <Table<RequestRead>
+                        key={1}
                         columns={columnsRequests}
                         dataSource={dataToRender}
                         tableLayout="fixed"
@@ -409,7 +513,7 @@ const Dashboard = () => {
             }
         }
 
-        if((currentRoleAndCompany?.role === 'pfm' || currentRoleAndCompany?.role === 'admin')) {
+        if((currentRoleAndCompany?.role === 'pfm')) {
             const dataToRender = projectsData?.results?.filter((item) => {
                 return item.organization_contractor_id === parseInt(currentRoleAndCompany.companyId, 10);
             });
@@ -417,6 +521,7 @@ const Dashboard = () => {
             if(dataToRender?.length) {
                 return (
                     <Table<OrganizationProjectRead>
+                        key={2}
                         columns={columnsProjects}
                         dataSource={dataToRender}
                         tableLayout="fixed"
@@ -432,6 +537,7 @@ const Dashboard = () => {
         if(requirementData?.results?.length && currentRoleAndCompany?.role === 'rm') {
             return (
                 <Table<RequestRequirementRead>
+                    key={3}
                     columns={columnsRequirements}
                     dataSource={requirementData.results}
                     tableLayout="fixed"
@@ -441,6 +547,10 @@ const Dashboard = () => {
                     rowKey="id"
                 />
             );
+        }
+
+        if(currentRoleAndCompany?.role === 'admin') {
+            return <Empty>{t('routes.dashboard.empty-admin')}</Empty>;
         }
 
         return <Empty>{t('routes.dashboard.empty')}</Empty>;
@@ -463,7 +573,7 @@ const Dashboard = () => {
     const elSwitcher = () => {
         const roles = data?.organizations_contractors_roles;
 
-        if(roles?.length && roles?.length >= 2) {
+        if(data?.id && roles?.length && roles?.length >= 2) {
             return (
                 <FormProvider {...context}>
                     <form>
@@ -543,7 +653,7 @@ const Dashboard = () => {
 
         const countersToRender = currentRoleAndCompany?.role === 'rm' ? countersReqs : counters;
 
-        if(currentRoleAndCompany?.role && countersToRender && Object.values(countersToRender).some((item) => item > 0)) {
+        if(currentRoleAndCompany?.role && currentRoleAndCompany?.role !== 'admin' && countersToRender && Object.values(countersToRender).some((item) => item > 0)) {
             const isSomethingFetching = isFetching || projectsFetching || requestFetching || requirementFetching;
 
             return (
