@@ -110,35 +110,36 @@ export type NoName81 = number;
 export type NoName82 = number;
 export type NoName83 = string;
 export type RequestsRequirementsCountTotal = number;
-export type NoName84 = string;
-export type NoName85 = number;
+export type NoName84 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName85 = string;
 export type NoName86 = number;
-export type NoName87 = string;
-export type NoName88 = number;
-export type ID13 = number;
+export type NoName87 = number;
+export type NoName88 = string;
 export type NoName89 = number;
+export type ID13 = number;
 export type NoName90 = number;
 export type NoName91 = number;
-export type NoName92 = string;
-export type NoName93 = number;
-export type NoName94 = string;
+export type NoName92 = number;
+export type NoName93 = string;
+export type NoName94 = number;
 export type NoName95 = string;
+export type NoName96 = string;
 /**
  * если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date
  */
-export type NoName96 = number;
 export type NoName97 = number;
 export type NoName98 = number;
-export type NoName99 = 10 | 20 | 30;
-export type NoName100 = string;
-export type NoName101 = 'closed' | 'done' | 'draft' | 'in_progress';
-export type NoName102 = string;
-export type NoName103 = number;
+export type NoName99 = number;
+export type NoName100 = 10 | 20 | 30;
+export type NoName101 = string;
+export type NoName102 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName103 = string;
 export type NoName104 = number;
-export type NoName105 = string;
+export type NoName105 = number;
 export type NoName106 = string;
 export type NoName107 = string;
-export type NoName108 = number;
+export type NoName108 = string;
+export type NoName109 = number;
 
 export interface TimeSheetRowRead {
     created_at?: NoName;
@@ -148,11 +149,11 @@ export interface TimeSheetRowRead {
     date_to?: NoName18;
     id?: ID1;
     request: RequestInline;
-    request_id: NoName104;
-    task_description?: NoName105;
-    task_name: NoName106;
-    updated_at?: NoName107;
-    work_time: NoName108;
+    request_id: NoName105;
+    task_description?: NoName106;
+    task_name: NoName107;
+    updated_at?: NoName108;
+    work_time: NoName109;
 }
 export interface CvInlineShort {
     birth_date?: NoName1;
@@ -181,12 +182,12 @@ export interface RequestInline {
     manager_rm?: UserInline;
     manager_rm_id?: NoName28;
     module?: ModuleInline;
-    module_id: NoName98;
-    priority?: NoName99;
-    start_date?: NoName100;
-    status?: NoName101;
-    title?: NoName102;
-    type_id?: NoName103;
+    module_id: NoName99;
+    priority?: NoName100;
+    start_date?: NoName101;
+    status?: NoName102;
+    title?: NoName103;
+    type_id?: NoName104;
 }
 export interface UserInline {
     birth_date?: NoName22;
@@ -210,13 +211,13 @@ export interface ModuleInline {
     manager_id?: NoName67;
     name: NoName68;
     organization_project?: OrganizationProjectInline;
-    organization_project_id: NoName85;
+    organization_project_id: NoName86;
     positions_labor_estimates?: ModulePositionLaborEstimateInline[];
-    sorting?: NoName93;
-    start_date?: NoName94;
-    updated_at?: NoName95;
-    work_days_count?: NoName96;
-    work_days_hours_count?: NoName97;
+    sorting?: NoName94;
+    start_date?: NoName95;
+    updated_at?: NoName96;
+    work_days_count?: NoName97;
+    work_days_hours_count?: NoName98;
 }
 export interface ModuleFunPointInline {
     created_at?: NoName32;
@@ -299,7 +300,8 @@ export interface OrganizationProjectInline {
     plan_description?: NoName83;
     requests_requirements_count_by_status?: RequestsRequirementsCountByStatus;
     requests_requirements_count_total?: RequestsRequirementsCountTotal;
-    updated_at?: NoName84;
+    status?: NoName84;
+    updated_at?: NoName85;
 }
 export interface IndustrySector {
     description?: NoName74;
@@ -309,13 +311,13 @@ export interface IndustrySector {
 }
 export interface RequestsRequirementsCountByStatus {}
 export interface ModulePositionLaborEstimateInline {
-    count?: NoName86;
-    created_at?: NoName87;
-    hours?: NoName88;
+    count?: NoName87;
+    created_at?: NoName88;
+    hours?: NoName89;
     id?: ID13;
-    module_id: NoName89;
+    module_id: NoName90;
     position?: Position;
-    position_id: NoName90;
-    sorting?: NoName91;
-    updated_at?: NoName92;
+    position_id: NoName91;
+    sorting?: NoName92;
+    updated_at?: NoName93;
 }

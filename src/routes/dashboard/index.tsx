@@ -43,6 +43,7 @@ interface ICounter {
 
 interface IRoleAndCompany {
     role: IRole | 'default',
+    userId: string,
     companyId: string
 }
 
@@ -59,6 +60,7 @@ const Dashboard = () => {
 
     const [currentRoleAndCompany, setCurrentRoleAndCompany] = useState<IRoleAndCompany>({
         role     : 'default',
+        userId   : '',
         companyId: ''
     });
 
@@ -72,7 +74,8 @@ const Dashboard = () => {
                 const currentCompanyAndRole = currentSettings[data.id];
 
                 setCurrentRoleAndCompany({
-                    role     : currentCompanyAndRole.payload,
+                    role     : currentCompanyAndRole.payload.role,
+                    userId   : currentCompanyAndRole.payload.userId,
                     companyId: currentCompanyAndRole.value
                 });
 
@@ -80,25 +83,25 @@ const Dashboard = () => {
             } else {
                 setCurrentRoleAndCompany({
                     role     : role?.role,
+                    userId   : String(data.id),
                     companyId: String(role?.organization_contractor_id)
                 });
 
-                context.setValue('company', {
+                const companyData = {
                     value: `${role?.organization_contractor_id}-${role?.role}`,
                     label: t(`routes.dashboard.organization-roles.${role?.role}`, {
                         organization: role?.organization_contractor_name
                     }),
-                    payload: role?.role
-                });
+                    payload: {
+                        role  : role?.role,
+                        userId: data.id
+                    }
+                };
+
+                context.setValue('company', companyData);
 
                 setStorage({
-                    [`${data?.id}`]: {
-                        value: `${role?.organization_contractor_id}-${role?.role}`,
-                        label: t(`routes.dashboard.organization-roles.${role?.role}`, {
-                            organization: role?.organization_contractor_name
-                        }),
-                        payload: role?.role
-                    }
+                    [`${data?.id}`]: companyData
                 });
             }
         }
@@ -107,7 +110,8 @@ const Dashboard = () => {
     useEffect(() => {
         if(company) {
             setCurrentRoleAndCompany({
-                role     : company.payload,
+                role     : company.payload.role,
+                userId   : company.payload.userId,
                 companyId: company.value
             });
 
@@ -121,25 +125,33 @@ const Dashboard = () => {
         refetch();
     }, [data?.id]);
 
-    const { data: projectsData, isFetching: projectsFetching } = mainRequest.useGetMainOrganizationProjectListQuery(undefined, {
-        refetchOnMountOrArgChange: true
+    const { data: projectsData, isFetching: projectsFetching } = mainRequest.useGetMainOrganizationProjectListQuery({
+        manager_pm_id : currentRoleAndCompany?.role === 'pm' ? [data?.id as number] : undefined,
+        manager_pfm_id: currentRoleAndCompany?.role === 'pfm' ? [data?.id as number] : undefined
+    }, {
+        refetchOnMountOrArgChange: true,
+        skip                     : !data?.id && !currentRoleAndCompany?.role
     });
 
     const { data: requestsData, isFetching: requestFetching } = mainRequest.useGetMainRequestQuery({
         organization_project_id: projectsData?.results?.map((item) => item.id as number)
     }, {
-        refetchOnMountOrArgChange: true
+        refetchOnMountOrArgChange: true,
+        skip                     : !projectsData?.results?.length
     });
 
-    const { data: requirementData, isFetching: requirementFetching } = mainRequest.useGetMainRequestRequirementQuery(undefined, {
-        refetchOnMountOrArgChange: true
+    const { data: requirementData, isFetching: requirementFetching } = mainRequest.useGetMainRequestRequirementQuery({
+        manager_rm_id: currentRoleAndCompany?.role === 'rm' ? [data?.id as number] : undefined
+    }, {
+        refetchOnMountOrArgChange: true,
+        skip                     : !data?.id || currentRoleAndCompany?.role !== 'rm'
     });
 
     const columnsProjects: ColumnsType<OrganizationProjectRead> = [
         {
             title           : t('routes.dashboard.table.head.project'),
-            key             : 'id',
             defaultSortOrder: 'descend',
+            dataIndex       : ['part', 'item'],
             sorter          : (a, b) => {
                 const inactiveA = a.date_to ? isPast(new Date(a.date_to)) : false;
                 const inactiveB = b.date_to ? isPast(new Date(b.date_to)) : false;
@@ -160,7 +172,7 @@ const Dashboard = () => {
 
                 return 0;
             },
-            render: (item) => {
+            render: (empty, item) => {
                 const inactive = item.date_to ? isPast(new Date(item.date_to)) : false;
 
                 if(!inactive) {
@@ -182,9 +194,11 @@ const Dashboard = () => {
             }
         },
         {
-            title : t('routes.dashboard.table.head.customer'),
-            key   : 'info',
-            render: (item) => {
+            title           : t('routes.dashboard.table.head.customer'),
+            key             : 'customer',
+            defaultSortOrder: undefined,
+            sorter          : (a, b) => (a.organization_customer?.name || '').localeCompare(b.organization_customer?.name || ''),
+            render          : (item) => {
                 const inactive = item.date_to ? isPast(new Date(item.date_to)) : false;
 
                 if(!inactive) {
@@ -587,7 +601,10 @@ const Dashboard = () => {
                                 label: t(`routes.dashboard.organization-roles.${role.role}`, {
                                     organization: role.organization_contractor_name
                                 }),
-                                payload: role.role
+                                payload: {
+                                    role  : role.role,
+                                    userId: data.id
+                                }
                             }))}
                         />
                     </form>
@@ -607,6 +624,11 @@ const Dashboard = () => {
                 if(curr.requests_count_by_status?.done && curr.requests_count_by_status?.done >= 0) {
                     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                     accumulator.second = accumulator.second + curr.requests_count_by_status?.done;
+                }
+
+                if(curr.requests_count_by_status?.closed && curr.requests_count_by_status?.closed >= 0) {
+                    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+                    accumulator.second = accumulator.second + curr.requests_count_by_status?.closed;
                 }
 
                 if(curr.requests_count_by_status?.in_progress && curr.requests_count_by_status?.in_progress >= 0) {
@@ -638,10 +660,9 @@ const Dashboard = () => {
             offer: 0
         });
 
-        const countersReqs = projectsData?.results.reduce((accumulator, curr) => {
-            if(curr.requests_requirements_count_total && curr.requests_requirements_count_total >= 0) {
-                // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                accumulator.first = accumulator.first + curr.requests_requirements_count_total;
+        const countersReqs = requirementData?.results.reduce((accumulator, curr) => {
+            if(curr.status === 'in_progress') {
+                accumulator.first = accumulator.first + 1;
             }
 
             return accumulator;

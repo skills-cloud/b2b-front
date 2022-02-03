@@ -70,7 +70,9 @@ export interface IResponseGetOrganizationProject extends IResponseBase {
 
 export interface IGetOrganizationProjectListQueryParams extends IQueryParams {
     organization_customer_id?: Array<number>,
-    organization_contractor_id?: Array<number>
+    organization_contractor_id?: Array<number>,
+    manager_pfm_id?: Array<number>,
+    manager_pm_id?: Array<number>
 }
 
 interface IResponseGetOrganization extends IResponseBase {
@@ -109,10 +111,10 @@ interface IParamsCompetenciesSet {
 export interface IGetRequestListParams {
     organization_project_id?: Array<number>,
     organization_customer_id?: Array<number>,
+    manager_rm_id?: Array<number>,
     industry_sector_id?: Array<number>,
     resource_manager_id?: Array<number>,
     recruiter_id?: Array<number>,
-    manager_id?: Array<number>,
     type_id?: Array<number>,
     status?: Array<string>,
     ordering?: Array<string>,
@@ -243,6 +245,12 @@ export interface ITimeSheetRowCreate {
     cv_ids: Array<number>
 }
 
+interface IGetRequestRequirementListParams {
+    manager_pfm_id?: Array<number>,
+    manager_pm_id?: Array<number>,
+    manager_rm_id?: Array<number>
+}
+
 export const mainRequest = createApi({
     reducerPath: 'api/main/request',
     tagTypes   : ['main', 'expected-labor-estimate', 'create-request-for-saved-labor-estimate'],
@@ -250,7 +258,7 @@ export const mainRequest = createApi({
         baseUrl: '/api/main'
     }),
     endpoints: (build) => ({
-        getMainRequestRequirement: build.query<IResponseGetMainRequestRequirement, undefined>({
+        getMainRequestRequirement: build.query<IResponseGetMainRequestRequirement, IGetRequestRequirementListParams>({
             providesTags: ['main'],
             query       : (params) => ({
                 url   : '/request-requirement/',
