@@ -72,8 +72,8 @@ export const CommonEdit = (props: IProps) => {
                     value: undefined
                 },
                 manager_rm: {
-                    label: `${other.manager_rm?.last_name} ${other.manager_rm?.first_name}`,
-                    value: String(other.manager_rm?.id)
+                    label: other.manager_rm ? `${other.manager_rm?.last_name} ${other.manager_rm?.first_name}` : undefined,
+                    value: other.manager_rm?.id ? String(other.manager_rm?.id) : undefined
                 },
                 city       : { label: other.city?.name, value: String(other.city?.id) },
                 citizenship: { label: other.citizenship?.name, value: String(other.citizenship?.id) },
