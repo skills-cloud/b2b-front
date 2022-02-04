@@ -389,8 +389,8 @@ const Dashboard = () => {
             title    : t('routes.dashboard.table-request.head.rpp'),
             dataIndex: 'module',
             render   : (module) => {
-                if(module.manager) {
-                    return `${module.manager.last_name} ${module.manager.first_name.substring(0, 1).toUpperCase()}.`;
+                if(module.organization_project?.manager_pfm) {
+                    return `${module.organization_project?.manager_pfm.last_name} ${module.organization_project?.manager_pfm.first_name.substring(0, 1).toUpperCase()}.`;
                 }
 
                 return t('routes.dashboard.table.values.empty');
