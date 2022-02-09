@@ -7,20 +7,34 @@
 
 export type Code200 = MainOrganization;
 export type NoName = string;
+export type EMail = string;
 export type NoName1 = string;
-export type ID = number;
-export type NoName2 = boolean;
-export type NoName3 = boolean;
+export type NoName2 = string;
+export type NoName3 = string;
 export type NoName4 = string;
-export type NoName5 = string;
+export type ID = number;
+export type NoName5 = boolean;
+export type NoName6 = boolean;
+export type NoName7 = boolean;
+export type NoName8 = string;
+export type NoName9 = string;
+export type NoName10 = string;
+export type NoName11 = string;
 
 export interface MainOrganization {
-    created_at?: NoName;
+    contact_person?: NoName;
+    contacts_email?: EMail;
+    contacts_phone?: NoName1;
+    created_at?: NoName2;
     current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
-    description?: NoName1;
+    description?: NoName3;
+    general_manager_name?: NoName4;
     id?: ID;
-    is_contractor?: NoName2;
-    is_customer?: NoName3;
-    name: NoName4;
-    updated_at?: NoName5;
+    is_contractor?: NoName5;
+    is_customer?: NoName6;
+    is_partner?: NoName7;
+    legal_name?: NoName8;
+    name: NoName9;
+    short_name?: NoName10;
+    updated_at?: NoName11;
 }

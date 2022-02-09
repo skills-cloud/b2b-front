@@ -72,6 +72,22 @@
                     "title": "Сортировка",
                     "type": "integer"
                 },
+                "status": {
+                    "enum": [
+                        "closed",
+                        "done",
+                        "in_progress",
+                        "open"
+                    ],
+                    "title": "Статус",
+                    "type": "string",
+                    "x-enum-description": {
+                        "closed": "Закрыт",
+                        "done": "Успешно завершен",
+                        "in_progress": "В работе",
+                        "open": "Открыт"
+                    }
+                },
                 "type_of_employment_id": {
                     "nullable": true,
                     "title": "Тип занятости",
