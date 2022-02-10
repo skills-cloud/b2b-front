@@ -81,10 +81,6 @@ const ModuleCreateForm = ({ formId, onSuccess, defaultValues }: IProjectsRequest
                 value: String(defaultValues?.organization_project.organization_customer.id),
                 label: defaultValues?.organization_project.organization_customer.name
             } : undefined,
-            manager: defaultValues?.manager ? {
-                value: String(defaultValues?.manager?.id),
-                label: `${defaultValues?.manager?.last_name} ${defaultValues?.manager?.first_name}`
-            } : undefined,
             project: defaultValues?.organization_project ? {
                 value: String(defaultValues?.organization_project?.id),
                 label: defaultValues?.organization_project?.name
@@ -105,7 +101,6 @@ const ModuleCreateForm = ({ formId, onSuccess, defaultValues }: IProjectsRequest
 
         const request = method({
             ...rest,
-            manager_id             : manager ? parseInt(manager.value, 10) : undefined,
             organization_project_id: parseInt(formData.project.value, 10)
         });
 

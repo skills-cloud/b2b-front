@@ -169,6 +169,10 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                 postData.manager_pfm_id = parseInt(manager_pfm.value, 10);
             }
 
+            if(params.organizationId) {
+                postData.organization_customer_id = parseInt(params.organizationId, 10);
+            }
+
             if(organization_customer) {
                 postData.organization_customer_id = parseInt(organization_customer.value, 10);
             }
@@ -182,10 +186,9 @@ const OrganizationProjectCreateForm = (props: IProps) => {
 
             const request = method({
                 ...rest,
-                date_from               : rest.date_from || undefined,
-                date_to                 : rest.date_to || undefined,
-                organization_customer_id: parseInt(params.organizationId, 10),
-                id                      : requestId as number
+                date_from: rest.date_from || undefined,
+                date_to  : rest.date_to || undefined,
+                id       : requestId as number
             });
 
             request

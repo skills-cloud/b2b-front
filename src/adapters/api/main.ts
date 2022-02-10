@@ -503,6 +503,13 @@ export const mainRequest = createApi({
                 body  : rest
             })
         }),
+        deleteMainOrganizationProject: build.mutation<undefined, IBaseGetById>({
+            invalidatesTags: ['main'],
+            query          : ({ id }) => ({
+                url   : `/organization-project/${id}/`,
+                method: 'DELETE'
+            })
+        }),
         getMainOrganizationProjectById: build.query<OrganizationProjectRead, IBaseGetById>({
             providesTags: ['main'],
             query       : ({ id, ...params }) => ({

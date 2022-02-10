@@ -12,14 +12,15 @@ import SkillsTag from 'component/skills-tag';
 
 import EditLocation from 'route/project-request/components/edit-location';
 import EditPrice from 'route/project-request/components/edit-price';
-import EditOuther from 'route/project-request/components/edit-outher';
+import EditOther from 'route/project-request/components/edit-other';
+import Empty from 'component/empty';
+import { IValue } from 'component/form/select';
 
 import { mainRequest } from 'adapter/api/main';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
-import { RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
+import { NoName10, RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
 
 import style from './index.module.pcss';
-import Empty from 'component/empty';
 
 export const MAIN_REQUIREMENTS_FORM_ID = 'MAIN_REQUIREMENTS_FORM_ID';
 
@@ -40,14 +41,12 @@ interface IEditRequirements {
     requestId: number
 }
 
-interface IForm extends RequestRequirement{
-    type_of_employment: {
-        value: string,
-        label: string
-    },
+interface IForm extends Omit<RequestRequirement, 'status'> {
+    type_of_employment: IValue,
     location: string,
-    city: {
-        value: string,
+    city: IValue,
+    status?: {
+        value: NoName10,
         label: string
     },
     date_to: string,
@@ -77,32 +76,30 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
         form.setValue('name', editRequirements?.name);
         form.setValue('date_from', editRequirements?.date_from);
         form.setValue('date_to', editRequirements?.date_to);
+        form.setValue('status', editRequirements?.status ? {
+            value: editRequirements?.status,
+            label: t(`routes.project-request.blocks.request-status.${editRequirements?.status}`)
+        } : undefined);
     }, [editRequirements]);
 
     const onSubmit = ({
         type_of_employment,
         location,
         city,
-        max_price,
-        description,
-        name,
-        date_from,
-        date_to
+        status,
+        ...data
     }: IForm) => {
         const cityId = city?.value;
         const valueTypeOfEmployment = type_of_employment?.value;
         const id = editRequirements?.id;
 
         const body = {
+            ...data,
+            status               : status?.value ?? undefined,
             request_id           : requestId,
             work_location_address: location,
             work_location_city_id: cityId ? parseInt(cityId, 10) : undefined,
-            type_of_employment_id: valueTypeOfEmployment ? parseInt(valueTypeOfEmployment, 10) : undefined,
-            max_price            : max_price,
-            description          : description,
-            name                 : name,
-            date_from            : date_from,
-            date_to              : date_to
+            type_of_employment_id: valueTypeOfEmployment ? parseInt(valueTypeOfEmployment, 10) : undefined
         };
 
 
@@ -192,7 +189,7 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
                         <EditPrice />
                     )}
                     {activeTab === ETabs.Other && (
-                        <EditOuther />
+                        <EditOther />
                     )}
                     {activeTab === ETabs.Timing && (
                         <DeadlineDates labels={{

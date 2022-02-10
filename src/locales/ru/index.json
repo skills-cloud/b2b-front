@@ -6,7 +6,8 @@
                 "specialists": "Специалисты",
                 "organizations": "Организации",
                 "requests": "Запросы",
-                "system-users": "Пользователи системы"
+                "system-users": "Пользователи",
+                "projects": "Проекты"
             }
         },
         "calendar": {
@@ -341,6 +342,54 @@
                 }
             }
         },
+        "projects": {
+            "confirm-modal": {
+                "header": "Точно удалить?",
+                "text": "Будет удалён проект: {{name}}",
+                "empty-name": "Имя проекта не указано",
+                "cancel": "Отмена",
+                "delete": "Удалить"
+            },
+            "main": {
+                "title": "Проекты",
+                "list": {
+                    "empty": "Поиск не дал результатов."
+                },
+                "controls": {
+                    "edit": "Редактировать",
+                    "delete": "Удалить"
+                }
+            },
+            "project-item": {
+                "blocks": {
+                    "customer": "Заказчик",
+                    "timeframe": "Период",
+                    "industry_sector": "Отрасль",
+                    "description": "Описание проекта",
+                    "requests": "Запросы",
+                    "empty": "Не указано"
+                }
+            },
+            "sidebar": {
+                "filters": {
+                    "title": "Фильтры",
+                    "form": {
+                        "customer": {
+                            "label": "Заказчик"
+                        },
+                        "period": {
+                            "label": "Период"
+                        },
+                        "industry-sector": {
+                            "label": "Отрасль"
+                        }
+                    },
+                    "buttons": {
+                        "clear": "Очистить"
+                    }
+                }
+            }
+        },
         "timesheet": {
             "sidebar": {
                 "title": "Фильтры",
@@ -617,6 +666,15 @@
                         "invariant_3": "1-3 года",
                         "invariant_5": "3-5 лет",
                         "invariant_100": "Более 5 лет"
+                    },
+                    "status": {
+                        "title": "Статус",
+                        "value": {
+                            "open": "Открыт",
+                            "closed": "Закрыт",
+                            "in_progress": "В работе",
+                            "done": "Готово"
+                        }
                     },
                     "controls": {
                         "edit": "Редактировать",
@@ -1304,6 +1362,13 @@
                 },
                 "status": {
                     "draft": "Черновик",
+                    "done": "Готово",
+                    "in_progress" : "В работе",
+                    "closed": "Закрыт"
+                },
+                "request-status": {
+                    "title": "Статус",
+                    "open": "Открыт",
                     "done": "Готово",
                     "in_progress" : "В работе",
                     "closed": "Закрыт"
