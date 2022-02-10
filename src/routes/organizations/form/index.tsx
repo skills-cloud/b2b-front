@@ -34,7 +34,11 @@ const OrganizationCreateForm = (props: IProps) => {
     const onSubmit = context.handleSubmit(
         (formData) => {
             const method = props.defaultValues ? patch : post;
-            const request = method(formData);
+            const data = {
+                ...formData,
+                short_name: formData.name || ''
+            };
+            const request = method(data);
 
             request
                 .unwrap()
@@ -64,13 +68,39 @@ const OrganizationCreateForm = (props: IProps) => {
                     required={errorMessage}
                     type="text"
                     name="name"
-                    label={t('routes.organization.create.name.label')}
-                    placeholder={t('routes.organization.create.name.placeholder')}
+                    label={t('routes.organization.create.name')}
+                />
+                <Input
+                    type="text"
+                    name="legal_name"
+                    label={t('routes.organization.create.legal-name')}
                 />
                 <Textarea
                     name="description"
                     label={t('routes.organization.create.description')}
                 />
+                <Input
+                    type="text"
+                    name="general_manager"
+                    label={t('routes.organization.create.general-manager')}
+                />
+                <Input
+                    type="text"
+                    name="contact_person"
+                    label={t('routes.organization.create.contact-person')}
+                />
+                <div className={cn('form__fields')}>
+                    <Input
+                        type="text"
+                        name="contacts_email"
+                        label={t('routes.organization.create.contact-mail')}
+                    />
+                    <Input
+                        type="text"
+                        name="contacts_phone"
+                        label={t('routes.organization.create.contact-phone')}
+                    />
+                </div>
                 <Checkbox
                     name="is_customer"
                     label={t('routes.organization.create.customer')}
@@ -78,6 +108,10 @@ const OrganizationCreateForm = (props: IProps) => {
                 <Checkbox
                     name="is_contractor"
                     label={t('routes.organization.create.contractor')}
+                />
+                <Checkbox
+                    name="is_partner"
+                    label={t('routes.organization.create.partner')}
                 />
                 <ErrorsComponent
                     error={error || patchError}

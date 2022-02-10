@@ -7,18 +7,32 @@
 
 export type Code200 = OrganizationCustomerRead;
 export type NoName = string;
+export type EMail = string;
 export type NoName1 = string;
-export type ID = number;
-export type NoName2 = boolean;
+export type NoName2 = string;
 export type NoName3 = string;
 export type NoName4 = string;
+export type ID = number;
+export type NoName5 = boolean;
+export type NoName6 = boolean;
+export type NoName7 = string;
+export type NoName8 = string;
+export type NoName9 = string;
+export type NoName10 = string;
 
 export interface OrganizationCustomerRead {
-    created_at?: NoName;
+    contact_person?: NoName;
+    contacts_email?: EMail;
+    contacts_phone?: NoName1;
+    created_at?: NoName2;
     current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
-    description?: NoName1;
+    description?: NoName3;
+    general_manager_name?: NoName4;
     id?: ID;
-    is_contractor?: NoName2;
-    name: NoName3;
-    updated_at?: NoName4;
+    is_contractor?: NoName5;
+    is_partner?: NoName6;
+    legal_name?: NoName7;
+    name: NoName8;
+    short_name?: NoName9;
+    updated_at?: NoName10;
 }

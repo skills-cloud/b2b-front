@@ -166,6 +166,24 @@
         },
         "MainOrganization": {
             "properties": {
+                "contact_person": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Контактное лицо",
+                    "type": "string"
+                },
+                "contacts_email": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Контактный e-mail",
+                    "type": "string"
+                },
+                "contacts_phone": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Контактный телефон",
+                    "type": "string"
+                },
                 "created_at": {
                     "format": "date-time",
                     "readOnly": true,
@@ -196,6 +214,12 @@
                     "title": "Описание",
                     "type": "string"
                 },
+                "general_manager_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Генеральный директор",
+                    "type": "string"
+                },
                 "id": {
                     "readOnly": true,
                     "title": "ID",
@@ -209,10 +233,26 @@
                     "title": "Это заказчик?",
                     "type": "boolean"
                 },
+                "is_partner": {
+                    "title": "Это партнер?",
+                    "type": "boolean"
+                },
+                "legal_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Юридическое наименование",
+                    "type": "string"
+                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,
                     "title": "Название",
+                    "type": "string"
+                },
+                "short_name": {
+                    "maxLength": 500,
+                    "nullable": true,
+                    "title": "Краткое наименование",
                     "type": "string"
                 },
                 "updated_at": {

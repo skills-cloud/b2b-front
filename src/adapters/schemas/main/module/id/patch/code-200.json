@@ -34,13 +34,6 @@
                     "title": "ID",
                     "type": "integer"
                 },
-                "manager_id": {
-                    "nullable": true,
-                    "title": "руководитель",
-                    "type": "integer",
-                    "x-url-object-detail": "/api/acc/user-manage/$id/",
-                    "x-url-object-list": "/api/acc/user-manage/"
-                },
                 "name": {
                     "maxLength": 500,
                     "minLength": 1,

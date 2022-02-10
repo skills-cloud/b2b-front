@@ -60,86 +60,92 @@ export type NoName42 = string;
 export type ID5 = number;
 export type NoName43 = string;
 export type NoName44 = string;
+export type EMail = string;
 export type NoName45 = string;
-export type ID6 = number;
-export type NoName46 = boolean;
-export type NoName47 = boolean;
+export type NoName46 = string;
+export type NoName47 = string;
 export type NoName48 = string;
-export type NoName49 = string;
-export type NoName50 = number;
-export type NoName51 = string;
-export type NoName52 = number;
+export type ID6 = number;
+export type NoName49 = boolean;
+export type NoName50 = boolean;
+export type NoName51 = boolean;
+export type NoName52 = string;
+export type NoName53 = string;
+export type NoName54 = string;
+export type NoName55 = string;
+export type NoName56 = number;
+export type NoName57 = string;
+export type NoName58 = number;
 /**
  * в часах
  */
-export type NoName53 = number;
+export type NoName59 = number;
 export type ID7 = number;
-export type NoName54 = string;
-export type ID8 = number;
-export type NoName55 = boolean;
-export type NoName56 = string;
-export type NoName57 = number;
-export type NoName58 = number;
-export type NoName59 = string;
 export type NoName60 = string;
-export type NoName61 = number;
-export type ID9 = number;
-export type NoName62 = number;
-export type NoName63 = string;
+export type ID8 = number;
+export type NoName61 = boolean;
+export type NoName62 = string;
+export type NoName63 = number;
 export type NoName64 = number;
 export type NoName65 = string;
 export type NoName66 = string;
-export type ID10 = number;
 export type NoName67 = number;
-export type NoName68 = string;
+export type ID9 = number;
+export type NoName68 = number;
 export type NoName69 = string;
-export type NoName70 = string;
+export type NoName70 = number;
 export type NoName71 = string;
 export type NoName72 = string;
+export type ID10 = number;
 export type NoName73 = string;
-export type ID11 = number;
 export type NoName74 = string;
-export type ID12 = number;
-export type NoName75 = boolean;
+export type NoName75 = string;
 export type NoName76 = string;
-export type NoName77 = number;
-export type NoName78 = number;
-export type NoName79 = number;
-export type NoName80 = string;
-export type NoName81 = number;
+export type NoName77 = string;
+export type NoName78 = string;
+export type ID11 = number;
+export type NoName79 = string;
+export type ID12 = number;
+export type NoName80 = boolean;
+export type NoName81 = string;
 export type NoName82 = number;
-export type NoName83 = string;
-export type RequestsRequirementsCountTotal = number;
-export type NoName84 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName83 = number;
+export type NoName84 = number;
 export type NoName85 = string;
 export type NoName86 = number;
 export type NoName87 = number;
 export type NoName88 = string;
-export type NoName89 = number;
-export type ID13 = number;
-export type NoName90 = number;
+export type RequestsRequirementsCountTotal = number;
+export type NoName89 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName90 = string;
 export type NoName91 = number;
 export type NoName92 = number;
 export type NoName93 = string;
 export type NoName94 = number;
-export type NoName95 = string;
-export type NoName96 = string;
+export type ID13 = number;
+export type NoName95 = number;
+export type NoName96 = number;
+export type NoName97 = number;
+export type NoName98 = string;
+export type NoName99 = number;
+export type NoName100 = string;
+export type NoName101 = string;
 /**
  * если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date
  */
-export type NoName97 = number;
-export type NoName98 = number;
-export type NoName99 = number;
-export type NoName100 = 10 | 20 | 30;
-export type NoName101 = string;
-export type NoName102 = 'closed' | 'done' | 'draft' | 'in_progress';
-export type NoName103 = string;
+export type NoName102 = number;
+export type NoName103 = number;
 export type NoName104 = number;
-export type NoName105 = number;
+export type NoName105 = 10 | 20 | 30;
 export type NoName106 = string;
-export type NoName107 = string;
+export type NoName107 = 'closed' | 'done' | 'draft' | 'in_progress';
 export type NoName108 = string;
 export type NoName109 = number;
+export type NoName110 = number;
+export type NoName111 = string;
+export type NoName112 = string;
+export type NoName113 = string;
+export type NoName114 = number;
 
 export interface TimeSheetRowRead {
     created_at?: NoName;
@@ -149,11 +155,11 @@ export interface TimeSheetRowRead {
     date_to?: NoName18;
     id?: ID1;
     request: RequestInline;
-    request_id: NoName105;
-    task_description?: NoName106;
-    task_name: NoName107;
-    updated_at?: NoName108;
-    work_time: NoName109;
+    request_id: NoName110;
+    task_description?: NoName111;
+    task_name: NoName112;
+    updated_at?: NoName113;
+    work_time: NoName114;
 }
 export interface CvInlineShort {
     birth_date?: NoName1;
@@ -182,12 +188,12 @@ export interface RequestInline {
     manager_rm?: UserInline;
     manager_rm_id?: NoName28;
     module?: ModuleInline;
-    module_id: NoName99;
-    priority?: NoName100;
-    start_date?: NoName101;
-    status?: NoName102;
-    title?: NoName103;
-    type_id?: NoName104;
+    module_id: NoName104;
+    priority?: NoName105;
+    start_date?: NoName106;
+    status?: NoName107;
+    title?: NoName108;
+    type_id?: NoName109;
 }
 export interface UserInline {
     birth_date?: NoName22;
@@ -205,19 +211,17 @@ export interface ModuleInline {
     description?: NoName31;
     difficulty_factor?: DifficultyFactor;
     fun_points?: ModuleFunPointInline[];
-    goals?: NoName66;
+    goals?: NoName72;
     id?: ID10;
-    manager?: UserInline;
-    manager_id?: NoName67;
-    name: NoName68;
+    name: NoName73;
     organization_project?: OrganizationProjectInline;
-    organization_project_id: NoName86;
+    organization_project_id: NoName91;
     positions_labor_estimates?: ModulePositionLaborEstimateInline[];
-    sorting?: NoName94;
-    start_date?: NoName95;
-    updated_at?: NoName96;
-    work_days_count?: NoName97;
-    work_days_hours_count?: NoName98;
+    sorting?: NoName99;
+    start_date?: NoName100;
+    updated_at?: NoName101;
+    work_days_count?: NoName102;
+    work_days_hours_count?: NoName103;
 }
 export interface ModuleFunPointInline {
     created_at?: NoName32;
@@ -225,12 +229,12 @@ export interface ModuleFunPointInline {
     difficulty_level?: FunPointTypeDifficultyLevelInline;
     difficulty_level_id: NoName40;
     fun_point_type?: FunPointTypeInline;
-    fun_point_type_id: NoName61;
+    fun_point_type_id: NoName67;
     id?: ID9;
-    module_id: NoName62;
-    name: NoName63;
-    sorting?: NoName64;
-    updated_at?: NoName65;
+    module_id: NoName68;
+    name: NoName69;
+    sorting?: NoName70;
+    updated_at?: NoName71;
 }
 export interface FunPointTypeDifficultyLevelInline {
     created_at?: NoName34;
@@ -248,76 +252,83 @@ export interface FunPointTypeInline {
     id?: ID5;
     name: NoName43;
     organization_customer?: MainOrganization;
-    organization_customer_id?: NoName50;
+    organization_customer_id?: NoName56;
     positions_labor_estimates?: FunPointTypePositionLaborEstimateInline[];
-    updated_at?: NoName60;
+    updated_at?: NoName66;
 }
 export interface MainOrganization {
-    created_at?: NoName44;
+    contact_person?: NoName44;
+    contacts_email?: EMail;
+    contacts_phone?: NoName45;
+    created_at?: NoName46;
     current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
-    description?: NoName45;
+    description?: NoName47;
+    general_manager_name?: NoName48;
     id?: ID6;
-    is_contractor?: NoName46;
-    is_customer?: NoName47;
-    name: NoName48;
-    updated_at?: NoName49;
+    is_contractor?: NoName49;
+    is_customer?: NoName50;
+    is_partner?: NoName51;
+    legal_name?: NoName52;
+    name: NoName53;
+    short_name?: NoName54;
+    updated_at?: NoName55;
 }
 export interface FunPointTypePositionLaborEstimateInline {
-    created_at?: NoName51;
-    fun_point_type_id: NoName52;
-    hours?: NoName53;
+    created_at?: NoName57;
+    fun_point_type_id: NoName58;
+    hours?: NoName59;
     id?: ID7;
     position?: Position;
-    position_id: NoName57;
-    sorting?: NoName58;
-    updated_at?: NoName59;
+    position_id: NoName63;
+    sorting?: NoName64;
+    updated_at?: NoName65;
 }
 export interface Position {
-    description?: NoName54;
+    description?: NoName60;
     id?: ID8;
-    is_verified?: NoName55;
-    name: NoName56;
+    is_verified?: NoName61;
+    name: NoName62;
 }
 export interface OrganizationProjectInline {
-    created_at?: NoName69;
+    created_at?: NoName74;
     current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
-    date_from?: NoName70;
-    date_to?: NoName71;
-    description?: NoName72;
-    goals?: NoName73;
+    date_from?: NoName75;
+    date_to?: NoName76;
+    description?: NoName77;
+    goals?: NoName78;
     id?: ID11;
     industry_sector?: IndustrySector;
-    industry_sector_id?: NoName77;
+    industry_sector_id?: NoName82;
     manager_pfm?: UserInline;
-    manager_pfm_id?: NoName78;
+    manager_pfm_id?: NoName83;
     manager_pm?: UserInline;
-    manager_pm_id?: NoName79;
-    name: NoName80;
+    manager_pm_id?: NoName84;
+    name: NoName85;
     organization_contractor?: MainOrganization;
-    organization_contractor_id: NoName81;
+    organization_contractor_id: NoName86;
     organization_customer?: MainOrganization;
-    organization_customer_id: NoName82;
-    plan_description?: NoName83;
+    organization_customer_id: NoName87;
+    plan_description?: NoName88;
     requests_requirements_count_by_status?: RequestsRequirementsCountByStatus;
     requests_requirements_count_total?: RequestsRequirementsCountTotal;
-    status?: NoName84;
-    updated_at?: NoName85;
+    status?: NoName89;
+    updated_at?: NoName90;
 }
 export interface IndustrySector {
-    description?: NoName74;
+    description?: NoName79;
     id?: ID12;
-    is_verified?: NoName75;
-    name: NoName76;
+    is_verified?: NoName80;
+    name: NoName81;
 }
 export interface RequestsRequirementsCountByStatus {}
 export interface ModulePositionLaborEstimateInline {
-    count?: NoName87;
-    created_at?: NoName88;
-    hours?: NoName89;
+    count?: NoName92;
+    created_at?: NoName93;
+    hours?: NoName94;
     id?: ID13;
-    module_id: NoName90;
+    module_id: NoName95;
     position?: Position;
-    position_id: NoName91;
-    sorting?: NoName92;
-    updated_at?: NoName93;
+    position_id: NoName96;
+    sorting?: NoName97;
+    updated_at?: NoName98;
 }

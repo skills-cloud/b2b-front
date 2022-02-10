@@ -1,5 +1,20 @@
 .organization {
 
+    &__title {
+        display: grid;
+        grid-gap: 16px;
+        grid-template-columns: 1fr;
+
+        &_edit {
+            grid-template-columns: 1fr 40px;
+            align-items: flex-start;
+        }
+    }
+
+    &__company {
+        color: var(--color-text-light);
+    }
+
     &__list-item-block {
         display: grid;
         grid-auto-flow: column;
@@ -33,5 +48,13 @@
     &__list-item-text {
         color: var(--color-text-dark);
         white-space: pre-wrap;
+    }
+
+    &__list-item-sub-head {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 20px;
+        color: var(--color-text-dark);
     }
 }

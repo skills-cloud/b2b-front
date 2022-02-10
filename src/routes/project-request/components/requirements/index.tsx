@@ -123,7 +123,8 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                     work_location_address: address,
                     type_of_employment,
                     date_from,
-                    date_to
+                    date_to,
+                    status
                 } = requirement;
                 const ancor = index === 0 ? { id: ESectionInvariants.Requirements } : {};
                 let contextLocation = 'empty';
@@ -199,6 +200,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                 )}
                                 <SectionContentListItem title={t('routes.project-request.blocks.competencies.experience')}>
                                     {getExperienceTrl(experience_years)}
+                                </SectionContentListItem>
+                                <SectionContentListItem title={t('routes.person.blocks.competencies.status.title')}>
+                                    {t(`routes.person.blocks.competencies.status.value.${status}`)}
                                 </SectionContentListItem>
                             </SectionContentList>
                         )}

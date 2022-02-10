@@ -20,9 +20,10 @@ export type NoName6 = string;
 export type NoName7 = number;
 export type NoName8 = number;
 export type NoName9 = number;
-export type NoName10 = number;
-export type NoName11 = string;
-export type NoName12 = number;
+export type NoName10 = 'closed' | 'done' | 'in_progress' | 'open';
+export type NoName11 = number;
+export type NoName12 = string;
+export type NoName13 = number;
 
 export interface RequestRequirement {
     count?: NoName;
@@ -36,7 +37,8 @@ export interface RequestRequirement {
     position_id?: NoName7;
     request_id: NoName8;
     sorting?: NoName9;
-    type_of_employment_id?: NoName10;
-    work_location_address?: NoName11;
-    work_location_city_id?: NoName12;
+    status?: NoName10;
+    type_of_employment_id?: NoName11;
+    work_location_address?: NoName12;
+    work_location_city_id?: NoName13;
 }

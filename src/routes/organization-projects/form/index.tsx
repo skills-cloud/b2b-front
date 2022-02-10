@@ -99,8 +99,8 @@ const OrganizationProjectCreateForm = (props: IProps) => {
 
     useEffect(() => {
         if(whoAmIData?.organizations_contractors_roles?.[0] && whoAmIData.organizations_contractors_roles[0]?.organization_contractor_id) {
-            context.setValue('organization_customer', {
-                value: parseInt(whoAmIData.organizations_contractors_roles[0].organization_contractor_id, 10),
+            context.setValue('organization_contractor', {
+                value: whoAmIData.organizations_contractors_roles[0].organization_contractor_id,
                 label: whoAmIData.organizations_contractors_roles[0].organization_contractor_name || ''
             });
         }

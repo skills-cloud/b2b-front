@@ -24,6 +24,8 @@ import FunctionalPoints from 'route/fun-points';
 import { SystemUsers } from 'route/system-users';
 import { SystemUsersCreate } from 'route/system-users/create';
 import Dashboard from 'route/dashboard';
+import Projects from 'route/projects';
+import ProjectCreate from 'route/projects/create';
 
 export interface IProps extends RouteProps {
     layout?: ComponentType,
@@ -79,6 +81,16 @@ export const baseRoutes: Array<IProps> = [{
 }, {
     exact    : true,
     layout   : Layout,
+    path     : '/projects',
+    component: Projects
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/projects/create',
+    component: ProjectCreate
+}, {
+    exact    : true,
+    layout   : Layout,
     path     : '/organizations/create',
     component: OrganizationCreate
 }, {
@@ -87,35 +99,51 @@ export const baseRoutes: Array<IProps> = [{
     path     : '/organizations/:organizationId/:subpage(projects)?',
     component: Organization
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/organizations/:organizationId/projects/create',
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/organizations/:organizationId/projects/create',
+        '/projects/create'
+    ],
     component: OrganizationProjectCreate
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/organizations/:organizationId/projects/:projectId/:subpage(modules)?',
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/organizations/:organizationId/projects/:projectId/:subpage(modules)?',
+        '/projects/:projectId/:subpage(modules)?'
+    ],
     component: OrganizationProjects
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/organizations/:organizationId/projects/:projectId/modules/create',
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/organizations/:organizationId/projects/:projectId/modules/create',
+        '/projects/:projectId/modules/create'
+    ],
     component: ModuleCreate
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/organizations/:organizationId/projects/:projectId/modules/:moduleId/:subpage(requests)?',
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/organizations/:organizationId/projects/:projectId/modules/:moduleId/:subpage(requests)?',
+        '/projects/:projectId/modules/:moduleId/:subpage(requests)?'
+    ],
     component: Module
 }, {
-    exact    : true,
-    layout   : Layout,
-    path     : '/organizations/:organizationId/projects/:projectId/modules/:moduleId/fun-points',
+    exact : true,
+    layout: Layout,
+    path  : [
+        '/organizations/:organizationId/projects/:projectId/modules/:moduleId/fun-points',
+        '/projects/:projectId/modules/:moduleId/fun-points'
+    ],
     component: FunctionalPoints
 }, {
     exact : true,
     layout: Layout,
     path  : [
         '/requests/create',
+        '/projects/:projectId/modules/:moduleId/requests/create',
         '/organizations/:organizationId/projects/:projectId/modules/:moduleId/requests/create'
     ],
     component: ProjectRequestCreate
@@ -124,6 +152,7 @@ export const baseRoutes: Array<IProps> = [{
     layout: Layout,
     path  : [
         '/organizations/:organizationId/projects/:projectId/modules/:moduleId/requests/:requestId/timesheets',
+        '/projects/:projectId/modules/:moduleId/requests/:requestId/timesheets',
         '/requests/:requestId/timesheets'
     ],
     component: Timesheets
@@ -138,6 +167,7 @@ export const baseRoutes: Array<IProps> = [{
     path  : [
         '/requests/:requestId',
         '/requests/:requestId/:subpage(edit|candidates)',
+        '/projects/:projectId/modules/:moduleId/requests/:requestId/:subpage(edit|candidates|requirement)?',
         '/organizations/:organizationId/projects/:projectId/modules/:moduleId/requests/:requestId/:subpage(edit|candidates|requirement)?'
     ],
     component: ProjectRequest

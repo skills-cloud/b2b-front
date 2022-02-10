@@ -14,6 +14,9 @@ export const SPECIALISTS = '/specialists';
 export const SPECIALIST_CREATE = '/specialists/create';
 export const SPECIALIST_ID = (specialistId?: string | number) => `/specialists/${specialistId}`;
 
+export const PROJECTS = '/projects';
+export const PROJECTS_CREATE = '/projects/create';
+
 export const ORGANIZATIONS = '/organizations';
 export const ORGANIZATION_CREATE = '/organizations/create';
 export const ORGANIZATION_ID = (organizationId?: string | number) => `/organizations/${organizationId}`;
@@ -28,6 +31,10 @@ export const ORGANIZATION_PROJECT_ID = (
         `/projects/${projectId}`
     ];
 
+    if(!organizationId) {
+        path.shift();
+    }
+
     return path.join('');
 };
 export const ORGANIZATION_PROJECT_MODULE_ID = (
@@ -40,6 +47,10 @@ export const ORGANIZATION_PROJECT_MODULE_ID = (
         `/projects/${projectId}`,
         `/modules/${moduleId}`
     ];
+
+    if(!organizationId) {
+        path.shift();
+    }
 
     return path.join('');
 };
@@ -55,6 +66,10 @@ export const ORGANIZATION_PROJECT_MODULE_FUN_POINTS = (
         '/fun-points'
     ];
 
+    if(!organizationId) {
+        path.shift();
+    }
+
     return path.join('');
 };
 export const ORGANIZATION_PROJECT_MODULE_CREATE = (
@@ -66,6 +81,10 @@ export const ORGANIZATION_PROJECT_MODULE_CREATE = (
         `/projects/${projectId}`,
         '/modules/create'
     ];
+
+    if(!organizationId) {
+        path.shift();
+    }
 
     return path.join('');
 };
@@ -80,6 +99,10 @@ export const ORGANIZATION_PROJECT_MODULE_REQUEST_CREATE = (
         `/modules/${moduleId}`,
         '/requests/create'
     ];
+
+    if(!organizationId) {
+        path.shift();
+    }
 
     return path.join('');
 };
@@ -96,6 +119,10 @@ export const ORGANIZATION_PROJECT_MODULE_REQUEST_ID = (
         `/requests/${requestId}`
     ];
 
+    if(!organizationId) {
+        path.shift();
+    }
+
     return path.join('');
 };
 export const ORGANIZATION_PROJECT_MODULE_REQUEST_EDIT = (
@@ -110,6 +137,10 @@ export const ORGANIZATION_PROJECT_MODULE_REQUEST_EDIT = (
         `/modules/${moduleId}`,
         `/requests/${requestId}/edit`
     ];
+
+    if(!organizationId) {
+        path.shift();
+    }
 
     return path.join('');
 };

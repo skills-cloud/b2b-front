@@ -38,7 +38,8 @@ import style from './index.module.pcss';
 export interface IFormValues {
     search?: string,
     is_customer?: boolean,
-    is_contractor?: boolean
+    is_contractor?: boolean,
+    is_partner?: boolean
 }
 
 export const Organizations = () => {
@@ -74,6 +75,9 @@ export const Organizations = () => {
                     } : undefined),
                     ...(values.is_contractor ? {
                         is_contractor: values.is_contractor
+                    } : undefined),
+                    ...(values.is_partner ? {
+                        is_partner: values.is_partner
                     } : undefined)
                 }, {
                     skipEmptyString: true
@@ -92,7 +96,8 @@ export const Organizations = () => {
         context.reset({
             search       : '',
             is_contractor: false,
-            is_customer  : false
+            is_customer  : false,
+            is_partner   : false
         });
     };
 
@@ -101,14 +106,26 @@ export const Organizations = () => {
         setItemToDelete(undefined);
     };
 
-    const elCustomerContractor = (isCustomer?: boolean, isContractor?: boolean) => {
+    const elCustomerContractor = (isCustomer?: boolean, isContractor?: boolean, isPartner?: boolean) => {
+        let text = '';
+
         if(isCustomer && !isContractor) {
-            return t('routes.organizations.main.list.customer');
+            text = t('routes.organizations.main.list.customer');
         } else if(isContractor && !isCustomer) {
-            return t('routes.organizations.main.list.contractor');
+            text = t('routes.organizations.main.list.contractor');
         } else if(isCustomer && isContractor) {
-            return `${t('routes.organizations.main.list.customer')} • ${t('routes.organizations.main.list.contractor')}`;
+            text = `${t('routes.organizations.main.list.customer')} • ${t('routes.organizations.main.list.contractor')}`;
         }
+
+        if(isPartner) {
+            if(text) {
+                text = `${text} • ${t('routes.organizations.main.list.partner')}`;
+            } else {
+                text = t('routes.organizations.main.list.partner');
+            }
+        }
+
+        return text;
     };
 
     const isOrganizationAdmin = (orgId?: number) => {
@@ -142,13 +159,22 @@ export const Organizations = () => {
                                         <Link to={ORGANIZATION_ID(item.id)} className={cn('organizations__list-item-link')}>
                                             {item.name}
                                         </Link>
-                                        {elCustomerContractor(item.is_customer, item.is_contractor)}
+                                        {elCustomerContractor(item.is_customer, item.is_contractor, item.is_partner)}
                                     </div>
                                     <div className={cn('organizations__list-item-block', 'organizations__list-item-block_row')}>
                                         <span className={cn('organizations__list-item-span')}>{t('routes.organizations.main.list.description.title')}</span>
                                         <p className={cn('organizations__list-item-text')}>
                                             {item.description || t('routes.organizations.main.list.description.empty')}
                                         </p>
+                                    </div>
+                                    <div className={cn('organizations__list-item-block', 'organizations__list-item-block_row')}>
+                                        <span className={cn('organizations__list-item-span')}>{t('routes.organizations.main.list.contact-person.title')}</span>
+                                        <p className={cn('organizations__list-item-sub-head')}>{item.contact_person || t('routes.organizations.main.list.contact-person.empty')}</p>
+                                        {(item.contacts_phone || item.contacts_email) && (
+                                            <p className={cn('organizations__list-item-text')}>
+                                                {`${item.contacts_phone || ''}   ${item.contacts_email || ''}`.trim()}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                                 {(item.id && isOrganizationAdmin(item.id)) || whoAmIData?.is_superuser && (
@@ -205,6 +231,10 @@ export const Organizations = () => {
                             <Checkbox
                                 name="is_contractor"
                                 label={t('routes.organizations.sidebar.filters.form.contractor.label')}
+                            />
+                            <Checkbox
+                                name="is_partner"
+                                label={t('routes.organizations.sidebar.filters.form.partner.label')}
                             />
                             <FormInput
                                 name="search"

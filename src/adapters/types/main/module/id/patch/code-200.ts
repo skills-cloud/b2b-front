@@ -11,17 +11,16 @@ export type NoName1 = string;
 export type NoName2 = string;
 export type NoName3 = string;
 export type ID = number;
-export type NoName4 = number;
-export type NoName5 = string;
+export type NoName4 = string;
+export type NoName5 = number;
 export type NoName6 = number;
-export type NoName7 = number;
+export type NoName7 = string;
 export type NoName8 = string;
-export type NoName9 = string;
 /**
  * если пусто, заполнится автоматически из расчета пятидневной рабочей недели<br>ПН-ПТ deadline_date-start_date
  */
+export type NoName9 = number;
 export type NoName10 = number;
-export type NoName11 = number;
 
 export interface ModuleWrite {
     created_at?: NoName;
@@ -29,12 +28,11 @@ export interface ModuleWrite {
     description?: NoName2;
     goals?: NoName3;
     id?: ID;
-    manager_id?: NoName4;
-    name: NoName5;
-    organization_project_id: NoName6;
-    sorting?: NoName7;
-    start_date?: NoName8;
-    updated_at?: NoName9;
-    work_days_count?: NoName10;
-    work_days_hours_count?: NoName11;
+    name: NoName4;
+    organization_project_id: NoName5;
+    sorting?: NoName6;
+    start_date?: NoName7;
+    updated_at?: NoName8;
+    work_days_count?: NoName9;
+    work_days_hours_count?: NoName10;
 }

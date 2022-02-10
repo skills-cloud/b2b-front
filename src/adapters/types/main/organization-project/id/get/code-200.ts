@@ -30,19 +30,26 @@ export type NoName16 = number;
 export type ModulesCount = number;
 export type NoName17 = string;
 export type NoName18 = string;
+export type EMail = string;
 export type NoName19 = string;
-export type ID3 = number;
-export type NoName20 = boolean;
-export type NoName21 = boolean;
+export type NoName20 = string;
+export type NoName21 = string;
 export type NoName22 = string;
-export type NoName23 = string;
-export type NoName24 = number;
-export type NoName25 = number;
+export type ID3 = number;
+export type NoName23 = boolean;
+export type NoName24 = boolean;
+export type NoName25 = boolean;
 export type NoName26 = string;
+export type NoName27 = string;
+export type NoName28 = string;
+export type NoName29 = string;
+export type NoName30 = number;
+export type NoName31 = number;
+export type NoName32 = string;
 export type RequestsCountTotal = number;
 export type RequestsRequirementsCountTotal = number;
-export type NoName27 = 'closed' | 'done' | 'draft' | 'in_progress';
-export type NoName28 = string;
+export type NoName33 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName34 = string;
 
 export interface OrganizationProjectRead {
     created_at?: NoName;
@@ -61,16 +68,16 @@ export interface OrganizationProjectRead {
     modules_count?: ModulesCount;
     name: NoName17;
     organization_contractor?: MainOrganization;
-    organization_contractor_id: NoName24;
+    organization_contractor_id: NoName30;
     organization_customer?: MainOrganization;
-    organization_customer_id: NoName25;
-    plan_description?: NoName26;
+    organization_customer_id: NoName31;
+    plan_description?: NoName32;
     requests_count_by_status?: RequestsCountByStatus;
     requests_count_total?: RequestsCountTotal;
     requests_requirements_count_by_status?: RequestsRequirementsCountByStatus;
     requests_requirements_count_total?: RequestsRequirementsCountTotal;
-    status?: NoName27;
-    updated_at?: NoName28;
+    status?: NoName33;
+    updated_at?: NoName34;
 }
 export interface IndustrySector {
     description?: NoName5;
@@ -89,14 +96,21 @@ export interface UserInline {
     photo?: Photo;
 }
 export interface MainOrganization {
-    created_at?: NoName18;
+    contact_person?: NoName18;
+    contacts_email?: EMail;
+    contacts_phone?: NoName19;
+    created_at?: NoName20;
     current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
-    description?: NoName19;
+    description?: NoName21;
+    general_manager_name?: NoName22;
     id?: ID3;
-    is_contractor?: NoName20;
-    is_customer?: NoName21;
-    name: NoName22;
-    updated_at?: NoName23;
+    is_contractor?: NoName23;
+    is_customer?: NoName24;
+    is_partner?: NoName25;
+    legal_name?: NoName26;
+    name: NoName27;
+    short_name?: NoName28;
+    updated_at?: NoName29;
 }
 export interface RequestsCountByStatus {
     draft: number;

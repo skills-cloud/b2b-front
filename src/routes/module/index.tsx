@@ -131,9 +131,6 @@ const Module = () => {
                         <SectionContentListItem title={t('routes.module.blocks.customer')}>
                             {data?.organization_project?.organization_customer?.name}
                         </SectionContentListItem>
-                        <SectionContentListItem title={t('routes.module.blocks.manager')}>
-                            <ShortName lastName={data?.manager?.last_name} firstName={data?.manager?.first_name} />
-                        </SectionContentListItem>
                         <SectionContentListItem title={t('routes.module.blocks.goals')}>
                             {data?.goals}
                         </SectionContentListItem>
