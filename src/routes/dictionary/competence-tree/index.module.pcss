@@ -1,0 +1,28 @@
+.competence-tree {
+    display: grid;
+    grid-row-gap: 24px;
+
+    &__label_bold {
+        font-weight: 500;
+    }
+
+    &__button {
+        justify-self: flex-start;
+    }
+
+    &__item {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        padding-right: 40px;
+        align-items: center;
+    }
+
+    &__controls {
+        display: flex;
+        gap: 6px;
+    }
+
+    &__icon {
+        cursor: pointer;
+    }
+}

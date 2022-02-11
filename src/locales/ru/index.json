@@ -81,6 +81,7 @@
             "dashboard": "Дашборд",
             "candidates": "Кандидаты",
             "specialists": "Специалисты",
+            "dictionary": "Справочники",
             "modules": "Модули",
             "organizations": "Организации",
             "requests": "Проектные запросы",
@@ -1524,6 +1525,7 @@
     "helmet": {
         "title": {
             "main": "SkillsCloud",
+            "dictionary": "Справочники",
             "not-found": "404 Не найдено"
         },
         "description": "SkillsCloud описание",

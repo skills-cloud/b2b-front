@@ -6,76 +6,91 @@
  */
 
 export type Code200 = CvTimeSlotRead;
-export type NoName = string;
-export type ID = number;
-export type NoName1 = boolean;
 export type NoName2 = string;
-export type NoName3 = string;
-export type ID1 = number;
-export type NoName4 = boolean;
+export type ID = number;
+export type NoName3 = boolean;
+export type NoName4 = string;
 export type NoName5 = string;
-export type NoName6 = number;
-export type NoName7 = number;
+export type ID1 = number;
+export type NoName6 = boolean;
+export type NoName7 = string;
 export type NoName8 = number;
-export type NoName9 = string;
-export type NoName10 = string;
+export type NoName9 = number;
+export type NoName10 = number;
 export type NoName11 = string;
+export type NoName12 = string;
+export type NoName13 = string;
 export type ID2 = number;
-export type NoName12 = boolean;
-export type NoName13 = boolean;
-export type NoName14 = 'manual' | 'request_requirement';
+export type NoName14 = boolean;
+export type NoName15 = boolean;
+export type NoName16 = 'manual' | 'request_requirement';
 export type OrganizationProjectId = number;
 export type OrganizationProjectName = string;
-export type NoName15 = number;
+export type NoName17 = number;
 export type RequestId = number;
 export type RequestRequirementId = number;
 export type RequestRequirementName = string;
 export type RequestTitle = string;
-export type NoName16 = string;
+export type NoName19 = string;
 export type ID3 = number;
-export type NoName17 = boolean;
-export type NoName18 = string;
-export type NoName19 = number;
+export type NoName20 = boolean;
+export type NoName21 = string;
+export type NoName22 = number;
 
 export interface CvTimeSlotRead {
     city?: City;
-    city_id?: NoName6;
+    city_id?: NoName8;
     country?: Country;
-    country_id?: NoName7;
-    cv_id: NoName8;
-    date_from?: NoName9;
-    date_to?: NoName10;
-    description?: NoName11;
+    country_id?: NoName9;
+    cv_id: NoName10;
+    date_from?: NoName11;
+    date_to?: NoName12;
+    description?: NoName13;
     id?: ID2;
-    is_free?: NoName12;
-    is_work_permit_required?: NoName13;
-    kind?: NoName14;
+    is_free?: NoName14;
+    is_work_permit_required?: NoName15;
+    kind?: NoName16;
     organization_project_id?: OrganizationProjectId;
     organization_project_name?: OrganizationProjectName;
-    price?: NoName15;
+    price?: NoName17;
     request_id?: RequestId;
     request_requirement_id?: RequestRequirementId;
     request_requirement_name?: RequestRequirementName;
     request_title?: RequestTitle;
     type_of_employment?: TypeOfEmployment;
-    type_of_employment_id: NoName19;
+    type_of_employment_id: NoName22;
 }
 export interface City {
+    attributes?: NoName;
     country: Country;
-    description?: NoName3;
+    description?: NoName5;
     id?: ID1;
-    is_verified?: NoName4;
-    name: NoName5;
+    is_verified?: NoName6;
+    name: NoName7;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName {}
 export interface Country {
-    description?: NoName;
+    attributes?: NoName1;
+    description?: NoName2;
     id?: ID;
-    is_verified?: NoName1;
-    name: NoName2;
+    is_verified?: NoName3;
+    name: NoName4;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName1 {}
 export interface TypeOfEmployment {
-    description?: NoName16;
+    attributes?: NoName18;
+    description?: NoName19;
     id?: ID3;
-    is_verified?: NoName17;
-    name: NoName18;
+    is_verified?: NoName20;
+    name: NoName21;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName18 {}

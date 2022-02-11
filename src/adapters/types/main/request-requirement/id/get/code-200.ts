@@ -59,29 +59,29 @@ export type NoName30 = number;
 export type ID4 = number;
 export type NoName31 = number;
 export type NoName32 = string;
-export type NoName33 = string;
+export type NoName34 = string;
 export type ID5 = number;
-export type NoName34 = boolean;
-export type NoName35 = string;
-export type NoName36 = number;
+export type NoName35 = boolean;
+export type NoName36 = string;
 export type NoName37 = number;
 export type NoName38 = number;
+export type NoName39 = number;
 export type Status = string;
-export type NoName39 = string;
-export type ID6 = number;
-export type NoName40 = boolean;
 export type NoName41 = string;
-export type NoName42 = number;
+export type ID6 = number;
+export type NoName42 = boolean;
 export type NoName43 = string;
-export type NoName44 = string;
+export type NoName44 = number;
+export type NoName45 = string;
+export type NoName48 = string;
 export type ID7 = number;
-export type NoName45 = boolean;
-export type NoName46 = string;
-export type NoName47 = string;
+export type NoName49 = boolean;
+export type NoName50 = string;
+export type NoName51 = string;
 export type ID8 = number;
-export type NoName48 = boolean;
-export type NoName49 = string;
-export type NoName50 = number;
+export type NoName52 = boolean;
+export type NoName53 = string;
+export type NoName54 = number;
 
 export interface RequestRequirementRead {
     competencies?: RequestRequirementCompetenceRead[];
@@ -96,15 +96,15 @@ export interface RequestRequirementRead {
     max_price?: NoName31;
     name?: NoName32;
     position?: Position;
-    position_id?: NoName36;
-    request_id: NoName37;
-    sorting?: NoName38;
+    position_id?: NoName37;
+    request_id: NoName38;
+    sorting?: NoName39;
     status?: Status;
     type_of_employment?: TypeOfEmployment;
-    type_of_employment_id?: NoName42;
-    work_location_address?: NoName43;
+    type_of_employment_id?: NoName44;
+    work_location_address?: NoName45;
     work_location_city?: City;
-    work_location_city_id?: NoName50;
+    work_location_city_id?: NoName54;
 }
 export interface RequestRequirementCompetenceRead {
     competence?: Competence;
@@ -156,27 +156,47 @@ export interface RequestRequirementCvOrganizationProjectCardItem {
     id: NoName23;
 }
 export interface Position {
-    description?: NoName33;
+    attributes?: NoName33;
+    description?: NoName34;
     id?: ID5;
-    is_verified?: NoName34;
-    name: NoName35;
+    is_verified?: NoName35;
+    name: NoName36;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName33 {}
 export interface TypeOfEmployment {
-    description?: NoName39;
+    attributes?: NoName40;
+    description?: NoName41;
     id?: ID6;
-    is_verified?: NoName40;
-    name: NoName41;
+    is_verified?: NoName42;
+    name: NoName43;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName40 {}
 export interface City {
+    attributes?: NoName46;
     country: Country;
-    description?: NoName47;
+    description?: NoName51;
     id?: ID8;
-    is_verified?: NoName48;
-    name: NoName49;
+    is_verified?: NoName52;
+    name: NoName53;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName46 {}
 export interface Country {
-    description?: NoName44;
+    attributes?: NoName47;
+    description?: NoName48;
     id?: ID7;
-    is_verified?: NoName45;
-    name: NoName46;
+    is_verified?: NoName49;
+    name: NoName50;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName47 {}

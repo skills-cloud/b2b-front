@@ -8,6 +8,12 @@
         "Citizenship": {
             "nullable": true,
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -37,6 +43,12 @@
         "City": {
             "nullable": true,
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "country": {
                     "$ref": "#/definitions/Country"
                 },
@@ -126,6 +138,12 @@
         },
         "ContactType": {
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -155,6 +173,12 @@
         "Country": {
             "nullable": true,
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -1445,6 +1469,12 @@
         "EducationGraduate": {
             "nullable": true,
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -1474,6 +1504,12 @@
         "EducationPlace": {
             "nullable": true,
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -1503,6 +1539,12 @@
         "EducationSpecialty": {
             "nullable": true,
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -1690,6 +1732,12 @@
         },
         "IndustrySector": {
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -2050,6 +2098,12 @@
         },
         "Organization": {
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -2344,6 +2398,12 @@
         },
         "PhysicalLimitation": {
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -2372,6 +2432,12 @@
         },
         "Position": {
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -2471,6 +2537,12 @@
         },
         "TypeOfEmployment": {
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",

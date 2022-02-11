@@ -8,6 +8,12 @@
         "City": {
             "nullable": true,
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "country": {
                     "$ref": "#/definitions/Country"
                 },
@@ -65,6 +71,12 @@
         "Country": {
             "nullable": true,
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -392,6 +404,12 @@
         },
         "IndustrySector": {
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -909,6 +927,12 @@
         },
         "Position": {
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",
@@ -1350,6 +1374,12 @@
         },
         "TypeOfEmployment": {
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",

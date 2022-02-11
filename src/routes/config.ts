@@ -24,6 +24,7 @@ import FunctionalPoints from 'route/fun-points';
 import { SystemUsers } from 'route/system-users';
 import { SystemUsersCreate } from 'route/system-users/create';
 import Dashboard from 'route/dashboard';
+import Dictionary from 'route/dictionary';
 import Projects from 'route/projects';
 import ProjectCreate from 'route/projects/create';
 
@@ -63,6 +64,11 @@ export const baseRoutes: Array<IProps> = [{
         '/organizations/:organizationId/projects/:projectId/modules/:moduleId/requests/:requestId/requirement/:requirementId/specialists'
     ],
     component: Specialists
+}, {
+    exact    : true,
+    layout   : Layout,
+    path     : '/dictionary',
+    component: Dictionary
 }, {
     exact    : true,
     layout   : Layout,
