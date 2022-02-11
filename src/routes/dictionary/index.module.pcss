@@ -1,0 +1,25 @@
+.dictionary {
+    width: 100%;
+    max-width: 992px;
+
+    /* stylelint-disable selector-max-compound-selectors,selector-max-combinators,selector-max-class,no-descending-specificity,declaration-no-important */
+    :global {
+
+        .ant-tabs-left > .ant-tabs-nav .ant-tabs-tab {
+            padding-left: 0;
+        }
+
+        .ant-tabs-tabpane {
+            box-sizing: border-box;
+        }
+
+        .ant-tabs-nav-operations {
+            display: none !important;
+        }
+
+        .ant-pagination-item-link span {
+            height: auto;
+        }
+    }
+    /* stylelint-enable selector-max-compound-selectors,selector-max-combinators,selector-max-class, no-descending-specificity,declaration-no-important */
+}

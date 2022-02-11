@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ContactType } from 'adapter/types/dictionary/contact-type/get/code-200';
 import { IndustrySector } from 'adapter/types/dictionary/industry-sector/get/code-200';
 import { IndustrySector as IndustrySectorById } from 'adapter/types/dictionary/industry-sector/id/get/code-200';
-import { Country } from 'adapter/types/dictionary/country/get/code-200';
+import { Country, NoName } from 'adapter/types/dictionary/country/get/code-200';
 import { Country as CountryById } from 'adapter/types/dictionary/country/id/get/code-200';
 import { City } from 'adapter/types/dictionary/city/get/code-200';
 import { City as CityById } from 'adapter/types/dictionary/city/id/get/code-200';
@@ -89,6 +89,25 @@ export interface IGetCompetenceListParams {
     id?: Array<number>
 }
 
+export interface IDictionary {
+    attributes?: NoName,
+    description?: string,
+    id?: number,
+    is_verified?: boolean,
+    name: string
+}
+
+export interface IDictionaryKey {
+    key: string
+}
+
+export interface IDictionaryParams {
+    search?: string,
+    page?: number,
+    page_size?: number,
+    country_id?: string | number
+}
+
 export const dictionary = createApi({
     reducerPath: 'api/dictionary',
     tagTypes   : ['dictionary'],
@@ -152,7 +171,7 @@ export const dictionary = createApi({
                 params
             })
         }),
-        getCountryList: build.query<IResponseGetCountryList, { search?: string } | undefined>({
+        getCountryList: build.query<IResponseGetCountryList, IDictionaryParams | undefined>({
             providesTags: ['dictionary'],
             query       : (params) => ({
                 url   : 'country/',
@@ -279,6 +298,37 @@ export const dictionary = createApi({
                 url   : `organization/${params.id}/`,
                 method: 'GET'
             })
+        }),
+        getDictionaryList: build.query<IResponseGetCountryList, IDictionaryKey & IDictionaryParams>({
+            providesTags: ['dictionary'],
+            query       : ({ key, ...params }) => ({
+                url   : `${key}/`,
+                method: 'GET',
+                params
+            })
+        }),
+        deleteDictionaryItem: build.mutation<void, IDictionaryKey & { id: number }>({
+            query: ({ key, id }) => ({
+                url   : `${key}/${id}/`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['dictionary']
+        }),
+        patchDictionaryItem: build.mutation<IDictionary, Omit<IDictionaryKey & IDictionary, 'attributes'>>({
+            query: ({ key, ...body }) => ({
+                url   : `${key}/${body.id}/`,
+                method: 'PATCH',
+                body
+            }),
+            invalidatesTags: ['dictionary']
+        }),
+        postDictionaryItem: build.mutation<IDictionary, Omit<IDictionaryKey & IDictionary, 'id' | 'attributes'>>({
+            query: ({ key, ...body }) => ({
+                url   : `${key}/`,
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: ['dictionary']
         })
     })
 });

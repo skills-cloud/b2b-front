@@ -12,44 +12,44 @@ export type NoName2 = string;
 export type NoName3 = string;
 export type NoName4 = string;
 export type ID = number;
-export type NoName5 = string;
+export type NoName6 = string;
 export type ID1 = number;
-export type NoName6 = boolean;
-export type NoName7 = string;
-export type NoName8 = number;
-export type NoName9 = string;
+export type NoName7 = boolean;
+export type NoName8 = string;
+export type NoName9 = number;
 export type NoName10 = string;
-export type NoName11 = '-' | 'F' | 'M';
+export type NoName11 = string;
+export type NoName12 = '-' | 'F' | 'M';
 export type ID2 = number;
-export type NoName12 = string;
 export type NoName13 = string;
 export type NoName14 = string;
+export type NoName15 = string;
 export type Photo = string;
-export type NoName15 = number;
 export type NoName16 = number;
+export type NoName17 = number;
 export type ModulesCount = number;
-export type NoName17 = string;
 export type NoName18 = string;
-export type EMail = string;
 export type NoName19 = string;
+export type EMail = string;
 export type NoName20 = string;
 export type NoName21 = string;
 export type NoName22 = string;
+export type NoName23 = string;
 export type ID3 = number;
-export type NoName23 = boolean;
 export type NoName24 = boolean;
 export type NoName25 = boolean;
-export type NoName26 = string;
+export type NoName26 = boolean;
 export type NoName27 = string;
 export type NoName28 = string;
 export type NoName29 = string;
-export type NoName30 = number;
+export type NoName30 = string;
 export type NoName31 = number;
-export type NoName32 = string;
+export type NoName32 = number;
+export type NoName33 = string;
 export type RequestsCountTotal = number;
 export type RequestsRequirementsCountTotal = number;
-export type NoName33 = 'closed' | 'done' | 'draft' | 'in_progress';
-export type NoName34 = string;
+export type NoName34 = 'closed' | 'done' | 'draft' | 'in_progress';
+export type NoName35 = string;
 
 export interface OrganizationProjectRead {
     created_at?: NoName;
@@ -60,67 +60,62 @@ export interface OrganizationProjectRead {
     goals?: NoName4;
     id?: ID;
     industry_sector?: IndustrySector;
-    industry_sector_id?: NoName8;
+    industry_sector_id?: NoName9;
     manager_pfm?: UserInline;
-    manager_pfm_id?: NoName15;
+    manager_pfm_id?: NoName16;
     manager_pm?: UserInline;
-    manager_pm_id?: NoName16;
+    manager_pm_id?: NoName17;
     modules_count?: ModulesCount;
-    name: NoName17;
+    name: NoName18;
     organization_contractor?: MainOrganization;
-    organization_contractor_id: NoName30;
+    organization_contractor_id: NoName31;
     organization_customer?: MainOrganization;
-    organization_customer_id: NoName31;
-    plan_description?: NoName32;
+    organization_customer_id: NoName32;
+    plan_description?: NoName33;
     requests_count_by_status?: RequestsCountByStatus;
     requests_count_total?: RequestsCountTotal;
     requests_requirements_count_by_status?: RequestsRequirementsCountByStatus;
     requests_requirements_count_total?: RequestsRequirementsCountTotal;
-    status?: NoName33;
-    updated_at?: NoName34;
+    status?: NoName34;
+    updated_at?: NoName35;
 }
 export interface IndustrySector {
-    description?: NoName5;
+    attributes?: NoName5;
+    description?: NoName6;
     id?: ID1;
-    is_verified?: NoName6;
-    name: NoName7;
+    is_verified?: NoName7;
+    name: NoName8;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName5 {}
 export interface UserInline {
-    birth_date?: NoName9;
-    first_name?: NoName10;
-    gender?: null | NoName11;
+    birth_date?: NoName10;
+    first_name?: NoName11;
+    gender?: null | NoName12;
     id?: ID2;
-    last_name?: NoName12;
-    middle_name?: NoName13;
-    phone?: NoName14;
+    last_name?: NoName13;
+    middle_name?: NoName14;
+    phone?: NoName15;
     photo?: Photo;
 }
 export interface MainOrganization {
-    contact_person?: NoName18;
+    contact_person?: NoName19;
     contacts_email?: EMail;
-    contacts_phone?: NoName19;
-    created_at?: NoName20;
+    contacts_phone?: NoName20;
+    created_at?: NoName21;
     current_user_roles?: ('admin' | 'pfm' | 'pm' | 'rm')[];
-    description?: NoName21;
-    general_manager_name?: NoName22;
+    description?: NoName22;
+    general_manager_name?: NoName23;
     id?: ID3;
-    is_contractor?: NoName23;
-    is_customer?: NoName24;
-    is_partner?: NoName25;
-    legal_name?: NoName26;
-    name: NoName27;
-    short_name?: NoName28;
-    updated_at?: NoName29;
+    is_contractor?: NoName24;
+    is_customer?: NoName25;
+    is_partner?: NoName26;
+    legal_name?: NoName27;
+    name: NoName28;
+    short_name?: NoName29;
+    updated_at?: NoName30;
 }
-export interface RequestsCountByStatus {
-    draft: number;
-    in_progress: number;
-    done: number;
-    closed: number;
-}
-export interface RequestsRequirementsCountByStatus {
-    draft: number;
-    in_progress: number;
-    done: number;
-    closed: number;
-}
+export interface RequestsCountByStatus {}
+export interface RequestsRequirementsCountByStatus {}

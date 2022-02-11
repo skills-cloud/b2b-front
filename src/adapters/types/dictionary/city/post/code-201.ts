@@ -6,25 +6,35 @@
  */
 
 export type Code201 = City;
-export type NoName = string;
-export type ID = number;
-export type NoName1 = boolean;
 export type NoName2 = string;
-export type NoName3 = string;
-export type ID1 = number;
-export type NoName4 = boolean;
+export type ID = number;
+export type NoName3 = boolean;
+export type NoName4 = string;
 export type NoName5 = string;
+export type ID1 = number;
+export type NoName6 = boolean;
+export type NoName7 = string;
 
 export interface City {
+    attributes?: NoName;
     country: Country;
-    description?: NoName3;
+    description?: NoName5;
     id?: ID1;
-    is_verified?: NoName4;
-    name: NoName5;
+    is_verified?: NoName6;
+    name: NoName7;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName {}
 export interface Country {
-    description?: NoName;
+    attributes?: NoName1;
+    description?: NoName2;
     id?: ID;
-    is_verified?: NoName1;
-    name: NoName2;
+    is_verified?: NoName3;
+    name: NoName4;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName1 {}

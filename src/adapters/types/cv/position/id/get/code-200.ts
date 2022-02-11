@@ -21,12 +21,12 @@ export type NoName5 = string;
 export type FileSize = string;
 export type ID1 = number;
 export type ID2 = number;
-export type NoName6 = string;
+export type NoName7 = string;
 export type ID3 = number;
-export type NoName7 = boolean;
-export type NoName8 = string;
-export type NoName9 = number;
-export type NoName10 = string;
+export type NoName8 = boolean;
+export type NoName9 = string;
+export type NoName10 = number;
+export type NoName11 = string;
 export type YearStarted = number;
 export type Years1 = number;
 
@@ -37,8 +37,8 @@ export interface CvPositionRead {
     files?: CvPositionFileRead[];
     id?: ID2;
     position?: Position;
-    position_id?: NoName9;
-    title?: NoName10;
+    position_id?: NoName10;
+    title?: NoName11;
     year_started?: YearStarted;
     years?: Years1;
 }
@@ -62,8 +62,13 @@ export interface CvPositionFileRead {
     id?: ID1;
 }
 export interface Position {
-    description?: NoName6;
+    attributes?: NoName6;
+    description?: NoName7;
     id?: ID3;
-    is_verified?: NoName7;
-    name: NoName8;
+    is_verified?: NoName8;
+    name: NoName9;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName6 {}

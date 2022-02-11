@@ -8,6 +8,12 @@
         "EducationSpecialty": {
             "nullable": true,
             "properties": {
+                "attributes": {
+                    "description": "если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования",
+                    "readOnly": true,
+                    "title": "Доп. атрибуты",
+                    "type": "object"
+                },
                 "description": {
                     "nullable": true,
                     "title": "Описание",

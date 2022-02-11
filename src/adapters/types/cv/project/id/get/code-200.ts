@@ -17,23 +17,23 @@ export type NoName5 = string;
 export type NoName6 = string;
 export type NoName7 = string;
 export type ID1 = number;
-export type NoName8 = string;
+export type NoName9 = string;
 export type ID2 = number;
-export type NoName9 = boolean;
-export type NoName10 = string;
-export type NoName11 = number;
-export type NoName12 = boolean;
-export type NoName13 = string;
+export type NoName10 = boolean;
+export type NoName11 = string;
+export type NoName12 = number;
+export type NoName13 = boolean;
 export type NoName14 = string;
-export type ID3 = number;
-export type NoName15 = boolean;
 export type NoName16 = string;
-export type NoName17 = number;
+export type ID3 = number;
+export type NoName17 = boolean;
 export type NoName18 = string;
+export type NoName19 = number;
+export type NoName21 = string;
 export type ID4 = number;
-export type NoName19 = boolean;
-export type NoName20 = string;
-export type NoName21 = number;
+export type NoName22 = boolean;
+export type NoName23 = string;
+export type NoName24 = number;
 
 export interface CvProjectRead {
     competencies?: CompetenceInline[];
@@ -44,13 +44,13 @@ export interface CvProjectRead {
     description?: NoName7;
     id?: ID1;
     industry_sector?: IndustrySector;
-    industry_sector_id?: NoName11;
-    is_verified?: NoName12;
-    name: NoName13;
+    industry_sector_id?: NoName12;
+    is_verified?: NoName13;
+    name: NoName14;
     organization?: Organization;
-    organization_id: NoName17;
+    organization_id: NoName19;
     position?: Position;
-    position_id: NoName21;
+    position_id: NoName24;
 }
 export interface CompetenceInline {
     description?: NoName;
@@ -60,20 +60,35 @@ export interface CompetenceInline {
     parent_id?: ParentId;
 }
 export interface IndustrySector {
-    description?: NoName8;
+    attributes?: NoName8;
+    description?: NoName9;
     id?: ID2;
-    is_verified?: NoName9;
-    name: NoName10;
+    is_verified?: NoName10;
+    name: NoName11;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName8 {}
 export interface Organization {
-    description?: NoName14;
+    attributes?: NoName15;
+    description?: NoName16;
     id?: ID3;
-    is_verified?: NoName15;
-    name: NoName16;
+    is_verified?: NoName17;
+    name: NoName18;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName15 {}
 export interface Position {
-    description?: NoName18;
+    attributes?: NoName20;
+    description?: NoName21;
     id?: ID4;
-    is_verified?: NoName19;
-    name: NoName20;
+    is_verified?: NoName22;
+    name: NoName23;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName20 {}

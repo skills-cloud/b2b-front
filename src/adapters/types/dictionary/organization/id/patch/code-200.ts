@@ -6,14 +6,19 @@
  */
 
 export type Code200 = Organization;
-export type NoName = string;
+export type NoName1 = string;
 export type ID = number;
-export type NoName1 = boolean;
-export type NoName2 = string;
+export type NoName2 = boolean;
+export type NoName3 = string;
 
 export interface Organization {
-    description?: NoName;
+    attributes?: NoName;
+    description?: NoName1;
     id?: ID;
-    is_verified?: NoName1;
-    name: NoName2;
+    is_verified?: NoName2;
+    name: NoName3;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName {}

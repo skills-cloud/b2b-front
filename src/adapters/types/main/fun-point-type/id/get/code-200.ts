@@ -39,14 +39,14 @@ export type NoName23 = number;
  */
 export type NoName24 = number;
 export type ID3 = number;
-export type NoName25 = string;
+export type NoName26 = string;
 export type ID4 = number;
-export type NoName26 = boolean;
-export type NoName27 = string;
-export type NoName28 = number;
+export type NoName27 = boolean;
+export type NoName28 = string;
 export type NoName29 = number;
-export type NoName30 = string;
+export type NoName30 = number;
 export type NoName31 = string;
+export type NoName32 = string;
 
 export interface FunPointTypeRead {
     created_at?: NoName;
@@ -57,7 +57,7 @@ export interface FunPointTypeRead {
     organization_customer?: MainOrganization;
     organization_customer_id?: NoName21;
     positions_labor_estimates?: FunPointTypePositionLaborEstimateInline[];
-    updated_at?: NoName31;
+    updated_at?: NoName32;
 }
 export interface FunPointTypeDifficultyLevelInline {
     created_at?: NoName2;
@@ -91,13 +91,18 @@ export interface FunPointTypePositionLaborEstimateInline {
     hours?: NoName24;
     id?: ID3;
     position?: Position;
-    position_id: NoName28;
-    sorting?: NoName29;
-    updated_at?: NoName30;
+    position_id: NoName29;
+    sorting?: NoName30;
+    updated_at?: NoName31;
 }
 export interface Position {
-    description?: NoName25;
+    attributes?: NoName25;
+    description?: NoName26;
     id?: ID4;
-    is_verified?: NoName26;
-    name: NoName27;
+    is_verified?: NoName27;
+    name: NoName28;
 }
+/**
+ * если вы не до конца понимаете назначение этого поля, вам лучше избежать редактирования
+ */
+export interface NoName25 {}
