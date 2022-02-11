@@ -23,7 +23,8 @@
                 },
                 "dropdown": {
                     "logout": "Выйти из аккаунта",
-                    "dashboard": "Дашборд"
+                    "dashboard": "Дашборд",
+                    "dictionary": "Справочники"
                 }
             }
         },

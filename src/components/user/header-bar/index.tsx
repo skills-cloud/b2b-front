@@ -75,6 +75,16 @@ export const UserHeaderBar = (props: IProps) => {
                                     selected={false}
                                     onClick={() => {
                                         onClose();
+
+                                        history.push('/dictionary');
+                                    }}
+                                >
+                                    {t('components.user.header-bar.dropdown.dictionary')}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    selected={false}
+                                    onClick={() => {
+                                        onClose();
                                         onLogout();
                                     }}
                                 >
