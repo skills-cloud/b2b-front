@@ -1,7 +1,7 @@
 import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useClassnames } from 'hook/use-classnames';
+import { useClassnames, IStyle } from 'hook/use-classnames';
 
 import ReactTreeList, { Node } from 'react-checkbox-tree';
 import IconChevronDown from 'component/icons/chevron-down';
@@ -34,7 +34,8 @@ interface IProps {
     expandOpen?: ReactNode,
     expandClose?: ReactNode,
     showCheckbox?: boolean,
-    needRenderSearch?: boolean
+    needRenderSearch?: boolean,
+    className?: string | IStyle
 }
 
 const walkTree = (items: Array<IItem>, callback: (model: IItem) => void) => {
@@ -91,12 +92,13 @@ const TreeList = ({
     onSetChecked,
     label,
     expandOpen,
+    className,
     expandClose,
     showCheckbox = false,
     needRenderSearch = true
 }: IProps) => {
     const { t } = useTranslation();
-    const cn = useClassnames(style);
+    const cn = useClassnames(style, className, true);
     const nodeById = useRef({});
 
     const [expanded, setExpanded] = useState<Array<string>>([]);

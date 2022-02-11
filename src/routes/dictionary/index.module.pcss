@@ -2,6 +2,16 @@
     width: 100%;
     max-width: 992px;
 
+    &__competence-item-label_bold {
+        font-weight: 500;
+    }
+
+    &__competence-item-experience {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        padding-right: 40px;
+    }
+
     /* stylelint-disable selector-max-compound-selectors,selector-max-combinators,selector-max-class,no-descending-specificity,declaration-no-important */
     :global {
 
@@ -11,10 +21,6 @@
 
         .ant-tabs-tabpane {
             box-sizing: border-box;
-        }
-
-        .ant-tabs-nav-operations {
-            display: none !important;
         }
 
         .ant-pagination-item-link span {

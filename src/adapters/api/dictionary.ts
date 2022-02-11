@@ -109,6 +109,11 @@ export interface IDictionaryParams {
     country_id?: string | number
 }
 
+export interface ICompetenceData {
+    name: string,
+    parent_id?: string
+}
+
 export interface IResponseGetDictionary {
     count: number,
     next?: string,
@@ -156,6 +161,29 @@ export const dictionary = createApi({
                     ...params
                 }
             })
+        }),
+        postCompetence: build.mutation<Competence, ICompetenceData | undefined>({
+            invalidatesTags: ['dictionary'],
+            query          : (body) => ({
+                url   : 'competence/',
+                method: 'POST',
+                body
+            })
+        }),
+        patchCompetence: build.mutation<Competence, { id: string } & ICompetenceData>({
+            invalidatesTags: ['dictionary'],
+            query          : (body) => ({
+                url   : `competence/${body.id}/`,
+                method: 'PATCH',
+                body
+            })
+        }),
+        deleteCompetence: build.mutation<void, { id: number }>({
+            query: ({ id }) => ({
+                url   : `competence/${id}/`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['dictionary']
         }),
         getCompetenceById: build.query<CompetenceById, { id: string }>({
             providesTags: ['dictionary'],

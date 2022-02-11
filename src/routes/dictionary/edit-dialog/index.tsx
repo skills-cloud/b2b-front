@@ -7,7 +7,7 @@ import Modal from 'component/modal';
 import Button from 'component/button';
 import Error from 'component/error';
 
-import style from './edit-dialog.module.pcss';
+import style from './index.module.pcss';
 
 export interface IProps {
     className?: string | IStyle,
@@ -56,7 +56,7 @@ export const EditDictionaryItem = (props: IProps) => {
                     </Button>
                 </div>
                 {props.isError && (
-                    <Error>{props.error}</Error>
+                    <Error>{JSON.stringify(props.error)}</Error>
                 )}
             </div>
         </Modal>

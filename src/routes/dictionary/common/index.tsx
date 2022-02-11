@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, Fragment, useMemo } from 'react';
 import { List } from 'antd';
-
 // import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -12,11 +11,11 @@ import Loader from 'component/loader';
 import { dictionary as dictionaryApi, IDictionary, IDictionaryParams } from 'src/adapters/api/dictionary';
 import { useClassnames } from 'hook/use-classnames';
 
-import EditDictionaryItem from './edit-dialog';
+import EditDictionaryItem from '../edit-dialog';
 import 'antd/lib/list/style/index.css';
 import 'antd/lib/pagination/style/index.css';
 import 'antd/lib/dropdown/style/index.css';
-import style from './common.module.pcss';
+import style from './index.module.pcss';
 
 
 export interface IProps {
@@ -104,7 +103,7 @@ export const CommonDictionary = (props: IProps) => {
                 loading={isLoading}
                 itemLayout="horizontal"
                 className={`dict-list-${props.apiKey}`}
-                style={{ height: `calc(100vh - ${props.listParams?.country_id ? 254 : 208}px)`, overflowY: 'scroll' }}
+                style={{ height: 'calc(100vh - 208px)', overflowY: 'scroll' }}
                 pagination={{
                     onChange: (changedPage) => {
                         setPage(changedPage);
