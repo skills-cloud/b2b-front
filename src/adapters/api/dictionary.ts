@@ -94,7 +94,8 @@ export interface IDictionary {
     description?: string,
     id?: number,
     is_verified?: boolean,
-    name: string
+    name: string,
+    country?: Country
 }
 
 export interface IDictionaryKey {
@@ -106,6 +107,13 @@ export interface IDictionaryParams {
     page?: number,
     page_size?: number,
     country_id?: string | number
+}
+
+export interface IResponseGetDictionary {
+    count: number,
+    next?: string,
+    previous?: string,
+    results: Array<IDictionary>
 }
 
 export const dictionary = createApi({
@@ -299,7 +307,7 @@ export const dictionary = createApi({
                 method: 'GET'
             })
         }),
-        getDictionaryList: build.query<IResponseGetCountryList, IDictionaryKey & IDictionaryParams>({
+        getDictionaryList: build.query<IResponseGetDictionary, IDictionaryKey & IDictionaryParams>({
             providesTags: ['dictionary'],
             query       : ({ key, ...params }) => ({
                 url   : `${key}/`,

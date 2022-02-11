@@ -20,7 +20,8 @@ export interface IProps {
     isLoading?: boolean,
     isError?: boolean,
     error?: ReactNode,
-    defaultFormValues?: Record<string, unknown>,
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    defaultFormValues?: Record<string, any>,
     inputs?: ReactNode
 }
 
@@ -37,7 +38,7 @@ export const EditDictionaryItem = (props: IProps) => {
             <div className={cn('edit-dictionary-item')}>
                 {props.text && <p className={cn('edit-dictionary-item__text')}>{props.text}</p>}
                 <FormProvider {...form}>
-                    <form>
+                    <form className={cn('edit-dictionary-item__form')}>
                         {props.inputs}
                     </form>
                 </FormProvider>

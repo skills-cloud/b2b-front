@@ -2,7 +2,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { Tabs } from 'antd';
-import { dictionary as dictionaryApi } from 'src/adapters/api/dictionary';
 
 import { useClassnames } from 'hook/use-classnames';
 
@@ -15,7 +14,6 @@ const { TabPane } = Tabs;
 const Dictionary = () => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
-    const countries = dictionaryApi.useGetCountryListQuery({});
     const dictionaryList = [
         {
             apiKey: 'country',
@@ -74,20 +72,6 @@ const Dictionary = () => {
             />
             <Tabs defaultActiveKey="1" tabPosition="left">
                 {dictionaryList.map((dictItem) => {
-                    if(dictItem.apiKey === 'city') {
-                        return (
-                            <TabPane tab={dictItem.name} key={dictItem.apiKey}>
-                                <Tabs defaultActiveKey="1" tabPosition="top">
-                                    {countries.data?.results.map((country) => (
-                                        <TabPane tab={country.name} key={country.id}>
-                                            <CommonDictionary {...dictItem} listParams={{ country_id: country.id }} />
-                                        </TabPane>
-                                    ))};
-                                </Tabs>
-                            </TabPane>
-                        );
-                    }
-
                     return (
                         <TabPane tab={dictItem.name} key={dictItem.apiKey}>
                             <CommonDictionary {...dictItem} />

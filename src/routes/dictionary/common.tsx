@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, Fragment, useMemo } from 'react';
 import { List } from 'antd';
 
 // import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import ConfirmDialog from 'component/confirm-dialog';
 import Button from 'component/button';
 import Input from 'component/form/input';
+import InputSelect from 'component/form/select';
 import Loader from 'component/loader';
 import { dictionary as dictionaryApi, IDictionary, IDictionaryParams } from 'src/adapters/api/dictionary';
 import { useClassnames } from 'hook/use-classnames';
@@ -33,16 +34,19 @@ export const CommonDictionary = (props: IProps) => {
     const timer = useRef<ReturnType<typeof setTimeout>>();
     const searchForm = useForm();
     const searchValue = searchForm.watch('search');
+    const countryValue = searchForm.watch('country');
     const [page, setPage] = useState<number>(1);
     const [search, setSearch] = useState<string>();
     const [deletingId, setDeletingId] = useState<number>();
     const [creating, setCreating] = useState(false);
     const [editingItem, setEditingItem] = useState<IDictionary>();
-    const { data, isLoading } = dictionaryApi.useGetDictionaryListQuery({
+    const countries = dictionaryApi.useGetCountryListQuery({});
+    const { data, isLoading, isFetching } = dictionaryApi.useGetDictionaryListQuery({
         key      : props.apiKey,
         page_size: PAGE_SIZE,
         search,
         page,
+        ...(countryValue ? { country_id: countryValue.value } : {}),
         ...props.listParams
     });
     const [deleteItem, deleteItemPayload] = dictionaryApi.useDeleteDictionaryItemMutation();
@@ -61,6 +65,20 @@ export const CommonDictionary = (props: IProps) => {
         }
     }, [searchValue]);
 
+    const elSelect = useMemo(() => {
+        if(props.apiKey === 'city') {
+            return (
+                <InputSelect
+                    name="country"
+                    options={countries.data?.results.map((item) => ({ label: item.name, value: String(item.id) })) || []}
+                    isSearchable={true}
+                    placeholder="Страна"
+                    clearable={true}
+                />
+            );
+        }
+    }, [props.apiKey]);
+
     if(isLoading) {
         return <Loader />;
     }
@@ -69,7 +87,8 @@ export const CommonDictionary = (props: IProps) => {
         <div className={cn('common-dict')}>
             <div className={cn('common-dict__header')}>
                 <FormProvider {...searchForm}>
-                    <form>
+                    <form className={cn('common-dict__header-form')}>
+                        {elSelect}
                         <Input
                             name="search"
                             type="text"
@@ -102,8 +121,8 @@ export const CommonDictionary = (props: IProps) => {
                 renderItem={(item) => (
                     <List.Item
                         actions={[
-                            <Button key="dict-list-edit" onClick={() => setEditingItem(item)}>Редактировать</Button>,
-                            <Button key="dict-list-edit" isSecondary={true} onClick={() => setDeletingId(item.id)}>Удалить</Button>
+                            <Button disabled={isFetching} key="dict-list-edit" onClick={() => setEditingItem(item)}>Редактировать</Button>,
+                            <Button disabled={isFetching} key="dict-list-edit" isSecondary={true} onClick={() => setDeletingId(item.id)}>Удалить</Button>
                         ]}
                     >
                         <List.Item.Meta
@@ -139,13 +158,14 @@ export const CommonDictionary = (props: IProps) => {
                     onClose={() => setEditingItem(undefined)}
                     error={patchItemPayload.error}
                     isError={patchItemPayload.isError}
-                    onSubmit={(formPayload: Record<string, unknown>) => {
+                    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+                    onSubmit={(formPayload: Record<string, any>) => {
                         if(editingItem) {
                             void patchItem({
                                 key: props.apiKey,
                                 ...editingItem,
                                 ...formPayload,
-                                ...(props.listParams?.country_id ? { country_id: props.listParams.country_id } : {})
+                                ...(formPayload.country ? { country_id: formPayload.country.value } : {})
                             })
                                 .unwrap()
                                 .then(() => {
@@ -155,13 +175,18 @@ export const CommonDictionary = (props: IProps) => {
                     }}
                     isLoading={patchItemPayload.isLoading}
                     defaultFormValues={{
-                        name: editingItem.name
+                        name: editingItem.name,
+                        ...(editingItem.country ? { country: { label: editingItem.country.name, value: String(editingItem.country.name) } } : {})
                     }}
                     inputs={(
-                        <Input
-                            name="name"
-                            type="text"
-                        />
+                        <Fragment>
+                            {elSelect}
+                            <Input
+                                name="name"
+                                type="text"
+                                placeholder="Значение"
+                            />
+                        </Fragment>
                     )}
                 />
             )}
@@ -172,12 +197,13 @@ export const CommonDictionary = (props: IProps) => {
                     onClose={() => setCreating(false)}
                     error={postItemPayload.error}
                     isError={postItemPayload.isError}
-                    onSubmit={(formPayload: Record<string, unknown>) => {
+                    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+                    onSubmit={(formPayload: Record<string, any>) => {
                         // @ts-ignore
                         void postItem({
                             ...formPayload,
                             key: props.apiKey,
-                            ...(props.listParams?.country_id ? { country_id: props.listParams.country_id } : {})
+                            ...(formPayload.country ? { country_id: formPayload.country.value } : {})
                         })
                             .unwrap()
                             .then(() => {
@@ -186,11 +212,18 @@ export const CommonDictionary = (props: IProps) => {
                     }}
                     isLoading={postItemPayload.isLoading}
                     inputs={(
-                        <Input
-                            name="name"
-                            type="text"
-                        />
+                        <Fragment>
+                            <Input
+                                name="name"
+                                type="text"
+                                placeholder="Значение"
+                            />
+                            {elSelect}
+                        </Fragment>
                     )}
+                    defaultFormValues={{
+                        country: countryValue
+                    }}
                 />
             )}
         </div>
