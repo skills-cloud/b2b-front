@@ -156,6 +156,7 @@ export const REQUEST_EDIT = (requestId?: string | number) => `/requests/${reques
 
 export const SYSTEM_USERS = '/system-users';
 export const DASHBOARD = '/dashboard';
+export const DICTIONARY = '/dictionary';
 
 
 /* eslint-enable @typescript-eslint/naming-convention */

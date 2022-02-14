@@ -17,7 +17,7 @@ import { dictionary } from 'adapter/api/dictionary';
 import { acc } from 'adapter/api/acc';
 import { cv } from 'adapter/api/cv';
 import { contact } from 'adapter/api/contact';
-import { CvDetailReadFull, NoName88 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
+import { CvDetailReadFull, NoName97 as IGenderType } from 'adapter/types/cv/cv/id/get/code-200';
 import { CvDetailWrite } from 'adapter/types/cv/cv/post/code-201';
 
 import style from './index.module.pcss';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 
 import FormDate from 'component/form/date';
 import InputCv from 'component/form/input-cv';
@@ -18,8 +18,9 @@ import { IGetCvListFilters } from 'adapter/api/cv';
 import style from './index.module.pcss';
 
 interface IFormValues extends Omit<TimeSheetRowRead, 'request' | 'cv'> {
-    request: IValue,
-    cv_list: Array<IValue>
+    request?: IValue,
+    cv_list: Array<IValue>,
+    cv: IValue
 }
 
 interface IProps {
@@ -38,22 +39,22 @@ const TimesheetForm = ({ formId, onSuccess, defaultValues, cvFilters, requestId,
     const [post, { error, isError, isLoading }] = mainRequest.usePostMainTimeSheetRowMutation();
     const [patch, { error: patchError, isError: isPatchError, isLoading: isPatchLoading }] = mainRequest.usePatchMainTimeSheetRowMutation();
 
-    const form = useForm({
+    const form = useForm<IFormValues>({
         defaultValues: {
             ...defaultValues,
             request: defaultValues?.request ? {
-                value: defaultValues.request.id,
+                value: String(defaultValues.request.id),
                 label: defaultValues.request.title
-            } : '',
+            } : undefined,
             cv: defaultValues?.cv ? {
-                value: defaultValues.cv.id,
+                value: String(defaultValues.cv.id),
                 label: `${defaultValues?.cv?.last_name} ${defaultValues?.cv?.first_name ?? ''}`.trim()
-            } : ''
+            } : undefined
         }
     });
 
     const onSubmit = form.handleSubmit(
-        (formData: SubmitHandler<IFormValues>) => {
+        (formData: IFormValues) => {
             const postData = Object.fromEntries(Object.entries(formData).filter(([, value]) => (!!value)));
             const requestData = {
                 ...postData,

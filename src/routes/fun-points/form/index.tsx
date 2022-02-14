@@ -206,7 +206,6 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                         value: String(resp.id),
                         label: resp.name
                     });
-                    // @ts-ignore
                     form.setValue('difficulty_level.factor', 0);
                 }
             })
@@ -239,7 +238,7 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
             .catch(console.error);
     });
 
-    const onSubmitLabor = (labor: { position: IValue, id: number, hours?: number }) => () => {
+    const onSubmitLabor = (labor: { position: IValue, id?: number, hours?: number }) => () => {
         void form.handleSubmit((formData) => {
             const laborById = formData?.fun_point_type?.positions_labor_estimates?.find((item) => item.id === labor.id);
             const method = laborById ? patchTypePositionLabor : postTypePositionLabor;
@@ -256,7 +255,7 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
             setIsLoadingPostLabor((oldState) => {
                 const newState = [...oldState];
 
-                if(!newState.includes(labor.id)) {
+                if(labor.id && !newState.includes(labor.id)) {
                     newState.push(labor.id);
                 }
 
@@ -269,7 +268,7 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                     setIsSuccessLabor((oldState) => {
                         const newState = [...oldState];
 
-                        if(!newState.includes(labor.id)) {
+                        if(labor.id && !newState.includes(labor.id)) {
                             newState.push(labor.id);
                         }
 
@@ -279,7 +278,7 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                     setIsLoadingPostLabor((oldState) => {
                         const newState = [...oldState];
 
-                        if(newState.includes(labor.id)) {
+                        if(labor.id && newState.includes(labor.id)) {
                             const findItemIndex = newState.findIndex((item) => item === labor.id);
 
                             newState.splice(findItemIndex, 1);
@@ -292,16 +291,20 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
         })();
     };
 
-    const onClickDelete = (id: string, index: number) => () => {
-        deleteTypePositionLabor({
-            id
-        })
-            .unwrap()
-            .then(() => {
-                // TODO конфирм
-                remove(index);
+    const onClickDelete = (id?: number, index?: number) => () => {
+        if(id) {
+            deleteTypePositionLabor({
+                id: String(id)
             })
-            .catch(console.error);
+                .unwrap()
+                .then(() => {
+                    // TODO конфирм
+                    if(index) {
+                        remove(index);
+                    }
+                })
+                .catch(console.error);
+        }
     };
 
     const onSubmitDifficulty = form.handleSubmit((formData) => {
@@ -370,36 +373,29 @@ const FunPointCreateForm = ({ onSuccess, defaultValues, setVisible }: IProjectsR
                             <div className={cn('fun-point__labors')}>
                                 <div className={cn('fun-point__labors-header')}>
                                     <H4>{t('routes.fun-points.create.form.labors.title')}</H4>
-                                    {/* @ts-ignore */}
                                     <AddAction onClick={() => append({})} />
                                 </div>
                                 {fields.map((labor, index) => (
-                                    // @ts-ignore
                                     <div key={labor.fieldId} className={cn('fun-point__labor')}>
                                         <InputDictionary
                                             isMulti={false}
                                             name={`positions_labor_estimates.${index}.position`}
                                             requestType={InputDictionary.requestType.Position}
-                                            // @ts-ignore
-                                            defaultValue={[labor.position_id as number]}
+                                            defaultValue={[labor.position_id]}
                                         />
                                         <Input name={`positions_labor_estimates.${index}.fun_point_type_id`} type="hidden" />
                                         <Input name={`positions_labor_estimates.${index}.position_id`} type="hidden" />
                                         <Input name={`positions_labor_estimates.${index}.hours`} type="text" />
                                         <div className={cn('fun-point__status')}>
-                                            {/* @ts-ignore */}
-                                            {elStatus(isLoadingPostLabor.includes(labor.id), isSuccessLabor.includes(labor.id))}
+                                            {labor.id && elStatus(isLoadingPostLabor.includes(labor.id), isSuccessLabor.includes(labor.id))}
                                         </div>
                                         <Button
                                             onClick={onSubmitLabor(labor)}
-                                            // @ts-ignore
-                                            disabled={isLoadingPostLabor.includes(labor.id) || isSuccessLabor.includes(labor.id)}
-                                            // @ts-ignore
-                                            isLoading={isLoadingPostLabor.includes(labor.id)}
+                                            disabled={(!!labor.id && isLoadingPostLabor.includes(labor.id)) || (!!labor.id && isSuccessLabor.includes(labor.id))}
+                                            isLoading={!!labor.id && isLoadingPostLabor.includes(labor.id)}
                                         >
                                             {t('routes.fun-points.create.form.labors.submit')}
                                         </Button>
-                                        {/* @ts-ignore */}
                                         <DeleteAction onClick={onClickDelete(labor.id, index)} />
                                     </div>
                                 ))}

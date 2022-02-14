@@ -380,7 +380,8 @@
                             "label": "Заказчик"
                         },
                         "period": {
-                            "label": "Период"
+                            "label-start": "Дата начала",
+                            "label-end": "Дата окончания"
                         },
                         "industry-sector": {
                             "label": "Отрасль"

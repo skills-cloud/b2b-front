@@ -17,8 +17,8 @@ export interface IProps {
     label?: string,
     disabled?: boolean,
     required?: Message | ValidationRule<boolean>,
-    maxLength?: ValidationRule<number | string>,
-    minLength?: ValidationRule<number | string>,
+    maxLength?: ValidationRule<number>,
+    minLength?: ValidationRule<number>,
     pattern?: ValidationRule<RegExp>,
     onChange?(e?: ChangeEvent<HTMLInputElement>): void
 }

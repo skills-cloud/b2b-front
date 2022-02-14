@@ -117,5 +117,15 @@ export interface MainOrganization {
     short_name?: NoName29;
     updated_at?: NoName30;
 }
-export interface RequestsCountByStatus {}
-export interface RequestsRequirementsCountByStatus {}
+export interface RequestsCountByStatus {
+    draft: number;
+    in_progress: number;
+    done: number;
+    closed: number;
+}
+export interface RequestsRequirementsCountByStatus {
+    draft: number;
+    in_progress: number;
+    done: number;
+    closed: number;
+}

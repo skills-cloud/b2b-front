@@ -18,7 +18,7 @@ import { IValue } from 'component/form/select';
 
 import { mainRequest } from 'adapter/api/main';
 import { RequestRequirementRead } from 'adapter/types/main/request-requirement/id/get/code-200';
-import { NoName10, RequestRequirement } from 'adapter/types/main/request-requirement/post/code-201';
+import { NoName10 } from 'adapter/types/main/request-requirement/post/code-201';
 
 import style from './index.module.pcss';
 
@@ -41,16 +41,22 @@ interface IEditRequirements {
     requestId: number
 }
 
-interface IForm extends Omit<RequestRequirement, 'status'> {
-    type_of_employment: IValue,
+interface ISelect {
+    value?: number,
+    label: string
+}
+
+interface IForm extends Omit<RequestRequirementRead, 'status' | 'type_of_employment' | 'work_location_city'> {
+    type_of_employment?: ISelect,
+    work_location_city?: IValue,
     location: string,
     city: IValue,
     status?: {
         value: NoName10,
         label: string
     },
-    date_to: string,
-    date_from: string
+    date_to?: string,
+    date_from?: string
 }
 
 const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, setActiveTab, requestId }: IEditRequirements) => {
@@ -59,25 +65,28 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
 
     const [patch] = mainRequest.usePatchMainRequestRequirementMutation();
     const [post] = mainRequest.usePostMainRequestRequirementMutation();
-    const form = useForm();
+    const form = useForm<IForm>();
 
     useEffect(() => {
-        form.setValue('location', editRequirements?.work_location_address);
+        form.setValue('location', editRequirements?.work_location_address || '');
         form.setValue('type_of_employment', editRequirements?.type_of_employment ? {
             value: editRequirements?.type_of_employment?.id,
             label: editRequirements?.type_of_employment?.name
         } : undefined);
         form.setValue('city', editRequirements?.work_location_city ? {
-            value: editRequirements?.work_location_city?.id,
+            value: String(editRequirements?.work_location_city?.id),
             label: editRequirements?.work_location_city?.name
-        } : undefined);
+        } : {
+            value: '',
+            label: ''
+        });
         form.setValue('max_price', editRequirements?.max_price);
         form.setValue('description', editRequirements?.description);
         form.setValue('name', editRequirements?.name);
         form.setValue('date_from', editRequirements?.date_from);
         form.setValue('date_to', editRequirements?.date_to);
         form.setValue('status', editRequirements?.status ? {
-            value: editRequirements?.status,
+            value: editRequirements?.status as NoName10,
             label: t(`routes.project-request.blocks.request-status.${editRequirements?.status}`)
         } : undefined);
     }, [editRequirements]);
@@ -99,7 +108,7 @@ const EditRequirements = ({ editRequirements, onClose, onEditRole, activeTab, se
             request_id           : requestId,
             work_location_address: location,
             work_location_city_id: cityId ? parseInt(cityId, 10) : undefined,
-            type_of_employment_id: valueTypeOfEmployment ? parseInt(valueTypeOfEmployment, 10) : undefined
+            type_of_employment_id: valueTypeOfEmployment ? valueTypeOfEmployment : undefined
         };
 
 

@@ -33,7 +33,7 @@ interface IForm {
     },
     people: {
         label: string,
-        value: string
+        value: number
     }
 }
 
@@ -42,7 +42,7 @@ const AddRole = ({ onBack, requestId, nextStep, onClose }: IAddRole) => {
     const cn = useClassnames(style);
     const [post] = mainRequest.usePostMainRequestRequirementMutation({});
 
-    const form = useForm({
+    const form = useForm<IForm>({
         defaultValues: {
             people: {
                 value: PEOPLE_SELECT[0],
@@ -55,7 +55,7 @@ const AddRole = ({ onBack, requestId, nextStep, onClose }: IAddRole) => {
         const body: RequestRequirement = {
             request_id : requestId,
             position_id: parseInt(values.position_id.value, 10),
-            count      : parseInt(values.people.value, 10)
+            count      : values.people.value
         };
 
         post(body)
