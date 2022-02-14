@@ -43,15 +43,15 @@ const dictionaryList = [
     },
     {
         apiKey: 'industry-sector',
-        name  : 'Industry sector'
+        name  : 'Отрасль'
     },
     {
         apiKey: 'organization',
-        name  : 'Organization'
+        name  : 'Организация'
     },
     {
         apiKey: 'physical-limitation',
-        name  : 'Physical limitation'
+        name  : 'Физические ограничения'
     },
     {
         apiKey: 'position',
@@ -59,7 +59,7 @@ const dictionaryList = [
     },
     {
         apiKey: 'type-of-employment',
-        name  : 'Type of employment'
+        name  : 'Тип занятости'
     }
 ];
 

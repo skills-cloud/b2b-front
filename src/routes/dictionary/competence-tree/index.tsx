@@ -176,12 +176,14 @@ const CometenceTree = () => {
                             {props.name}
                         </span>
                         <div className={cn('competence-tree__controls')}>
-                            <IconPlus
-                                svg={{
-                                    className: cn('competence-tree__icon'),
-                                    onClick  : () => setCreating({ parent: { label: props.name, value: String(props.id) } })
-                                }}
-                            />
+                            {!props.parent_id && (
+                                <IconPlus
+                                    svg={{
+                                        className: cn('competence-tree__icon'),
+                                        onClick  : () => setCreating({ parent: { label: props.name, value: String(props.id) } })
+                                    }}
+                                />
+                            )}
                             <IconEdit
                                 svg={{
                                     className: cn('competence-tree__icon'),

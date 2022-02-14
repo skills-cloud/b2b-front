@@ -22,7 +22,7 @@ export type TError = string | null;
 
 export interface IValue {
     label: string,
-    value: string | number
+    value: string | number | null
 }
 
 export enum ERequestType {
@@ -103,7 +103,7 @@ export interface IProps {
     placeholder?: string,
     tabIndex?: string,
     disabled?: boolean,
-    defaultValue?: Array<IValue | number | string>,
+    defaultValue?: Array<IValue | number | string | null> | null,
     error?: TError,
     requestLimit?: number,
     requestOffset?: number,
@@ -179,11 +179,13 @@ const InputDictionary = (props: IProps & typeof defaultProps) => {
             const ids: Array<number | string> = [];
             const values: Array<IValue> = [];
 
-            const pushToArrays = (arrayItem: number | string | IValue) => {
-                if(typeof arrayItem === 'number' || typeof arrayItem === 'string') {
-                    ids.push(arrayItem);
-                } else {
-                    values.push(arrayItem);
+            const pushToArrays = (arrayItem: number | string | IValue | null) => {
+                if(arrayItem !== null) {
+                    if(typeof arrayItem === 'number' || typeof arrayItem === 'string') {
+                        ids.push(arrayItem);
+                    } else {
+                        values.push(arrayItem);
+                    }
                 }
             };
 

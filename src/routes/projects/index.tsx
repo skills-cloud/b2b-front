@@ -37,10 +37,14 @@ import { OrganizationProjectRead } from 'adapter/types/main/organization-project
 import ConfirmModal from './confirm-modal';
 import EditModal from './edit-modal';
 import style from './index.module.pcss';
+import FormDate from 'component/form/date';
+import useRoles from 'hook/use-roles';
 
 export interface IFormValues {
     industry_sector?: Array<IValue> | null,
-    organization_customer?: Array<IValue> | null
+    organization_customer?: Array<IValue> | null,
+    date_from?: string,
+    date_to?: string
 }
 
 export const Projects = () => {
@@ -61,6 +65,7 @@ export const Projects = () => {
     const [itemToDelete, setItemToDelete] = useState<OrganizationProjectRead>();
 
     const { data: whoAmIData } = acc.useGetAccWhoAmIQuery(undefined);
+    const { su, admin, pfm, pm } = useRoles(whoAmIData?.organizations_contractors_roles?.find((item) => item.organization_contractor_id)?.organization_contractor_id);
 
     useEffect(() => {
         if(timer.current) {
@@ -69,7 +74,9 @@ export const Projects = () => {
 
         const filters = {
             ...(values.industry_sector ? { industry_sector_id: values.industry_sector?.map((item) => item?.value) } : {}),
-            ...(values.organization_customer ? { organization_customer_id: values.organization_customer?.map((item) => item?.value) } : {})
+            ...(values.organization_customer ? { organization_customer_id: values.organization_customer?.map((item) => item?.value) } : {}),
+            date_from: values.date_from,
+            date_to  : values.date_to
         };
 
         timer.current = setTimeout(() => {
@@ -90,23 +97,15 @@ export const Projects = () => {
     const onClearFilter = () => {
         context.reset({
             industry_sector      : [],
-            organization_customer: []
+            organization_customer: [],
+            date_from            : '',
+            date_to              : ''
         });
     };
 
     const onClickClose = () => {
         setItemToEdit(undefined);
         setItemToDelete(undefined);
-    };
-
-    const isOrganizationAdmin = (orgId?: number) => {
-        return whoAmIData?.organizations_contractors_roles?.some((orgRole) => {
-            if(orgRole.organization_contractor_id && orgId) {
-                return parseInt(orgRole.organization_contractor_id, 10) === orgId && orgRole.role === 'admin';
-            }
-
-            return false;
-        });
     };
 
     const elTimeframe = (dateFrom?: string, dateTo?: string) => {
@@ -136,7 +135,7 @@ export const Projects = () => {
                             <div
                                 key={item.id}
                                 className={cn('projects__list-item', {
-                                    'projects__list-item_with-actions': isOrganizationAdmin(item.id) || whoAmIData?.is_superuser
+                                    'projects__list-item_with-actions': su || admin || pfm || pm
                                 })}
                             >
                                 <div className={cn('projects__list-item-content')}>
@@ -146,7 +145,7 @@ export const Projects = () => {
                                         </Link>
                                     </div>
                                 </div>
-                                {(item.id && isOrganizationAdmin(item.id)) || whoAmIData?.is_superuser && (
+                                {(su || admin || pfm || pm) && (
                                     <div className={cn('projects__list-item-actions')}>
                                         <Dropdown
                                             render={({ onClose }) => (
@@ -225,6 +224,16 @@ export const Projects = () => {
                                 clearable={true}
                                 label={t('routes.projects.sidebar.filters.form.industry-sector.label')}
                             />
+                            <FormDate
+                                name="date_from"
+                                direction="column"
+                                label={t('routes.projects.sidebar.filters.form.period.label-start')}
+                            />
+                            <FormDate
+                                name="date_to"
+                                direction="column"
+                                label={t('routes.projects.sidebar.filters.form.period.label-end')}
+                            />
                             <Button type="button" onClick={onClearFilter} isSecondary={true}>
                                 {t('routes.projects.sidebar.filters.buttons.clear')}
                             </Button>
@@ -254,7 +263,7 @@ export const Projects = () => {
     };
 
     const elActions = () => {
-        if(whoAmIData?.is_superuser) {
+        if(su || admin || pfm || pm) {
             return <AddAction to={PROJECTS_CREATE} />;
         }
     };

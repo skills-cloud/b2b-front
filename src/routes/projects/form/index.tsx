@@ -27,24 +27,27 @@ export interface IProps {
 }
 
 interface ISelect {
-    value: string,
+    value?: number,
     label: string
 }
 
-interface IFormValues extends Omit<OrganizationProjectRead, 'industry_sector' | 'manager_pm' | 'manager_pfm' | 'organization_customer' | 'organization_contractor'> {
-    manager_pm: ISelect,
-    manager_pfm: ISelect,
-    organization_contractor: ISelect,
-    organization_customer: ISelect,
-    recruiter: ISelect,
-    industry_sector: ISelect
+interface IFormValues extends Omit<OrganizationProjectRead, 'industry_sector' | 'name' | 'manager_pm' | 'manager_pfm' | 'organization_customer' | 'organization_contractor'> {
+    name?: string,
+    manager_pm?: ISelect,
+    manager_pfm?: ISelect,
+    organization_contractor?: {
+        value: string,
+        label: string
+    },
+    organization_customer?: ISelect,
+    industry_sector?: ISelect
 }
 
 const OrganizationProjectCreateForm = (props: IProps) => {
     const cn = useClassnames(style);
     const { t } = useTranslation();
     const params = useParams<IParams>();
-    const context = useForm({
+    const context = useForm<IFormValues>({
         mode         : 'onChange',
         defaultValues: {
             ...props.defaultValues,
@@ -155,40 +158,20 @@ const OrganizationProjectCreateForm = (props: IProps) => {
     const onSubmit = context.handleSubmit(
         ({ industry_sector, manager_pm, manager_pfm, organization_customer, organization_contractor, ...data }: IFormValues) => {
             const postData = { ...data };
-
-            if(industry_sector) {
-                postData.industry_sector_id = parseInt(industry_sector.value, 10);
-            }
-
-            if(manager_pm) {
-                postData.manager_pm_id = parseInt(manager_pm.value, 10);
-            }
-
-
-            if(manager_pfm) {
-                postData.manager_pfm_id = parseInt(manager_pfm.value, 10);
-            }
-
-            if(params.organizationId) {
-                postData.organization_customer_id = parseInt(params.organizationId, 10);
-            }
-
-            if(organization_customer) {
-                postData.organization_customer_id = parseInt(organization_customer.value, 10);
-            }
-
-            if(organization_contractor) {
-                postData.organization_contractor_id = parseInt(organization_contractor.value, 10);
-            }
-
             const method = props.defaultValues ? patch : post;
             const { id: requestId, ...rest } = postData;
 
             const request = method({
                 ...rest,
-                date_from: rest.date_from || undefined,
-                date_to  : rest.date_to || undefined,
-                id       : requestId as number
+                name                      : data.name || '',
+                date_from                 : rest.date_from || undefined,
+                date_to                   : rest.date_to || undefined,
+                organization_customer_id  : organization_customer?.value || parseInt(params.organizationId, 10),
+                organization_contractor_id: organization_contractor?.value ? parseInt(organization_contractor.value, 10) : 0,
+                id                        : requestId as number,
+                manager_pm_id             : manager_pm ? manager_pm.value : undefined,
+                manager_pfm_id            : manager_pfm ? manager_pfm.value : undefined,
+                industry_sector_id        : industry_sector ? industry_sector.value : undefined
             });
 
             request
@@ -219,6 +202,22 @@ const OrganizationProjectCreateForm = (props: IProps) => {
 
     const errorMessage = t('routes.organization-project.create.required-error');
 
+    const elCustomer = () => {
+        return (
+            <InputMain
+                required={errorMessage}
+                disabled={!!props.defaultValues}
+                defaultValue={[props.defaultValues?.organization_customer?.id as number]}
+                name="organization_customer"
+                direction="column"
+                requestType={InputMain.requestType.Customer}
+                label={t('routes.organization-project.create.organization_customer.title')}
+                placeholder={t('routes.organization-project.create.organization_customer.placeholder')}
+                isMulti={false}
+            />
+        );
+    };
+
     return (
         <FormProvider {...context}>
             <form id={props.formId} className={cn('form')} onSubmit={onSubmit}>
@@ -229,17 +228,7 @@ const OrganizationProjectCreateForm = (props: IProps) => {
                     label={t('routes.organization-project.create.name.title')}
                     placeholder={t('routes.organization-project.create.name.placeholder')}
                 />
-                <InputMain
-                    required={errorMessage}
-                    disabled={!!props.defaultValues || !!params.organizationId || !!whoAmIData?.organizations_contractors_roles?.length}
-                    defaultValue={[props.defaultValues?.organization_customer?.id as number || params.organizationId]}
-                    name="organization_customer"
-                    direction="column"
-                    requestType={InputMain.requestType.Customer}
-                    label={t('routes.organization-project.create.organization_customer.title')}
-                    placeholder={t('routes.organization-project.create.organization_customer.placeholder')}
-                    isMulti={false}
-                />
+                {elCustomer()}
                 <InputMain
                     required={errorMessage}
                     defaultValue={[props.defaultValues?.organization_contractor?.id as number]}

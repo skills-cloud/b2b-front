@@ -120,9 +120,9 @@ const OrganizationProjects = () => {
                         <SectionContentListItem title={t('routes.organization-projects.blocks.description')}>
                             {data?.description}
                         </SectionContentListItem>
-                        <SectionContentListItem title={t('routes.organization-projects.blocks.value')}>
+                        {/* <SectionContentListItem title={t('routes.organization-projects.blocks.value')}>
                             {data?.id}
-                        </SectionContentListItem>
+                        </SectionContentListItem> */}
                         <SectionContentListItem title={t('routes.organization-projects.blocks.resource_plan')}>
                             {data?.plan_description}
                         </SectionContentListItem>

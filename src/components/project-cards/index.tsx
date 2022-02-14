@@ -39,9 +39,9 @@ const FORM_ORGANIZATION_CARD_ID = 'FORM_ORGANIZATION_CARD_ID';
 const FORM_CREATE_CARD_FROM_TEMPLATE = 'FORM_CREATE_CARD_FROM_TEMPLATE';
 
 interface IForm {
-    cardName: string,
-    cardNameSub: string,
-    position: Array<IValue>,
+    cardName?: string,
+    cardNameSub?: string,
+    position?: Array<IValue>,
     project?: IValue
 }
 
@@ -119,11 +119,11 @@ const ProjectCards = (props: IProps) => {
         }
     }, [cardsProject, visibleModalId, positionMap]);
 
-    const editCard = (formValues: IForm) => {
+    const onSubmit = context.handleSubmit((formValues: IForm) => {
         if(visibleModalId === null) {
             if(projectId || formValues.project?.value) {
                 post({
-                    name                   : formValues.cardName,
+                    name                   : formValues.cardName || '',
                     parent_id              : undefined,
                     organization_project_id: formValues.project?.value ? parseInt(formValues.project?.value, 10) : parseInt(projectId, 10)
                 })
@@ -150,21 +150,21 @@ const ProjectCards = (props: IProps) => {
         }
 
         patch({
-            name         : formValues.cardName,
+            name         : formValues.cardName || '',
             id           : cardsProject[visibleModalId].id,
             positions_ids: formValues?.position?.map(({ value }) => parseInt(value, 10))
         })
             .unwrap()
             .then(() => setVisibleAddCard(false))
             .catch(console.error);
-    };
+    });
 
-    const createCardFromTemplateRequest = (formValues: { card_id: { value: string }, project: IValue }) => {
+    const createCardFromTemplateRequest = (formValues: { card_id?: { value: string }, project?: IValue }) => {
         if(!projectId) {
             return;
         }
         createCardFromTemplate({
-            root_card_item_id: formValues.card_id.value,
+            root_card_item_id: formValues.card_id?.value || '',
             project_id       : formValues.project?.value || projectId
         }).unwrap()
             .then(() => {
@@ -326,7 +326,7 @@ const ProjectCards = (props: IProps) => {
                 >
                     <FormProvider {...context}>
                         <form
-                            onSubmit={context.handleSubmit(editCard)} id={FORM_ORGANIZATION_CARD_ID}
+                            onSubmit={onSubmit} id={FORM_ORGANIZATION_CARD_ID}
                             className={cn('organization__cards-add-form')}
                         >
                             {props.projects?.length && (

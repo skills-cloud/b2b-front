@@ -129,9 +129,9 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                 const ancor = index === 0 ? { id: ESectionInvariants.Requirements } : {};
                 let contextLocation = 'empty';
 
-                if(location?.country.name && location?.name) {
+                if(location?.country?.name && location?.name) {
                     contextLocation = 'country_city';
-                } else if(location?.country.name) {
+                } else if(location?.country?.name) {
                     contextLocation = 'country';
                 } else if(location?.name) {
                     contextLocation = 'city';
@@ -219,7 +219,7 @@ const Requirements = ({ requirements, requestId }: IRequirements) => {
                                             'routes.project-request.blocks.location.point-content',
                                             {
                                                 context: contextLocation,
-                                                country: location.country.name,
+                                                country: location.country?.name,
                                                 city   : location.name
                                             })}
                                     </SectionContentListItem>

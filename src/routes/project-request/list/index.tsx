@@ -28,7 +28,7 @@ import style from './index.module.pcss';
 import { acc } from 'adapter/api/acc';
 
 export interface IFormPayload {
-    industry_sector?: Array<IValue> | null,
+    industry_sector?: Array<IValue>,
     priority?: IValue | null,
     status?: IValue | null,
     organization_customer?: Array<IValue> | null,
@@ -88,7 +88,7 @@ const ProjectRequestList = () => {
 
         timer.current = setTimeout(() => {
             const filters = {
-                ...(values.industry_sector ? { industry_sector_id: values.industry_sector?.map((item) => item?.value) } : {}),
+                ...(values.industry_sector ? { industry_sector_id: values.industry_sector?.map((item) => item?.value || '') } : {}),
                 ...(values.organization_customer ? { organization_customer_id: values.organization_customer?.map((item) => item?.value) } : {}),
                 ...(values.organization_project ? { organization_project_id: values.organization_project?.map((item) => item?.value) } : {}),
                 priority: values.priority?.value,

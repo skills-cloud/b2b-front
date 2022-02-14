@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router';
@@ -6,19 +6,18 @@ import { IParams } from 'helper/url-list';
 
 import useClassnames from 'hook/use-classnames';
 import FormDate from 'component/form/date';
-import Error from 'component/error';
 import InputFile from 'component/form/file';
 import InputDictionary from 'component/form/input-dictionary';
 import InputProject from 'component/form/input-project';
 import Textarea from 'component/form/textarea';
 import InputSelect from 'component/form/select';
+import ErrorsComponent from 'component/error/errors';
 
 import { career } from 'adapter/api/career';
 import { dictionary } from 'adapter/api/dictionary';
 import { CvCareerRead, CvCareerFileRead } from 'adapter/types/cv/career/get/code-200';
 
 import style from './index.module.pcss';
-import ErrorsComponent from 'component/error/errors';
 
 export interface IResultForm extends Omit<CvCareerRead, 'competencies_select' | 'organization' | 'position' | 'projects'> {
     competencies_select: Array<{
@@ -132,7 +131,8 @@ const CareerForm = (props: IProjectForm) => {
                                             label: organization.name
                                         }))
                                     );
-                                });
+                                })
+                                .catch(console.error);
                         }}
                         isMulti={false}
                         name="career.organization"
